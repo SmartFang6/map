@@ -1,0 +1,136 @@
+<template>
+  <div class="cockpit">
+    <div class="header_box">
+      <slot name="header" />
+    </div>
+    <div class="side left_side" :class="{ closeWL: leftSideViewClose }">
+      <!--      <div class="btn btnL" @click="switchSideL">&lt;</div>-->
+      <slot name="left" />
+    </div>
+    <div class="side right_side" :class="{ closeWR: rightSideViewClose }">
+      <!--      <div class="btn btnR" @click="switchSideR">&gt;</div>-->
+      <slot name="right" />
+    </div>
+    <div class="bottom_view" :class="{ closeHB: bottomViewClose }">
+      <div @click="switchBottom" class="btn">X</div>
+      <slot name="bottom" />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+const store = useStore();
+const leftSideViewClose = computed(() => {
+  return store.state.layout?.left === "close" || false;
+});
+const rightSideViewClose = computed(() => {
+  return store.state.layout?.right === "close" || false;
+});
+const bottomViewClose = computed(() => {
+  return store.state.layout?.bottom === "close" || false;
+});
+// const switchSideL = () => {
+//   store.commit("UPDATE_LAYOUT", {
+//     left: store.state.layout?.left === "close" ? "open" : "close",
+//   });
+// };
+// const switchSideR = () => {
+//   store.commit("UPDATE_LAYOUT", {
+//     right: store.state.layout?.right === "close" ? "open" : "close",
+//   });
+// };
+const switchBottom = () => {
+  store.commit("UPDATE_LAYOUT", {
+    bottom: store.state.layout?.bottom === "close" ? "open" : "close",
+  });
+};
+</script>
+
+<style scoped lang="less">
+@topH: 80px;
+@sideW: 500px;
+@bottomH: 300px;
+.cockpit {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  .header_box {
+    width: 100vw;
+    height: @topH;
+    background: #486c08;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .side {
+    width: @sideW;
+    height: calc(100vh - @topH);
+    background: #6c4c08;
+    position: absolute;
+    bottom: 0;
+    transition: transform 0.5s ease;
+
+    .btn {
+      color: #fff;
+      width: 40px;
+      height: 100px;
+      background: #2c3e50;
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      margin: auto;
+      line-height: 100px;
+    }
+
+    .btnL {
+      right: -40px;
+    }
+    .btnR {
+      left: -40px;
+    }
+  }
+  .left_side {
+    left: 0;
+  }
+  .right_side {
+    right: 0;
+  }
+  .bottom_view {
+    width: calc(100vw - 2 * @sideW);
+    transition: transform 0.5s ease;
+    height: @bottomH;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background: #486c08;
+    .btn {
+      width: 100px;
+      height: 40px;
+      background: #2c3e50;
+      color: #fff;
+      position: absolute;
+      top: -40px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+    }
+  }
+  .closeWL {
+    transform: translateX(-@sideW);
+  }
+  .closeWR {
+    transform: translateX(@sideW);
+  }
+  .closeHB {
+    transform: translateY(@bottomH);
+  }
+}
+</style>
