@@ -1,7 +1,6 @@
 <template>
   <div class="cockpit">
     <div class="header_box">
-      <el-button @click="onOpenDialog">click</el-button>
       <slot name="header" />
     </div>
     <div class="side left_side" :class="{ closeWL: leftSideViewClose }">

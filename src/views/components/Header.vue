@@ -6,7 +6,10 @@
  ¦------------------------------------------->
 
 <template>
-  <div class="layout-header">vue template</div>
+  <div class="layout-header">
+    <div class="title">水域监管驾驶舱</div>
+    <div class="entry-btn" />
+  </div>
 </template>
 
 <script setup></script>
@@ -17,5 +20,33 @@
   height: 75px;
   background: url(@/assets/images/layout-header.png);
   background-size: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  & > .title {
+    color: #fff;
+    font-size: 38px;
+    color: #fff;
+    box-shadow: 0px 4px 1px 0px #071732;
+    letter-spacing: 4px;
+    font-family: FZZYJW;
+  }
+  & > .entry-btn {
+    position: absolute;
+    right: 0;
+    top: 16px;
+    color: #fff;
+    font-size: 24px;
+    font-family: YouSheBiaoTiHei;
+    font-size: 24px;
+    background: url(@/assets/images/entry-btn.png);
+    width: 268px;
+    height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    cursor: pointer;
+  }
 }
 </style>
