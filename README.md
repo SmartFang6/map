@@ -22,3 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Global components
+需要全局注册的组件，在 components 文件下新建文件夹->index.vue 即可

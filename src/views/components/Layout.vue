@@ -1,6 +1,7 @@
 <template>
   <div class="cockpit">
     <div class="header_box">
+      <el-button @click="onOpenDialog">click</el-button>
       <slot name="header" />
     </div>
     <div class="side left_side" :class="{ closeWL: leftSideViewClose }">
@@ -22,7 +23,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 const store = useStore();
 const leftSideViewClose = computed(() => {
