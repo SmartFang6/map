@@ -1,7 +1,6 @@
 <template>
   <div class="cockpit">
     <div class="header_box">
-      <el-button @click="onOpenDialog">click</el-button>
       <slot name="header" />
     </div>
     <div class="side left_side" :class="{ closeWL: leftSideViewClose }">
@@ -23,18 +22,19 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useStore } from "vuex";
-const store = useStore();
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
 const leftSideViewClose = computed(() => {
-  return store.state.layout?.left === "close" || false;
-});
+  return store.state.layout?.left === 'close' || false
+})
 const rightSideViewClose = computed(() => {
-  return store.state.layout?.right === "close" || false;
-});
+  return store.state.layout?.right === 'close' || false
+})
 const bottomViewClose = computed(() => {
-  return store.state.layout?.bottom === "close" || false;
-});
+  return store.state.layout?.bottom === 'close' || false
+})
 // const switchSideL = () => {
 //   store.commit("UPDATE_LAYOUT", {
 //     left: store.state.layout?.left === "close" ? "open" : "close",
@@ -46,10 +46,10 @@ const bottomViewClose = computed(() => {
 //   });
 // };
 const switchBottom = () => {
-  store.commit("UPDATE_LAYOUT", {
-    bottom: store.state.layout?.bottom === "close" ? "open" : "close",
-  });
-};
+  store.commit('UPDATE_LAYOUT', {
+    bottom: store.state.layout?.bottom === 'close' ? 'open' : 'close'
+  })
+}
 </script>
 
 <style scoped lang="less">

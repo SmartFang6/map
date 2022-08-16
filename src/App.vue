@@ -28,4 +28,21 @@ a {
   text-decoration: none;
   color: #fff;
 }
+// 字体引入
+@font-face {
+  font-family: "AGENCYB";
+  src: url(@/assets/font-family/AGENCYB.TTF);
+}
+@font-face {
+  font-family: "FZZDHJW";
+  src: url(@/assets/font-family/FZZDHJW.TTF);
+}
+@font-face {
+  font-family: "FZZYJW";
+  src: url(@/assets/font-family/FZZYJW.TTF);
+}
+@font-face {
+  font-family: "YOUSHEBIAOTIHEI-2";
+  src: url(@/assets/font-family/YOUSHEBIAOTIHEI-2.TTF);
+}
 </style>

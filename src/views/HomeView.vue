@@ -4,21 +4,28 @@
     <template #map>
       <div class="map">MAP</div>
     </template>
+    <template #left>
+      <test />
+    </template>
   </Layout>
 </template>
 
 <script setup>
-import Layout from "./components/Layout";
 import Header from "./components/Header";
 import { inject } from "vue";
 import { NoticeEvt } from "@/views/config";
-const eventBus = inject("EventBus");
+const eventBus = inject("eventBus");
 
+// console.log(eventBus, "eventBus", NoticeEvt);
 // 通知 home
-eventBus.$on(NoticeEvt.NOTICE_HOME, (val) => {
+eventBus.on(NoticeEvt.NOTICE_HOME, (val) => {
   console.log(val);
   // TODO
 });
+
+function onTest() {
+  eventBus.$emit("testEventBus", "123");
+}
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
 // TODO
