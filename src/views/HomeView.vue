@@ -8,6 +8,18 @@
       <!-- 事件统计 -->
       <EventStatistics />
     </template>
+    <template #right>
+      <!-- 风险管控-->
+      <RiskControl />
+      <!-- 处置绩效 -->
+      <Performance />
+      <!-- 问题待结案排名-->
+      <OpenProblemTopList />
+    </template>
+    <template #bottom>
+      <!-- 问题清单 -->
+      <ProblemList />
+    </template>
   </Layout>
 </template>
 
@@ -16,6 +28,10 @@ import Header from "./components/Header";
 import { inject } from "vue";
 import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
+import RiskControl from "./components/RiskControl.vue";
+import Performance from "./components/Performance/index.vue";
+import OpenProblemTopList from "./components/OpenProblemTopList.vue";
+import ProblemList from "./components/ProblemList.vue";
 const eventBus = inject("eventBus");
 
 console.log(eventBus, "eventBus", NoticeEvt);
