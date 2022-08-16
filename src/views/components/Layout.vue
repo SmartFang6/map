@@ -62,11 +62,12 @@ const switchBottom = () => {
   top: 0;
   left: 0;
   overflow: hidden;
+  background: url(@/assets/images/layout-bg.png);
+  background-size: 100%;
 
   .header_box {
     width: 100vw;
     height: @topH;
-    background: #486c08;
     position: absolute;
     top: 0;
     left: 0;

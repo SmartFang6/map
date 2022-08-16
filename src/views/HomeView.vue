@@ -1,5 +1,6 @@
 <template>
   <Layout>
+    <template #header><Header /></template>
     <template #map>
       <div class="map">MAP</div>
     </template>
@@ -8,7 +9,9 @@
 
 <script setup>
 import Layout from "./components/Layout";
+import Header from "./components/Header";
 </script>
+
 <style scoped lang="less">
 .map {
   width: 100%;
