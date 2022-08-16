@@ -76,7 +76,7 @@ const switchBottom = () => {
   .side {
     width: @sideW;
     height: calc(100vh - @topH);
-    background: rgba(108, 76, 8, 0.64);
+    // background: rgba(108, 76, 8, 0.64);
     position: absolute;
     bottom: 0;
     transition: transform 0.5s ease;
@@ -115,7 +115,7 @@ const switchBottom = () => {
     left: 0;
     right: 0;
     margin: 0 auto;
-    background: rgba(72, 108, 8, 0.71);
+    // background: rgba(72, 108, 8, 0.71);
     .btn {
       width: 100px;
       height: 40px;
