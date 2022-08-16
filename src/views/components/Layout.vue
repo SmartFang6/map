@@ -7,6 +7,9 @@
       <!--      <div class="btn btnL" @click="switchSideL">&lt;</div>-->
       <slot name="left" />
     </div>
+    <div style="width: 100vw; height: 100vh">
+      <slot name="map"></slot>
+    </div>
     <div class="side right_side" :class="{ closeWR: rightSideViewClose }">
       <!--      <div class="btn btnR" @click="switchSideR">&gt;</div>-->
       <slot name="right" />
@@ -71,7 +74,7 @@ const switchBottom = () => {
   .side {
     width: @sideW;
     height: calc(100vh - @topH);
-    background: #6c4c08;
+    background: rgba(108, 76, 8, 0.64);
     position: absolute;
     bottom: 0;
     transition: transform 0.5s ease;
@@ -110,7 +113,7 @@ const switchBottom = () => {
     left: 0;
     right: 0;
     margin: 0 auto;
-    background: #486c08;
+    background: rgba(72, 108, 8, 0.71);
     .btn {
       width: 100px;
       height: 40px;
