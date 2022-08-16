@@ -42,7 +42,7 @@ a {
   src: url(@/assets/font-family/FZZYJW.TTF);
 }
 @font-face {
-  font-family: "YOUSHEBIAOTIHEI-2";
+  font-family: "YOUSHEBIAOTIHEI";
   src: url(@/assets/font-family/YOUSHEBIAOTIHEI-2.TTF);
 }
 </style>
