@@ -10,6 +10,19 @@
 <script setup>
 import Layout from "./components/Layout";
 import Header from "./components/Header";
+import { inject } from "vue";
+import { NoticeEvt } from "@/views/config";
+const eventBus = inject("EventBus");
+
+// 通知 home
+eventBus.$on(NoticeEvt.NOTICE_HOME, (val) => {
+  console.log(val);
+  // TODO
+});
+//例: 通知地图
+// eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
+// TODO
+// })
 </script>
 
 <style scoped lang="less">
