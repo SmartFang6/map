@@ -105,6 +105,9 @@ const switchBottom = () => {
   }
   .right_side {
     right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .bottom_view {
     width: calc(100vw - 2 * @sideW);

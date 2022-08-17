@@ -27,7 +27,7 @@
     color: #fff;
     font-size: 38px;
     color: #fff;
-    box-shadow: 0px 4px 1px 0px #071732;
+    text-shadow: 0px 4px 1px #071732;
     letter-spacing: 4px;
     font-family: FZZYJW;
     padding-top: 12px;

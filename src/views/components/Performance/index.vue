@@ -8,6 +8,7 @@
 <template>
   <div class="performance">
     <Title title="处置绩效" />
+    <!--#region 奖牌栏-->
     <div class="medal-bar">
       <!--#region 第一名-->
       <div class="first">
@@ -51,11 +52,15 @@
       </div>
       <!--#endregion-->
     </div>
+    <!--#endregion-->
+
+    <List />
   </div>
 </template>
 
 <script setup>
 import Title from "@/components/Title/index.vue";
+import List from "./List.vue";
 </script>
 
 <style lang="less" scoped>

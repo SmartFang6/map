@@ -74,7 +74,8 @@ import Title from "@/components/Title/index.vue";
 }
 
 .risk-list {
-  padding: 20px 19px 43px 10px;
+  // padding: 20px 19px 43px 10px;
+  padding: 20px 19px 20px 10px;
   display: flex;
   justify-content: space-between;
 }
