@@ -7,6 +7,10 @@
     <template #left>
       <!-- 事件统计 -->
       <EventStatistics />
+      <!-- 问题来源 -->
+      <ProblemSource />
+      <!-- 问题派发 -->
+      <IssueDistribution />
     </template>
     <template #right>
       <!-- 风险管控-->
@@ -28,6 +32,8 @@ import Header from "./components/Header";
 import { inject } from "vue";
 import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
+import ProblemSource from "./components/ProblemSource.vue";
+import IssueDistribution from "./components/IssueDistribution.vue";
 import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
 import OpenProblemTopList from "./components/OpenProblemTopList.vue";
@@ -50,5 +56,13 @@ console.log(eventBus, "eventBus", NoticeEvt);
   line-height: 100vh;
   font-size: 200px;
   font-weight: 900;
+}
+.left-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 12px;
 }
 </style>
