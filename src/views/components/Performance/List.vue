@@ -45,7 +45,7 @@
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
 import { reactive } from "vue";
-import { Vue3SeamlessScroll as VueSeamlessScroll } from "vue3-seamless-scroll";
+// import { Vue3SeamlessScroll as VueSeamlessScroll } from "vue3-seamless-scroll";
 
 const dataList = reactive([]);
 for (let i = 1; i < 100; i++) {

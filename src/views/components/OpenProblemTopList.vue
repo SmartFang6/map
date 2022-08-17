@@ -90,6 +90,7 @@ for (let i = 1; i <= 5; i++) {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding-left: 15px;
     .name {
       display: flex;
       justify-content: space-between;

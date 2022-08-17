@@ -15,7 +15,7 @@
       <slot name="right" />
     </div>
     <div class="bottom_view" :class="{ closeHB: bottomViewClose }">
-      <div @click="switchBottom" class="btn">X</div>
+      <!-- <div @click="switchBottom" class="btn">X</div> -->
       <slot name="bottom" />
     </div>
   </div>
@@ -45,17 +45,17 @@ const bottomViewClose = computed(() => {
 //     right: store.state.layout?.right === "close" ? "open" : "close",
 //   });
 // };
-const switchBottom = () => {
-  store.commit("UPDATE_LAYOUT", {
-    bottom: store.state.layout?.bottom === "close" ? "open" : "close",
-  });
-};
+// const switchBottom = () => {
+//   store.commit("UPDATE_LAYOUT", {
+//     bottom: store.state.layout?.bottom === "close" ? "open" : "close",
+//   });
+// };
 </script>
 
 <style scoped lang="less">
 @topH: 80px;
 @sideW: 500px;
-@bottomH: 300px;
+@bottomH: 256px;
 .cockpit {
   width: 100vw;
   height: 100vh;
@@ -78,6 +78,7 @@ const switchBottom = () => {
     height: calc(100vh - @topH);
     // background: rgba(108, 76, 8, 0.64);
     position: absolute;
+    z-index: 100;
     bottom: 0;
     transition: transform 0.5s ease;
 
@@ -110,10 +111,12 @@ const switchBottom = () => {
     justify-content: space-between;
   }
   .bottom_view {
-    width: calc(100vw - 2 * @sideW);
+    // width: calc(100vw - 2 * @sideW);
+    width: 100%;
     transition: transform 0.5s ease;
     height: @bottomH;
     position: absolute;
+    z-index: 1;
     bottom: 0;
     left: 0;
     right: 0;
@@ -138,7 +141,7 @@ const switchBottom = () => {
     transform: translateX(@sideW);
   }
   .closeHB {
-    transform: translateY(@bottomH);
+    transform: translateY(calc(@bottomH - 38px));
   }
 }
 </style>
