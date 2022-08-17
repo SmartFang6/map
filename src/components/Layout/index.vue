@@ -78,7 +78,6 @@ const bottomViewClose = computed(() => {
   .side {
     width: @sideW;
     height: calc(100vh - @topH);
-    // background: rgba(108, 76, 8, 0.64);
     position: absolute;
     z-index: 100;
     bottom: 0;

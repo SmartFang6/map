@@ -29,6 +29,7 @@ const props = defineProps({
   &-text {
     display: inline-block;
     margin-left: 45px;
+    font-size: 20px;
     font-family: "YouSheBiaoTiHei";
   }
 }

@@ -2,6 +2,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 
 // 创建一个Vue 应用
 const app = createApp(App);
@@ -14,4 +16,5 @@ requireComponents.keys().forEach((fileName) => {
   app.component(reqComName, reqCom.default || reqCom);
 });
 
+app.use(ElementPlus);
 app.use(store).use(router).mount("#app");
