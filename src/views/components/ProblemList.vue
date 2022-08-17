@@ -23,15 +23,53 @@
         </div>
       </div>
     </div>
+
+    <div class="problem-list-container">
+      <div class="table-header">
+        <div>排名</div>
+        <div>责任部门</div>
+        <div>事件来源</div>
+        <div>行政区域</div>
+        <div>所在河湖</div>
+        <div>事件类型</div>
+        <div>事件等级</div>
+        <div>发生时间</div>
+        <div>状态</div>
+      </div>
+      <div class="table-body">
+        <div
+          v-for="row in dataList"
+          :key="row.index"
+          :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+        >
+          <div>{{ row.index }}</div>
+          <div>{{ row.eventResponsibleUnitName }}</div>
+          <div>{{ row.eventSourceName }}</div>
+          <div>{{ row.adnm }}</div>
+          <div>{{ row.rchnm }}</div>
+          <el-tooltip
+            :content="row.eventTypeName"
+            effect="dark"
+            placement="top-start"
+          >
+            <div>{{ row.eventTypeName }}</div>
+          </el-tooltip>
+          <div>{{ row.eventGradeName }}</div>
+          <div>{{ row.occurTime }}</div>
+          <div>{{ row.status }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { useStore } from "vuex";
-import { computed } from "vue";
-import { ElSelect, ElOption } from "element-plus";
+import { computed, reactive } from "vue";
+import { ElSelect, ElOption, ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
+import "element-plus/es/components/tooltip/style/css";
 
 const store = useStore();
 
@@ -46,13 +84,29 @@ const onPanelTrigger = () => {
     bottom: store.state.layout?.bottom === "close" ? "open" : "close",
   });
 };
+
+// 数据列表
+const dataList = reactive([]);
+for (let i = 1; i < 100; i++) {
+  dataList.push({
+    index: i,
+    eventResponsibleUnitName: `${i}农村农业局`,
+    eventSourceName: "公众巡河",
+    adnm: "莲花镇",
+    rchnm: "曹娥江",
+    eventTypeName: "擅自围垦湖泊用于养殖",
+    eventGradeName: "较严重",
+    occurTime: "2022-10-10",
+    status: "逾期已处理",
+  });
+}
 </script>
 
 <style lang="less" scoped>
+// 头部信息
 .problem-list {
   width: 100%;
   height: 100%;
-  background: url(@/assets/images/layout-bottom-bg.png) no-repeat center bottom;
   &-header {
     height: 61px;
     width: 1039px;
@@ -113,6 +167,7 @@ const onPanelTrigger = () => {
   }
 }
 
+// 下拉框
 .custom-select {
   --el-input-border: transparent;
   --el-select-input-focus-border-color: transparent;
@@ -158,6 +213,78 @@ const onPanelTrigger = () => {
     & > svg {
       display: none;
     }
+  }
+}
+
+// 列表
+.problem-list-container {
+  width: 785px;
+  margin: 0 auto;
+  .table-header {
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    height: 30px;
+    width: 100%;
+  }
+  .table-body {
+    font-size: 14px;
+    color: #8ac0e0;
+    height: 150px;
+    overflow: hidden;
+  }
+  .table-row {
+    display: flex;
+    height: 30px;
+    align-items: center;
+    width: 100%;
+    &.stripe {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+  .text-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .table-header > div:nth-child(1),
+  .table-row > div:nth-child(1) {
+    width: 60px;
+  }
+  .table-header > div:nth-child(2),
+  .table-row > div:nth-child(2) {
+    width: 120px;
+  }
+  .table-header > div:nth-child(3),
+  .table-row > div:nth-child(3) {
+    width: 80px;
+  }
+  .table-header > div:nth-child(4),
+  .table-row > div:nth-child(4) {
+    width: 80px;
+  }
+  .table-header > div:nth-child(5),
+  .table-row > div:nth-child(5) {
+    width: 80px;
+  }
+  .table-header > div:nth-child(6),
+  .table-row > div:nth-child(6) {
+    width: 125px;
+    .text-ellipsis;
+  }
+  .table-header > div:nth-child(7),
+  .table-row > div:nth-child(7) {
+    width: 80px;
+  }
+  .table-header > div:nth-child(8),
+  .table-row > div:nth-child(8) {
+    width: 80px;
+  }
+  .table-header > div:nth-child(9),
+  .table-row > div:nth-child(9) {
+    width: 80px;
   }
 }
 </style>

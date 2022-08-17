@@ -1,5 +1,5 @@
 <!--------------------------------------------
- ¦ 问题待结案排名
+ ¦ 事件高发排名
  ¦ 文件描述
  ¦
  ¦ Author: 大风
@@ -8,7 +8,7 @@
 
 <template>
   <div>
-    <Title title="问题待结案排名" />
+    <Title title="事件高发排名" />
     <div class="top-list">
       <div v-for="item in dataList" :key="item.index" class="top-list-item">
         <div class="index">{{ item.index }}</div>

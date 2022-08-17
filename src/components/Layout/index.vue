@@ -14,9 +14,11 @@
       <!--      <div class="btn btnR" @click="switchSideR">&gt;</div>-->
       <slot name="right" />
     </div>
-    <div class="bottom_view" :class="{ closeHB: bottomViewClose }">
+    <div class="bottom_view">
       <!-- <div @click="switchBottom" class="btn">X</div> -->
-      <slot name="bottom" />
+      <div class="bottom_view_content" :class="{ closeHB: bottomViewClose }">
+        <slot name="bottom" />
+      </div>
     </div>
   </div>
 </template>
@@ -122,6 +124,8 @@ const bottomViewClose = computed(() => {
     right: 0;
     margin: 0 auto;
     // background: rgba(72, 108, 8, 0.71);
+    background: url(@/assets/images/layout-bottom-bg.png) no-repeat center
+      bottom;
     .btn {
       width: 100px;
       height: 40px;
@@ -133,6 +137,11 @@ const bottomViewClose = computed(() => {
       right: 0;
       margin: 0 auto;
     }
+  }
+  .bottom_view_content {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
   }
   .closeWL {
     transform: translateX(-@sideW);
