@@ -19,7 +19,7 @@ const props = defineProps({
   display: flex;
   align-items: center;
   width: 100%;
-  height: 36px;
+  height: 48px;
   box-sizing: border-box;
   padding: 0 12px;
   background: url(@/assets/images/title-bg.png);
@@ -29,7 +29,7 @@ const props = defineProps({
   &-text {
     display: inline-block;
     margin-left: 45px;
-    font-size: 20px;
+    font-size: 24px;
     font-family: "YouSheBiaoTiHei";
   }
 }
