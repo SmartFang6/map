@@ -7,6 +7,11 @@ const routes = [
     name: "home",
     component: HomeView,
   },
+  {
+    path: "/test",
+    name: "test",
+    component: import("@/test/index"),
+  },
 ];
 
 const router = createRouter({
