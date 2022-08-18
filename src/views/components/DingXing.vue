@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, onMounted, onUnmounted, nextTick } from "vue";
+import { computed, reactive, ref, onMounted, onUnmounted } from "vue";
 
 const data = reactive({
   echartsData: [
@@ -104,6 +104,7 @@ const chartOption = computed(() => {
         data: data.echartsData,
         center: ["30%", "50%"],
         emphasis: {
+          // focus: "self",
           label: {
             show: true,
             fontSize: "16",
@@ -126,22 +127,11 @@ const chartOption = computed(() => {
   };
 });
 
-// 定时展示图标信息
-const num = ref(0);
 // 定时器id容器
 let timer = null;
 // dom挂载后
 onMounted(() => {
   addEchartsDataTwo();
-  nextTick(() => {
-    timer = setInterval(() => {
-      if (num.value >= data.echartsData.length - 1) {
-        num.value = 0;
-      } else {
-        num.value++;
-      }
-    }, 3000);
-  });
 });
 onUnmounted(() => {
   clearInterval(timer);
@@ -160,14 +150,18 @@ const addEchartsDataTwo = () => {
     // 鼠标移入
     echartApi.on("mouseover", (e) => {
       clearInterval(timer);
-      // // 取消高亮指定的数据图形
-      if (e.dataIndex !== currentHighlight.value - 1) {
-        echartApi.dispatchAction({
-          type: "downplay",
-          seriesIndex: 0,
-          dataIndex: currentHighlight.value - 1,
-        });
-      }
+      // 取消高亮指定的数据图形
+      echartApi.dispatchAction({
+        type: "downplay",
+        seriesIndex: 0,
+        dataIndex: data.echartsData.map((itm, idx) => idx),
+      });
+      // 高亮当前指定数据图形
+      echartApi.dispatchAction({
+        type: "highlight",
+        seriesIndex: 0,
+        dataIndex: e.dataIndex,
+      });
       currentHighlight.value = e.dataIndex;
     });
     // 鼠标移出清除定时器，在打开定时器，取消高亮最后一次鼠标移入的图形
@@ -186,7 +180,6 @@ function echartsInterrupt(indexs = 0) {
   timer = setInterval(() => {
     if (currentHighlight.value > data.echartsData.length - 1) {
       currentHighlight.value = 0;
-      clearInterval(timer);
     }
     echartApi.dispatchAction({
       type: "downplay",

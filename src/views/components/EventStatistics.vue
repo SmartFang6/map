@@ -97,7 +97,7 @@ const configList = [
   }
 
   .item-value {
-    font-size: 24px;
+    font-size: 30px;
     font-family: AGENCYB;
     letter-spacing: 4px;
     color: #0adbe0;

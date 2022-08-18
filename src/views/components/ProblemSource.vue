@@ -481,7 +481,7 @@ onMounted(() => {
     justify-content: space-between;
     align-items: flex-start;
     box-sizing: border-box;
-    padding: 12px;
+    padding: 10px;
 
     &-left {
       ul {
@@ -493,19 +493,22 @@ onMounted(() => {
 
       ul > li {
         width: 260px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background: url(@/assets/images/problem_source_2.png);
         background-size: 100% 100%;
         text-align: center;
         line-height: 42px;
 
         .second-number {
-          font-size: 24px;
+          font-size: 35px;
         }
 
         .second-text {
           font-family: FZZDHJW;
           color: #c4f0ff;
-          font-size: 16px;
+          font-size: 20px;
           margin-left: 10px;
           letter-spacing: 0px;
         }
@@ -531,27 +534,29 @@ onMounted(() => {
       .first-info {
         position: absolute;
         right: 30px;
-        bottom: 20px;
+        bottom: 5px;
 
         li {
-          font-size: 20px;
+          .first-number {
+            font-size: 60px;
+          }
         }
-      }
-
-      .first-number {
-        font-size: 40px;
-      }
-
-      .first-text {
-        font-family: FZZDHJW;
-        color: #fff;
-        font-size: 20px;
+        .first-text {
+          font-family: FZZDHJW;
+          color: #fff;
+          font-size: 24px;
+        }
       }
     }
 
     .no {
       font-family: YOUSHEBIAOTIHEI;
-      color: #09c4e6;
+      text-shadow: 0.26vw 0.26vw 0.26vw rgb(0 0 0 / 50%);
+      background-image: linear-gradient(#0af0f3, #089ddb);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-size: 25px;
     }
   }
   #problemEchart {
