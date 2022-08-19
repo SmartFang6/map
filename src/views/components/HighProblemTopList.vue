@@ -45,7 +45,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 let tabActive = ref("type");
-import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 const dataList = reactive([]);
 for (let i = 1; i <= 5; i++) {
@@ -64,13 +64,11 @@ for (let i = 1; i <= 5; i++) {
   padding-left: 5px;
   padding-right: 20px;
   width: 100%;
-  height: 270px;
   box-sizing: border-box;
   color: #c4f0ff;
   font-size: 14px;
   &-container {
     width: 100%;
-    height: 240px;
     overflow: hidden;
   }
   &-item {

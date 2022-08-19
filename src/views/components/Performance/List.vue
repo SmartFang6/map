@@ -16,7 +16,7 @@
       <div>消号率</div>
     </div>
     <div class="table-body">
-      <vue-seamless-scroll :data="dataList">
+      <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
         <div
           v-for="item in dataList"
           :key="item.index"
@@ -48,7 +48,7 @@ import { reactive } from "vue";
 import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 const dataList = reactive([]);
-for (let i = 1; i < 100; i++) {
+for (let i = 1; i < 10; i++) {
   dataList.push({
     index: i,
     org: `${i}具体名称展示具体名称展示`,

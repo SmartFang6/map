@@ -37,7 +37,7 @@
         <div>状态</div>
       </div>
       <div class="table-body">
-        <vue-seamless-scroll :data="dataList">
+        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
           <div
             v-for="row in dataList"
             :key="row.index"
@@ -90,7 +90,7 @@ const onPanelTrigger = () => {
 
 // 数据列表
 const dataList = reactive([]);
-for (let i = 1; i < 100; i++) {
+for (let i = 1; i < 10; i++) {
   dataList.push({
     index: i,
     eventResponsibleUnitName: `${i}农村农业局`,
