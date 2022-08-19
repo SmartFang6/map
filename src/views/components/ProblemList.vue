@@ -207,7 +207,7 @@ for (let i = 1; i < 100; i++) {
   }
   :deep(.el-select__caret.el-icon) {
     width: 12px;
-    height: 7px;
+    height: 7px !important;
     background: url(@/assets/images/custom-select-arrow-down.png);
     display: block;
     & > svg {

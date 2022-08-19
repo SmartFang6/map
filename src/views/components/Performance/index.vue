@@ -7,7 +7,12 @@
 
 <template>
   <div class="performance">
-    <Title title="处置绩效" />
+    <Title title="处置绩效">
+      <el-tabs v-model="tabActive" type="card">
+        <el-tab-pane class="tab-item" label="乡镇" name="village"></el-tab-pane>
+        <el-tab-pane label="部门" name="department"></el-tab-pane>
+      </el-tabs>
+    </Title>
     <!--#region 奖牌栏-->
     <div class="medal-bar">
       <!--#region 第一名-->
@@ -26,8 +31,14 @@
       <!--#region 其他-->
       <div class="other">
         <div class="tabs">
-          <div class="tab active">销号率排名</div>
-          <div class="tab">考核排名</div>
+          <div
+            v-for="type in typeLis"
+            :key="type.value"
+            :class="{ tab: true, active: typeActive === type.value }"
+            @click="typeActive = type.value"
+          >
+            {{ type.label }}
+          </div>
         </div>
         <!--#region 列表-->
         <div class="other-list">
@@ -61,12 +72,51 @@
 <script setup>
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
+import { ref, reactive } from "vue";
+
+let tabActive = ref("village");
+let typeActive = ref(1);
+const typeLis = reactive([
+  {
+    label: "销号率排名",
+    value: 1,
+  },
+  {
+    label: "考核排名",
+    value: 2,
+  },
+]);
 </script>
 
 <style lang="less" scoped>
 .performance {
   display: flex;
   flex-direction: column;
+  :deep(.el-tabs) {
+    height: auto;
+    margin-left: 10px;
+  }
+
+  :deep(.el-tabs--card > .el-tabs__header .el-tabs__item) {
+    box-sizing: border-box;
+    border: none;
+    color: white;
+  }
+
+  :deep(.el-tabs--card > .el-tabs__header .el-tabs__nav) {
+    border: none;
+  }
+
+  :deep(.el-tabs--card > .el-tabs__header) {
+    border: none;
+  }
+  :deep(.el-tabs__header) {
+    margin: 0;
+  }
+  :deep(.el-tabs--card > .el-tabs__header .el-tabs__item.is-active) {
+    background: url(@/assets/images/checked.png);
+    background-size: 100% 100%;
+  }
 }
 
 .medal-bar {

@@ -17,8 +17,8 @@
       <RiskControl />
       <!-- 处置绩效 -->
       <Performance />
-      <!-- 问题待结案排名-->
-      <OpenProblemTopList />
+      <!-- 高发问题排名-->
+      <HighProblemTopList />
     </template>
     <template #bottom>
       <!-- 问题清单 -->
@@ -36,7 +36,7 @@ import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
 import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
-import OpenProblemTopList from "./components/OpenProblemTopList.vue";
+import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
 const eventBus = inject("eventBus");
 

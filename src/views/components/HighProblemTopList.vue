@@ -7,10 +7,15 @@
  ¦------------------------------------------->
 
 <template>
-  <div>
-    <Title title="事件高发排名" />
-    <div class="top-list">
-      <div v-for="item in dataList" :key="item.index" class="top-list-item">
+  <div class="high-list-wrapper">
+    <Title title="事件高发排名">
+      <el-tabs v-model="tabActive" type="card">
+        <el-tab-pane class="tab-item" label="类型" name="type"></el-tab-pane>
+        <el-tab-pane label="地区" name="area"></el-tab-pane>
+      </el-tabs>
+    </Title>
+    <div class="high-list">
+      <div v-for="item in dataList" :key="item.index" class="high-list-item">
         <div class="index">{{ item.index }}</div>
         <div class="item-content">
           <div class="name">
@@ -27,7 +32,8 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+let tabActive = ref("type");
 
 const dataList = reactive([]);
 for (let i = 1; i <= 5; i++) {
@@ -41,7 +47,7 @@ for (let i = 1; i <= 5; i++) {
 </script>
 
 <style lang="less" scoped>
-.top-list {
+.high-list {
   padding-top: 13px;
   padding-left: 5px;
   padding-right: 20px;
@@ -110,6 +116,29 @@ for (let i = 1; i <= 5; i++) {
     background-image: linear-gradient(-18deg, #0adbe0 0%, #14a2d2 100%),
       linear-gradient(90deg, rgba(89, 240, 93, 0.5) 0%, #59f05d 100%);
     background-blend-mode: normal, normal;
+  }
+}
+
+.high-list-wrapper {
+  :deep(.el-tabs--card > .el-tabs__header .el-tabs__item) {
+    box-sizing: border-box;
+    border: none;
+    color: white;
+  }
+
+  :deep(.el-tabs--card > .el-tabs__header .el-tabs__nav) {
+    border: none;
+  }
+
+  :deep(.el-tabs--card > .el-tabs__header) {
+    border: none;
+  }
+  :deep(.el-tabs__header) {
+    margin: 0;
+  }
+  :deep(.el-tabs--card > .el-tabs__header .el-tabs__item.is-active) {
+    background: url(@/assets/images/checked.png);
+    background-size: 100% 100%;
   }
 }
 </style>
