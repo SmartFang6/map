@@ -16,7 +16,7 @@
       <div>消号率</div>
     </div>
     <div class="table-body">
-      <vue-seamless-scroll :list="dataList" :hover="true" :step="1.3">
+      <vue-seamless-scroll :data="dataList">
         <div
           v-for="item in dataList"
           :key="item.index"
@@ -45,7 +45,7 @@
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
 import { reactive } from "vue";
-// import { Vue3SeamlessScroll as VueSeamlessScroll } from "vue3-seamless-scroll";
+import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 const dataList = reactive([]);
 for (let i = 1; i < 100; i++) {

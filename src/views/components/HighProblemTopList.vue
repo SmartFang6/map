@@ -15,17 +15,28 @@
       </el-tabs>
     </Title>
     <div class="high-list">
-      <div v-for="item in dataList" :key="item.index" class="high-list-item">
-        <div class="index">{{ item.index }}</div>
-        <div class="item-content">
-          <div class="name">
-            <span>{{ item.name }}</span>
-            <span>{{ item.value }}</span>
+      <div class="high-list-container">
+        <vue-seamless-scroll :data="dataList">
+          <div
+            v-for="item in dataList"
+            :key="item.index"
+            class="high-list-item"
+          >
+            <div class="index">{{ item.index }}</div>
+            <div class="item-content">
+              <div class="name">
+                <span>{{ item.name }}</span>
+                <span>{{ item.value }}</span>
+              </div>
+              <div class="progress-outer">
+                <div
+                  class="progress-inner"
+                  :style="{ width: `${item.rate}%` }"
+                />
+              </div>
+            </div>
           </div>
-          <div class="progress-outer">
-            <div class="progress-inner" :style="{ width: `${item.rate}%` }" />
-          </div>
-        </div>
+        </vue-seamless-scroll>
       </div>
     </div>
   </div>
@@ -34,6 +45,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 let tabActive = ref("type");
+import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 const dataList = reactive([]);
 for (let i = 1; i <= 5; i++) {
@@ -51,8 +63,16 @@ for (let i = 1; i <= 5; i++) {
   padding-top: 13px;
   padding-left: 5px;
   padding-right: 20px;
+  width: 100%;
+  height: 270px;
+  box-sizing: border-box;
   color: #c4f0ff;
   font-size: 14px;
+  &-container {
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+  }
   &-item {
     display: flex;
     align-items: center;

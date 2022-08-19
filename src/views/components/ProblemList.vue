@@ -37,27 +37,29 @@
         <div>状态</div>
       </div>
       <div class="table-body">
-        <div
-          v-for="row in dataList"
-          :key="row.index"
-          :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
-        >
-          <div>{{ row.index }}</div>
-          <div>{{ row.eventResponsibleUnitName }}</div>
-          <div>{{ row.eventSourceName }}</div>
-          <div>{{ row.adnm }}</div>
-          <div>{{ row.rchnm }}</div>
-          <el-tooltip
-            :content="row.eventTypeName"
-            effect="dark"
-            placement="top-start"
+        <vue-seamless-scroll :data="dataList">
+          <div
+            v-for="row in dataList"
+            :key="row.index"
+            :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
           >
-            <div>{{ row.eventTypeName }}</div>
-          </el-tooltip>
-          <div>{{ row.eventGradeName }}</div>
-          <div>{{ row.occurTime }}</div>
-          <div>{{ row.status }}</div>
-        </div>
+            <div>{{ row.index }}</div>
+            <div>{{ row.eventResponsibleUnitName }}</div>
+            <div>{{ row.eventSourceName }}</div>
+            <div>{{ row.adnm }}</div>
+            <div>{{ row.rchnm }}</div>
+            <el-tooltip
+              :content="row.eventTypeName"
+              effect="dark"
+              placement="top-start"
+            >
+              <div>{{ row.eventTypeName }}</div>
+            </el-tooltip>
+            <div>{{ row.eventGradeName }}</div>
+            <div>{{ row.occurTime }}</div>
+            <div>{{ row.status }}</div>
+          </div>
+        </vue-seamless-scroll>
       </div>
     </div>
   </div>
@@ -70,6 +72,7 @@ import { ElSelect, ElOption, ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
+import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 const store = useStore();
 
