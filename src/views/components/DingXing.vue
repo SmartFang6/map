@@ -104,14 +104,12 @@ const chartOption = computed(() => {
         data: data.echartsData,
         center: ["30%", "50%"],
         emphasis: {
-          // focus: "self",
           label: {
             show: true,
             fontSize: "16",
             fontWeight: "bold",
             color: "#fff",
             formatter(val) {
-              console.log(val, "emphasisemphasis");
               return `{value${val.dataIndex}|${val.name}}\n\n{value${
                 val.dataIndex
               }|${val.percent + "%"}}`;

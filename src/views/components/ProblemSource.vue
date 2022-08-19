@@ -38,7 +38,7 @@
 import { onMounted, ref } from "vue";
 import "echarts-gl";
 import * as Echarts from "echarts";
-const chart = ref();
+const chart = ref(null);
 let chartTool = null;
 
 let optionConfig = [
@@ -320,7 +320,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     grid3D: {
       show: false,
       boxHeight: 5,
-      top: "10%",
+      top: "5%",
       left: "-20%",
       viewControl: {
         // 3d效果可以放大、旋转等，请自己去查看官方配置
@@ -563,6 +563,9 @@ onMounted(() => {
     width: 100%;
     height: 240px;
     max-height: 240px;
+    background: url(@/assets/images/pie_bg.png) no-repeat;
+    background-size: 235px 135px;
+    background-position: 28px 102px;
   }
 }
 </style>
