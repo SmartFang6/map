@@ -2,7 +2,9 @@
   <Layout>
     <template #header><Header /></template>
     <template #map>
-      <div class="map">MAP</div>
+      <div class="map">
+        <Map />
+      </div>
     </template>
     <template #left>
       <!-- 事件统计 -->
@@ -38,6 +40,7 @@ import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
 import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
+import Map from "@/views/OLMap/RainMap";
 const eventBus = inject("eventBus");
 
 console.log(eventBus, "eventBus", NoticeEvt);
