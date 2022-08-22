@@ -1,7 +1,6 @@
 <template>
   <div class="IssueDistribution">
     <Title title="问题派发">
-      <!-- <dc-table /> -->
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane class="tab-item" label="定性" name="dx"></el-tab-pane>
         <el-tab-pane label="定责" name="dz"></el-tab-pane>
