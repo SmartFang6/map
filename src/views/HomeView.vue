@@ -7,7 +7,7 @@
           @changeTime="mapRef?.changeTime"
           @changeLayerType="mapRef?.changeLayerType"
         />
-        <Map ref="mapRef" />
+        <Map ref="mapRef" @showPop="showPop" />
       </div>
     </template>
     <template #left>
@@ -77,10 +77,6 @@ const mapRef = ref(null);
 .map {
   width: 100%;
   height: 100%;
-  text-align: center;
-  line-height: 100vh;
-  font-size: 200px;
-  font-weight: 900;
 }
 .left-box {
   display: flex;

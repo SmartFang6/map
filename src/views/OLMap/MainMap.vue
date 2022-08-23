@@ -1,38 +1,43 @@
 <template>
   <div class="picture-map2">
     <div id="map2" />
+    <AreaHappyPopInfo
+      v-if="areaHappyShow"
+      :lgtd="popInfo.lgtd"
+      :lttd="popInfo.lttd"
+      :info="popInfo"
+    />
+    <!-- <TownOverlay
+      v-for="item in townss"
+      :key="item.adcd"
+      :detail="item"
+      :lgtd="item.lgtd"
+      :lttd="item.lttd"
+    /> -->
   </div>
 </template>
 
 <script>
-import Point from "ol/geom/Point";
-import Feature from "ol/Feature";
-import Style from "ol/style/Style";
-import Icon from "ol/style/Icon";
-import VectorLayer from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
-import Fill from "ol/style/Fill";
-import Text from "ol/style/Text";
-import GeoJSON from "ol/format/GeoJSON";
-import Stroke from "ol/style/Stroke";
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
-import LayerSwitch from "./layers/LayerSwitch";
-import ShadeLayer from "./layers/ShadeLayer";
-import OrgAdcdWmsLayer from "./layers/OrgAdcdWmsLayer";
-// import LayerParams from './common/LayerParams'
-import BaseVectorLayer from "./layers/base/BaseVectorLayer";
-import { pointLayer, riverPointLayer } from "./config/layerConfig";
+import BaseVectorLayer from './layers/base/BaseVectorLayer'
+import { basicTotalLayer, orgHighLightLayer, pointLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
 import MainShadowLayer from "./layers/imgShade/MainShadowLayer";
 import TdtImgClipLayer from './layers/imgShade/TdtImgClipLayer';
 import OrgBoundaryLayer from './layers/common/OrgBoundaryLayer'
+import moment from "moment";
+import StatisticsLayer from './layers/StatisticsLayer'
+// import TownOverlay from './overlays/TownOverlay'
+import AreaHappyPopInfo from './components/WaterAreaPopInfo'
+import BasicTotalLayer from './layers/BasicTotalLayer'
+import { getCenter } from 'ol/extent'
 
 export default {
   name: "FirstMap",
-  components: {  },
+  components: {  AreaHappyPopInfo },
   provide() {
     return { getMap: this.getMap };
   },
@@ -40,11 +45,17 @@ export default {
   data() {
     return {
       adcd: "330182",
-      curLayer: "", // 当前图层
+      curLayer: 'basicTotalLayer', // 当前图层，默认为统计图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
       address: "",
+      startTime: moment(new Date()).startOf('month').format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(new Date()).endOf('month').format('YYYY-MM-DD 23:59:59'),
+      townss: [], // 统计图
+      areaHappyShow: false,
+      curIndex: 0,
+      popInfo: {},
     };
   },
   watch: {
@@ -80,7 +91,9 @@ export default {
         mainShadeLayer: new MainShadowLayer(), // 地图下偏移的阴影
         boundary: new OrgBoundaryLayer(), // 边界线
         // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
-        statisticsLayer: new DCLayer(), // 统计图
+        // statisticsLayer: new StatisticsLayer(statisticsLayer), // 统计图
+        selectLayer: new BaseVectorLayer(orgHighLightLayer),
+        basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 基础总览
         pointLayer: new DCLayer(pointLayer), // 点位图
       };
       // 加载立体感效果的图层
@@ -93,11 +106,66 @@ export default {
       // 加载下级行政区划边界
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
+      // 初始化加载统计图
+      // this.layers.statisticsLayer.load(new LayerParams({
+      //   vm: this,
+      //   searchInfo: {
+      //     adcd: this.adcd,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime
+      //   }
+      // }))
+      this.layers.basicTotalLayer.load(new LayerParams({
+        vm: this,
+        searchInfo: {
+          adcd: this.adcd,
+          startTime: this.startTime,
+          endTime: this.endTime,
+        }
+      }))
+      this.layers.selectLayer.addLayer(this.map)
+    },
+    // 移除轮播
+    removeInterval() {
+      if (this.interval) {
+        this.areaHappyShow = false
+        window.clearInterval(this.interval)
+        this.interval = null
+      }
+    },
+    // 初始化轮播
+    initInterval() {
+      this.interval = window.setInterval(() => {
+        this.layers.selectLayer.clear()// 高亮
+        this.areaHappyShow = false
+        const features = this.layers.basicTotalLayer.getSource().getFeatures()
+        const curFeature = features[this.curIndex]
+        this.layers.selectLayer.addFeatures([curFeature])// 高亮
+        const properties = curFeature.get('properties')
+        properties.layerid = 'basicTotalLayer'
+        properties.lgtd = getCenter(curFeature.getGeometry().getExtent())[0]
+        properties.lttd = getCenter(curFeature.getGeometry().getExtent())[1]
+        // const center = curFeature.getGeometry().getExtent()
+        // properties.lgtd = (center[0] + center[2]) / 2
+        // properties.lttd = (center[1] + center[3]) / 2
+        this.popInfo = properties
+        console.log('pop', properties);
+        this.$nextTick(() => {
+          this.areaHappyShow = true
+        })
+        this.curIndex++
+        if (this.curIndex >= features.length) {
+          this.curIndex = 0
+        }
+      }, 2000)
     },
     // 时间筛选
     changeTime(val) {
+      console.log('切换时间', val);
+      this.startTime = val.startTime
+      this.endTime = val.endTime
       // 先移除当前图层
-      this.layers[this.curLayer].removeLayer(this.map)
+      this.layers[this.curLayer].removeLayer(this.map, this)
       // 再重新加载当前图层
       let searchInfo = {
         adcd: this.adcd,
@@ -111,11 +179,12 @@ export default {
     },
     // 统计图点位图切换
     changeLayerType(val) {
+      console.log('切换类型', val);
       // 先移除当前图层
-      this.layers[this.curLayer].removeLayer(this.map)
+      this.layers[this.curLayer].removeLayer(this.map, this)
       switch(val) {
         case '1': // 统计图
-          this.curLayer = 'statisticsLayer'
+          this.curLayer = 'basicTotalLayer'
           break
         case '2': // 点位图
           this.curLayer = 'pointLayer'
@@ -124,8 +193,8 @@ export default {
       // 再加载新图层
       let searchInfo = {
         adcd: this.adcd,
-        startTime: val.startTime,
-        endTime: val.endTime,
+        startTime: this.startTime,
+        endTime: this.endTime,
       }
       this.layers[this.curLayer].load(new LayerParams({
         vm: this,
@@ -170,7 +239,7 @@ export default {
     initClick() {
       this.map.on("click", (evt) => {
         let layerid = "";
-        const clickLayers = ["1111"];
+        const clickLayers = ["point"];
         const clickFeature = this.map.forEachFeatureAtPixel(
           evt.pixel,
           (feature, layer) => {
@@ -185,14 +254,7 @@ export default {
         );
         if (clickFeature) {
           // 有元素选中
-          console.log("fea", clickFeature);
-        } else {
-          // 没有元素选中，则移动所在点位，并重新加载范围内点位
-          this.curLong = evt.coordinate[0];
-          this.curLat = evt.coordinate[1];
-          this.addLocateLayer(evt.coordinate);
-          this.getAddressFromCoord(evt.coordinate);
-          this.reloadLayers();
+          this.$emit('showPop', clickFeature.getProperties().properties)
         }
       });
     },

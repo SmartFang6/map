@@ -1,26 +1,26 @@
 <template>
-  <div class="popInfo" :style="{ backgroundImage: 'url(' + this.getImage() + ')' }">
-    <div class="content">
-        <div class="total-title">
-          <div class="townname">{{ info.adnm }}</div>
-        </div>
-        <div class="total-row">
-          <div class="col">
-            <div class="col-title">水域面积</div>
-            <div class="score">{{ info.waterArea !== null ? info.waterArea : '--' }}km²</div>
-          </div>
-          <div class="col white">
-            <div class="col-title">水面率</div>
-            <div class="degree">
-              {{ info.waterSurfaceRate !== null ? info.waterSurfaceRate : '--' }}%
-            </div>
-          </div>
+  <div class="popInfo">
+    <div class="conent">
+      <div class="one">
+        <span class="title">{{ info.adnm ? info.adnm: '--' }}</span>
+      </div>
+        <div class="two">
+          <span class="lineone">问题数</span>
+        <span class="lineonenum">{{ info.allNum !== null ? info.allNum : '--' }}</span>
+        <span class="lineoneunit">个</span></div>
+        <div class="three">
+        <span class="linetwo">销号率</span>
+        <span class="linetwonum">{{ info.completedRate !== null && info.completedRate !== undefined ? (Number(info.completedRate)*100).toFixed(2) : '--' }}</span>
+        <span class="linetwounit">%</span>
         </div>
     </div>
+  <!-- <img class="bg" :src="icon" /> -->
   </div>
 </template>
 <script>
 import DcOverlay from '../common/DcOverlay'
+import bgPic from '@/assets/map/bg.png'
+import titlePic from '@/assets/map/title.png'
 export default {
   mixins: [DcOverlay],
   props: {
@@ -32,105 +32,136 @@ export default {
     },
   },
   data() {
-    return {}
+    return {
+      icon: '',
+      titleIcon: '',
+    }
+  },
+  mounted() {
+    this.icon = bgPic
+    this.titleIcon = titlePic
   },
   methods: {
-    getImage() {
-      let icon = require('@/assets/images/mxqt/dialog_blue.png')
-      return icon
-    },
-    getColor() {
-      let background = '#28e457'
-      return background
-    },
+    
   },
 }
 </script>
 <style lang="less" scoped>
 .popInfo {
-  background-repeat: no-repeat;
-  background-size: 100%, 100%;
-  color: #ffffff;
-  font-family: MicrosoftYaHei-Bold;
-  font-size: 18px;
-  font-weight: normal;
-  font-stretch: normal;
-  .content {
-    padding: 20px;
-    .total-title {
-      display: flex;
-      width: 260px;
-      height: 35px;
-      .townname {
-        margin: 0 0 0 30px;
-        padding-top: 18px;
-        color: white;
-        font-size: 20px;
-        font-weight: bold; //字体加粗
-        // justify-content: flex-start;
-        // display: flex;
-        // align-items: center;
-      }
+  transform: translate(-50%, 50%);
+  background: url('~@/assets/map/bg.png') no-repeat ;
+  background-size: 100% 100%;
+  width: 269px;
+  height: 132px;
+  position: relative;
+  text-align: left;
+  .conent{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 188px;
+    height: 132px;
+    .one {
+      padding-top: 10px;
     }
-    .total-row {
-      width: 220px;
-      height: 80px;
-      margin-top: 15px;
-      margin-left: 20px;
-      background-color: #073f5b;
-      opacity: 0.7; // 透明度
-      border: solid 2px #449dbe;
-      display: flex;
-      text-align: center;
-      .col {
-        width: 120px;
-        color: white;
-        justify-content: flex-end;
-        align-items: center;
-        padding: 8px 8px 8px 0;
-        .col-title {
-          margin: auto;
-          font-size: 14px;
-        }
-        .score {
-          font-size: 22px;
-          margin-top: 8px;
-          padding: 3px 0 0 5px;
-        }
-        .degree {
-          font-size: 22px;
-          // color: black;
-          text-align: center;
-          margin-top: 8px;
-          padding: 4px;
-          //  padding: 3px 0 0 5px;
-          // background-color: #28e457;
-        }
-      }
-      .white {
-        color: white;
-        justify-content: flex-end;
-        flex: 1;
-        align-items: center;
-      }
+    .two {
+      padding-top: 8px;
+    }
+    .three {
+      padding-top: 8px;
     }
     .title {
-      font-size: 18px;
+      font-family: YouSheBiaoTiHei;
+      font-size: 24px;
+      color: #0adbe0;
+      text-align: left;
+      padding-left: 20px;
     }
-    .row {
-      font-size: 14px;
-      margin-top: 8px;
-      .unit {
-        font-size: 16px;
-        font-weight: 900;
-      }
-      .beautiful {
-        background-color: #6db773;
-        width: 70px;
-        // height:20px;
-        padding: 6px;
-      }
-    }
+    
+  .lineone {
+    margin-top: 120px;
+    margin-left: 20px;
+    background: url('~@/assets/map/title.png') no-repeat ;
+    background-size: 100% 100%;
+    width: 70px;
+    height: 24px;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #0adbe0;
+    padding: 3px 5px 3px 5px;
   }
+  .lineonenum {
+    // position: relative;
+    font-family: AgencyFB-Bold;
+    font-size: 24px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #0adbe0;
+    margin-left: 20px;
+    // left: 10px;
+    // left: -250px;
+  }
+  .lineoneunit {
+    // position: relative;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #0adbe0;
+    // left: -150px;
+  }
+  .linetwo {
+    background: url('~@/assets/map/title.png') no-repeat ;
+    background-size: 100% 100%;
+    width: 70px;
+    height: 24px;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #0adbe0;
+    // margin-top: 120px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    padding: 3px 5px 3px 5px;
+  }
+  .linetwonum {
+    // position: relative;
+    font-family: AgencyFB-Bold;
+    font-size: 24px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #0adbe0;
+    margin-left: 20px;
+    // left: -250px;
+    // top: 30px;
+  }
+  .linetwounit {
+    // position: relative;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 28px;
+    letter-spacing: 0px;
+    color: #0adbe0;
+    // left: -150px;
+    // top: 30px;
+  }
+  }
+  
+  
 }
 </style>

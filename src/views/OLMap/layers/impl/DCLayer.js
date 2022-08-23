@@ -14,11 +14,12 @@ class DCLayer extends MergeLayerImpl {
     // 开始加载数据
     if (this.layerConfig.loadFunc) {
       this.res = await this.layerConfig.loadFunc(searchInfo)
+      // console.log('res1', this.res);
       this.res = this.res.message
     } else {
       this.res = []
     }
-    console.log('load res', this.res);
+    // console.log('load res', this.res);
     // this.legendChange()
     this.clear()
     if (this.res.length > 0) {

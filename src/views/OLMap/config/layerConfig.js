@@ -15,6 +15,7 @@ import SldUtils from '../utils/SldUtils'
 import pointRed from '@/assets/map/pointRed.png'
 import pointGreen from '@/assets/map/pointGreen.png'
 import pointYellow from '@/assets/map/pointYellow.png'
+import { getPointList } from '@/apis/map'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
 
 export const geoserverWmsUrl = {
@@ -218,9 +219,9 @@ export const protectVillageLayer = {
 // 河段点
 export const riverPointLayer = {
   field: {
-    lgtd: 'lgtd',
-    lttd: 'lttd',
-    id: 'stcd',
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'id',
   },
   id: 'riverPoint',
   type: LayerTypeEnum.vector,
@@ -250,12 +251,42 @@ function riverPointStyle(feature) {
   })
 }
 
+// 统计图
+export const statisticsLayer = {
+  id: 'statistics',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 20,
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  }
+}
+
+// 基础总览
+export const basicTotalLayer = {
+  id: 'basicTotal',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'rgba(0,0,0,0)'
+    }
+  },
+  zIndex: 10
+}
+
 // 点位图图层
 export const pointLayer = {
   field: {
-    lgtd: 'lgtd',
-    lttd: 'lttd',
-    id: 'stcd',
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'id',
   },
   id: 'point',
   type: LayerTypeEnum.vector,
@@ -267,16 +298,16 @@ export const pointLayer = {
     icon: {
       src: [
         'case',
-        ['==', ['get', 'problemStatus'], '0'],
+        ['==', ['get', 'statPointLocationType'], '1'],
         pointGreen, // 已销号
-        ['==', ['get', 'problemStatus'], '1'],
+        ['==', ['get', 'statPointLocationType'], '2'],
         pointYellow, // 未销号
-        ['==', ['get', 'problemStatus'], '2'],
+        ['==', ['get', 'statPointLocationType'], '3'],
         pointRed, // 逾期
         pointGreen
       ],
       scale: 1
     }
   },
-  // loadFunc: getRiverByLongLat
+  loadFunc: getPointList
 }
