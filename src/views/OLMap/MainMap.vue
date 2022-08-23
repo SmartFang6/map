@@ -77,13 +77,10 @@ export default {
     },
     firstLoad() {
       this.layers = {
-        // shadeLayer: new ShadeLayer(),
         mainShadeLayer: new MainShadowLayer(), // 地图下偏移的阴影
         boundary: new OrgBoundaryLayer(), // 边界线
         // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
       };
-      // 加载遮罩
-      // this.layers.shadeLayer.load(this.adcd, this.map, true)
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
         map: this.map,
@@ -91,6 +88,7 @@ export default {
       });
       // 加载下级行政区划边界
       this.layers.boundary.load(this.map, this.adcd)
+      // 加载下级行政区划边界
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
     },

@@ -131,7 +131,7 @@ export const orgAdcdWmsLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivision/wms',
+    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/wms',
     params: {
       LAYERS: '',
       VERSION: '1.3.0',

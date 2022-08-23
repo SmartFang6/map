@@ -3,6 +3,7 @@ import {
   getMapAdcdFromSystem,
   getAdLevelBySystemAdcd,
   getFeatureTypesByAdLevel,
+  getChildFeatureTypesByAdLevel,
 } from '../../common/commonrough'
 import SldUtils from '../../utils/SldUtils'
 import { StyleTypeEnum } from '../../enum/TypeEnum'
@@ -54,9 +55,11 @@ class OrgBoundaryLayer extends BaseLayer {
     }
     const mapadcd = getMapAdcdFromSystem(adcd)
     const adLevel = getAdLevelBySystemAdcd(adcd)
-    const featureType = getFeatureTypesByAdLevel(adLevel)
+    // const featureType = getFeatureTypesByAdLevel(adLevel)
+    const featureType = getChildFeatureTypesByAdLevel(adLevel)
     this.layerConfig.source.params.LAYERS = featureType
-    this.layerConfig.source.params.CQL_FILTER = `admin_div_code=${mapadcd}`
+    this.layerConfig.source.params.CQL_FILTER = `parent_code=${mapadcd}`
+    // this.layerConfig.source.params.CQL_FILTER = `parent_code=${mapadcd}`
     if (this.styleConfig) {
       if (this.styleConfig.sldBody) {
         this.layerConfig.source.params.sld_body = this.styleConfig.sldBody
