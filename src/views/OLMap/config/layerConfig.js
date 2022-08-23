@@ -12,6 +12,9 @@ import { SourceTypeEnum, LayerTypeEnum, StyleTypeEnum } from '../enum/TypeEnum'
 import { geoserverPath } from './geoserverConfig'
 import { res, matrixIds, projectionExtent } from './mapConfig'
 import SldUtils from '../utils/SldUtils'
+import pointRed from '@/assets/map/pointRed.png'
+import pointGreen from '@/assets/map/pointGreen.png'
+import pointYellow from '@/assets/map/pointYellow.png'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
 
 export const geoserverWmsUrl = {
@@ -187,60 +190,6 @@ function drawStyle(feature) {
 }
 
 // 雨量站
-// export const rainStationLayer = {
-//   id: 'rainStation',
-//   type: LayerTypeEnum.vector,
-//   source: { type: SourceTypeEnum.vector },
-//   levelField: 'warnType',
-//   warnConfig: {
-//     1: {
-//       color: '#f3382b',
-//       icon: rainRed,
-//       symbolSize: [20, 20],
-//     },
-//   },
-//   style: rainStationStyle,
-//   zIndex: 10,
-//   field: {
-//     id: 'stcd',
-//     lgtd: 'lgtd',
-//     lttd: 'lttd',
-//   },
-//   // loadFunc: getRiverLevelList,
-// }
-// function rainStationStyle(feature) {
-//   let icon
-//   const name = feature.get('properties').stnm
-//   const { drp } = feature.get('properties')
-//   switch (feature.get('properties').warnType) {
-//     case '1':
-//       icon = rainRed
-//       break
-//     case '0':
-//       icon = rainGreen
-//       break
-//     default:
-//       icon = rainGreen
-//       break
-//   }
-//   return new Style({
-//     type: StyleTypeEnum.icon,
-//     image: new Icon({
-//       src: icon,
-//       scale: 0.6,
-//     }),
-//     text: new Text({
-//       text: [`${name}  `, '', drp, 'bold 16px SourceHanSansCN-Heavy', 'mm', ''],
-//       fill: new Fill({ color: '#ffffff' }),
-//       font: 'normal 16px SourceHanSansCN-Regular',
-//       offsetY: 30,
-//       padding: [4, 5, 3, 5],
-//       backgroundFill: new Fill({ color: '#38407faa' }),
-//     }),
-//   })
-// }
-
-// 雨量站
 export const rainStationLayer = {
   id: 'rainStation',
   type: LayerTypeEnum.vector,
@@ -299,4 +248,35 @@ function riverPointStyle(feature) {
       offsetY: -28,
     }),
   })
+}
+
+// 点位图图层
+export const pointLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'stcd',
+  },
+  id: 'point',
+  type: LayerTypeEnum.vector,
+  source: { type: SourceTypeEnum.vector },
+  zIndex: 11,
+  levelField: null,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'problemStatus'], '0'],
+        pointGreen, // 已销号
+        ['==', ['get', 'problemStatus'], '1'],
+        pointYellow, // 未销号
+        ['==', ['get', 'problemStatus'], '2'],
+        pointRed, // 逾期
+        pointGreen
+      ],
+      scale: 1
+    }
+  },
+  // loadFunc: getRiverByLongLat
 }

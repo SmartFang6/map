@@ -22,7 +22,7 @@ import ShadeLayer from "./layers/ShadeLayer";
 import OrgAdcdWmsLayer from "./layers/OrgAdcdWmsLayer";
 // import LayerParams from './common/LayerParams'
 import BaseVectorLayer from "./layers/base/BaseVectorLayer";
-import { riverPointLayer } from "./config/layerConfig";
+import { pointLayer, riverPointLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -39,7 +39,7 @@ export default {
   props: {},
   data() {
     return {
-      adcd: "330327",
+      adcd: "330182",
       curLayer: "", // 当前图层
       baseLayers: [], // 所有加载的图层
       lgtd: "",
@@ -80,6 +80,8 @@ export default {
         mainShadeLayer: new MainShadowLayer(), // 地图下偏移的阴影
         boundary: new OrgBoundaryLayer(), // 边界线
         // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
+        statisticsLayer: new DCLayer(), // 统计图
+        pointLayer: new DCLayer(pointLayer), // 点位图
       };
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
@@ -92,7 +94,44 @@ export default {
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
     },
-
+    // 时间筛选
+    changeTime(val) {
+      // 先移除当前图层
+      this.layers[this.curLayer].removeLayer(this.map)
+      // 再重新加载当前图层
+      let searchInfo = {
+        adcd: this.adcd,
+        startTime: val.startTime,
+        endTime: val.endTime,
+      }
+      this.layers[this.curLayer].load(new LayerParams({
+        vm: this,
+        searchInfo,
+      }))
+    },
+    // 统计图点位图切换
+    changeLayerType(val) {
+      // 先移除当前图层
+      this.layers[this.curLayer].removeLayer(this.map)
+      switch(val) {
+        case '1': // 统计图
+          this.curLayer = 'statisticsLayer'
+          break
+        case '2': // 点位图
+          this.curLayer = 'pointLayer'
+          break
+      }
+      // 再加载新图层
+      let searchInfo = {
+        adcd: this.adcd,
+        startTime: val.startTime,
+        endTime: val.endTime,
+      }
+      this.layers[this.curLayer].load(new LayerParams({
+        vm: this,
+        searchInfo,
+      }))
+    },
     // 初始化加载图层
     initLayers(layers) {
       const layerArr = layers;
