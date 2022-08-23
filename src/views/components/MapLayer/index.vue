@@ -13,7 +13,16 @@
       <el-tabs v-model="timeActive" type="card">
         <el-tab-pane class="tab-item" label="本月" name="month"></el-tab-pane>
         <el-tab-pane label="本年" name="year"></el-tab-pane>
-        <el-tab-pane label="自定义" name="custom"></el-tab-pane>
+        <el-tab-pane label="自定义" name="custom">
+          <div class="width: 1px;">
+            <el-date-picker
+              :editable="false"
+              class="date-picker"
+              type="monthrange"
+              size="small"
+            ></el-date-picker>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
     <!--#endregion-->
@@ -155,6 +164,9 @@ export default {
     &.active {
       background: url(@/assets/images/performance-tab-active.png);
     }
+  }
+  .date-picker {
+    float: left;
   }
 }
 </style>
