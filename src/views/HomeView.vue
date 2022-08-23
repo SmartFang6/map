@@ -3,7 +3,8 @@
     <template #header><Header /></template>
     <template #map>
       <div class="map">
-        <Map />
+        <MapLayer />
+        <Map ref="mapRef" />
       </div>
     </template>
     <template #left>
@@ -31,7 +32,7 @@
 
 <script setup>
 import Header from "./components/Header";
-import { inject } from "vue";
+import { inject, ref } from "vue";
 import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
 import ProblemSource from "./components/ProblemSource.vue";
@@ -41,9 +42,11 @@ import Performance from "./components/Performance/index.vue";
 import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
 import Map from "@/views/OLMap/RainMap";
+import MapLayer from "./components/MapLayer/index.vue";
 const eventBus = inject("eventBus");
 
 console.log(eventBus, "eventBus", NoticeEvt);
+const mapRef = ref(null);
 
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
