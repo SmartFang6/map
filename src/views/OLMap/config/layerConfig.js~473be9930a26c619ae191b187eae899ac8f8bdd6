@@ -1,0 +1,1916 @@
+/* eslint-disable no-unused-vars */
+
+import Icon from 'ol/style/Icon'
+import Text from 'ol/style/Text'
+import Style from 'ol/style/Style'
+import Circle from 'ol/style/Circle'
+import Fill from 'ol/style/Fill'
+import Stroke from 'ol/style/Stroke'
+import Point from 'ol/geom/Point'
+import GeoJSON from 'ol/format/GeoJSON'
+import { SourceTypeEnum, LayerTypeEnum, StyleTypeEnum } from '../enum/TypeEnum'
+import { geoserverPath } from './geoserverConfig'
+import { res, matrixIds, projectionExtent } from './mapConfig'
+import SldUtils from '../utils/SldUtils'
+
+import { getDeCiList, getRiverHappinessList, getRainFallList, getRiverLevelList, getReservoirLevelList, getWaterQualityList, getWaterQualityPointList,
+getTrafficStationList, getReservoirList, gePoolList, getDikeList, getSluiceList, getPumpList, getOutfallList, getDangerAreaList,
+getTheRescueTeamList, getWaterChangeList, getMaterialWarehouseList, getVideoList, getMainVillageList, getSoilMoistureList, getOutFallWaterList, getWarningVillageList, getRiverPermitList, getWarnPointsList, getWarnDikeList } from '@/apis/map'
+
+// 日常保洁假数据
+import dayyellow from '@/assets/images/map/dayyellow.png'
+import dayred from '@/assets/images/map/dayred.png'
+import dayorange from '@/assets/images/map/dayorange.png'
+import daygreen from '@/assets/images/map/daygreen.png'
+
+// 河流幸福指数图标
+import river_blue from '@/assets/images/map/river_blue.png'
+import river_green from '@/assets/images/map/river_green.png'
+import river_red from '@/assets/images/map/river_red.png'
+import river_yellow from '@/assets/images/map/river_yellow.png'
+
+// 雨量站
+import rain_no from '@/assets/images/map/no_rainy.png'
+import rain_0 from '@/assets/images/map/0_rainy.png'
+import rain_10 from '@/assets/images/map/10_rainy.png'
+import rain_25 from '@/assets/images/map/25_rainy.png'
+import rain_50 from '@/assets/images/map/50_rainy.png'
+import rain_100 from '@/assets/images/map/100_rainy.png'
+import rain_250 from '@/assets/images/map/250_rainy.png'
+import rain_500 from '@/assets/images/map/500_rainy.png'
+
+// 河道站
+import river_station_green from '@/assets/images/map/normal_waterstation.png'
+import river_station_yellow from '@/assets/images/map/yellow_waterstation.png'
+import river_station_red from '@/assets/images/map/red_waterstation.png'
+import river_station_grey from '@/assets/images/map/hd_grey.png'
+
+// 水库站
+import reservoir_station_no from '@/assets/images/map/no_reservoir.png'
+import reservoir_station_green from '@/assets/images/map/green_reservoir.png'
+import reservoir_station_red from '@/assets/images/map/red_reservoir.png'
+
+// 水质站
+import wq_I from '@/assets/images/map/I.png'
+import wq_II from '@/assets/images/map/II.png'
+import wq_III from '@/assets/images/map/III.png'
+import wq_IV from '@/assets/images/map/IV.png'
+import wq_V from '@/assets/images/map/V.png'
+import wq_lie from '@/assets/images/map/lie.png'
+import nodata from '@/assets/images/map/nodata.png'
+
+import wq_nodata from '@/assets/images/map/wq_nodata.png'
+import wq_normal from '@/assets/images/map/wq_normal.png'
+
+// 水质监测点
+import waterQualityPoint from '@/assets/images/map/waterQualityPoint.png'
+
+import sluice from '@/assets/images/map/sluice.png'
+import pump from '@/assets/images/map/pump.png'
+
+// 水库图标
+import sk_dyx from '@/assets/images/map/sk_dyx.png'
+import sk_dex from '@/assets/images/map/sk_dex.png'
+import sk_zx from '@/assets/images/map/sk_zx.png'
+import sk_xyx from '@/assets/images/map/sk_xyx.png'
+import sk_xex from '@/assets/images/map/sk_xex.png'
+
+// 山塘图标
+import st_wd from '@/assets/images/map/wuding.png'
+import st_pt from '@/assets/images/map/putong.png'
+import st_db from '@/assets/images/map/diba.png'
+import st_gb from '@/assets/images/map/gaoba.png'
+
+// 泵站按规模级别
+import bz_dyx from '@/assets/images/map/bz_dyx.png'
+import bz_dex from '@/assets/images/map/bz_dex.png'
+import bz_zx from '@/assets/images/map/bz_zx.png'
+import bz_xyx from '@/assets/images/map/bz_xyx.png'
+import bz_xex from '@/assets/images/map/bz_xex.png'
+import bz_gmyx from '@/assets/images/map/bz_gmyx.png'
+
+// 水闸按规模级别
+import sz_dyx from '@/assets/images/map/sz_dyx.png'
+import sz_dex from '@/assets/images/map/sz_dex.png'
+import sz_zx from '@/assets/images/map/sz_zx.png'
+import sz_xyx from '@/assets/images/map/sz_xyx.png'
+import sz_xex from '@/assets/images/map/sz_xex.png'
+import sz_gmyx from '@/assets/images/map/sz_gmyx.png'
+
+// 五色图
+import dike_red from '@/assets/images/map/waterquality_hong.png'
+import dike_green from '@/assets/images/map/waterquality_lv.png'
+import monitor_point from '@/assets/images/map/jiancedian.png'
+
+// 所有的聚合图标
+import jh from '@/assets/images/map/jh.png'
+
+// 排污口
+import outfall_icon from '@/assets/images/map/outFall.png'
+import outfallcompany from '@/assets/images/map/outfallcompany.png'
+import outfallpark from '@/assets/images/map/outfallpark.png'
+import outallsewage from '@/assets/images/map/outallsewage.png'
+
+// 排水口
+import outfallwater from '@/assets/images/map/outfallwater.png'
+
+// 流量站
+import liuliang from '@/assets/images/map/ll_lv.png'
+import liuliang_hui from '@/assets/images/map/ll_hui.png'
+
+// 视频
+import camera from '@/assets/images/map/camera.png'
+
+// 重点村落
+import main_village from '@/assets/images/map/main_village.png'
+
+// 预警村落
+import warningvillage from '@/assets/images/map/warningvillage.png'
+
+// 预警点位-堤防
+import warndike from '@/assets/images/map/warndike.png'
+
+// 危险区域
+import dangerarea from '@/assets/images/map/dangerarea.png'
+
+// 土壤墒情
+import soil from '@/assets/images/map/soil.png'
+
+// 涉河许可
+import riverpermit from '@/assets/images/map/riverpermit.png'
+import redriver from '@/assets/images/map/redriver.png'
+
+// 水域变化
+import sy_zj from '@/assets/images/map/waterAdd.png'
+import sy_js from '@/assets/images/map/waterReduce.png'
+import sy_qt from '@/assets/images/map/qita.png'
+import sy_glfw from '@/assets/images/map/guanlifanwei.png'
+
+// 仓库
+import store_house from '@/assets/images/map/cangku.png'
+// 抢险队伍
+import team_icon from '@/assets/images/map/duiwu.png'
+
+// 抢险队伍
+import location from '@/assets/images/map/location.png'
+
+const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
+// 天地图 影像图
+export const tdtImg = {
+  type: LayerTypeEnum.tile,
+  className: 'clipImg',
+  id: 'tdt_img',
+  visible: true,
+  zIndex: 1,
+  source: {
+    type: SourceTypeEnum.wmts,
+    name: '天地图影像图',
+    url: `http://t{0-6}.tianditu.gov.cn/img_c/wmts?tk=${tdtTk}`,
+    layer: 'img',
+    style: 'default',
+    matrixSet: 'c',
+    format: 'tiles',
+    projectionExtent,
+    resolutions: res,
+    matrixIds
+  }
+}
+
+// 遮罩层
+export const shadeLayer = {
+  id: 'shade',
+  type: LayerTypeEnum.vectorImage,
+  source: { type: SourceTypeEnum.vector },
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: { color: 'rgba(0,142,224, 0.5)' }
+  },
+  zIndex: 1
+}
+
+// 遮罩层
+export const shadeLayer_coord = {
+  id: 'shade',
+  type: LayerTypeEnum.vectorImage,
+  source: { type: SourceTypeEnum.vector },
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: { color: 'rgba(0,142,224, 0)' }
+  },
+  zIndex: 1
+}
+
+// 遮罩层
+export const innerShadeLayer = {
+  id: 'innerShade',
+  type: LayerTypeEnum.vectorImage,
+  source: { type: SourceTypeEnum.vector },
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: { color: 'rgba(64,193,247, 0.5)' }
+  },
+  zIndex: 6
+}
+
+export const shadowLayer = {
+  type: LayerTypeEnum.vectorImage,
+  className: 'imgShade',
+  id: 'imgShade',
+  zIndex: 4,
+  source: { type: SourceTypeEnum.vector },
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: { color: 'rgba(0,229,255,0.5)' }
+  }
+}
+
+// 行政区划边界线
+export const orgAdcdWmsLayer = {
+  id: 'orgadcdWms',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivision/wms',
+    params: {
+      LAYERS: '',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      CQL_FILTER: '1=1'
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 6
+}
+
+// 行政区划高亮图层
+export const orgHighLightLayer = {
+  id: 'orgHighLight',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 20,
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'rgba(24,255,253,0.8)'
+    }
+  }
+}
+/** ------------------------------------   建德大屏相关图层配置项    ---------------------------------------- */
+// 河道水域面图层
+export const riverLayer = {
+  id: 'river',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.riverLakeWms,
+    params: {
+      LAYERS: 'BeautifulRiverLake:vw_river_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      cql_filter: `county='建德市'`,
+      sld_body: SldUtils.createSld([{
+        rules: [{ // 省级河流
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#00FFFF'
+          },
+          filter: ['EqualTo', ['grade', '省级']]
+        }, {// 市级河流
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#00FFFF'
+          },
+          filter: ['EqualTo', ['grade', '市级']]
+        }, {// 县级河流
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#00FFFF'
+          },
+          filter: ['EqualTo', ['grade', '县级']]
+        }, {// 乡级河流
+          type: StyleTypeEnum.polygon,
+          maxScale: 1 / 0.000005364418029785156, // 表示到达这个分辨率后再出现该类型元素
+          fill: {
+            color: '#00FFFF'
+          },
+          filter: ['EqualTo', ['grade', '乡级']]
+        }, {// 字体
+          type: StyleTypeEnum.polygon,
+          text: {
+            text: 'name',
+           'font-family': '宋体',
+              'font-size': 20,
+            stroke: {
+              color: '#FFFFFF',
+              width: 1
+            },
+            fill: {
+              color: '#000000'
+            }
+          }
+        }]
+      }], 'BeautifulRiverLake:vw_river_area')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 8
+}
+
+// 管理范围线
+export const riverManageLineLayer = {
+  id: 'riverManageLine',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.riverLakeWms,
+    params: {
+      LAYERS: 'BeautifulRiverLake:vw_river_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([{
+        rules: [{
+          type: StyleTypeEnum.lineString,
+          stroke: {
+            color: '#CF011C',
+            width: 2
+          }
+        }]
+      }], 'BeautifulRiverLake:vw_river_manageline')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 临水线
+export const riverApproachLineLayer = {
+  id: 'riverApproachLine',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.riverLakeWms,
+    params: {
+      // LAYERS: 'BeautifulRiverLake:vw_river_approachline',
+      LAYERS: 'BeautifulRiverLake:vw_river_waterline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([{
+        rules: [{
+          type: StyleTypeEnum.lineString,
+          stroke: {
+            color: '#F1F202',
+            width: 2
+          }
+        }]
+      // }], 'BeautifulRiverLake:vw_river_approachline')
+      }], 'BeautifulRiverLake:vw_river_waterline')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 中心线
+export const riverCenterLineLayer = {
+  id: 'riverCenterLine',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.riverLakeWms,
+    params: {
+      LAYERS: 'BeautifulRiverLake:vw_river_centerline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([{
+        rules: [{
+          type: StyleTypeEnum.lineString,
+          stroke: {
+            color: '#ED9623',
+            width: 2,
+            lineDash: [10, 10]
+          }
+        }]
+      }], 'BeautifulRiverLake:vw_river_centerline')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 河道gis
+export const riverGisLayer = {
+  id: 'riverGis',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 10,
+  style: riverGisStyle
+}
+
+function riverGisStyle(feature) {
+  const type = feature.getGeometry().getType()
+  if (type.indexOf('Polygon') !== -1) {
+    return new Style({
+      fill: new Fill({
+        color: 'rgb(2,246,245)'
+      })
+    })
+  } else if (type.indexOf('LineString') !== -1) {
+    console.log(feature.getId())
+    if (feature.getId().indexOf('vw_river_manageline') !== -1) {
+      return new Style({
+        stroke: new Stroke({
+          color: '#CF011C',
+          width: 2
+        })
+      })
+    } else if (feature.getId().indexOf('vw_river_waterline') !== -1) {
+      return new Style({
+        stroke: new Stroke({
+          color: '#F8F901',
+          width: 2
+        })
+      })
+    } else {
+      return new Style({
+        stroke: new Stroke({
+          color: '#ED9623',
+          width: 2
+        })
+      })
+    }
+  } else {
+    const pointType = feature.get('type')
+    let icon = require('@/assets/images/map/start.png')
+    if (pointType === 'end') {
+      icon = require('@/assets/images/map/end.png')
+    }
+    return new Style({
+      image: new Icon({
+        src: icon,
+        anchor: [0.5, 1]
+      })
+    })
+  }
+}
+
+/** -------  幸福河湖  ---------- */
+// 区域幸福指数
+export const areaHappinessLayer = {
+  id: 'regionalHappinessIndex',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: [
+        'case',
+        ['==', ['get', 'happinessDegree'], '不幸福'], 'rgba(255,89,44,0.5)', // 红色
+        ['==', ['get', 'happinessDegree'], '一般'], 'rgba(255,158,27,0.5)', // 橙色
+        ['==', ['get', 'happinessDegree'], '比较幸福'], 'rgba(255,244,74,0.5)', // 黄色
+        ['==', ['get', 'happinessDegree'], '幸福'], 'rgba(0,255,108,0.5)', // 绿色
+        ['==', ['get', 'happinessDegree'], '非常幸福'], 'rgba(51,179,253,0.5)', // 蓝色
+        'rgba(51,179,253,0.5)'
+      ]
+    },
+    stroke: {
+      color: [
+        'case',
+        ['==', ['get', 'happinessDegree'], '不幸福'], 'rgba(255,89,44,0.5)', // 红色
+        ['==', ['get', 'happinessDegree'], '一般'], 'rgba(255,158,27,0.5)', // 橙色
+        ['==', ['get', 'happinessDegree'], '比较幸福'], 'rgba(255,244,74,0.5)', // 黄色
+        ['==', ['get', 'happinessDegree'], '幸福'], 'rgba(0,255,108,0.5)', // 绿色
+        ['==', ['get', 'happinessDegree'], '非常幸福'], 'rgba(51,179,253,0.5)', // 蓝色
+        'rgba(51,179,253,0.5)'
+      ],
+      width: 2
+    }
+    // text: {
+    //   text: ['get', 'adName'],
+    //   font: '14px MicrosoftYaHei-Bold',
+    //   fill: {
+    //     color: '#000000'
+    //   },
+    //   stroke: {
+    //     color: '#ffffff',
+    //     width: 1
+    //   }
+    // }
+  },
+  zIndex: 10
+}
+// 日常保洁随机点
+export const deCiLayer = {
+  id: 'deCiIndex',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  levelField: 'level', // 图例筛选字段
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'level'], '1'], dayred,
+        ['==', ['get', 'level'], '2'], dayyellow,
+        ['==', ['get', 'level'], '3'], dayorange,
+        ['==', ['get', 'level'], '4'], daygreen,
+        dayred
+      ],
+      scale: 1
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'id',
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  },
+  loadFunc: getDeCiList
+}
+// 河道幸福指数
+export const riverHappinessLayer = {
+  id: 'channelHappinessIndex',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'happinessDegree'], '不幸福'], river_red,
+        ['==', ['get', 'happinessDegree'], '一般'], river_yellow,
+        ['==', ['get', 'happinessDegree'], '幸福'], river_green,
+        ['==', ['get', 'happinessDegree'], '很幸福'], river_blue,
+        river_blue
+      ],
+      scale: 0.5
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'id',
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  },
+  loadFunc: getRiverHappinessList
+}
+
+// 雨量站
+export const rainLayer = {
+  id: 'rainfallStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  levelField: 'rainType',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'rainType'], '2'], rain_no,
+        ['==', ['get', 'rainType'], '1'], rain_0,
+        ['==', ['get', 'rainType'], '3'], rain_10,
+        ['==', ['get', 'rainType'], '4'], rain_25,
+        ['==', ['get', 'rainType'], '5'], rain_50,
+        ['==', ['get', 'rainType'], '6'], rain_100,
+        ['==', ['get', 'rainType'], '7'], rain_250,
+        ['==', ['get', 'rainType'], '8'], rain_500,
+        rain_no
+      ],
+      scale: 0.6
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'stcd',
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  },
+  loadFunc: getRainFallList
+}
+// 河道站
+export const riverLevelLayer = {
+  id: 'gaugingStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  levelField: 'rzStatus',
+  warnConfig: {
+    '2': {
+      color: '#FDE200',
+      icon: river_station_yellow,
+      symbolSize: [24, 24]
+    },
+    '3': {
+      color: '#FF3000',
+      icon: river_station_red,
+      symbolSize: [24, 24]
+    }
+  },
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'rzStatus'], '1'], river_station_green,
+        ['==', ['get', 'rzStatus'], '2'], river_station_yellow,
+        ['==', ['get', 'rzStatus'], '3'], river_station_red,
+        ['==', ['get', 'rzStatus'], '4'], river_station_grey,
+        river_station_grey
+      ],
+      scale: 0.6
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'stcd',
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  },
+  loadFunc: getRiverLevelList
+}
+
+// 水库站
+export const reservoirLevelLayer = {
+  id: 'reservoirStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  levelField: 'status',
+  warnConfig: {
+    '1': {
+      color: '#FE3000',
+      icon: reservoir_station_red,
+      symbolSize: [20, 20]
+    }
+  },
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'status'], '3'], reservoir_station_no,
+        ['==', ['get', 'status'], '2'], reservoir_station_green,
+        ['==', ['get', 'status'], '1'], reservoir_station_red,
+        reservoir_station_no
+      ],
+      scale: 0.6
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'stcd',
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  },
+  loadFunc: getReservoirLevelList
+}
+
+// 水质站
+export const waterQualityLayer = {
+  id: 'waterQualityStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  levelField: 'hasValue',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'hasValue'], '0'], wq_nodata,
+        ['==', ['get', 'hasValue'], '1'], wq_normal,
+        wq_normal
+      ],
+      // src: [
+      //   'case',
+      //   ['==', ['get', 'levelName'], 'Ⅰ类'], wq_I,
+      //   ['==', ['get', 'levelName'], 'Ⅱ类'], wq_II,
+      //   ['==', ['get', 'levelName'], 'Ⅲ类'], wq_III,
+      //   ['==', ['get', 'levelName'], 'Ⅳ类'], wq_IV,
+      //   ['==', ['get', 'levelName'], 'Ⅴ类'], wq_V,
+      //   ['==', ['get', 'levelName'], '劣Ⅴ类'], wq_lie,
+      //   nodata
+      // ],
+      scale: 0.6
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'id',
+    lgtd: 'longitude',
+    lttd: 'latitude'
+  },
+  loadFunc: getWaterQualityList
+}
+
+// 水质监测点
+export const waterQualityPointLayer = {
+  id: 'waterQualityPoint',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.cluster,
+    source: {
+      type: SourceTypeEnum.vector
+    },
+    distance: 50
+  },
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'type'], '1'], st_pt,
+        ['==', ['get', 'type'], '2'], st_wd,
+        ['==', ['get', 'type'], '3'], st_gb,
+        ['==', ['get', 'type'], '4'], st_db,
+        waterQualityPoint
+      ],
+      scale: 0.6
+    },
+    text: {
+      text: [
+        'case',
+        ['has', 'point_count'], ['get', 'point_count'],
+        ''
+      ],
+      font: '15px MicrosoftYaHei-Bold',
+      offsetY: -28,
+      fill: {
+        color: '#ffffff'
+      }
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'id',
+    lgtd: 'longitude',
+    lttd: 'latitude'
+  },
+  loadFunc: getWaterQualityPointList
+}
+// export const waterQualityPointLayer = {
+//   field: {
+//     lgtd: 'longitude',
+//     lttd: 'latitude',
+//     id: 'id'
+//   },
+//   id: 'waterQualityPoint',
+//   type: LayerTypeEnum.vector,
+//   source: {
+//     type: SourceTypeEnum.vector
+//   },
+//   zIndex: 11,
+//   style: {
+//     type: StyleTypeEnum.icon,
+//     icon: {
+//       src: waterQualityPoint,
+//       scale: 1
+//     }
+//   },
+//   loadFunc: getWaterQualityPointList
+// }
+
+// 流量站
+export const trafficStationLayer = {
+  id: 'trafficStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  levelField: 'flowStatus',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'flowStatus'], '0'], liuliang_hui, // 离线
+        ['==', ['get', 'flowStatus'], '1'], liuliang, // 在线
+        liuliang_hui
+      ],
+      scale: 0.5
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'stcd',
+    lgtd: 'lgtd',
+    lttd: 'lttd'
+  },
+  loadFunc: getTrafficStationList
+}
+
+// 水库
+export const reservoirLayer = {
+  id: 'reservoir',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector,
+    source: {
+      type: SourceTypeEnum.vector
+    },
+    distance: 50
+  },
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'type'], '1'], sk_dyx,
+        ['==', ['get', 'type'], '2'], sk_dex,
+        ['==', ['get', 'type'], '3'], sk_zx,
+        ['==', ['get', 'type'], '4'], sk_xyx,
+        ['==', ['get', 'type'], '5'], sk_xex,
+        sk_xex
+      ],
+      scale: 1
+    },
+    text: {
+      text: [
+        'case',
+        ['has', 'point_count'], ['get', 'point_count'],
+        ''
+      ],
+      font: '12px MicrosoftYaHei-Bold',
+      offsetY: -20,
+      fill: {
+        color: '#ffffff'
+      }
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'stationId',
+    lgtd: 'longitude',
+    lttd: 'latitude'
+  },
+  loadFunc: getReservoirList
+}
+
+// 山塘
+export const poolLayer = {
+  id: 'pool',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.cluster,
+    source: {
+      type: SourceTypeEnum.vector
+    },
+    distance: 50
+  },
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'type'], '1'], st_pt,
+        ['==', ['get', 'type'], '2'], st_wd,
+        ['==', ['get', 'type'], '3'], st_gb,
+        ['==', ['get', 'type'], '4'], st_db,
+        jh
+      ],
+      scale: 0.6
+    },
+    text: {
+      text: [
+        'case',
+        ['has', 'point_count'], ['get', 'point_count'],
+        ''
+      ],
+      font: '12px MicrosoftYaHei-Bold',
+      offsetY: -4,
+      fill: {
+        color: '#ffffff'
+      }
+    }
+  },
+  zIndex: 10,
+  field: {
+    id: 'stationId',
+    lgtd: 'longitude',
+    lttd: 'latitude'
+  },
+  loadFunc: gePoolList
+}
+
+// 堤防图层
+export const dikeLayer = {
+  id: 'dike',
+  type: LayerTypeEnum.vectorImage,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 10,
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.polygon,
+    stroke: {
+      color: [
+        'case',
+        ['==', ['get', 'type'], '1'], '#8DC778',
+        ['==', ['get', 'type'], '2'], '#41E99F',
+        ['==', ['get', 'type'], '3'], '#1F6AE7',
+        ['==', ['get', 'type'], '4'], '#E5D12F',
+        ['==', ['get', 'type'], '5'], '#F54C4B',
+        ['==', ['get', 'type'], '6'], '#A2AEBF',
+        ['==', ['get', 'type'], '7'], '#5470C6',
+        '#5470C6'
+      ],
+      width: 3
+    }
+  },
+  loadFunc: getDikeList
+}
+
+// 预警堤防图层
+export const warnDikeLayer = {
+  id: 'warnDike',
+  type: LayerTypeEnum.vectorImage,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 10,
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.polygon,
+    stroke: {
+      color: [
+        'case',
+        ['==', ['get', 'type'], '1'], '#8DC778',
+        ['==', ['get', 'type'], '2'], '#41E99F',
+        ['==', ['get', 'type'], '3'], '#1F6AE7',
+        ['==', ['get', 'type'], '4'], '#E5D12F',
+        ['==', ['get', 'type'], '5'], '#F54C4B',
+        ['==', ['get', 'type'], '6'], '#A2AEBF',
+        ['==', ['get', 'type'], '7'], '#5470C6',
+        '#5470C6'
+      ],
+      width: 3
+    }
+  },
+  loadFunc: getWarnDikeList
+}
+
+// 水闸图层
+export const sluiceLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'stationId'
+  },
+  id: 'brakeStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'type'], '1'], sz_dyx,
+        ['==', ['get', 'type'], '2'], sz_dex,
+        ['==', ['get', 'type'], '3'], sz_zx,
+        ['==', ['get', 'type'], '4'], sz_xyx,
+        ['==', ['get', 'type'], '5'], sz_xex,
+        ['==', ['get', 'type'], '6'], sz_gmyx,
+        sluice
+      ],
+      scale: 0.8
+    }
+  },
+  loadFunc: getSluiceList
+}
+
+// 泵站图层
+export const pumpLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'stationId'
+  },
+  id: 'pumpStation',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  levelField: 'type',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'type'], '1'], bz_dyx,
+        ['==', ['get', 'type'], '2'], bz_dex,
+        ['==', ['get', 'type'], '3'], bz_zx,
+        ['==', ['get', 'type'], '4'], bz_xyx,
+        ['==', ['get', 'type'], '5'], bz_xex,
+        ['==', ['get', 'type'], '6'], bz_gmyx,
+        pump
+      ],
+      scale: 0.6
+    }
+  },
+  loadFunc: getPumpList
+}
+
+// 排污口
+export const outfallLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'stationId'
+  },
+  levelField: 'typeNm',
+  id: 'drainOutlet',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector,
+    distance: 50,
+    source: {
+      type: SourceTypeEnum.cluster
+    }
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'typeNm'], '工业园区'], outfallcompany,
+        ['==', ['get', 'typeNm'], '工业企业'], outfallpark,
+        ['==', ['get', 'typeNm'], '污水处理厂'], outallsewage,
+        outfall_icon
+      ],
+      scale: 0.6
+    },
+    text: {
+      text: [
+        'case',
+        ['has', 'point_count'], ['get', 'point_count'],
+        ''
+      ],
+      font: '12px MicrosoftYaHei-Bold',
+      offsetY: -20,
+      fill: {
+        color: '#ffffff'
+      }
+    }
+  },
+  loadFunc: getOutfallList
+}
+
+// 物资仓库
+export const materialWarehouseLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'stationId'
+  },
+  id: 'materialWarehouse',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: store_house,
+      scale: 0.5
+    }
+  },
+  loadFunc: getMaterialWarehouseList
+}
+
+// 排水口
+export const outFallWaterLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'stationId'
+  },
+  id: 'outFall',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: outfallwater,
+      scale: 1
+    }
+  },
+  loadFunc: getOutFallWaterList
+}
+
+// 抢险队伍
+export const theRescueTeamLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'stationId'
+  },
+  id: 'theRescueTeam',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: team_icon,
+      scale: 0.5
+    }
+  },
+  loadFunc: getTheRescueTeamList
+}
+
+// 视频
+export const videoLayer = {
+  field: {
+    lgtd: 'vmLong',
+    lttd: 'vmLat',
+    id: 'vmCode'
+  },
+  id: 'video',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: camera,
+      scale: 0.5
+    }
+  },
+  loadFunc: getVideoList
+}
+// 预警村落
+export const warningVillageLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'adCode'
+  },
+  id: 'warningVillage',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: warningvillage,
+      scale: 1
+    }
+  },
+  loadFunc: getWarningVillageList
+}
+
+// 预警点位
+export const warnPointsLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id',
+    name: 'name'
+  },
+  id: 'warnPoints',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  warnConfig: {
+    color: 'rgba(228, 17, 17, 0.9)',
+    icon: warndike,
+    symbolSize: [120, 120]
+},
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: warndike,
+      scale: 1
+    }
+  },
+  loadFunc: getWarnPointsList
+}
+
+export const warningDikeCircleLayer = {
+  id: 'warningArea',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'rgba(221, 99, 170, 0.2)'
+    }
+  }
+}
+
+// 预警点位前往
+export const warnPointsComeLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id',
+    name: 'name'
+  },
+  id: 'warnPoints',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  warnConfig: {
+    color: 'rgba(228, 17, 17, 0.9)',
+    icon: warndike,
+    symbolSize: [30, 30]
+},
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: warndike,
+      scale: 0.1
+    }
+  },
+  loadFunc: getWarnPointsList
+}
+
+// 预警区域
+export const warningAreaLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'adCode'
+  },
+  id: 'warningArea',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  warnConfig: {
+      color: 'rgba(228, 17, 17, 0.9)',
+      icon: warningvillage,
+      symbolSize: [100, 100]
+  },
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: warningvillage,
+      scale: 1
+    }
+  },
+  loadFunc: getWarningVillageList
+}
+
+export const warningAreaCircleLayer = {
+  id: 'warningArea',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'rgba(221, 99, 170, 0.5)'
+    }
+  }
+}
+
+// 重点村落
+export const mainVillageLayer = {
+  id: 'mainvillage',
+  type: LayerTypeEnum.vectorImage,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  style: mainVillageStyle,
+  // style: {
+  //   type: StyleTypeEnum.icon,
+  //   icon: {
+  //     src: main_village,
+  //     scale: 1
+  //   }
+  // },
+  field: {
+    id: 'id',
+    lgtd: 'longitude',
+    lttd: 'latitude'
+  },
+  zIndex: 10,
+  loadFunc: getMainVillageList
+}
+
+function mainVillageStyle(feature, res) {
+  const properties = feature.get('properties')
+  if (res >= 0.00034332275390625 && !properties.prevCode) { // 乡镇点位
+    return new Style({
+      image: new Icon({
+        src: main_village,
+        scale: 0.8
+      }),
+      text: new Text({
+        text: properties.total + '',
+        font: '12px MicrosoftYaHei-Bold',
+        offsetY: -26,
+        fill: new Fill({
+          color: '#ffffff'
+        })
+      })
+    })
+  } else if (res < 0.00034332275390625 && properties.prevCode) { // 村落点位
+    return new Style({
+      image: new Icon({
+        src: main_village,
+        scale: 1
+      })
+    })
+  }
+  return null
+}
+// export const mainVillageLayer = {
+//   field: {
+//     lgtd: 'lgtd',
+//     lttd: 'lttd',
+//     id: 'prevCode'
+//   },
+//   id: 'mainVillage',
+//   type: LayerTypeEnum.vector,
+//   source: {
+//     type: SourceTypeEnum.vector
+//   },
+//   zIndex: 11,
+//   style: {
+//     type: StyleTypeEnum.icon,
+//     icon: {
+//       src: main_village,
+//       scale: 0.5
+//     }
+//   },
+//   loadFunc: getMainVillageList
+// }
+
+// 土壤墒情
+export const soilMoistureLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id'
+  },
+  id: 'soilMoisture',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: soil,
+      scale: 1
+    }
+  },
+  loadFunc: getSoilMoistureList
+}
+
+// 围片
+export const weiPianLayer = {
+  id: 'weiPian',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: 'https://gis.dcyun.com:48164/geoserver/BeautifulRiverLake/wms',
+    params: {
+      LAYERS: 'BeautifulRiverLake:vw_dike_closedarea',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([{
+        rules: [{
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#25A2FF',
+            opacity: 0.5
+          },
+          stroke: {
+                  color: '#25A2FF',
+                  width: 1
+                }
+        }]
+      }], 'BeautifulRiverLake:vw_dike_closedarea')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 6
+}
+// export const weiPianLayer = {
+//   field: {
+//     lgtd: 'lgtd',
+//     lttd: 'lttd',
+//     id: 'id'
+//   },
+//   id: 'weiPian',
+//   type: LayerTypeEnum.vector,
+//   source: {
+//     type: SourceTypeEnum.vector
+//   },
+//   zIndex: 6,
+//   style: [
+//     {
+//   type: StyleTypeEnum.icon,
+//     icon: {
+//       src: riverpermit,
+//       scale: 1
+//     }
+//   },
+//   {
+//     type: StyleTypeEnum.polygon,
+//     fill: {
+//       color: 'rgba(214,226,223,0.4)'
+//     },
+//     stroke: {
+//       color: 'rgba(214,226,223,1)',
+//       width: 1
+//     }
+//   }
+// ]
+// }
+
+// 堤段
+export const diDuanLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id'
+  },
+  id: 'diDuan',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: [
+    {
+  type: StyleTypeEnum.icon,
+    icon: {
+      src: riverpermit,
+      scale: 1
+    }
+  },
+  {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'red'
+    },
+    stroke: {
+      color: 'red',
+      width: 3
+    }
+  }
+]
+}
+
+// 涉河许可
+export const riverPermitLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id'
+  },
+  id: 'riverPermit',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: [
+    {
+  type: StyleTypeEnum.icon,
+    icon: {
+      src: riverpermit,
+      scale: 1
+    }
+  },
+  {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'red'
+    },
+    stroke: {
+      color: 'red',
+      width: 3
+    }
+  }
+],
+loadFunc: getRiverPermitList
+}
+
+// 危险区域
+export const dangerAreaLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id'
+  },
+  id: 'dangerArea',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  levelField: 'LVL',
+  style: [
+{
+  type: StyleTypeEnum.icon,
+    icon: {
+      src: riverpermit,
+      scale: 1
+    }
+  },
+  {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: [
+        'case',
+        ['==', ['get', 'LVL'], '极高危险区'], 'rgba(255,18,0,0.5)',
+        ['==', ['get', 'LVL'], '高危险区'], 'rgba(255,174,0,0.5)',
+        ['==', ['get', 'LVL'], '普通危险区'], 'rgba(0,132,255,0.5)',
+        'rgba(51,179,253,0.5)'
+      ]
+    },
+    stroke: {
+      color: [
+        'case',
+        ['==', ['get', 'LVL'], '极高危险区'], 'rgba(255,18,0,0.5)',
+        ['==', ['get', 'LVL'], '高危险区'], 'rgba(255,174,0,0.5)',
+        ['==', ['get', 'LVL'], '普通危险区'], 'rgba(0,132,255,0.5)',
+        'rgb(51,179,253)'
+      ],
+      width: 2
+    }
+  }
+]
+}
+// export const dangerAreaLayer = {
+//   id: 'dangerArea',
+//   type: LayerTypeEnum.image,
+//   source: {
+//     type: SourceTypeEnum.imagewms,
+//     url: 'https://shyjpt.zjwater.com:48080/geoserver/TorrentialFlood/wms',// 危险区,
+//     params: {
+//       LAYERS: 'TorrentialFlood:vw_DangerArea',
+//       VERSION: '1.3.0',
+//       SRS: 'EPSG:4326',
+//       STYLES: ''
+//     },
+//     crossOrigin: 'anonymous'
+//   },
+//   zIndex: 10
+// }
+
+// 水域增加
+export const watersIncreasedLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'polygonId'
+  },
+  id: 'watersIncreased',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: sy_zj,
+      scale: 0.5
+    }
+  },
+  loadFunc: getWaterChangeList
+}
+
+// 水域减少
+export const watersReduceLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'polygonId'
+  },
+  id: 'watersReduce',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: sy_js,
+      scale: 0.5
+    }
+  },
+  loadFunc: getWaterChangeList
+}
+
+// 管理范围变化
+export const managingScopeChangesLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'polygonId'
+  },
+  id: 'managingScopeChanges',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: sy_glfw,
+      scale: 0.5
+    }
+  },
+  loadFunc: getWaterChangeList
+}
+
+// 其他
+export const otherLayer = {
+  field: {
+    lgtd: 'longitude',
+    lttd: 'latitude',
+    id: 'polygonId'
+  },
+  id: 'other',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 11,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: sy_qt,
+      scale: 0.5
+    }
+  },
+  loadFunc: getWaterChangeList
+}
+
+// 洪水预报图层
+export const floodForecastLayer = {
+  id: 'floodForecast',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.riverLakeWms,
+    params: {
+      LAYERS: 'BeautifulRiverLake:vw_flood_forecast',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([{
+        rules: [{ // 水深0-0.5
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#0000FF'
+          },
+          filter: ['And', [['LessThanOrEqualTo', ['deep', 0.5]], ['GreaterThan', ['deep', 0]]]]
+        }, {// 0.5-1
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#00FFFF'
+          },
+          filter: ['And', [['LessThanOrEqualTo', ['deep', 1]], ['GreaterThan', ['deep', 0.5]]]]
+        }, {// 1-1.5
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#00FF00'
+          },
+          filter: ['And', [['LessThanOrEqualTo', ['deep', 1.5]], ['GreaterThan', ['deep', 1]]]]
+        }, {// 1.5-2
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#FFFF00'
+          },
+          filter: ['And', [['LessThanOrEqualTo', ['deep', 2]], ['GreaterThan', ['deep', 1.5]]]]
+        }, {// 2-3
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#FFA500'
+          },
+          filter: ['And', [['LessThanOrEqualTo', ['deep', 3]], ['GreaterThan', ['deep', 2]]]]
+        }, {// >3
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#FF0000'
+          },
+          filter: ['GreaterThan', ['deep', 3]]
+        }]
+      }], 'BeautifulRiverLake:vw_flood_forecast')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 8
+}
+/**  -------------------------  幸福河湖相关图层配置  ---------------------- */
+// 这项目图层不幸福
+// 分区  和   乡镇
+export const townLayer = {
+  id: 'orgTown',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 20,
+  style: {
+    type: StyleTypeEnum.polygon,
+    fill: {
+      color: 'rgba(23,136,241,0.5)'
+    },
+    stroke: {
+      color: 'rgba(23,136,241,0.97)',
+      width: 2
+    },
+    text: {
+      text: ['get', 'adName'],
+      font: '12px MicrosoftYaHei-Bold',
+      fill: {
+        color: '#000000'
+      },
+      stroke: {
+        color: '#ffffff',
+        width: 1
+      }
+    }
+  }
+}
+
+// 河道信息
+export const riverInfoLayer = {
+  id: 'channelHappinessIndex',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 20,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'happinessDegree'], '非常幸福'], require('@/assets/images/map/river_blue.png'),
+        ['==', ['get', 'happinessDegree'], '幸福'], require('@/assets/images/map/river_green.png'),
+        ['==', ['get', 'happinessDegree'], '比较幸福'], require('@/assets/images/map/river_yellow.png'),
+        ['==', ['get', 'happinessDegree'], '一般'], require('@/assets/images/map/river_orange.png'),
+        ['==', ['get', 'happinessDegree'], '不幸福'], require('@/assets/images/map/river_red.png'),
+        require('@/assets/images/map/river_blue.png')
+      ],
+      scale: 0.5,
+      anchor: [0.5, 1]
+    },
+    text: {
+      text: ['get', 'riverName'],
+      font: '12px MicrosoftYaHei-Bold',
+      offsetX: 0,
+      offsetY: 8,
+      fill: {
+        color: '#000000'
+      },
+      stroke: {
+        color: '#ffffff',
+        width: 1
+      }
+    }
+  },
+  field: {
+    id: 'riverCode',
+    lgtd: 'spLon',
+    lttd: 'spLat'
+  }
+}
+
+export const riverFiveColorLayer = {
+  id: 'riverFiveColor',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: 'https://gis.dcyun.com:48164/geoserver/BeautifulRiverLake/wms',
+    params: {
+      LAYERS: 'BeautifulRiverLake:dynamic_fivecolor_river',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      // cql_filter: jian
+      sld_body: SldUtils.createSld([{
+        rules: [{ // 不幸福
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#FF592C'
+          },
+          filter: ['EqualTo', ['grade', '1']]
+        }, {// 一般
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#FD9A16'
+          },
+          filter: ['EqualTo', ['grade', '2']]
+        }, {// 比较幸福
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#FCD847'
+          },
+          filter: ['EqualTo', ['grade', '3']]
+        }, {// 幸福
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#4ACE5F'
+          },
+          filter: ['EqualTo', ['grade', '4']]
+        }, {// 非常幸福
+          type: StyleTypeEnum.polygon,
+          fill: {
+            color: '#1890FF'
+          },
+          filter: ['EqualTo', ['grade', '5']]
+        }]
+      }], 'BeautifulRiverLake:dynamic_fivecolor_river')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 10
+}
+
+export const drawLayer = {
+  id: 'draw',
+  type: LayerTypeEnum.vector,
+  source: {
+    type: SourceTypeEnum.vector
+  },
+  zIndex: 40,
+  style: drawStyle
+  // style:''
+}
+function drawStyle(feature) {
+  const type = feature.getGeometry().getType()
+  let style
+  if (type === 'LineString') {
+    style = new Style({
+      fill: new Fill({
+        color: 'rgba(216,30,6,0.4)'
+      }),
+      stroke: new Stroke({
+        color: 'rgb(216,30,6)',
+        width: 2
+      })
+    })
+  } else if (type === 'Point') {
+    style = new Style({
+      image: new Icon({
+        src: location,
+        scale: 0.1
+      })
+    })
+  }
+  return style
+}
