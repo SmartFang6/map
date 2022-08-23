@@ -23,6 +23,7 @@
   display: flex;
   justify-content: center;
   position: relative;
+  z-index: 100;
   & > .title {
     color: #fff;
     font-size: 38px;

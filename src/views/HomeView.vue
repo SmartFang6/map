@@ -3,7 +3,11 @@
     <template #header><Header /></template>
     <template #map>
       <div class="map">
-        <Map />
+        <MapLayer
+          @changeTime="mapRef?.changeTime"
+          @changeLayerType="mapRef?.changeLayerType"
+        />
+        <Map ref="mapRef" @showPop="showPop" />
       </div>
     </template>
     <template #left>
@@ -40,10 +44,12 @@ import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
 import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
+import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
-const eventBus = inject("eventBus");
-let leftData = ref(null);
+const eventBus = inject("EventBus");
+
+let leftData = ref({});
 // 获取左侧栏数据
 function getLeftData() {
   const params = {
@@ -52,24 +58,27 @@ function getLeftData() {
     startTime: "2022-07-23 09:29:29",
   };
   getEventStat(params).then((res) => {
-    console.log(res);
+    leftData.value = res;
   });
 }
 getLeftData();
+
 // 注入左侧栏数据
 provide("leftData", leftData);
 
 console.log(eventBus, "eventBus", NoticeEvt);
+const mapRef = ref(null);
+
+//例: 通知地图
+// eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
+// TODO
+// })
 </script>
 
 <style scoped lang="less">
 .map {
   width: 100%;
   height: 100%;
-  text-align: center;
-  line-height: 100vh;
-  font-size: 200px;
-  font-weight: 900;
 }
 .left-box {
   display: flex;

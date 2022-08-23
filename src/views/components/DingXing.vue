@@ -5,39 +5,35 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, onMounted, onUnmounted } from "vue";
+import { computed, ref, onMounted, onUnmounted, inject } from "vue";
 
-const data = reactive({
-  echartsData: [
-    {
-      name: "轻微问题",
-      value: 567,
-      itemStyle: {
-        color: "rgb(68,201,100)",
-      },
-    },
-    {
-      name: "较严重问题",
-      value: 467,
-      itemStyle: {
-        color: "rgb(255,144,25)",
-      },
-    },
-    {
-      name: "严重问题",
-      value: 45,
-      itemStyle: {
-        color: "rgb(211,88,88)",
-      },
-    },
-  ],
+// 获取注入数据
+let leftData = inject("leftData");
+// 定性
+let eventGradeList = computed(() => {
+  return leftData.value?.eventGradeList || [];
+});
+const colorList = ["#44C964", "#FF9019", "#D35858"];
+let echartsData = computed(() => {
+  let _res =
+    eventGradeList.value?.map((item, idx) => {
+      return {
+        name: item?.eventGradeName,
+        value: item?.eventGradeNum,
+        rate: item?.eventGradeNum,
+        itemStyle: {
+          color: colorList[idx] || "#D35858",
+        },
+      };
+    }) || [];
+  return _res;
 });
 
 // 图表数据
 const chartOption = computed(() => {
   // item-rich
   let itemRich = {};
-  data.echartsData.forEach((item, idx) => {
+  echartsData.value.forEach((item, idx) => {
     itemRich[`value${idx}`] = {
       ...item.itemStyle,
       fontSize: 20,
@@ -45,24 +41,23 @@ const chartOption = computed(() => {
     };
   });
   // 计算item-value 占比数值
-  const total = data.echartsData
+  const total = echartsData.value
     .map((i) => i.value)
     .reduce((pre, nex) => {
       return Number(pre) + Number(nex);
-    });
-  console.log(total, "total");
+    }, 0);
   return {
-    color: ["#097ceb", "#e26959", "#45e0d3"],
+    // color: ["#097ceb", "#e26959", "#45e0d3"],
     legend: {
       orient: "vertical",
       right: 30,
       top: "center",
       formatter: function (name) {
-        const arr = data.echartsData;
+        const arr = echartsData.value;
         const ARR = arr.filter((item) => {
           return item.name === name;
         });
-        const idx = data.echartsData.findIndex((i) => i.name === name);
+        const idx = echartsData.value.findIndex((i) => i.name === name);
         const itemValue = ARR[0].value;
         // const Proportion = ((itemValue / total) * 100).toFixed(2);
         return `${name}  {value${idx}|${itemValue}} 个`;
@@ -101,7 +96,7 @@ const chartOption = computed(() => {
         labelLine: {
           show: false,
         },
-        data: data.echartsData,
+        data: echartsData.value,
         center: ["30%", "50%"],
         emphasis: {
           label: {
@@ -152,7 +147,7 @@ const addEchartsDataTwo = () => {
       echartApi.dispatchAction({
         type: "downplay",
         seriesIndex: 0,
-        dataIndex: data.echartsData.map((itm, idx) => idx),
+        dataIndex: echartsData.value.map((itm, idx) => idx),
       });
       // 高亮当前指定数据图形
       echartApi.dispatchAction({
@@ -176,7 +171,7 @@ function echartsInterrupt(indexs = 0) {
   const echartApi = charts.value.chartInstance._api;
   let ii = 0;
   timer = setInterval(() => {
-    if (currentHighlight.value > data.echartsData.length - 1) {
+    if (currentHighlight.value > echartsData.value.length - 1) {
       currentHighlight.value = 0;
     }
     echartApi.dispatchAction({
