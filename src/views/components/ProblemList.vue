@@ -47,7 +47,7 @@
             <div>{{ row.eventResponsibleUnitName }}</div>
             <div>{{ row.eventSourceName }}</div>
             <div>{{ row.adnm }}</div>
-            <div>{{ row.rchnm }}</div>
+            <div class="one-line">{{ row.rchnm }}</div>
             <el-tooltip
               :content="row.eventTypeName"
               effect="dark"
@@ -67,12 +67,14 @@
 
 <script setup>
 import { useStore } from "vuex";
-import { computed, reactive } from "vue";
+import { ref, computed, onBeforeMount, toRaw } from "vue";
 import { ElSelect, ElOption, ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
 import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import moment from "moment";
+import { getEventQuestionList } from "@/api/cockpitEventStats";
 
 const store = useStore();
 
@@ -89,20 +91,93 @@ const onPanelTrigger = () => {
 };
 
 // 数据列表
-const dataList = reactive([]);
-for (let i = 1; i < 10; i++) {
-  dataList.push({
-    index: i,
-    eventResponsibleUnitName: `${i}农村农业局`,
-    eventSourceName: "公众巡河",
-    adnm: "莲花镇",
-    rchnm: "曹娥江",
-    eventTypeName: "擅自围垦湖泊用于养殖",
-    eventGradeName: "较严重",
-    occurTime: "2022-10-10",
-    status: "逾期已处理",
+const dataList = ref([]);
+
+// 示例数据
+// for (let i = 1; i < 10; i++) {
+//   dataList.push({
+//     index: i,
+//     eventResponsibleUnitName: `${i}农村农业局`,
+//     eventSourceName: "公众巡河",
+//     adnm: "莲花镇",
+//     rchnm: "曹娥江",
+//     eventTypeName: "擅自围垦湖泊用于养殖",
+//     eventGradeName: "较严重",
+//     occurTime: "2022-10-10",
+//     status: "逾期已处理",
+//   });
+// }
+
+// 问题清单数据源
+let dataModel = ref(null);
+
+// 事件等级映射
+const eventLevelMapper = [
+  {
+    key: 1,
+    value: "",
+  },
+];
+
+// 事件状态映射
+const eventStatusMapper = [
+  {
+    key: 1,
+    value: "",
+  },
+];
+console.log(eventLevelMapper, eventStatusMapper);
+
+/**
+ * 通过接口获取问题清单的列表数据
+ * @param {Object} queryParam
+ * @returns {any}
+ */
+const getEventQuestionModel = async (queryParam) => {
+  const param = Object.assign(
+    {
+      adcd: "330182",
+      code: "",
+      startTime: "2022-07-23 09:29:29",
+      endTime: "2022-08-23 09:29:29",
+      searchText: "",
+      pageNo: 1,
+      pageSize: 20,
+    },
+    queryParam
+  );
+  return await getEventQuestionList(param);
+};
+
+/**
+ * 获取问题清单的展示列表
+ * @param {undefined}
+ * @returns {undefined}
+ */
+const getEventProblemList = () => {
+  const target = toRaw(dataModel)?.records;
+  if (!target) return;
+  dataList.value = [];
+  target.forEach((feild, pos) => {
+    dataList.value.push({
+      index: pos + 1,
+      eventResponsibleUnitName: feild.eventResponsibleUnitCode,
+      eventSourceName: feild.eventSourceName,
+      adnm: feild.adnm,
+      rchnm: feild.rchnm,
+      eventTypeName: feild.eventTypeName,
+      eventGradeName: feild.eventGradeName,
+      occurTime: moment(feild.occurTime).format("YYYY-MM-DD"),
+      status: feild.eventStatusName,
+    });
   });
-}
+};
+
+onBeforeMount(async () => {
+  dataModel = await getEventQuestionModel();
+  getEventProblemList();
+  console.log(dataModel, dataList);
+});
 </script>
 
 <style lang="less" scoped>
@@ -289,5 +364,11 @@ for (let i = 1; i < 10; i++) {
   .table-row > div:nth-child(9) {
     width: 80px;
   }
+}
+
+.one-line {
+  white-space: nowrap;
+  // text-overflow: ellipsis;
+  // overflow: hidden;
 }
 </style>

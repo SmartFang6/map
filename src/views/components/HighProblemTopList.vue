@@ -9,7 +9,11 @@
 <template>
   <div class="high-list-wrapper">
     <Title title="事件高发排名">
-      <el-tabs v-model="tabActive" type="card">
+      <el-tabs
+        v-model="tabActive"
+        type="card"
+        @tab-click="onHandleTypeOrAreaClick"
+      >
         <el-tab-pane class="tab-item" label="类型" name="type"></el-tab-pane>
         <el-tab-pane label="地区" name="area"></el-tab-pane>
       </el-tabs>
@@ -43,19 +47,137 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { ref, toRaw, onBeforeMount } from "vue";
+import { getEventIncidenceRank } from "@/api/cockpitEventStats";
+
+// 事件高发排名选项卡
 let tabActive = ref("type");
+
+// 事件高发排名列表
+let dataList = ref(null);
+
+// 示例数据
+// for (let i = 1; i <= 5; i++) {
+//   dataList.push({
+//     index: i,
+//     name: "乡镇名称展示/企业名称展示",
+//     value: "23/90%",
+//     rate: 30,
+//   });
+// }
+
+// 四乱类型映射
+const typeMapper = [
+  {
+    key: "1",
+    value: "乱占",
+  },
+  {
+    key: "2",
+    value: "乱建",
+  },
+  {
+    key: "3",
+    value: "乱堆",
+  },
+  {
+    key: "4",
+    value: "乱采",
+  },
+  {
+    key: "9",
+    value: "其他",
+  },
+];
+
+// 问题排行数据源
+let dataModel = ref(null);
+
+/**
+ * 获取事件高发排名 (按地区、类型)
+ * @param {any} queryParam
+ * @returns {Object}
+ */
+const getEventRankModel = async (queryParam) => {
+  const param = Object.assign(
+    {
+      adcd: "330182",
+      code: "1",
+      startTime: "2022-07-23 09:29:29",
+      endTime: "2022-08-23 09:29:29",
+      searchText: "",
+      pageNo: 1,
+      pageSize: 10,
+    },
+    queryParam
+  );
+  return await getEventIncidenceRank(param);
+};
+
+/**
+ * 类型或地区的标签页点击切换事件
+ * @param {pane} context
+ * @returns {undefined}
+ */
+const onHandleTypeOrAreaClick = (context) => {
+  toggleTypeOrAreaList(context.paneName);
+};
+
+/**
+ * 切换类型或地区的数据列表
+ * @param {String} keyword
+ * @returns {undefined}
+ */
+const toggleTypeOrAreaList = (keyword) => {
+  const model = toRaw(dataModel);
+  let target =
+    keyword === "type"
+      ? model?.eventStatHighIncidenceRankTypeList
+      : model?.eventStatHighIncidenceRankRegionList;
+  if (!target) return;
+  dataList.value = [];
+  target?.forEach((field, index) => {
+    if (keyword === "type") {
+      let typeName = "";
+      typeMapper.forEach((typeItem) => {
+        if (field.fourDisorderType === typeItem.key) {
+          typeName = typeItem.value;
+        }
+      });
+      let total = 0;
+      target.forEach((baseItem) => {
+        total += baseItem.typeNum;
+      });
+      dataList.value.push({
+        index: index + 1,
+        name: typeName,
+        value: field.typeNum,
+        rate: ((field.typeNum * 100) / total).toFixed(2),
+        code: field.fourDisorderType,
+      });
+    } else {
+      let total = 0;
+      target.forEach((baseItem) => {
+        total += baseItem.adcdNum;
+      });
+      dataList.value.push({
+        index: index + 1,
+        name: field.adnm,
+        value: field.adcdNum,
+        rate: ((field.adcdNum * 100) / total).toFixed(2),
+        code: field.adcd,
+      });
+    }
+  });
+};
+
 // import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
-const dataList = reactive([]);
-for (let i = 1; i <= 5; i++) {
-  dataList.push({
-    index: i,
-    name: "乡镇名称展示/企业名称展示",
-    value: "23/90%",
-    rate: 30,
-  });
-}
+onBeforeMount(async () => {
+  dataModel = await getEventRankModel();
+  toggleTypeOrAreaList(tabActive.value);
+  console.log("onBeforeMountSource", dataList, tabActive.value);
+});
 </script>
 
 <style lang="less" scoped>

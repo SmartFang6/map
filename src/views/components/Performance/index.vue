@@ -72,7 +72,8 @@
 <script setup>
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, onBeforeMount } from "vue";
+import { getEventPointRank } from "@/api/cockpitEventStats";
 
 let tabActive = ref("village");
 let typeActive = ref(1);
@@ -86,6 +87,31 @@ const typeLis = reactive([
     value: 2,
   },
 ]);
+
+// 处置绩效组件数据源
+let dataModel = ref(null);
+
+// 获取处置绩效的数据
+const getEventPointRankModel = async (queryParam) => {
+  const param = Object.assign(
+    {
+      adcd: "330182",
+      code: "1",
+      startTime: "2022-07-23 09:29:29",
+      endTime: "2022-08-23 09:29:29",
+      searchText: "",
+      pageNo: 1,
+      pageSize: 10,
+    },
+    queryParam
+  );
+  return await getEventPointRank(param);
+};
+
+onBeforeMount(async () => {
+  dataModel.value = await getEventPointRankModel();
+  console.log(dataModel);
+});
 </script>
 
 <style lang="less" scoped>

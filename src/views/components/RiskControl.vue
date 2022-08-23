@@ -15,12 +15,17 @@
           <img src="@/assets/images/risk-default.png" />
           <div class="index">
             <img src="@/assets/images/risk-down.png" />
-            <div class="value">2</div>
+            <div class="value">
+              {{ dataModel?.todayCompareToYesterdayAddNum }}
+            </div>
           </div>
         </div>
 
         <div class="data">
-          <div class="value"><span>34</span><span>个</span></div>
+          <div class="value">
+            <span>{{ dataModel?.todayAddNum }}</span>
+            <span>个</span>
+          </div>
           <div class="label">每日新增</div>
         </div>
       </div>
@@ -32,12 +37,17 @@
           <img src="@/assets/images/risk-danger.png" />
           <div class="index">
             <img src="@/assets/images/risk-up.png" />
-            <div class="value">3</div>
+            <div class="value">
+              {{ dataModel?.todayCompareToYesterdayTimeoutNum }}
+            </div>
           </div>
         </div>
 
         <div class="data">
-          <div class="value"><span>34</span><span>个</span></div>
+          <div class="value">
+            <span>{{ dataModel?.todayTimeoutNum }}</span>
+            <span>个</span>
+          </div>
           <div class="label">每日超期</div>
         </div>
       </div>
@@ -49,12 +59,17 @@
           <img src="@/assets/images/risk-warning.png" />
           <div class="index">
             <img src="@/assets/images/risk-up.png" />
-            <div class="value">3</div>
+            <div class="value">
+              {{ dataModel?.todayCompareToYesterdayImmediatelyTimeoutNum }}
+            </div>
           </div>
         </div>
 
         <div class="data">
-          <div class="value"><span>34</span><span>个</span></div>
+          <div class="value">
+            <span>{{ dataModel?.todayImmediatelyTimeoutNum }}</span>
+            <span>个</span>
+          </div>
           <div class="label">每日逾期</div>
         </div>
       </div>
@@ -65,6 +80,37 @@
 
 <script setup>
 import Title from "@/components/Title/index.vue";
+import { ref, onBeforeMount } from "vue";
+import { getEventRiskControl } from "@/api/cockpitEventStats";
+
+// 风险管控组件数据源
+let dataModel = ref(null);
+
+/**
+ * 获取风险管控的数据
+ * @param {Object} queryParam
+ * @returns {any}
+ */
+const getEventRiskModel = async (queryParam) => {
+  const param = Object.assign(
+    {
+      adcd: "330182",
+      code: "",
+      startTime: "2022-07-23 09:29:29",
+      endTime: "2022-08-23 09:29:29",
+      searchText: "",
+      pageNo: 1,
+      pageSize: 10,
+    },
+    queryParam
+  );
+  return await getEventRiskControl(param);
+};
+
+onBeforeMount(async () => {
+  dataModel.value = await getEventRiskModel();
+  console.log(dataModel);
+});
 </script>
 
 <style lang="less" scoped>
