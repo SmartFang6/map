@@ -14,5 +14,7 @@ import { postHttp } from "@/utils/axios";
  * } data
  */
 export const getEventStat = (data) => {
-  return postHttp("/supervision/getEventStat", { data });
+  return postHttp("/supervision/getEventStat", {
+    data,
+  });
 };

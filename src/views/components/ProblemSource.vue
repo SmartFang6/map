@@ -8,12 +8,16 @@
           <li>
             <span class="no">No.</span>
             <span class="no second-number">2</span>
-            <span class="second-text">河长巡河</span>
+            <span class="second-text">{{
+              eventSourceHeadThreeList?.[1]?.eventSourceName || "--"
+            }}</span>
           </li>
           <li>
             <span class="no">No.</span>
             <span class="no second-number">3</span>
-            <span class="second-text">AI智能发现</span>
+            <span class="second-text">{{
+              eventSourceHeadThreeList?.[2]?.eventSourceName || "--"
+            }}</span>
           </li>
         </ul>
       </div>
@@ -24,7 +28,9 @@
             <span class="no">No.</span>
             <span class="no first-number">1</span>
           </li>
-          <li class="first-text">公众举报</li>
+          <li class="first-text">
+            {{ eventSourceHeadThreeList?.[0]?.eventSourceName || "--" }}
+          </li>
         </ul>
       </div>
     </div>
@@ -35,67 +41,56 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, inject, computed, watch } from "vue";
 import "echarts-gl";
 import * as Echarts from "echarts";
+
+// 获取注入数据
+let leftData = inject("leftData");
+watch(
+  () => leftData,
+  (n, o) => {
+    console.log(n, o, "watch-left-data");
+  },
+  { immediate: true }
+);
+// 问题来源
+let eventSourceList = computed(() => {
+  return leftData.value?.eventSourceList || [];
+});
+// 问题来源头3名
+let eventSourceHeadThreeList = computed(() => {
+  return leftData.value?.eventSourceHeadThreeList || [];
+});
+
 const chart = ref(null);
 let chartTool = null;
-
-let optionConfig = [
-  {
-    name: "河长巡河",
-    value: 567,
-    itemStyle: {
-      color: "#00f5ff",
-    },
-  },
-  {
-    name: "AI智能发现",
-    value: 467,
-    itemStyle: {
-      color: "#ffcd19",
-    },
-  },
-  {
-    name: "无人船/机发现",
-    value: 818,
-    itemStyle: {
-      color: "#e35f5f",
-    },
-  },
-  {
-    name: "四平台上报",
-    value: 324,
-    itemStyle: {
-      color: "#07dda3",
-    },
-  },
-  {
-    name: "监测站点",
-    value: 818,
-    itemStyle: {
-      color: "#31b9ff",
-    },
-  },
-  {
-    name: "四轮/遥感",
-    value: 567,
-    itemStyle: {
-      color: "#ff9019",
-    },
-  },
-  {
-    name: "公众上报",
-    value: 467,
-    itemStyle: {
-      color: "#b675ff",
-    },
-  },
+const colorList = [
+  "#00f5ff",
+  "#ffcd19",
+  "#e35f5f",
+  "#07dda3",
+  "#31b9ff",
+  "#ff9019",
+  "#b675ff",
 ];
+let optionConfig = computed(() => {
+  let _res =
+    eventSourceList.value?.map((item, idx) => {
+      return {
+        name: item?.eventSourceName,
+        value: item?.eventSourceNum,
+        itemStyle: {
+          color: colorList[idx],
+        },
+      };
+    }) || [];
+  return _res;
+});
 
 // let selectedIndex = "";
 let hoveredIndex = "";
-const option = getPie3D(optionConfig, 0.59);
+const option = getPie3D(optionConfig.value, 0.59);
 // 生成扇形的曲面参数方程
 function getParametricEquation(
   startRatio,
@@ -185,6 +180,7 @@ function getParametricEquation(
 }
 // 生成模拟 3D 饼图的配置项
 function getPie3D(pieData, internalDiameterRatio) {
+  console.log(pieData, "----------------------");
   const series = [];
   // 总和
   let sumValue = 0;
@@ -270,7 +266,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     .map((i) => i.value)
     .reduce((pre, nex) => {
       return Number(pre) + Number(nex);
-    });
+    }, 0);
   console.log(total, "total");
   // 准备待返回的配置项，把准备好的 legendData、series 传入。
   const option = {

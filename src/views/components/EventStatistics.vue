@@ -6,10 +6,12 @@
         <img :src="item.icon" alt="icon" class="item-img" />
         <div>
           <p>
-            <span class="item-value">{{ item.num }}</span
-            ><span class="item-unit">{{ item.unit }}</span>
+            <span class="item-value">{{
+              leftData?.eventStatEvent?.[item.key] || 0
+            }}</span>
+            <span class="item-unit">{{ item?.unit }}</span>
           </p>
-          <p>{{ item.label }}</p>
+          <p>{{ item?.label }}</p>
         </div>
       </li>
     </ul>
@@ -19,55 +21,47 @@
 <script setup>
 import { inject } from "vue";
 import Title from "@/components/Title/index.vue";
-const eventBus = inject("EventBus");
-eventBus.$on("testEventBus", (val) => {
-  console.log(val, "test-console.log");
-});
 
-const configList = [
+// 数据配置项
+let configList = [
   {
     icon: require("@/assets/event-icon/icon_1.png"),
     label: "问题总数",
     unit: "个",
-    key: "",
-    num: 30,
+    key: "allNum",
   },
   {
     icon: require("@/assets/event-icon/icon_2.png"),
     label: "未办结",
     unit: "个",
-    key: "",
-    num: 10,
+    key: "unCompleteNum",
   },
   {
     icon: require("@/assets/event-icon/icon_3.png"),
     label: "已办结",
     unit: "个",
-    key: "",
-    num: 10,
+    key: "completedNum",
   },
   {
     icon: require("@/assets/event-icon/icon_4.png"),
     label: "逾期问题",
     unit: "个",
-    key: "",
-    num: 10,
+    key: "dueDateNum",
   },
   {
     icon: require("@/assets/event-icon/icon_5.png"),
     label: "销号率",
     unit: "%",
-    key: "",
-    num: 10,
+    key: "completedRate",
   },
   {
     icon: require("@/assets/event-icon/icon_6.png"),
     label: "平均耗时",
     unit: "H",
-    key: "",
-    num: 10,
+    key: "completedAverageCostTime",
   },
 ];
+let leftData = inject("leftData");
 </script>
 
 <style lang="less" scoped>
