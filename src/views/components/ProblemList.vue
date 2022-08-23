@@ -67,7 +67,7 @@
 
 <script setup>
 import { useStore } from "vuex";
-import { ref, computed, onBeforeMount, toRaw } from "vue";
+import { ref, toRaw, computed, onBeforeMount, onBeforeUnmount } from "vue";
 import { ElSelect, ElOption, ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
@@ -173,10 +173,25 @@ const getEventProblemList = () => {
   });
 };
 
+// 问题清单定时器,没3分钟更新一次
+let timer = null;
+
 onBeforeMount(async () => {
+  // 先加载一次数据
   dataModel = await getEventQuestionModel();
   getEventProblemList();
-  console.log(dataModel, dataList);
+
+  //每3分钟刷新数据
+  timer = setInterval(async () => {
+    dataModel = await getEventQuestionModel();
+    getEventProblemList();
+    console.log(dataModel, dataList);
+  }, 3 * 60 * 1000);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(timer);
+  timer = null;
 });
 </script>
 
