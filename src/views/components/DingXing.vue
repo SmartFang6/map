@@ -45,7 +45,7 @@ const chartOption = computed(() => {
     .map((i) => i.value)
     .reduce((pre, nex) => {
       return Number(pre) + Number(nex);
-    });
+    }, 0);
   return {
     // color: ["#097ceb", "#e26959", "#45e0d3"],
     legend: {
