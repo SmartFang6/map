@@ -1,5 +1,6 @@
 import BaseLayer from '../base/BaseLayer'
-import { tdtImg } from '../../config/layerConfig'
+import { tdtImg, tdtImgAnnoLayer } from '../../config/layerConfig'
+import LayerFactory from "../../factory/LayerFactory";
 
 /**
  * 裁剪天地图
@@ -20,7 +21,10 @@ class TdtImgClipLayer extends BaseLayer { // 天地图裁剪功能
   load(vm, map, feature) {
     this.removeLayer(map)
     this.addLayer(map)
-    this.layer.on('postrender', (evt) => {
+    tdtImgAnnoLayer.zIndex=6
+    this.tdtImgAnnoLayer = LayerFactory.createLayer(tdtImgAnnoLayer)
+    map.addLayer(this.tdtImgAnnoLayer)
+    this.tdtImgAnnoLayer.on('postrender', (evt) => {
       // 根据多边形进行裁剪
       this.clip(evt.context, feature.getGeometry(), map)
       // 底图置灰

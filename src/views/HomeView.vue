@@ -40,7 +40,7 @@ import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
 import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
-import Map from "@/views/OLMap/RainMap";
+import Map from "@/views/OLMap/MainMap";
 const eventBus = inject("eventBus");
 
 console.log(eventBus, "eventBus", NoticeEvt);

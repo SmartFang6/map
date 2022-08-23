@@ -27,6 +27,8 @@ import { riverPointLayer } from "./config/layerConfig";
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
 import MainShadowLayer from "./layers/imgShade/MainShadowLayer";
+import TdtImgClipLayer from './layers/imgShade/TdtImgClipLayer';
+import OrgBoundaryLayer from './layers/common/OrgBoundaryLayer'
 
 export default {
   name: "FirstMap",
@@ -75,24 +77,21 @@ export default {
     },
     firstLoad() {
       this.layers = {
-        layerSwitch: new LayerSwitch(),
-        riverPointLayer: new DCLayer(riverPointLayer),
-        shadeLayer: new ShadeLayer(),
+        // shadeLayer: new ShadeLayer(),
         mainShadeLayer: new MainShadowLayer(), // 地图下偏移的阴影
-        orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
-        // draw: new BaseVectorLayer(drawLayer)
+        boundary: new OrgBoundaryLayer(), // 边界线
+        // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
       };
-      // 加载街道图
-      this.layers.layerSwitch.changeLayers("2", this.map);
-      // // 加载遮罩
-      this.layers.shadeLayer.load(this.adcd, this.map, true)
+      // 加载遮罩
+      // this.layers.shadeLayer.load(this.adcd, this.map, true)
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
         map: this.map,
         adcd: this.adcd,
       });
-      // // this.layers.innerShadeLayer.load(this.adcd, this.map)
-      // this.layers.orgAdcdWmsLayer.load(this.map, this.adcd)
+      // 加载下级行政区划边界
+      this.layers.boundary.load(this.map, this.adcd)
+      // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
     },
 
@@ -164,10 +163,6 @@ export default {
 };
 </script>
 <style>
-/* .clipImg canvas {
-  -webkit-filter: brightness(100%) grayscale(100%);
-  filter: brightness(100%) grayscale(100%);
-} */
 </style>
 <style lang="less" scoped>
 .picture-map2 {
