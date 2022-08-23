@@ -31,7 +31,7 @@
 
 <script setup>
 import Header from "./components/Header";
-import { inject } from "vue";
+import { inject, provide, ref } from "vue";
 import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
 import ProblemSource from "./components/ProblemSource.vue";
@@ -40,15 +40,26 @@ import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
 import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
+import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
 const eventBus = inject("eventBus");
+let leftData = ref(null);
+// 获取左侧栏数据
+function getLeftData() {
+  const params = {
+    adcd: "330182",
+    endTime: "2022-08-23 09:29:29",
+    startTime: "2022-07-23 09:29:29",
+  };
+  getEventStat(params).then((res) => {
+    console.log(res);
+  });
+}
+getLeftData();
+// 注入左侧栏数据
+provide("leftData", leftData);
 
 console.log(eventBus, "eventBus", NoticeEvt);
-
-//例: 通知地图
-// eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
-// TODO
-// })
 </script>
 
 <style scoped lang="less">
