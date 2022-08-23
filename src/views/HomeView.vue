@@ -3,7 +3,10 @@
     <template #header><Header /></template>
     <template #map>
       <div class="map">
-        <MapLayer />
+        <MapLayer
+          @changeTime="mapRef?.changeTime"
+          @changeLayerType="mapRef?.changeLayerType"
+        />
         <Map ref="mapRef" />
       </div>
     </template>

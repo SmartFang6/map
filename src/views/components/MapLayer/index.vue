@@ -22,15 +22,15 @@
     <div class="graph-tabs">
       <div
         class="graph-style"
-        :class="{ active: graphActive === 'statistics' }"
-        @click="graphActive = 'statistics'"
+        :class="{ active: graphActive === '1' }"
+        @click="graphActive = '1'"
       >
         统计图
       </div>
       <div
         class="graph-style"
-        :class="{ active: graphActive === 'point' }"
-        @click="graphActive = 'point'"
+        :class="{ active: graphActive === '2' }"
+        @click="graphActive = '2'"
       >
         点位图
       </div>
@@ -40,15 +40,55 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+import moment from "moment";
+import { reactive, toRefs, watch } from "vue";
 
 export default {
   name: "MapLayer",
-  setup() {
+  emits: ["changeTime", "changeLayerType"],
+  setup(props, { emit }) {
     const state = reactive({
       timeActive: "month",
-      graphActive: "statistics",
+      graphActive: "1",
     });
+
+    // 监听时间切换状态发送事件
+    watch(
+      () => state.timeActive,
+      (timeActive) => {
+        if (timeActive === "month") {
+          emit("changeTime", {
+            startTime: moment(new Date())
+              .startOf("month")
+              .format("YYYY-MM-DD 00:00:00"),
+            endTime: moment(new Date())
+              .endOf("month")
+              .format("YYYY-MM-DD 23:59:59"),
+          });
+        } else if (timeActive === "year") {
+          emit("changeTime", {
+            startTime: moment(new Date())
+              .startOf("year")
+              .format("YYYY-MM-DD 00:00:00"),
+            endTime: moment(new Date())
+              .endOf("year")
+              .format("YYYY-MM-DD 23:59:59"),
+          });
+        }
+      },
+      {
+        immediate: true,
+      }
+    );
+
+    // 监听图形切换状态发送事件
+    watch(
+      () => state.graphActive,
+      (graphActive) => emit("changeLayerType", graphActive),
+      {
+        immediate: true,
+      }
+    );
 
     return {
       ...toRefs(state),
