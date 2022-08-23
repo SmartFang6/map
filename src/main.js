@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 // 创建一个Vue 应用
 const app = createApp(App);
@@ -16,5 +17,5 @@ requireComponents.keys().forEach((fileName) => {
   app.component(reqComName, reqCom.default || reqCom);
 });
 
-app.use(ElementPlus);
+app.use(ElementPlus, { locale: zhCn });
 app.use(store).use(router).mount("#app");

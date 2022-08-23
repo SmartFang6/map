@@ -6,10 +6,14 @@
         :key="index"
         class="carousel-item"
       >
-        <div class="item" v-for="(itm, idx) in item" :key="itm.name">
+        <div
+          class="item"
+          v-for="(itm, idx) in item"
+          :key="itm.eventResponsibleUnitCode"
+        >
           <el-progress
             type="circle"
-            :percentage="65"
+            :percentage="itm.unitCompletedRate"
             :stroke-width="18"
             :color="colors[idx]"
             :show-text="false"
@@ -20,19 +24,19 @@
           <div class="item-icon" :class="{ 'item-icon-bg': idx !== 0 }"></div>
           <ul>
             <li class="item-value" :style="{ color: colors[idx] }">
-              {{ itm.num1 }} %
+              {{ itm.unitCompletedRate }} %
             </li>
-            <li class="item-name">{{ itm.name }}</li>
+            <li class="item-name">{{ itm.eventResponsibleUnitCodeName }}</li>
             <li class="item-footer footer-top">
               问题总数
               <span class="item-footer-value" :style="{ color: colors[idx] }">{{
-                itm.num2
+                itm.unitEventNum
               }}</span>
             </li>
             <li class="item-footer">
               已销号
               <span class="item-footer-value" :style="{ color: colors[idx] }">{{
-                itm.num3
+                itm.unitCompletedNum
               }}</span>
             </li>
           </ul>
@@ -43,56 +47,37 @@
 </template>
 
 <script setup>
-// import { ref } from "vue";
+import { computed, inject } from "vue";
 const colors = ["#32DA85", "#00F5FF", "#FFCD19", "#E35F5F"];
-let dataList = [
-  [
-    {
-      name: "水利部门",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-    {
-      name: "农业农村部",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-    {
-      name: "自然资源部",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-    {
-      name: "生态环境部",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-  ],
-  [
-    {
-      name: "水利部门",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-    {
-      name: "农业农村部",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-    {
-      name: "自然资源部",
-      num1: 98.2,
-      num2: 231,
-      num3: 110,
-    },
-  ],
-];
+
+// 获取注入数据
+let leftData = inject("leftData");
+// 定性
+let eventResponsibleUnitList = computed(() => {
+  return leftData.value?.eventResponsibleUnitList || [];
+});
+
+/**
+ * num 为二维数组中的item 数量
+ * arr 为一维数组
+ */
+function arrTrans(num, arr) {
+  if (!arr.length) return [];
+  // 一维数组转换为二维数组
+  const iconsArr = []; // 声明数组
+  arr.forEach((item, index) => {
+    // Math.floor() 计算结果为下舍整数，如小于1的都取0
+    const page = Math.floor(index / num); // 计算该元素为第几个素组内
+    if (!iconsArr[page]) {
+      // 判断是否存在，不存在则创建一个空的二维数组
+      iconsArr[page] = [];
+    }
+    iconsArr[page].push(item);
+  });
+  return iconsArr;
+}
+let dataList = arrTrans(4, eventResponsibleUnitList);
+console.log(dataList, "data-list");
 </script>
 
 <style lang="less" scoped>
