@@ -13,6 +13,11 @@ import { geoserverPath } from './geoserverConfig'
 import { res, matrixIds, projectionExtent } from './mapConfig'
 import SldUtils from '../utils/SldUtils'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
+
+export const geoserverWmsUrl = {
+  adcdWMS: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/wms',
+  adcdOWS: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/ows',
+}
 // 天地图 影像图
 export const tdtImg = {
   type: LayerTypeEnum.tile,
@@ -32,6 +37,44 @@ export const tdtImg = {
     resolutions: res,
     matrixIds,
   },
+}
+
+export const tdtImgAnnoLayer = {
+  type: LayerTypeEnum.tile,
+  id: "tdt_img_anno",
+  className: "clipImg",
+  visible: true,
+  source: {
+    type: SourceTypeEnum.wmts,
+    name: "天地图影像注记图",
+    url: `http://t{0-6}.tianditu.gov.cn/cia_c/wmts?tk=${tdtTk}`,
+    layer: "cia",
+    style: "default",
+    matrixSet: "c",
+    format: "tiles",
+    projectionExtent,
+    resolutions: res,
+    matrixIds,
+  },
+  zIndex: 10
+}
+
+// 行政区划外边界图层
+export const orgBoundaryLayer = {
+  id: 'orgadcdWms',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverWmsUrl.adcdWMS,
+    params: {
+      LAYERS: '',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      CQL_FILTER: '1=1',
+    },
+    crossOrigin: 'anonymous',
+  },
+  zIndex: 10,
 }
 
 // 遮罩层
@@ -88,7 +131,7 @@ export const orgAdcdWmsLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivision/wms',
+    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/wms',
     params: {
       LAYERS: '',
       VERSION: '1.3.0',
