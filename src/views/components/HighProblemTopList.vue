@@ -47,8 +47,8 @@
 </template>
 
 <script setup>
-import { ref, toRaw, onBeforeMount } from "vue";
-import { getEventIncidenceRank } from "@/api/cockpitEventStats";
+import { ref, toRaw, inject, watch } from "vue";
+import { getEventIncidenceRank } from "@/apis/cockpitEventStats";
 
 // 事件高发排名选项卡
 let tabActive = ref("type");
@@ -173,11 +173,25 @@ const toggleTypeOrAreaList = (keyword) => {
 
 // import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
-onBeforeMount(async () => {
-  dataModel = await getEventRankModel();
-  toggleTypeOrAreaList(tabActive.value);
-  console.log("onBeforeMountSource", dataList, tabActive.value);
-});
+// 获取注入的时间区间
+let dateRange = inject("dateRange");
+
+// 监测查询时间
+watch(
+  () => dateRange,
+  async (dateRange) => {
+    console.log("HIGH dateRange", dateRange);
+    // 先加载一次数据
+    dataModel = await getEventRankModel({
+      ...dateRange.value,
+    });
+    toggleTypeOrAreaList(tabActive.value);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 </script>
 
 <style lang="less" scoped>
@@ -189,6 +203,7 @@ onBeforeMount(async () => {
   box-sizing: border-box;
   color: #c4f0ff;
   font-size: 14px;
+  height: 275px;
   &-container {
     width: 100%;
     overflow: hidden;

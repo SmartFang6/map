@@ -5,18 +5,36 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onUnmounted, inject } from "vue";
+import {
+  computed,
+  ref,
+  onMounted,
+  onUnmounted,
+  inject,
+  nextTick,
+  watch,
+} from "vue";
 
 // 获取注入数据
 let leftData = inject("leftData");
-// 定性
-let eventGradeList = computed(() => {
-  return leftData.value?.eventGradeList || [];
-});
+
+// 监听注入的数据更新echarts
+watch(
+  () => leftData,
+  (n, o) => {
+    console.log(n, o);
+    // chart.value.setOption(option);
+    nextTick(() => {
+      charts.value.chartInstance.setOption(chartOption.value);
+    });
+  },
+  { deep: true }
+);
+
 const colorList = ["#44C964", "#FF9019", "#D35858"];
 let echartsData = computed(() => {
   let _res =
-    eventGradeList.value?.map((item, idx) => {
+    leftData.value?.eventGradeList?.map((item, idx) => {
       return {
         name: item?.eventGradeName,
         value: item?.eventGradeNum,

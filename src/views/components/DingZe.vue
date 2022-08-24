@@ -26,7 +26,9 @@
             <li class="item-value" :style="{ color: colors[idx] }">
               {{ itm.unitCompletedRate }} %
             </li>
-            <li class="item-name">{{ itm.eventResponsibleUnitCodeName }}</li>
+            <li class="item-name" :title="itm.eventResponsibleUnitCodeName">
+              {{ itm.eventResponsibleUnitCodeName }}
+            </li>
             <li class="item-footer footer-top">
               问题总数
               <span class="item-footer-value" :style="{ color: colors[idx] }">{{
@@ -47,15 +49,29 @@
 </template>
 
 <script setup>
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 const colors = ["#32DA85", "#00F5FF", "#FFCD19", "#E35F5F"];
 
+let dataList = ref([]);
 // 获取注入数据
 let leftData = inject("leftData");
+// 监听注入的数据更新echarts
+// watch(
+//   () => leftData,
+//   (n, o) => {
+//     console.log(n, o, "22222");
+//     // chart.value.setOption(option);
+//     nextTick(() => {
+//       dataList.value = arrTrans(4, eventResponsibleUnitList.value);
+//     });
+//   },
+//   { deep: true }
+// );
 // 定性
 let eventResponsibleUnitList = computed(() => {
   return leftData.value?.eventResponsibleUnitList || [];
 });
+dataList.value = arrTrans(4, eventResponsibleUnitList.value);
 
 /**
  * num 为二维数组中的item 数量
@@ -76,8 +92,6 @@ function arrTrans(num, arr) {
   });
   return iconsArr;
 }
-let dataList = arrTrans(4, eventResponsibleUnitList);
-console.log(dataList, "data-list");
 </script>
 
 <style lang="less" scoped>
@@ -129,10 +143,13 @@ console.log(dataList, "data-list");
   .item-name {
     font-family: MicrosoftYaHei;
     color: #fff;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .item-footer {
     box-sizing: border-box;
-    padding: 8px 5px;
+    padding: 8px;
     margin-top: 10px;
     background: url(@/assets/images/issue_footer.png);
     background-size: 100% 100%;

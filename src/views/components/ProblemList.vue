@@ -10,9 +10,13 @@
     <div class="problem-list-header">
       <div class="shake-hands">
         <div class="custom-select-wrapper">
-          <el-select v-if="!collapsed" placeholder="全部" class="custom-select">
-            <el-option value="1">111</el-option>
-          </el-select>
+          <!--
+          <el-select
+            v-if="!collapsed"
+            placeholder="全部"
+            class="custom-select"
+          />
+          -->
         </div>
         <div class="title">问题清单</div>
         <div class="operator-wrapper">
@@ -26,7 +30,7 @@
 
     <div class="problem-list-container">
       <div class="table-header">
-        <div>排名</div>
+        <div>序号</div>
         <div>责任部门</div>
         <div>事件来源</div>
         <div>行政区域</div>
@@ -47,7 +51,13 @@
             <div>{{ row.eventResponsibleUnitName }}</div>
             <div>{{ row.eventSourceName }}</div>
             <div>{{ row.adnm }}</div>
-            <div class="one-line">{{ row.rchnm }}</div>
+            <el-tooltip
+              :content="row.rchnm"
+              effect="dark"
+              placement="top-start"
+            >
+              <div class="one-line">{{ row.rchnm }}</div>
+            </el-tooltip>
             <el-tooltip
               :content="row.eventTypeName"
               effect="dark"
@@ -57,7 +67,13 @@
             </el-tooltip>
             <div>{{ row.eventGradeName }}</div>
             <div>{{ row.occurTime }}</div>
-            <div>{{ row.status }}</div>
+            <el-tooltip
+              :content="row.status"
+              effect="dark"
+              placement="top-start"
+            >
+              <div class="one-line">{{ row.status }}</div>
+            </el-tooltip>
           </div>
         </vue-seamless-scroll>
       </div>
@@ -74,14 +90,15 @@ import {
   computed,
   onBeforeMount,
   onBeforeUnmount,
+  inject,
 } from "vue";
-import { ElSelect, ElOption, ElTooltip } from "element-plus";
+import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
 import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 import moment from "moment";
-import { getEventQuestionList } from "@/api/cockpitEventStats";
+import { getEventQuestionList } from "@/apis/cockpitEventStats";
 
 const store = useStore();
 
@@ -151,7 +168,7 @@ const getEventProblemList = () => {
   target.forEach((feild, pos) => {
     dataList.value.push({
       index: pos + 1,
-      eventResponsibleUnitName: feild.eventResponsibleUnitCode,
+      eventResponsibleUnitName: feild.eventResponsibleUnitCodeName,
       eventSourceName: feild.eventSourceName,
       adnm: feild.adnm,
       rchnm: feild.rchnm,
@@ -163,15 +180,19 @@ const getEventProblemList = () => {
   });
 };
 
+// 获取注入的时间区间
+let dateRange = inject("dateRange");
+
 // 监测查询时间
 watch(
-  () => store.state.searchTime,
-  (searchTime) => {
-    let { startTime, endTime } = searchTime;
-    if(!startTime || !endTime) {
-      startTime = moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00"),
-      endTime = moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00"),
-    }
+  () => dateRange,
+  async (dateRange) => {
+    console.log("dateRange", dateRange);
+    // 先加载一次数据
+    dataModel = await getEventQuestionModel({
+      ...dateRange.value,
+    });
+    getEventProblemList();
   },
   {
     immediate: true,
@@ -183,13 +204,11 @@ watch(
 let timer = null;
 
 onBeforeMount(async () => {
-  // 先加载一次数据
-  dataModel = await getEventQuestionModel();
-  getEventProblemList();
-
   //每3分钟刷新数据
   timer = setInterval(async () => {
-    dataModel = await getEventQuestionModel();
+    dataModel = await getEventQuestionModel({
+      ...dateRange.value,
+    });
     getEventProblemList();
     console.log(dataModel, dataList);
   }, 3 * 60 * 1000);

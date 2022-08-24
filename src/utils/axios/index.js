@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "@/store";
+import router from "@/router";
 
 import { ElMessage } from "element-plus";
 
@@ -66,6 +67,7 @@ instance.interceptors.response.use(
       store.commit("UPDATE_TOKEN", "");
       store.commit("UPDATE_USER_INFO", {});
       ElMessage.error(err.message);
+      router.replace("/401");
     } else if (err.response?.status === 500) {
       // 获取错误提示
       ElMessage.error("服务重启中，请稍候！");

@@ -53,7 +53,7 @@
 
 <script>
 import moment from "moment";
-import { reactive, toRefs, watch, useStore } from "vue";
+import { reactive, toRefs, watch } from "vue";
 
 export default {
   name: "MapLayer",
@@ -67,36 +67,31 @@ export default {
       searchTime: null,
     });
 
-    const store = useStore();
-
     // 监听时间切换状态发送事件
     watch(
       () => state.timeActive,
       (timeActive) => {
         if (timeActive === "month") {
-          state.searchTime = {
+          emit("changeTime", {
             startTime: moment(new Date())
               .startOf("month")
               .format("YYYY-MM-DD 00:00:00"),
             endTime: moment(new Date())
               .endOf("month")
               .format("YYYY-MM-DD 23:59:59"),
-          };
-          emit("changeTime", state.searchTime);
+          });
         } else if (timeActive === "year") {
-          state.searchTime = {
+          emit("changeTime", {
             startTime: moment(new Date())
               .startOf("year")
               .format("YYYY-MM-DD 00:00:00"),
             endTime: moment(new Date())
               .endOf("year")
               .format("YYYY-MM-DD 23:59:59"),
-          };
-          emit("changeTime", state.searchTime);
+          });
         } else {
           state.datePickerRef.$el?.nextElementSibling.click();
         }
-        store.commit("UPDATE_SEARCH_TIME", state.searchTime);
       },
       {
         immediate: true,
@@ -113,10 +108,6 @@ export default {
         let [startTime, endTime] = dateRange;
         endTime = moment(endTime).endOf("day").format("YYYY-MM-DD 23:59:59");
         emit("changeTime", {
-          startTime,
-          endTime,
-        });
-        store.commit("UPDATE_SEARCH_TIME", {
           startTime,
           endTime,
         });

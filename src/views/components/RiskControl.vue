@@ -80,25 +80,11 @@
 
 <script setup>
 import Title from "@/components/Title/index.vue";
-import { ref, inject, onBeforeMount, watch } from "vue";
-import { getEventRiskControl } from "@/api/cockpitEventStats";
+import { ref, inject, watch } from "vue";
+import { getEventRiskControl } from "@/apis/cockpitEventStats";
 
 // 风险管控组件数据源
 let dataModel = ref(null);
-
-const searchTime = inject("searchTime");
-console.log("searchTime", searchTime);
-
-watch(
-  () => searchTime,
-  (searchTime) => {
-    console.log("watch searchTime", searchTime);
-  },
-  {
-    immediate: true,
-    deep: true,
-  }
-);
 
 /**
  * 获取风险管控的数据
@@ -121,10 +107,24 @@ const getEventRiskModel = async (queryParam) => {
   return await getEventRiskControl(param);
 };
 
-onBeforeMount(async () => {
-  dataModel.value = await getEventRiskModel();
-  console.log(dataModel);
-});
+// 获取注入的时间区间
+let dateRange = inject("dateRange");
+
+// 监测查询时间
+watch(
+  () => dateRange,
+  async (dateRange) => {
+    console.log("RiskdateRange", dateRange);
+    // 先加载一次数据
+    dataModel.value = await getEventRiskModel({
+      ...dateRange.value,
+    });
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 </script>
 
 <style lang="less" scoped>

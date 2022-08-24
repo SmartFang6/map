@@ -32,7 +32,8 @@ class AreaHappinessLayer extends BaseVectorLayer {
     // 获取幸福指数
     const querys = params.getValueByKey('searchInfo')
     let res = await getStatisticsList(querys)
-    res = res.message // 测试，后边需删掉！！！！！！！
+    // res = res.message // 测试，后边需删掉！！！！！！！
+    console.log('rees', res);
     this.adcdFeatures[adcd].forEach(feature => {
       const happyscore = common.getSystemAdcdFromMap(
         feature.get('admin_div_code')

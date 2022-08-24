@@ -41,23 +41,28 @@
 </template>
 
 <script setup>
-import { onMounted, ref, inject, computed, watch } from "vue";
+import { onMounted, ref, inject, computed, watch, nextTick } from "vue";
 import "echarts-gl";
 import * as Echarts from "echarts";
 
 // 获取注入数据
 let leftData = inject("leftData");
+let option = ref({});
+
+// 监听注入的数据更新echarts
 watch(
   () => leftData,
   (n, o) => {
-    console.log(n, o, "watch-left-data");
+    console.log(n, o, "left-data", chart);
+    // chart.value.setOption(option);
+    nextTick(() => {
+      option.value = getPie3D(optionConfig.value, 0.59);
+      chartTool.setOption(option.value);
+    });
   },
-  { immediate: true }
+  { deep: true }
 );
-// 问题来源
-let eventSourceList = computed(() => {
-  return leftData.value?.eventSourceList || [];
-});
+
 // 问题来源头3名
 let eventSourceHeadThreeList = computed(() => {
   return leftData.value?.eventSourceHeadThreeList || [];
@@ -76,7 +81,7 @@ const colorList = [
 ];
 let optionConfig = computed(() => {
   let _res =
-    eventSourceList.value?.map((item, idx) => {
+    leftData.value?.eventSourceList?.map((item, idx) => {
       return {
         name: item?.eventSourceName,
         value: item?.eventSourceNum,
@@ -90,7 +95,6 @@ let optionConfig = computed(() => {
 
 // let selectedIndex = "";
 let hoveredIndex = "";
-const option = getPie3D(optionConfig.value, 0.59);
 // 生成扇形的曲面参数方程
 function getParametricEquation(
   startRatio,
@@ -180,7 +184,7 @@ function getParametricEquation(
 }
 // 生成模拟 3D 饼图的配置项
 function getPie3D(pieData, internalDiameterRatio) {
-  console.log(pieData, "----------------------");
+  console.log("-----------optionConfig-----------", pieData);
   const series = [];
   // 总和
   let sumValue = 0;
@@ -371,26 +375,27 @@ function chartMouseover(params) {
     // 如果当前有高亮的扇形，取消其高亮状态（对 option 更新）
     if (hoveredIndex !== "") {
       // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 false。
-      isSelected = option.series[hoveredIndex].pieStatus.selected;
+      isSelected = option.value.series[hoveredIndex].pieStatus.selected;
       isHovered = false;
-      startRatio = option.series[hoveredIndex].pieData.startRatio;
-      endRatio = option.series[hoveredIndex].pieData.endRatio;
-      k = option.series[hoveredIndex].pieStatus.k;
+      startRatio = option.value.series[hoveredIndex].pieData.startRatio;
+      endRatio = option.value.series[hoveredIndex].pieData.endRatio;
+      k = option.value.series[hoveredIndex].pieStatus.k;
       i =
-        option.series[hoveredIndex].pieData.value ===
-        option.series[0].pieData.value
+        option.value.series[hoveredIndex].pieData.value ===
+        option.value.series[0].pieData.value
           ? 35
           : 10;
       // 对当前点击的扇形，执行取消高亮操作（对 option 更新）
-      option.series[hoveredIndex].parametricEquation = getParametricEquation(
-        startRatio,
-        endRatio,
-        isSelected,
-        isHovered,
-        k,
-        i
-      );
-      option.series[hoveredIndex].pieStatus.hovered = isHovered;
+      option.value.series[hoveredIndex].parametricEquation =
+        getParametricEquation(
+          startRatio,
+          endRatio,
+          isSelected,
+          isHovered,
+          k,
+          i
+        );
+      option.value.series[hoveredIndex].pieStatus.hovered = isHovered;
 
       // 将此前记录的上次选中的扇形对应的系列号 seriesIndex 清空
       hoveredIndex = "";
@@ -399,23 +404,23 @@ function chartMouseover(params) {
     // 如果触发 mouseover 的扇形不是透明圆环，将其高亮（对 option 更新）
     if (params.seriesName !== "mouseoutSeries") {
       // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 true。
-      isSelected = option.series[params.seriesIndex].pieStatus.selected;
+      isSelected = option.value.series[params.seriesIndex].pieStatus.selected;
       isHovered = true;
-      startRatio = option.series[params.seriesIndex].pieData.startRatio;
-      endRatio = option.series[params.seriesIndex].pieData.endRatio;
-      k = option.series[params.seriesIndex].pieStatus.k;
+      startRatio = option.value.series[params.seriesIndex].pieData.startRatio;
+      endRatio = option.value.series[params.seriesIndex].pieData.endRatio;
+      k = option.value.series[params.seriesIndex].pieStatus.k;
 
       // 对当前点击的扇形，执行高亮操作（对 option 更新）
-      option.series[params.seriesIndex].parametricEquation =
+      option.value.series[params.seriesIndex].parametricEquation =
         getParametricEquation(
           startRatio,
           endRatio,
           isSelected,
           isHovered,
           k,
-          option.series[params.seriesIndex].pieData.value / 5 + 5 // 控制高亮柱状高度
+          option.value.series[params.seriesIndex].pieData.value / 5 + 5 // 控制高亮柱状高度
         );
-      option.series[params.seriesIndex].pieStatus.hovered = isHovered;
+      option.value.series[params.seriesIndex].pieStatus.hovered = isHovered;
 
       // 记录上次高亮的扇形对应的系列号 seriesIndex
       hoveredIndex = params.seriesIndex;
@@ -430,26 +435,20 @@ function chartMouseover(params) {
 function globaloutHandler() {
   if (hoveredIndex !== "") {
     // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 true。
-    let isSelected = option.series[hoveredIndex].pieStatus.selected;
+    let isSelected = option.value.series[hoveredIndex].pieStatus.selected;
     let isHovered = false;
-    let k = option.series[hoveredIndex].pieStatus.k;
-    let startRatio = option.series[hoveredIndex].pieData.startRatio;
-    let endRatio = option.series[hoveredIndex].pieData.endRatio;
+    let k = option.value.series[hoveredIndex].pieStatus.k;
+    let startRatio = option.value.series[hoveredIndex].pieData.startRatio;
+    let endRatio = option.value.series[hoveredIndex].pieData.endRatio;
     // 对当前点击的扇形，执行取消高亮操作（对 option 更新）
     let i =
-      option.series[hoveredIndex].pieData.value ===
-      option.series[0].pieData.value
+      option.value.series[hoveredIndex].pieData.value ===
+      option.value.series[0].pieData.value
         ? 35
         : 10;
-    option.series[hoveredIndex].parametricEquation = getParametricEquation(
-      startRatio,
-      endRatio,
-      isSelected,
-      isHovered,
-      k,
-      i
-    );
-    option.series[hoveredIndex].pieStatus.hovered = isHovered;
+    option.value.series[hoveredIndex].parametricEquation =
+      getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, i);
+    option.value.series[hoveredIndex].pieStatus.hovered = isHovered;
 
     // 将此前记录的上次选中的扇形对应的系列号 seriesIndex 清空
     hoveredIndex = "";
@@ -461,7 +460,7 @@ function globaloutHandler() {
 
 onMounted(() => {
   chartTool = Echarts.init(chart.value);
-  chartTool.setOption(option);
+  // chartTool.setOption(option);
   chartTool.on("mouseover", chartMouseover);
   chartTool.on("globalout", globaloutHandler);
 });
@@ -521,10 +520,10 @@ onMounted(() => {
 
       .first-bg {
         width: 97px;
-        height: 88px;
+        height: 83px;
         background: url(@/assets/images/first_icon.png);
         background-size: 100% 100%;
-        margin: 12px 5px;
+        margin: 10px 5px;
       }
 
       .first-info {

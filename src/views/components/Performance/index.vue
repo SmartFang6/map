@@ -75,15 +75,15 @@
     </div>
     <!--#endregion-->
 
-    <List :dataList="rankingList" :type="typeActive" />
+    <List :dataModel="rankingList" :type="typeActive" />
   </div>
 </template>
 
 <script setup>
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
-import { ref, reactive, toRaw, watch, onBeforeMount } from "vue";
-import { getEventPointRank } from "@/api/cockpitEventStats";
+import { ref, reactive, toRaw, inject, watch } from "vue";
+import { getEventPointRank } from "@/apis/cockpitEventStats";
 
 let tabActive = ref("village");
 let typeActive = ref(1);
@@ -185,12 +185,27 @@ const toggleTownOrDeptList = (local, stamp) => {
   return target;
 };
 
-onBeforeMount(async () => {
-  dataModel = await getEventPointRankModel();
-  rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
-  setExcellentList(rankingList.value);
-  console.log(dataModel);
-});
+// 获取注入的时间区间
+let dateRange = inject("dateRange");
+
+// 监测查询时间
+watch(
+  () => dateRange,
+  async (dateRange) => {
+    console.log("dateRange", dateRange);
+    // 先加载一次数据
+    dataModel = await getEventPointRankModel({
+      ...dateRange.value,
+    });
+    rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
+    setExcellentList(rankingList.value);
+    console.log(dataModel);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 </script>
 
 <style lang="less" scoped>

@@ -149,6 +149,7 @@ class SourceFactory {
       layer: config.layer,
       style: config.style,
       matrixSet: config.matrixSet,
+      tilePixelRatio: config.tilePixelRatio,
       format: config.format,
       wrapX: config.wrapX,
       tileGrid: new WMTSTileGrid({

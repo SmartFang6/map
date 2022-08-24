@@ -53,7 +53,7 @@ const dataList = ref([]);
 
 // 获取父组件传递的列表数据
 const props = defineProps({
-  dataList: {
+  dataModel: {
     type: Array,
     default: () => [],
   },
@@ -64,16 +64,16 @@ const props = defineProps({
 });
 
 watch(
-  () => [props.dataList, props.type],
+  () => [props.dataModel, props.type],
   () => {
     nextTick(() => {
-      console.log(props.dataList, props.type);
-      if (!props.dataList || props.dataList.length <= 0) {
+      console.log(props.dataModel, props.type);
+      if (!props.dataModel || props.dataModel.length <= 0) {
         dataList.value = [];
         return;
       }
       dataList.value = [];
-      props.dataList.forEach((item) => {
+      props.dataModel.forEach((item) => {
         if (props.type === 1) {
           dataList.value.push({
             index: item?.rankNo,
@@ -93,6 +93,7 @@ watch(
           });
         }
       });
+      console.log("perform dataList", dataList);
     });
   },
   {

@@ -21,7 +21,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, orgHighLightLayer, pointLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
+import { basicTotalLayer, orgHighLightLayer, pointLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -34,6 +34,7 @@ import StatisticsLayer from './layers/StatisticsLayer'
 import AreaHappyPopInfo from './components/WaterAreaPopInfo'
 import BasicTotalLayer from './layers/BasicTotalLayer'
 import { getCenter } from 'ol/extent'
+import DCWMSLayer from './layers/impl/DCWMSLayer'
 
 export default {
   name: "FirstMap",
@@ -45,13 +46,13 @@ export default {
   data() {
     return {
       adcd: "330182",
-      curLayer: 'basicTotalLayer', // 当前图层，默认为统计图
+      curLayer: 'pointLayer', // 当前图层，默认为统计图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
       address: "",
-      startTime: moment(new Date()).startOf('month').format('YYYY-MM-DD 00:00:00'),
-      endTime: moment(new Date()).endOf('month').format('YYYY-MM-DD 23:59:59'),
+      startTime: moment(new Date()).startOf('year').format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(new Date()).endOf('year').format('YYYY-MM-DD 23:59:59'),
       townss: [], // 统计图
       areaHappyShow: false,
       curIndex: 0,
@@ -92,9 +93,10 @@ export default {
         boundary: new OrgBoundaryLayer(), // 边界线
         // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
         // statisticsLayer: new StatisticsLayer(statisticsLayer), // 统计图
-        selectLayer: new BaseVectorLayer(orgHighLightLayer),
-        basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 基础总览
+        selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
+        basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
+        lineManageLayer: new DCWMSLayer(riverManageLineLayer), // 河道管理范围线
       };
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
@@ -106,23 +108,30 @@ export default {
       // 加载下级行政区划边界
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
-      // 初始化加载统计图
-      // this.layers.statisticsLayer.load(new LayerParams({
-      //   vm: this,
-      //   searchInfo: {
-      //     adcd: this.adcd,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }
-      // }))
-      this.layers.basicTotalLayer.load(new LayerParams({
+      // 建德--加载河道管理范围线
+      if (this.adcd === '330182') {
+        this.layers.lineManageLayer.load(new LayerParams({
+          vm: this,
+          searchInfo: {}
+        }))
+      }
+      // 初始化加载点位图
+      this.layers.pointLayer.load(new LayerParams({
         vm: this,
         searchInfo: {
           adcd: this.adcd,
           startTime: this.startTime,
-          endTime: this.endTime,
+          endTime: this.endTime
         }
       }))
+      // this.layers.basicTotalLayer.load(new LayerParams({
+      //   vm: this,
+      //   searchInfo: {
+      //     adcd: this.adcd,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime,
+      //   }
+      // }))
       this.layers.selectLayer.addLayer(this.map)
     },
     // 移除轮播
@@ -141,13 +150,11 @@ export default {
         const features = this.layers.basicTotalLayer.getSource().getFeatures()
         const curFeature = features[this.curIndex]
         this.layers.selectLayer.addFeatures([curFeature])// 高亮
-        const properties = curFeature.get('properties')
+        let properties = curFeature.getProperties()
+        console.log('cur', properties);
         properties.layerid = 'basicTotalLayer'
         properties.lgtd = getCenter(curFeature.getGeometry().getExtent())[0]
         properties.lttd = getCenter(curFeature.getGeometry().getExtent())[1]
-        // const center = curFeature.getGeometry().getExtent()
-        // properties.lgtd = (center[0] + center[2]) / 2
-        // properties.lttd = (center[1] + center[3]) / 2
         this.popInfo = properties
         console.log('pop', properties);
         this.$nextTick(() => {

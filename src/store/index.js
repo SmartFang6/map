@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
@@ -12,15 +13,8 @@ export default createStore({
       right: "open",
       bottom: "open",
     },
-    /**
-     * 驾驶舱查看的事件选项
-     * startTime: 开始时间
-     * endTime: 结束时间
-     */
-    searchTime: {
-      startTime: "",
-      endTime: "",
-    },
+    token: null,
+    userInfo: {},
   },
   getters: {},
   mutations: {
@@ -31,13 +25,18 @@ export default createStore({
         ...payload,
       };
     },
-
-    // 更新查询的时间参数
-    UPDATE_SEARCH_TIME: (state, timer) => {
-      if (!timer) return;
-      state.searchTime = timer;
+    UPDATE_TOKEN(state, payload) {
+      state.token = payload;
+    },
+    UPDATE_USER_INFO(state, payload) {
+      state.userInfo = payload;
     },
   },
   actions: {},
   modules: {},
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+    }),
+  ],
 });

@@ -10,6 +10,14 @@ module.exports = defineConfig({
         changeOrigin: true, // 是否改变域名
         ws: true,
       },
+      "/userApi": {
+        target: "http://192.168.2.238:8501",
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          "^/userApi": "/api",
+        },
+      },
     },
   },
 });
