@@ -63,7 +63,7 @@ function getLeftData(st = null, et = null) {
   const _endTime =
     et || moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59");
   const params = {
-    adcd: store?.state?.userInfo?.adminDivCode,
+    adcd: store?.state?.userInfo?.adminDivCode || "330182",
     endTime: _endTime,
     startTime: _startTime,
   };
@@ -71,7 +71,7 @@ function getLeftData(st = null, et = null) {
     leftData.value = res;
   });
 }
-getLeftData();
+// getLeftData();
 
 // 注入左侧栏数据
 provide("leftData", leftData);
@@ -81,11 +81,11 @@ const mapRef = ref(null);
 function onChangeTime(val) {
   console.log(val, "on-change-time");
   getLeftData(val.startTime, val.endTime);
-  // mapRef.value?.changeTime(val);
+  mapRef.value?.changeTime(val);
 }
 function onChangeLayerType(val) {
   console.log(val, "change-layer-type");
-  // mapRef.value?.changeLayerType(val);
+  mapRef.value?.changeLayerType(val);
 }
 
 //例: 通知地图
