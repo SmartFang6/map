@@ -19,10 +19,10 @@
       <div class="first">
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
-          <div class="name">生态部门</div>
+          <div class="name"></div>
           <div class="value">
-            <span>100</span>
-            <span>%</span>
+            <span>--</span>
+            <span></span>
           </div>
         </div>
       </div>
@@ -44,18 +44,18 @@
         <div class="other-list">
           <div class="other-item">
             <div class="no"><span>No.</span><span>2</span></div>
-            <div class="name">交通部门</div>
+            <div class="name"></div>
             <div class="score">
-              <span>100</span>
-              <span>%</span>
+              <span></span>
+              <span>--</span>
             </div>
           </div>
           <div class="other-item">
             <div class="no"><span>No.</span><span>3</span></div>
-            <div class="name">自然资源部门</div>
+            <div class="name"></div>
             <div class="score">
-              <span>100</span>
-              <span>%</span>
+              <span></span>
+              <span>--</span>
             </div>
           </div>
         </div>
@@ -70,9 +70,9 @@
       <div class="first">
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
-          <div class="name">莲花镇</div>
+          <div class="name">下涯镇</div>
           <div class="value">
-            <span>100</span>
+            <span>50</span>
             <span>%</span>
           </div>
         </div>
@@ -95,18 +95,18 @@
         <div class="other-list">
           <div class="other-item">
             <div class="no"><span>No.</span><span>2</span></div>
-            <div class="name">洋溪街道</div>
+            <div class="name">梅城镇</div>
             <div class="score">
-              <span>100</span>
+              <span>50</span>
               <span>%</span>
             </div>
           </div>
           <div class="other-item">
             <div class="no"><span>No.</span><span>3</span></div>
-            <div class="name">新安江街道</div>
+            <div class="name">- -</div>
             <div class="score">
-              <span>100</span>
-              <span>%</span>
+              <span>--</span>
+              <span></span>
             </div>
           </div>
         </div>
@@ -192,15 +192,15 @@ watch(
       dataList.value = [
         {
           index: 1,
-          org: "莲花镇",
-          count: 0,
-          rate: "--",
+          org: "下涯镇",
+          count: 2,
+          rate: "50%",
         },
         {
           index: 2,
-          org: "洋溪街道",
-          count: 0,
-          rate: "--",
+          org: "梅城镇",
+          count: 2,
+          rate: "50%",
         },
         {
           index: 3,
