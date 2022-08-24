@@ -141,13 +141,11 @@ export default {
         const features = this.layers.basicTotalLayer.getSource().getFeatures()
         const curFeature = features[this.curIndex]
         this.layers.selectLayer.addFeatures([curFeature])// 高亮
-        const properties = curFeature.get('properties')
+        let properties = curFeature.getProperties()
+        console.log('cur', properties);
         properties.layerid = 'basicTotalLayer'
         properties.lgtd = getCenter(curFeature.getGeometry().getExtent())[0]
         properties.lttd = getCenter(curFeature.getGeometry().getExtent())[1]
-        // const center = curFeature.getGeometry().getExtent()
-        // properties.lgtd = (center[0] + center[2]) / 2
-        // properties.lttd = (center[1] + center[3]) / 2
         this.popInfo = properties
         console.log('pop', properties);
         this.$nextTick(() => {

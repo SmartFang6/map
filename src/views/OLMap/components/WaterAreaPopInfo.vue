@@ -2,11 +2,11 @@
   <div class="popInfo">
     <div class="conent">
       <div class="one">
-        <span class="title">{{ info.adnm ? info.adnm: '--' }}</span>
+        <span class="title">{{ info.admin_div_name ? info.admin_div_name: '--' }}</span>
       </div>
         <div class="two">
           <span class="lineone">问题数</span>
-        <span class="lineonenum">{{ info.allNum !== null ? info.allNum : '--' }}</span>
+        <span class="lineonenum">{{ info.allNum !== null && info.allNum !== undefined ? info.allNum : '--' }}</span>
         <span class="lineoneunit">个</span></div>
         <div class="three">
         <span class="linetwo">销号率</span>
