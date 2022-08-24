@@ -189,6 +189,7 @@ onBeforeMount(async () => {
   box-sizing: border-box;
   color: #c4f0ff;
   font-size: 14px;
+  height: 275px;
   &-container {
     width: 100%;
     overflow: hidden;
