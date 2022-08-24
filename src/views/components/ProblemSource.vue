@@ -520,10 +520,10 @@ onMounted(() => {
 
       .first-bg {
         width: 97px;
-        height: 88px;
+        height: 83px;
         background: url(@/assets/images/first_icon.png);
         background-size: 100% 100%;
-        margin: 12px 5px;
+        margin: 10px 5px;
       }
 
       .first-info {
