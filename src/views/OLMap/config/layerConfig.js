@@ -291,7 +291,7 @@ export const pointLayer = {
   id: 'point',
   type: LayerTypeEnum.vector,
   source: { type: SourceTypeEnum.vector },
-  zIndex: 11,
+  zIndex: 21,
   levelField: null,
   style: {
     type: StyleTypeEnum.icon,
