@@ -11,37 +11,48 @@
           v-for="(itm, idx) in item"
           :key="itm.eventResponsibleUnitCode"
         >
-          <el-progress
-            type="circle"
-            :percentage="itm.unitCompletedRate"
-            :stroke-width="18"
-            :color="colors[idx]"
-            :show-text="false"
-            :width="80"
-            stroke-linecap="butt"
-            :class="`item-${idx}`"
-          />
-          <div class="item-icon" :class="{ 'item-icon-bg': idx !== 0 }"></div>
-          <ul>
-            <li class="item-value" :style="{ color: colors[idx] }">
-              {{ itm.unitCompletedRate }} %
-            </li>
-            <li class="item-name" :title="itm.eventResponsibleUnitCodeName">
-              {{ itm.eventResponsibleUnitCodeName }}
-            </li>
-            <li class="item-footer footer-top">
-              问题总数
-              <span class="item-footer-value" :style="{ color: colors[idx] }">{{
-                itm.unitEventNum
-              }}</span>
-            </li>
-            <li class="item-footer">
-              已销号
-              <span class="item-footer-value" :style="{ color: colors[idx] }">{{
-                itm.unitCompletedNum
-              }}</span>
-            </li>
-          </ul>
+          <div class="" v-if="itm !== 0">
+            <el-progress
+              type="circle"
+              :percentage="itm.unitCompletedRate"
+              :stroke-width="18"
+              :color="colors[idx]"
+              :show-text="false"
+              :width="80"
+              stroke-linecap="butt"
+              :class="`item-${idx}`"
+            />
+            <ul>
+              <li class="item-value" :style="{ color: colors[idx] }">
+                {{ itm.unitCompletedRate }} %
+              </li>
+              <li class="item-name" :title="itm.eventResponsibleUnitCodeName">
+                {{ itm.eventResponsibleUnitCodeName }}
+              </li>
+              <li class="item-footer footer-top">
+                问题总数
+                <span
+                  class="item-footer-value"
+                  :style="{ color: colors[idx] }"
+                  >{{ itm.unitEventNum }}</span
+                >
+              </li>
+              <li class="item-footer">
+                已销号
+                <span
+                  class="item-footer-value"
+                  :style="{ color: colors[idx] }"
+                  >{{ itm.unitCompletedNum }}</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div v-else>
+            <div
+              class="item-icon item-icon-bg"
+              v-if="idx !== item.length - 1"
+            ></div>
+          </div>
         </div>
       </el-carousel-item>
     </el-carousel>
@@ -55,18 +66,7 @@ const colors = ["#32DA85", "#00F5FF", "#FFCD19", "#E35F5F"];
 let dataList = ref([]);
 // 获取注入数据
 let leftData = inject("leftData");
-// 监听注入的数据更新echarts
-// watch(
-//   () => leftData,
-//   (n, o) => {
-//     console.log(n, o, "22222");
-//     // chart.value.setOption(option);
-//     nextTick(() => {
-//       dataList.value = arrTrans(4, eventResponsibleUnitList.value);
-//     });
-//   },
-//   { deep: true }
-// );
+
 // 定性
 let eventResponsibleUnitList = computed(() => {
   return leftData.value?.eventResponsibleUnitList || [];
@@ -89,6 +89,7 @@ function arrTrans(num, arr) {
       iconsArr[page] = [];
     }
     iconsArr[page].push(item);
+    iconsArr[page].push(0);
   });
   return iconsArr;
 }
@@ -106,11 +107,12 @@ function arrTrans(num, arr) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100%;
   }
   .item-icon {
-    width: 30px;
+    width: 25px;
     height: 11px;
-    margin: 0 0 0 -130px;
+    margin-bottom: 40px;
   }
   .item-icon-bg {
     background: url(@/assets/images/issue_icon.png);
@@ -143,7 +145,7 @@ function arrTrans(num, arr) {
   .item-name {
     font-family: MicrosoftYaHei;
     color: #fff;
-    max-width: 130px;
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
