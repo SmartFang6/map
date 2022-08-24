@@ -15,6 +15,7 @@ class TdtImgClipLayer extends BaseLayer { // 天地图裁剪功能
     const tdtConfig = JSON.parse(JSON.stringify(tdtImg))
     tdtConfig.zIndex = 5
     const config = layerConfig || tdtConfig
+    config.source.tilePixelRatio = window.devicePixelRatio
     super(config)
   }
 
@@ -35,6 +36,7 @@ class TdtImgClipLayer extends BaseLayer { // 天地图裁剪功能
   clip(context, boundPolygon, map) {
     const featureType = boundPolygon.getType()
     context.save()
+    context.scale(window.devicePixelRatio, window.devicePixelRatio)
     const pointArr = []
     if (featureType === 'Polygon') {
       this.poinToPixel(pointArr, boundPolygon, map)
