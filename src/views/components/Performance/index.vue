@@ -14,14 +14,14 @@
       </el-tabs>
     </Title>
     <!--#region 奖牌栏-->
-    <div class="medal-bar">
+    <div v-if="tabActive === 'department'" class="medal-bar">
       <!--#region 第一名-->
       <div class="first">
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
-          <div class="name">水利局</div>
+          <div class="name">生态部门</div>
           <div class="value">
-            <span>99</span>
+            <span>100</span>
             <span>%</span>
           </div>
         </div>
@@ -44,17 +44,17 @@
         <div class="other-list">
           <div class="other-item">
             <div class="no"><span>No.</span><span>2</span></div>
-            <div class="name">建设厅</div>
+            <div class="name">交通部门</div>
             <div class="score">
-              <span>89</span>
+              <span>100</span>
               <span>%</span>
             </div>
           </div>
           <div class="other-item">
             <div class="no"><span>No.</span><span>3</span></div>
-            <div class="name">综合办</div>
+            <div class="name">自然资源部门</div>
             <div class="score">
-              <span>78</span>
+              <span>100</span>
               <span>%</span>
             </div>
           </div>
@@ -65,18 +65,70 @@
     </div>
     <!--#endregion-->
 
-    <List />
+    <div v-else class="medal-bar">
+      <!--#region 第一名-->
+      <div class="first">
+        <img src="@/assets/images/performance-first.png" />
+        <div class="first-info">
+          <div class="name">莲花镇</div>
+          <div class="value">
+            <span>100</span>
+            <span>%</span>
+          </div>
+        </div>
+      </div>
+      <!--#endregion-->
+
+      <!--#region 其他-->
+      <div class="other">
+        <div class="tabs">
+          <div
+            v-for="type in typeLis"
+            :key="type.value"
+            :class="{ tab: true, active: typeActive === type.value }"
+            @click="typeActive = type.value"
+          >
+            {{ type.label }}
+          </div>
+        </div>
+        <!--#region 列表-->
+        <div class="other-list">
+          <div class="other-item">
+            <div class="no"><span>No.</span><span>2</span></div>
+            <div class="name">洋溪街道</div>
+            <div class="score">
+              <span>100</span>
+              <span>%</span>
+            </div>
+          </div>
+          <div class="other-item">
+            <div class="no"><span>No.</span><span>3</span></div>
+            <div class="name">新安江街道</div>
+            <div class="score">
+              <span>100</span>
+              <span>%</span>
+            </div>
+          </div>
+        </div>
+        <!--#endregion-->
+      </div>
+      <!--#endregion-->
+    </div>
+    <!--#endregion-->
+
+    <List :data="dataList" />
   </div>
 </template>
 
 <script setup>
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
-import { ref, reactive, onBeforeMount } from "vue";
+import { ref, reactive, onBeforeMount, watch } from "vue";
 import { getEventPointRank } from "@/api/cockpitEventStats";
 
 let tabActive = ref("village");
 let typeActive = ref(1);
+let dataList = ref([]);
 const typeLis = reactive([
   {
     label: "销号率排名",
@@ -87,6 +139,124 @@ const typeLis = reactive([
     value: 2,
   },
 ]);
+
+watch(
+  () => tabActive.value,
+  (tabActive) => {
+    if (tabActive === "department") {
+      dataList.value = [
+        {
+          index: 1,
+          org: "生态环境部门",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 2,
+          org: "交通部门",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 3,
+          org: "自然资源部门",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 4,
+          org: "建设部门",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 5,
+          org: "农业农村部门",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 6,
+          org: "水利部门",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 7,
+          org: "综合执法部门",
+          count: 100,
+          rate: "100%",
+        },
+      ];
+    } else {
+      dataList.value = [
+        {
+          index: 1,
+          org: "莲花镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 2,
+          org: "洋溪街道",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 3,
+          org: "新安江街道",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 4,
+          org: "梅城镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 5,
+          org: "三都镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 6,
+          org: "大洋镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 7,
+          org: "寿昌镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 8,
+          org: "大同镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 9,
+          org: "李家镇",
+          count: 100,
+          rate: "100%",
+        },
+        {
+          index: 10,
+          org: "更楼街道",
+          count: 100,
+          rate: "100%",
+        },
+      ];
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 
 // 处置绩效组件数据源
 let dataModel = ref(null);
