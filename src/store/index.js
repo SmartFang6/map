@@ -12,6 +12,15 @@ export default createStore({
       right: "open",
       bottom: "open",
     },
+    /**
+     * 驾驶舱查看的事件选项
+     * startTime: 开始时间
+     * endTime: 结束时间
+     */
+    searchTime: {
+      startTime: "",
+      endTime: "",
+    },
   },
   getters: {},
   mutations: {
@@ -21,6 +30,12 @@ export default createStore({
         ...state.layout,
         ...payload,
       };
+    },
+
+    // 更新查询的时间参数
+    UPDATE_SEARCH_TIME: (state, timer) => {
+      if (!timer) return;
+      state.searchTime = timer;
     },
   },
   actions: {},

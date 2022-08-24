@@ -67,7 +67,14 @@
 
 <script setup>
 import { useStore } from "vuex";
-import { ref, toRaw, computed, onBeforeMount, onBeforeUnmount } from "vue";
+import {
+  ref,
+  toRaw,
+  watch,
+  computed,
+  onBeforeMount,
+  onBeforeUnmount,
+} from "vue";
 import { ElSelect, ElOption, ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
@@ -111,23 +118,6 @@ const dataList = ref([]);
 // 问题清单数据源
 let dataModel = ref(null);
 
-// 事件等级映射
-const eventLevelMapper = [
-  {
-    key: 1,
-    value: "",
-  },
-];
-
-// 事件状态映射
-const eventStatusMapper = [
-  {
-    key: 1,
-    value: "",
-  },
-];
-console.log(eventLevelMapper, eventStatusMapper);
-
 /**
  * 通过接口获取问题清单的列表数据
  * @param {Object} queryParam
@@ -138,8 +128,8 @@ const getEventQuestionModel = async (queryParam) => {
     {
       adcd: "330182",
       code: "",
-      startTime: "2022-07-23 09:29:29",
-      endTime: "2022-08-23 09:29:29",
+      startTime: "2021-07-24 18:29:29",
+      endTime: "2022-08-24 18:29:29",
       searchText: "",
       pageNo: 1,
       pageSize: 20,
@@ -172,6 +162,22 @@ const getEventProblemList = () => {
     });
   });
 };
+
+// 监测查询时间
+watch(
+  () => store.state.searchTime,
+  (searchTime) => {
+    let { startTime, endTime } = searchTime;
+    if(!startTime || !endTime) {
+      startTime = moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00"),
+      endTime = moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00"),
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
 // 问题清单定时器,没3分钟更新一次
 let timer = null;

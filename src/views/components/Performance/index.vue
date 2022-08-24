@@ -8,7 +8,11 @@
 <template>
   <div class="performance">
     <Title title="处置绩效">
-      <el-tabs v-model="tabActive" type="card">
+      <el-tabs
+        v-model="tabActive"
+        type="card"
+        @tab-click="onHandleTownOrDeptClick"
+      >
         <el-tab-pane class="tab-item" label="乡镇" name="village"></el-tab-pane>
         <el-tab-pane label="部门" name="department"></el-tab-pane>
       </el-tabs>
@@ -19,9 +23,11 @@
       <div class="first">
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
-          <div class="name">水利局</div>
+          <div class="name">{{ champion?.eventResponsibleUnitCodeName }}</div>
           <div class="value">
-            <span>99</span>
+            <span>{{
+              champion?.completedRate ? champion?.completedRate * 100 : 0
+            }}</span>
             <span>%</span>
           </div>
         </div>
@@ -32,7 +38,7 @@
       <div class="other">
         <div class="tabs">
           <div
-            v-for="type in typeLis"
+            v-for="type in typeList"
             :key="type.value"
             :class="{ tab: true, active: typeActive === type.value }"
             @click="typeActive = type.value"
@@ -42,19 +48,23 @@
         </div>
         <!--#region 列表-->
         <div class="other-list">
-          <div class="other-item">
-            <div class="no"><span>No.</span><span>2</span></div>
-            <div class="name">建设厅</div>
-            <div class="score">
-              <span>89</span>
-              <span>%</span>
+          <div
+            class="other-item"
+            v-for="(rankField, index) in performanceList"
+            :key="index"
+          >
+            <div class="no">
+              <span>No.</span><span>{{ index + 2 }}</span>
             </div>
-          </div>
-          <div class="other-item">
-            <div class="no"><span>No.</span><span>3</span></div>
-            <div class="name">综合办</div>
+            <div class="name">
+              {{ rankField?.eventResponsibleUnitCodeName }}
+            </div>
             <div class="score">
-              <span>78</span>
+              <span>
+                {{
+                  rankField?.completedRate ? rankField?.completedRate * 100 : 0
+                }}
+              </span>
               <span>%</span>
             </div>
           </div>
@@ -65,19 +75,19 @@
     </div>
     <!--#endregion-->
 
-    <List />
+    <List :dataList="rankingList" :type="typeActive" />
   </div>
 </template>
 
 <script setup>
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
-import { ref, reactive, onBeforeMount } from "vue";
+import { ref, reactive, toRaw, watch, onBeforeMount } from "vue";
 import { getEventPointRank } from "@/api/cockpitEventStats";
 
 let tabActive = ref("village");
 let typeActive = ref(1);
-const typeLis = reactive([
+const typeList = reactive([
   {
     label: "销号率排名",
     value: 1,
@@ -88,8 +98,40 @@ const typeLis = reactive([
   },
 ]);
 
+// 监听绩效的排名类型切换
+watch(
+  () => typeActive.value,
+  (Actived) => {
+    rankingList.value = toggleTownOrDeptList(tabActive.value, Actived);
+    setExcellentList(rankingList.value);
+  },
+  {
+    immediate: false,
+  }
+);
+
 // 处置绩效组件数据源
-let dataModel = ref(null);
+let dataModel = ref([]);
+
+// 处置绩效的排名冠军数据
+let champion = ref(null);
+
+// 绩效排名列表
+let rankingList = ref([]);
+
+// 绩效排名的表格数据
+let performanceList = ref([]);
+
+// 设置处置绩效的前三名数据
+const setExcellentList = (rankSource) => {
+  if (!rankSource || rankSource.length <= 0) {
+    champion.value = {};
+    performanceList.value = [];
+  } else {
+    champion.value = rankSource[0];
+    performanceList.value = rankSource.slice(1, 3);
+  }
+};
 
 // 获取处置绩效的数据
 const getEventPointRankModel = async (queryParam) => {
@@ -97,8 +139,8 @@ const getEventPointRankModel = async (queryParam) => {
     {
       adcd: "330182",
       code: "1",
-      startTime: "2022-07-23 09:29:29",
-      endTime: "2022-08-23 09:29:29",
+      startTime: "2021-07-24 18:00:00",
+      endTime: "2022-08-24 18:00:00",
       searchText: "",
       pageNo: 1,
       pageSize: 10,
@@ -108,8 +150,45 @@ const getEventPointRankModel = async (queryParam) => {
   return await getEventPointRank(param);
 };
 
+/**
+ * 绩效中乡镇或部门的标签页点击切换事件
+ * @param {pane} context
+ * @returns {undefined}
+ */
+const onHandleTownOrDeptClick = (context) => {
+  rankingList.value = toggleTownOrDeptList(context.paneName, typeActive.value);
+  setExcellentList(rankingList.value);
+};
+
+/**
+ * 处置绩效选项切换时，更新数据列表
+ * @param {String} local
+ * @param {String} stamp
+ * @returns {object}
+ */
+const toggleTownOrDeptList = (local, stamp) => {
+  const model = toRaw(dataModel);
+  let target = null;
+  if (local === "village") {
+    target =
+      stamp === 1
+        ? model?.zoneRank?.completedRankList
+        : model?.zoneRank?.pointRankList;
+  } else {
+    target =
+      stamp === 1
+        ? model?.departmentRank?.completedRankList
+        : model?.departmentRank?.pointRankList;
+  }
+  console.log("target", target);
+  // 获取百分比的总数
+  return target;
+};
+
 onBeforeMount(async () => {
-  dataModel.value = await getEventPointRankModel();
+  dataModel = await getEventPointRankModel();
+  rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
+  setExcellentList(rankingList.value);
   console.log(dataModel);
 });
 </script>

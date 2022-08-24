@@ -11,9 +11,10 @@
     <div class="table-header">
       <div>排名</div>
       <div>部门/乡镇名称</div>
-      <div>行政区划</div>
-      <div>问题数</div>
-      <div>消号率</div>
+      <!-- <div>行政区划</div> -->
+      <div v-if="type === 1">问题数</div>
+      <div v-if="type === 1">消号率</div>
+      <div v-if="type === 2">分数</div>
     </div>
     <div class="table-body">
       <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
@@ -26,15 +27,16 @@
           <el-tooltip :content="item.org" effect="dark" placement="top-start">
             <div>{{ item.org }}</div>
           </el-tooltip>
-          <el-tooltip
+          <!-- <el-tooltip
             :content="item.content"
             effect="dark"
             placement="top-start"
           >
             <div>{{ item.content }}</div>
-          </el-tooltip>
-          <div>{{ item.count }}</div>
-          <div>{{ item.rate }}</div>
+          </el-tooltip> -->
+          <div v-if="type === 1">{{ item.count }}</div>
+          <div v-if="type === 1">{{ item.rate }}</div>
+          <div v-if="type === 2">{{ item.point }}</div>
         </div>
       </vue-seamless-scroll>
     </div>
@@ -44,19 +46,71 @@
 <script setup>
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
-import { reactive } from "vue";
+import { ref, watch, nextTick } from "vue";
 // import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
-const dataList = reactive([]);
-for (let i = 1; i < 10; i++) {
-  dataList.push({
-    index: i,
-    org: `${i}具体名称展示具体名称展示`,
-    content: `${i}具体内容`,
-    count: 100,
-    rate: "50%",
-  });
-}
+const dataList = ref([]);
+
+// 获取父组件传递的列表数据
+const props = defineProps({
+  dataList: {
+    type: Array,
+    default: () => [],
+  },
+  type: {
+    type: Number,
+    default: 1,
+  },
+});
+
+watch(
+  () => [props.dataList, props.type],
+  () => {
+    nextTick(() => {
+      console.log(props.dataList, props.type);
+      if (!props.dataList || props.dataList.length <= 0) {
+        dataList.value = [];
+        return;
+      }
+      dataList.value = [];
+      props.dataList.forEach((item) => {
+        if (props.type === 1) {
+          dataList.value.push({
+            index: item?.rankNo,
+            org: item?.eventResponsibleUnitCodeName,
+            content: item?.content || "",
+            count: item?.unitEventNum,
+            rate: (item?.completedRate ? item?.completedRate * 100 : 0) + "%",
+          });
+        } else {
+          dataList.value.push({
+            index: item?.rankNo,
+            org: item?.eventResponsibleUnitCodeName,
+            content: item?.content || "",
+            count: item?.point,
+            point: item?.point,
+            rate: "100%",
+          });
+        }
+      });
+    });
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+
+// 示例数据
+// for (let i = 1; i < 10; i++) {
+//   dataList.push({
+//     index: i,
+//     org: `${i}具体名称展示具体名称展示`,
+//     content: `${i}具体内容`,
+//     count: 100,
+//     rate: "50%",
+//   });
+// }
 </script>
 
 <style lang="less" scoped>

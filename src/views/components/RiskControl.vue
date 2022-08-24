@@ -80,11 +80,25 @@
 
 <script setup>
 import Title from "@/components/Title/index.vue";
-import { ref, onBeforeMount } from "vue";
+import { ref, inject, onBeforeMount, watch } from "vue";
 import { getEventRiskControl } from "@/api/cockpitEventStats";
 
 // 风险管控组件数据源
 let dataModel = ref(null);
+
+const searchTime = inject("searchTime");
+console.log("searchTime", searchTime);
+
+watch(
+  () => searchTime,
+  (searchTime) => {
+    console.log("watch searchTime", searchTime);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
 /**
  * 获取风险管控的数据
@@ -96,8 +110,8 @@ const getEventRiskModel = async (queryParam) => {
     {
       adcd: "330182",
       code: "",
-      startTime: "2022-07-23 09:29:29",
-      endTime: "2022-08-23 09:29:29",
+      startTime: "2021-07-24 18:29:29",
+      endTime: "2022-08-24 18:29:29",
       searchText: "",
       pageNo: 1,
       pageSize: 10,

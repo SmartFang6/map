@@ -30,7 +30,7 @@
             <div class="item-content">
               <div class="name">
                 <span>{{ item.name }}</span>
-                <span>{{ item.value }}</span>
+                <span>{{ item.value }}/{{ item.rate + "%" }}</span>
               </div>
               <div class="progress-outer">
                 <div
@@ -103,8 +103,8 @@ const getEventRankModel = async (queryParam) => {
     {
       adcd: "330182",
       code: "1",
-      startTime: "2022-07-23 09:29:29",
-      endTime: "2022-08-23 09:29:29",
+      startTime: "2021-07-24 18:29:29",
+      endTime: "2022-08-24 18:29:29",
       searchText: "",
       pageNo: 1,
       pageSize: 10,
