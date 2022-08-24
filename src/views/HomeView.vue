@@ -68,6 +68,24 @@ function getLeftData(st = null, et = null) {
     startTime: _startTime,
   };
   getEventStat(params).then((res) => {
+    // 事件统计平均耗时（小时）转（天 ）
+    if (res.eventStatEvent && res.eventStatEvent.completedAverageCostTime) {
+      let day = parseInt(res.eventStatEvent.completedAverageCostTime / 24);
+      if (Number.isNaN(day)) {
+        day = 0;
+      }
+      res.eventStatEvent.completedAverageCostTime = day;
+    }
+    // 事件统计消耗率转百分比
+    if (res.eventStatEvent && res.eventStatEvent.completedRate) {
+      let val = res.eventStatEvent.completedRate * 100;
+      if (Number.isNaN(val)) {
+        val = 0;
+      } else {
+        val = val.toFixed(1);
+      }
+      res.eventStatEvent.completedRate = val;
+    }
     leftData.value = res;
   });
 }

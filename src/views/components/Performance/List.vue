@@ -10,28 +10,20 @@
   <div class="performance-table">
     <div class="table-header">
       <div>排名</div>
-      <div>部门/乡镇名称</div>
-      <div>行政区划</div>
+      <div>名称</div>
       <div>问题数</div>
-      <div>消号率</div>
+      <div>销号率</div>
     </div>
     <div class="table-body">
       <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
         <div
-          v-for="item in dataList"
+          v-for="item in data"
           :key="item.index"
           :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
         >
           <div>{{ item.index }}</div>
           <el-tooltip :content="item.org" effect="dark" placement="top-start">
             <div>{{ item.org }}</div>
-          </el-tooltip>
-          <el-tooltip
-            :content="item.content"
-            effect="dark"
-            placement="top-start"
-          >
-            <div>{{ item.content }}</div>
           </el-tooltip>
           <div>{{ item.count }}</div>
           <div>{{ item.rate }}</div>
@@ -44,19 +36,14 @@
 <script setup>
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
-import { reactive } from "vue";
+import { defineProps } from "vue";
 // import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
-
-const dataList = reactive([]);
-for (let i = 1; i < 10; i++) {
-  dataList.push({
-    index: i,
-    org: `${i}具体名称展示具体名称展示`,
-    content: `${i}具体内容`,
-    count: 100,
-    rate: "50%",
-  });
-}
+defineProps({
+  data: {
+    type: Array,
+    default: () => [],
+  },
+});
 </script>
 
 <style lang="less" scoped>

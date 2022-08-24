@@ -53,6 +53,10 @@ export const getEventRiskControl = (queryParams) => {
  */
 export const getEventQuestionList = (queryParams) => {
   return postHttp("/supervision/pageEventStatReportProblemNewRecord", {
-    data: queryParams,
+    data: {
+      ...queryParams,
+      startTime: "2021-01-01 00:00:00",
+      endTime: "2023-01-01 00:00:00",
+    },
   });
 };

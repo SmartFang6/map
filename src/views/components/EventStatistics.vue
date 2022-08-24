@@ -57,7 +57,7 @@ let configList = [
   {
     icon: require("@/assets/event-icon/icon_6.png"),
     label: "平均耗时",
-    unit: "H",
+    unit: "天",
     key: "completedAverageCostTime",
   },
 ];

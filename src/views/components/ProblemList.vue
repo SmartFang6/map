@@ -30,7 +30,7 @@
 
     <div class="problem-list-container">
       <div class="table-header">
-        <div>排名</div>
+        <div>序号</div>
         <div>责任部门</div>
         <div>事件来源</div>
         <div>行政区域</div>
@@ -51,7 +51,13 @@
             <div>{{ row.eventResponsibleUnitName }}</div>
             <div>{{ row.eventSourceName }}</div>
             <div>{{ row.adnm }}</div>
-            <div class="one-line">{{ row.rchnm }}</div>
+            <el-tooltip
+              :content="row.rchnm"
+              effect="dark"
+              placement="top-start"
+            >
+              <div class="one-line">{{ row.rchnm }}</div>
+            </el-tooltip>
             <el-tooltip
               :content="row.eventTypeName"
               effect="dark"
@@ -61,7 +67,13 @@
             </el-tooltip>
             <div>{{ row.eventGradeName }}</div>
             <div>{{ row.occurTime }}</div>
-            <div>{{ row.status }}</div>
+            <el-tooltip
+              :content="row.status"
+              effect="dark"
+              placement="top-start"
+            >
+              <div class="one-line">{{ row.status }}</div>
+            </el-tooltip>
           </div>
         </vue-seamless-scroll>
       </div>
@@ -165,7 +177,7 @@ const getEventProblemList = () => {
   target.forEach((feild, pos) => {
     dataList.value.push({
       index: pos + 1,
-      eventResponsibleUnitName: feild.eventResponsibleUnitCode,
+      eventResponsibleUnitName: feild.eventResponsibleUnitCodeName,
       eventSourceName: feild.eventSourceName,
       adnm: feild.adnm,
       rchnm: feild.rchnm,
