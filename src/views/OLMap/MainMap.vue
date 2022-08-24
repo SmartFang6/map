@@ -21,7 +21,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, orgHighLightLayer, pointLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
+import { basicTotalLayer, orgHighLightLayer, pointLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -34,6 +34,7 @@ import StatisticsLayer from './layers/StatisticsLayer'
 import AreaHappyPopInfo from './components/WaterAreaPopInfo'
 import BasicTotalLayer from './layers/BasicTotalLayer'
 import { getCenter } from 'ol/extent'
+import DCWMSLayer from './layers/impl/DCWMSLayer'
 
 export default {
   name: "FirstMap",
@@ -92,9 +93,10 @@ export default {
         boundary: new OrgBoundaryLayer(), // 边界线
         // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
         // statisticsLayer: new StatisticsLayer(statisticsLayer), // 统计图
-        selectLayer: new BaseVectorLayer(orgHighLightLayer),
-        basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 基础总览
+        selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
+        basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
+        lineManageLayer: new DCWMSLayer(riverManageLineLayer), // 河道管理范围线
       };
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
@@ -106,15 +108,14 @@ export default {
       // 加载下级行政区划边界
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
+      // 建德--加载河道管理范围线
+      if (this.adcd === '330182') {
+        this.layers.lineManageLayer.load(new LayerParams({
+          vm: this,
+          searchInfo: {}
+        }))
+      }
       // 初始化加载统计图
-      // this.layers.statisticsLayer.load(new LayerParams({
-      //   vm: this,
-      //   searchInfo: {
-      //     adcd: this.adcd,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }
-      // }))
       this.layers.basicTotalLayer.load(new LayerParams({
         vm: this,
         searchInfo: {
