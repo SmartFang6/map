@@ -51,7 +51,13 @@
             <div>{{ row.eventResponsibleUnitName }}</div>
             <div>{{ row.eventSourceName }}</div>
             <div>{{ row.adnm }}</div>
-            <div class="one-line">{{ row.rchnm }}</div>
+            <el-tooltip
+              :content="row.rchnm"
+              effect="dark"
+              placement="top-start"
+            >
+              <div class="one-line">{{ row.rchnm }}</div>
+            </el-tooltip>
             <el-tooltip
               :content="row.eventTypeName"
               effect="dark"
@@ -61,7 +67,13 @@
             </el-tooltip>
             <div>{{ row.eventGradeName }}</div>
             <div>{{ row.occurTime }}</div>
-            <div>{{ row.status }}</div>
+            <el-tooltip
+              :content="row.status"
+              effect="dark"
+              placement="top-start"
+            >
+              <div class="one-line">{{ row.status }}</div>
+            </el-tooltip>
           </div>
         </vue-seamless-scroll>
       </div>
