@@ -3,9 +3,13 @@
     <template #header><Header /></template>
     <template #map>
       <div class="map">
-        <MapLayer
+        <!-- <MapLayer
           @changeTime="mapRef?.changeTime"
           @changeLayerType="mapRef?.changeLayerType"
+        /> -->
+        <MapLayer
+          @changeTime="onChangeTime"
+          @changeLayerType="onChangeLayerType"
         />
         <Map ref="mapRef" @showPop="showPop" />
       </div>
@@ -47,15 +51,21 @@ import ProblemList from "./components/ProblemList.vue";
 import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
+import store from "@/store";
+import moment from "moment";
 const eventBus = inject("EventBus");
 
 let leftData = ref({});
 // 获取左侧栏数据
-function getLeftData() {
+function getLeftData(st = null, et = null) {
+  const _startTime =
+    st || moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00");
+  const _endTime =
+    et || moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59");
   const params = {
-    adcd: "330182",
-    endTime: "2022-08-23 09:29:29",
-    startTime: "2022-07-23 09:29:29",
+    adcd: store?.state?.userInfo?.adminDivCode,
+    endTime: _endTime,
+    startTime: _startTime,
   };
   getEventStat(params).then((res) => {
     leftData.value = res;
@@ -68,6 +78,15 @@ provide("leftData", leftData);
 
 console.log(eventBus, "eventBus", NoticeEvt);
 const mapRef = ref(null);
+function onChangeTime(val) {
+  console.log(val, "on-change-time");
+  getLeftData(val.startTime, val.endTime);
+  // mapRef.value?.changeTime(val);
+}
+function onChangeLayerType(val) {
+  console.log(val, "change-layer-type");
+  // mapRef.value?.changeLayerType(val);
+}
 
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
