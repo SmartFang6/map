@@ -6,8 +6,8 @@
         <img :src="item.icon" alt="icon" class="item-img" />
         <div>
           <p>
-            <span class="item-value">{{
-              leftData?.eventStatEvent?.[item.key] || 0
+            <span class="item-value" :title="eventStatEvent?.[item.key] || 0">{{
+              eventStatEvent?.[item.key] || 0
             }}</span>
             <span class="item-unit">{{ item?.unit }}</span>
           </p>
@@ -19,8 +19,19 @@
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { inject, computed } from "vue";
 import Title from "@/components/Title/index.vue";
+let leftData = inject("leftData");
+
+let eventStatEvent = computed(() => {
+  return leftData?.eventStatEvent?.map((i) => {
+    return {
+      ...i,
+      completedRate: i.completedRate * 100,
+      completedAverageCostTime: (i.completedAverageCostTime / 24).toFixed(2),
+    };
+  });
+});
 
 // 数据配置项
 let configList = [
@@ -61,7 +72,6 @@ let configList = [
     key: "completedAverageCostTime",
   },
 ];
-let leftData = inject("leftData");
 </script>
 
 <style lang="less" scoped>
@@ -91,13 +101,18 @@ let leftData = inject("leftData");
   }
 
   .item-value {
+    display: inline-block;
     font-size: 30px;
     font-family: AGENCYB;
     letter-spacing: 4px;
     color: #0adbe0;
+    max-width: 65px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .item-unit {
+    display: inline-block;
     font-size: 12px;
   }
 }

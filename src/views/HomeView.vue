@@ -12,6 +12,8 @@
           @changeLayerType="onChangeLayerType"
         />
         <Map ref="mapRef" @showPop="showPop" />
+        <!-- 地图弹窗 -->
+        <MapPop ref="MapPopRef" />
       </div>
     </template>
     <template #left>
@@ -53,6 +55,7 @@ import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
 import store from "@/store";
 import moment from "moment";
+import MapPop from "./components/MapPop/index.vue";
 const eventBus = inject("EventBus");
 
 let leftData = ref({});
@@ -106,6 +109,13 @@ function onChangeLayerType(val) {
   mapRef.value?.changeLayerType(val);
 }
 
+// 地图点位弹窗
+let MapPopRef = ref(null);
+function showPop(info) {
+  console.log(info);
+  console.log(MapPopRef, "MapPopRef");
+  MapPopRef.value.open(info);
+}
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
 // TODO
