@@ -30,7 +30,7 @@
 
     <div class="problem-list-container">
       <div class="table-header">
-        <div>排名</div>
+        <div>序号</div>
         <div>责任部门</div>
         <div>事件来源</div>
         <div>行政区域</div>
@@ -165,7 +165,7 @@ const getEventProblemList = () => {
   target.forEach((feild, pos) => {
     dataList.value.push({
       index: pos + 1,
-      eventResponsibleUnitName: feild.eventResponsibleUnitCode,
+      eventResponsibleUnitName: feild.eventResponsibleUnitName,
       eventSourceName: feild.eventSourceName,
       adnm: feild.adnm,
       rchnm: feild.rchnm,
