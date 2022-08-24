@@ -10,11 +10,13 @@
     <div class="problem-list-header">
       <div class="shake-hands">
         <div class="custom-select-wrapper">
+          <!--
           <el-select
             v-if="!collapsed"
             placeholder="全部"
             class="custom-select"
           />
+          -->
         </div>
         <div class="title">问题清单</div>
         <div class="operator-wrapper">
@@ -70,7 +72,7 @@
 <script setup>
 import { useStore } from "vuex";
 import { ref, toRaw, computed, onBeforeMount, onBeforeUnmount } from "vue";
-import { ElSelect, ElTooltip } from "element-plus";
+import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
