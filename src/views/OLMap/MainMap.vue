@@ -46,13 +46,13 @@ export default {
   data() {
     return {
       adcd: "330182",
-      curLayer: 'basicTotalLayer', // 当前图层，默认为统计图
+      curLayer: 'pointLayer', // 当前图层，默认为统计图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
       address: "",
-      startTime: moment(new Date()).startOf('month').format('YYYY-MM-DD 00:00:00'),
-      endTime: moment(new Date()).endOf('month').format('YYYY-MM-DD 23:59:59'),
+      startTime: moment(new Date()).startOf('year').format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(new Date()).endOf('year').format('YYYY-MM-DD 23:59:59'),
       townss: [], // 统计图
       areaHappyShow: false,
       curIndex: 0,
@@ -115,15 +115,23 @@ export default {
           searchInfo: {}
         }))
       }
-      // 初始化加载统计图
-      this.layers.basicTotalLayer.load(new LayerParams({
+      // 初始化加载点位图
+      this.layers.pointLayer.load(new LayerParams({
         vm: this,
         searchInfo: {
           adcd: this.adcd,
           startTime: this.startTime,
-          endTime: this.endTime,
+          endTime: this.endTime
         }
       }))
+      // this.layers.basicTotalLayer.load(new LayerParams({
+      //   vm: this,
+      //   searchInfo: {
+      //     adcd: this.adcd,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime,
+      //   }
+      // }))
       this.layers.selectLayer.addLayer(this.map)
     },
     // 移除轮播
