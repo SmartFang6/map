@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 export default createStore({
   state: {
@@ -12,6 +13,8 @@ export default createStore({
       right: "open",
       bottom: "open",
     },
+    token: null,
+    userInfo: {},
   },
   getters: {},
   mutations: {
@@ -22,7 +25,18 @@ export default createStore({
         ...payload,
       };
     },
+    UPDATE_TOKEN(state, payload) {
+      state.token = payload;
+    },
+    UPDATE_USER_INFO(state, payload) {
+      state.userInfo = payload;
+    },
   },
   actions: {},
   modules: {},
+  plugins: [
+    createPersistedState({
+      storage: window.sessionStorage,
+    }),
+  ],
 });

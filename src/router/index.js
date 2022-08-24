@@ -8,9 +8,17 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/test",
-    name: "test",
-    component: import("@/test/index"),
+    path: "/ssoLogin",
+    name: "ssoLogin",
+    component: () => import("@/views/ssoLogin.vue"),
+  },
+  {
+    path: "/401",
+    name: "401",
+    meta: {
+      title: "401...",
+    },
+    component: () => import("@/views/401"),
   },
 ];
 
