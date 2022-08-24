@@ -165,7 +165,7 @@ const getEventProblemList = () => {
   target.forEach((feild, pos) => {
     dataList.value.push({
       index: pos + 1,
-      eventResponsibleUnitName: feild.eventResponsibleUnitName,
+      eventResponsibleUnitName: feild.eventResponsibleUnitCodeName,
       eventSourceName: feild.eventSourceName,
       adnm: feild.adnm,
       rchnm: feild.rchnm,

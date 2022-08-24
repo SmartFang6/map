@@ -12,7 +12,7 @@
       <div>排名</div>
       <div>名称</div>
       <div>问题数</div>
-      <div>消号率</div>
+      <div>销号率</div>
     </div>
     <div class="table-body">
       <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
