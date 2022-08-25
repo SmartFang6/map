@@ -28,12 +28,12 @@
             <span>更多</span>
           </div> -->
         </div>
-        <div class="title">问题清单</div>
+        <!-- <div class="title">问题清单</div>
         <div class="operator-wrapper">
-          <!-- <div class="operator" @click="onShowMore">
+          <div class="operator" @click="onShowMore">
             <span>更多</span>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
     </div>
 
