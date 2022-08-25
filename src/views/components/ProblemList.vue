@@ -34,7 +34,7 @@
         <div>责任部门</div>
         <div>事件来源</div>
         <div>行政区域</div>
-        <div>所在河湖</div>
+        <!-- <div>所在河湖</div> -->
         <div>事件类型</div>
         <div>事件等级</div>
         <div>发生时间</div>
@@ -65,13 +65,13 @@
             <el-tooltip :content="row.adnm" effect="dark" placement="top-start">
               <div>{{ row.adnm }}</div>
             </el-tooltip>
-            <el-tooltip
+            <!-- <el-tooltip
               :content="row.rchnm"
               effect="dark"
               placement="top-start"
             >
               <div class="one-line">{{ row.rchnm }}</div>
-            </el-tooltip>
+            </el-tooltip> -->
             <el-tooltip
               :content="row.eventTypeName"
               effect="dark"
@@ -396,32 +396,32 @@ onBeforeUnmount(() => {
   }
   .table-header > div:nth-child(4),
   .table-row > div:nth-child(4) {
-    width: 80px;
+    width: 90px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(5),
   .table-row > div:nth-child(5) {
-    width: 80px;
+    width: 140px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(6),
   .table-row > div:nth-child(6) {
-    width: 130px;
+    width: 70px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(7),
   .table-row > div:nth-child(7) {
-    width: 68px;
+    width: 100px;
   }
   .table-header > div:nth-child(8),
   .table-row > div:nth-child(8) {
-    width: 86px;
-  }
-  .table-header > div:nth-child(9),
-  .table-row > div:nth-child(9) {
     width: 100px;
-    .text-ellipsis;
   }
+  // .table-header > div:nth-child(9),
+  // .table-row > div:nth-child(9) {
+  //   width: 100px;
+  //   .text-ellipsis;
+  // }
 }
 
 .one-line {
