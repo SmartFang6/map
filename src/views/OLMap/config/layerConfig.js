@@ -318,22 +318,22 @@ export const riverManageLineLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: geoserverPath.beautifulWms,
-    params: {
-      LAYERS: 'BeautifulRiverLake:vw_river_manageline',
-      VERSION: '1.3.0',
-      SRS: 'EPSG:4326',
-      STYLES: '',
-      sld_body: SldUtils.createSld([{
-        rules: [{
-          type: StyleTypeEnum.lineString,
-          stroke: {
-            color: '#CF011C',
-            width: 1
-          }
-        }]
-      }], 'BeautifulRiverLake:vw_river_manageline')
-    },
+    // url: geoserverPath.beautifulWms,
+    // params: {
+    //   LAYERS: 'BeautifulRiverLake:vw_river_manageline',
+    //   VERSION: '1.3.0',
+    //   SRS: 'EPSG:4326',
+    //   STYLES: '',
+    //   sld_body: SldUtils.createSld([{
+    //     rules: [{
+    //       type: StyleTypeEnum.lineString,
+    //       stroke: {
+    //         color: '#CF011C',
+    //         width: 1
+    //       }
+    //     }]
+    //   }], 'BeautifulRiverLake:vw_river_manageline')
+    // },
     crossOrigin: 'anonymous'
   },
   zIndex: 18

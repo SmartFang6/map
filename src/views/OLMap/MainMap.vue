@@ -35,6 +35,7 @@ import AreaHappyPopInfo from './components/WaterAreaPopInfo'
 import BasicTotalLayer from './layers/BasicTotalLayer'
 import { getCenter } from 'ol/extent'
 import DCWMSLayer from './layers/impl/DCWMSLayer'
+import store from "@/store";
 
 export default {
   name: "FirstMap",
@@ -45,7 +46,7 @@ export default {
   props: {},
   data() {
     return {
-      adcd: "330182",
+      adcd: store?.state?.userInfo?.adminDivCode || "330182",
       curLayer: 'pointLayer', // 当前图层，默认为统计图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
@@ -109,8 +110,8 @@ export default {
       // 加载下级行政区划边界
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
-      // 建德--加载河道管理范围线
-      if (this.adcd === '330182' && this.lineManageShow) {
+      // 加载河道管理范围线
+      if (this.lineManageShow) {
         this.layers.lineManageLayer.load(new LayerParams({
           vm: this,
           searchInfo: {}
@@ -136,9 +137,9 @@ export default {
       // }))
       this.layers.selectLayer.addLayer(this.map)
       // 监听地图缩放，加载管理范围线
-      if (this.adcd === '330182') {
+      // if (this.adcd === '330182') {
         this.watchMapZoom()
-      }
+      // }
     },
     // 监听地图缩放
     watchMapZoom() {
