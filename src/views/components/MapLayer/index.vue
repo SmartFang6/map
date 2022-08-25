@@ -31,6 +31,7 @@
     <!--#endregion-->
 
     <!--#region 图类型切换-->
+    <!-- 暂时隐藏，默认展示点位图，后续做市级再放出来 -->
     <!-- <div class="graph-tabs">
       <div
         class="graph-style"
@@ -60,7 +61,7 @@ export default {
   emits: ["changeTime", "changeLayerType"],
   setup(props, { emit }) {
     const state = reactive({
-      timeActive: "month",
+      timeActive: "year",
       graphActive: "2",
       datePickerRef: null,
       dateRange: [],

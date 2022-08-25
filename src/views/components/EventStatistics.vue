@@ -24,14 +24,7 @@ import Title from "@/components/Title/index.vue";
 let leftData = inject("leftData");
 
 let eventStatEvent = computed(() => {
-  // return leftData.value?.eventStatEvent;
-  return {
-    ...leftData.value?.eventStatEvent,
-    completedRate: leftData.value?.eventStatEvent?.completedRate * 100,
-    completedAverageCostTime: (
-      leftData.value?.eventStatEvent?.completedAverageCostTime / 24
-    ).toFixed(2),
-  };
+  return leftData.value?.eventStatEvent;
 });
 
 // 数据配置项
