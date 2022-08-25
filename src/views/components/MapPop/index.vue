@@ -4,6 +4,9 @@
       <template #title>
         <div class="pop-title">
           <span>{{ info?.eventSourceName }}</span>
+          <el-button text :type="getTag(info.eventGrade)">{{
+            info?.eventTypeName
+          }}</el-button>
           <el-tag
             :type="getTag(info.eventGrade)"
             size="small"
@@ -113,11 +116,11 @@ defineExpose({
   }
 
   .pop-body {
-    padding: 0 15px;
+    padding: 0 20px;
 
     .item-row {
       margin-bottom: 20px;
-      line-height: 40px;
+      line-height: 30px;
     }
   }
 
@@ -128,20 +131,21 @@ defineExpose({
     color: white;
 
     &-label {
-      width: 120px;
+      width: 100px;
       box-sizing: border-box;
       // background: url(@/assets/images/custom-select-bg.png);
       background: url(@/assets/images/pop-label.png);
       background-size: 100% 100%;
+      color: #0adbe0;
     }
 
     &-content {
       flex: 1;
-      margin-left: 10px;
-      text-align: center;
+      margin-left: 20px;
       box-sizing: border-box;
+      text-align: left;
       // padding: 10px;
-      border-bottom: 2px solid #0fc1da;
+      // border-bottom: 2px solid #0fc1da;
     }
   }
 }
