@@ -57,6 +57,7 @@ export default {
       areaHappyShow: false,
       curIndex: 0,
       popInfo: {},
+      lineManageShow: false,
     };
   },
   watch: {
@@ -109,7 +110,7 @@ export default {
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
       // 建德--加载河道管理范围线
-      if (this.adcd === '330182') {
+      if (this.adcd === '330182' && this.lineManageShow) {
         this.layers.lineManageLayer.load(new LayerParams({
           vm: this,
           searchInfo: {}
@@ -124,6 +125,7 @@ export default {
           endTime: this.endTime
         }
       }))
+      // 初始化加载统计图
       // this.layers.basicTotalLayer.load(new LayerParams({
       //   vm: this,
       //   searchInfo: {
@@ -133,6 +135,29 @@ export default {
       //   }
       // }))
       this.layers.selectLayer.addLayer(this.map)
+      // 监听地图缩放，加载管理范围线
+      if (this.adcd === '330182') {
+        this.watchMapZoom()
+      }
+    },
+    // 监听地图缩放
+    watchMapZoom() {
+      this.map.getView().on('change:resolution', evt => {
+        if(this.map.getView().getZoom() > 14) {
+          if (!this.lineManageShow) { // 如果此时地图上没展示范围线，则加载
+            this.layers.lineManageLayer.load(new LayerParams({
+              vm: this,
+              searchInfo: {}
+            }))
+            this.lineManageShow = true
+          }
+        } else {
+          if (this.lineManageShow) {
+            this.layers.lineManageLayer.removeLayer(this.map, this)
+            this.lineManageShow = false
+          }
+        }
+      })
     },
     // 移除轮播
     removeInterval() {

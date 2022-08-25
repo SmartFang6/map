@@ -31,7 +31,8 @@
     <!--#endregion-->
 
     <!--#region 图类型切换-->
-    <div class="graph-tabs">
+    <!-- 暂时隐藏，默认展示点位图，后续做市级再放出来 -->
+    <!-- <div class="graph-tabs">
       <div
         class="graph-style"
         :class="{ active: graphActive === '1' }"
@@ -46,7 +47,7 @@
       >
         点位图
       </div>
-    </div>
+    </div> -->
     <!--#endregion-->
   </div>
 </template>
@@ -61,7 +62,7 @@ export default {
   setup(props, { emit }) {
     const state = reactive({
       timeActive: "year",
-      graphActive: "1",
+      graphActive: "2",
       datePickerRef: null,
       dateRange: [],
       searchTime: null,
