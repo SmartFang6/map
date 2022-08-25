@@ -17,6 +17,9 @@
             class="custom-select"
           />
           -->
+          <!-- <el-button class="more-problem" @click="dialogVisible = true" link>
+            更多
+          </el-button> -->
         </div>
         <div class="title">问题清单</div>
         <div class="operator-wrapper">
@@ -92,6 +95,37 @@
         </vue-seamless-scroll>
       </div>
     </div>
+    <!--#region 搜索区-->
+    <el-dialog v-model="dialogVisible" title="问题清单" width="48%">
+      <el-table
+        :data="dataList"
+        :header-cell-style="{ 'text-align': 'center' }"
+        :cell-style="{ 'text-align': 'center' }"
+      >
+        <el-table-column property="index" label="序号" width="60" />
+        <el-table-column
+          property="eventResponsibleUnitName"
+          label="责任部门"
+          width="80"
+        />
+        <el-table-column
+          property="eventSourceName"
+          label="事件来源"
+          width="100"
+        />
+        <el-table-column property="adnm" label="行政区域" width="80" />
+        <!-- <el-table-column property="rchnm" label="所在河湖" width="100" /> -->
+        <el-table-column property="eventTypeName" label="事件类型" />
+        <el-table-column
+          property="eventGradeName"
+          label="事件等级"
+          width="80"
+        />
+        <el-table-column property="occurTime" label="发生时间" width="100" />
+        <el-table-column property="status" label="状态" width="120" />
+      </el-table>
+    </el-dialog>
+    <!--#endregion-->
   </div>
 </template>
 
@@ -127,6 +161,9 @@ const onPanelTrigger = () => {
     bottom: store.state.layout?.bottom === "close" ? "open" : "close",
   });
 };
+
+// 问题清单"更多"的弹窗
+let dialogVisible = ref(false);
 
 // 数据列表
 const dataList = ref([]);
@@ -428,5 +465,12 @@ onBeforeUnmount(() => {
   white-space: nowrap;
   // text-overflow: ellipsis;
   // overflow: hidden;
+}
+
+.more-problem.el-button.is-link {
+  padding-top: 6px;
+  color: #c4f0ff;
+  font-size: 20px;
+  font-family: YOUSHEBIAOTIHEI;
 }
 </style>

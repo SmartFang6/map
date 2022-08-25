@@ -8,6 +8,7 @@
           @changeLayerType="mapRef?.changeLayerType"
         /> -->
         <MapLayer
+          v-show="false"
           @changeTime="onChangeTime"
           @changeLayerType="onChangeLayerType"
         />
@@ -71,9 +72,9 @@ let dateRange = ref({});
 // 获取左侧栏数据
 function getLeftData(st = null, et = null) {
   const _startTime =
-    st || moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00");
+    st || moment(new Date()).startOf("year").format("YYYY-MM-DD 00:00:00");
   const _endTime =
-    et || moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59");
+    et || moment(new Date()).endOf("year").format("YYYY-MM-DD 23:59:59");
   const params = {
     adcd: store?.state?.userInfo?.adminDivCode || "330182",
     endTime: _endTime,
