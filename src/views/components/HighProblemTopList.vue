@@ -101,7 +101,7 @@ let dataModel = ref(null);
 const getEventRankModel = async (queryParam) => {
   const param = Object.assign(
     {
-      adcd: "330182",
+      adcd: "",
       code: "1",
       startTime: "2021-07-24 18:29:29",
       endTime: "2022-08-24 18:29:29",

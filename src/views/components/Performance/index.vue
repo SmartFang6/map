@@ -137,7 +137,7 @@ const setExcellentList = (rankSource) => {
 const getEventPointRankModel = async (queryParam) => {
   const param = Object.assign(
     {
-      adcd: "330182",
+      adcd: "",
       code: "1",
       startTime: "2021-07-24 18:00:00",
       endTime: "2022-08-24 18:00:00",
@@ -304,7 +304,8 @@ watch(
       background: url(@/assets/images/medal-bar-item.png);
       background-size: 100%;
       box-sizing: border-box;
-      padding-left: 35px;
+      padding-left: 32px;
+      padding-right: 16px;
       display: flex;
       align-items: center;
       box-sizing: border-box;

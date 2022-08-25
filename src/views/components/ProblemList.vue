@@ -48,9 +48,23 @@
             :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
           >
             <div>{{ row.index }}</div>
-            <div>{{ row.eventResponsibleUnitName }}</div>
-            <div>{{ row.eventSourceName }}</div>
-            <div>{{ row.adnm }}</div>
+            <el-tooltip
+              :content="row.eventResponsibleUnitName"
+              effect="dark"
+              placement="top-start"
+            >
+              <div>{{ row.eventResponsibleUnitName }}</div>
+            </el-tooltip>
+            <el-tooltip
+              :content="row.eventSourceName"
+              effect="dark"
+              placement="top-start"
+            >
+              <div>{{ row.eventSourceName }}</div>
+            </el-tooltip>
+            <el-tooltip :content="row.adnm" effect="dark" placement="top-start">
+              <div>{{ row.adnm }}</div>
+            </el-tooltip>
             <el-tooltip
               :content="row.rchnm"
               effect="dark"
@@ -143,7 +157,7 @@ let dataModel = ref(null);
 const getEventQuestionModel = async (queryParam) => {
   const param = Object.assign(
     {
-      adcd: "330182",
+      adcd: "",
       code: "",
       startTime: "2021-07-24 18:29:29",
       endTime: "2022-08-24 18:29:29",
@@ -374,6 +388,7 @@ onBeforeUnmount(() => {
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {
     width: 120px;
+    .text-ellipsis;
   }
   .table-header > div:nth-child(3),
   .table-row > div:nth-child(3) {
@@ -382,27 +397,30 @@ onBeforeUnmount(() => {
   .table-header > div:nth-child(4),
   .table-row > div:nth-child(4) {
     width: 80px;
+    .text-ellipsis;
   }
   .table-header > div:nth-child(5),
   .table-row > div:nth-child(5) {
     width: 80px;
+    .text-ellipsis;
   }
   .table-header > div:nth-child(6),
   .table-row > div:nth-child(6) {
-    width: 125px;
+    width: 130px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(7),
   .table-row > div:nth-child(7) {
-    width: 80px;
+    width: 68px;
   }
   .table-header > div:nth-child(8),
   .table-row > div:nth-child(8) {
-    width: 80px;
+    width: 86px;
   }
   .table-header > div:nth-child(9),
   .table-row > div:nth-child(9) {
-    width: 80px;
+    width: 100px;
+    .text-ellipsis;
   }
 }
 

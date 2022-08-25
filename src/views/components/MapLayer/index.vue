@@ -60,7 +60,7 @@ export default {
   emits: ["changeTime", "changeLayerType"],
   setup(props, { emit }) {
     const state = reactive({
-      timeActive: "month",
+      timeActive: "year",
       graphActive: "1",
       datePickerRef: null,
       dateRange: [],

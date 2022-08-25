@@ -10,10 +10,11 @@
   <div class="performance-table">
     <div class="table-header">
       <div>排名</div>
-      <div>部门/乡镇名称</div>
+      <div>名称</div>
+      <!-- <div>部门/乡镇名称</div> -->
       <!-- <div>行政区划</div> -->
       <div v-if="type === 1">问题数</div>
-      <div v-if="type === 1">消号率</div>
+      <div v-if="type === 1">销号率</div>
       <div v-if="type === 2">分数</div>
     </div>
     <div class="table-body">
@@ -129,6 +130,7 @@ watch(
     height: 49px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
   .table-body {
     height: 160px;
@@ -139,24 +141,25 @@ watch(
     display: flex;
     height: 32px;
     align-items: center;
+    justify-content: space-between;
     &.stripe {
       background-color: rgba(11, 32, 59, 0.8);
     }
   }
   .table-header > div,
   .table-row > div {
-    text-align: left;
+    text-align: center;
     padding-left: 10px;
   }
   .table-header > div:nth-child(1),
   .table-row > div:nth-child(1) {
-    width: 52px;
+    width: 80px;
     text-align: center;
     padding-left: 0px;
   }
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {
-    width: 124px;
+    width: 180px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -164,7 +167,7 @@ watch(
   }
   .table-header > div:nth-child(3),
   .table-row > div:nth-child(3) {
-    width: 115px;
+    width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -172,7 +175,7 @@ watch(
   }
   .table-header > div:nth-child(4),
   .table-row > div:nth-child(4) {
-    width: 105px;
+    width: 100px;
   }
   .table-row > div:nth-child(4) {
     color: #00f5ff;
