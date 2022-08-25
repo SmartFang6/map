@@ -3,10 +3,10 @@
     <el-dialog v-model="dialogVisible" width="40%">
       <template #title>
         <div class="pop-title">
-          <span>{{ info?.eventSourceName }}</span>
-          <el-button text :type="getTag(info.eventGrade)">{{
+          <span>{{ info?.adnm }}</span>
+          <!-- <el-button text :type="getTag(info.eventGrade)">{{
             info?.eventTypeName
-          }}</el-button>
+          }}</el-button> -->
           <el-tag
             :type="getTag(info.eventGrade)"
             size="small"
@@ -17,48 +17,46 @@
         </div>
       </template>
       <div class="pop-body">
-        <el-row :gutter="40" class="item-row">
-          <el-col :span="12">
-            <div class="item">
-              <span class="item-label">行政区域</span>
-              <span class="item-content">{{ info.adnm }}</span>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="item">
-              <span class="item-label">事件编号</span>
-              <span class="item-content">{{ info.eventId }}</span>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="40" class="item-row">
-          <el-col :span="12">
-            <div class="item">
-              <span class="item-label">事件状态</span>
-              <span class="item-content">{{ info.eventNewStatus }}</span>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="item">
-              <span class="item-label">所属河湖</span>
-              <span class="item-content">{{ info.rchnm }}</span>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="40" class="item-row">
-          <el-col :span="12">
-            <div class="item">
-              <span class="item-label">上报人员</span>
-              <span class="item-content">{{ info.reportUser }}</span>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="item">
-              <span class="item-label">发生时间</span>
-              <span class="item-content">{{ info.occurTime }}</span>
-            </div>
-          </el-col>
-        </el-row>
+        <img :src="noImg" alt="" class="left-img" />
+        <ul>
+          <li class="right-li">
+            <span class="item-label">事件编号：</span
+            ><span class="item-value">{{ info.eventId }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">问题来源：</span
+            ><span class="item-value">{{ info.eventSourceName }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">事件等级：</span
+            ><span class="item-value">{{ info.eventGradeName }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">责任部门：</span
+            ><span class="item-value">{{ info.eventResponsibleUnitName }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">所属区域：</span
+            ><span class="item-value">{{ info.eventId }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">所属河湖：</span
+            ><span class="item-value">{{ info.rchnm }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">发生时间：</span
+            ><span class="item-value">{{ info.occurTime }}</span>
+          </li>
+          <li class="right-li">
+            <span class="item-label">事件状态：</span
+            ><span class="item-value">{{ info.eventStatusName }}</span>
+          </li>
+        </ul>
+      </div>
+      <!-- 详情入口 -->
+      <div class="footer" @click="onJupmDetail">
+        <img src="@/assets/images/detail-icon.png" alt="" class="footer-img" />
+        <span class="footer-text">查看详情</span>
       </div>
     </el-dialog>
   </div>
@@ -66,6 +64,7 @@
 
 <script setup>
 import { ref } from "vue";
+import noImg from "@/assets/images/no-img.png";
 let dialogVisible = ref(false);
 let info = ref({});
 
@@ -79,11 +78,17 @@ function getTag(val) {
   return typeMap[val];
 }
 
+// 跳转后台详情
+function onJupmDetail() {
+  console.log("跳转后台详情");
+}
+
 // 打开弹窗
 function open(val) {
   info.value = val;
   dialogVisible.value = true;
 }
+
 defineExpose({
   open,
 });
@@ -98,9 +103,11 @@ defineExpose({
   }
 
   :deep(.el-dialog__headerbtn .el-dialog__close) {
-    background-color: #0adbe0;
-    border: solid 1px white;
-    color: white;
+    svg {
+      display: none;
+    }
+    background: url(@/assets/images/close-icon.png);
+    background-size: 100% 100%;
   }
 
   .pop-title {
@@ -116,36 +123,56 @@ defineExpose({
   }
 
   .pop-body {
-    padding: 0 20px;
-
-    .item-row {
-      margin-bottom: 20px;
-      line-height: 30px;
-    }
-  }
-
-  .item {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: center;
-    color: white;
+    box-sizing: border-box;
+    padding: 0 50px;
 
-    &-label {
+    .left-img {
+      width: 268px;
+      height: 156px;
+    }
+
+    ul {
+      flex: 1;
+      margin-left: 50px;
+
+      li {
+        width: 100%;
+        line-height: 40px;
+        text-align: left;
+      }
+    }
+
+    .item-label {
       width: 100px;
-      box-sizing: border-box;
-      // background: url(@/assets/images/custom-select-bg.png);
+      padding: 5px 10px;
       background: url(@/assets/images/pop-label.png);
       background-size: 100% 100%;
       color: #0adbe0;
     }
 
-    &-content {
-      flex: 1;
-      margin-left: 20px;
-      box-sizing: border-box;
-      text-align: left;
-      // padding: 10px;
-      // border-bottom: 2px solid #0fc1da;
+    .item-value {
+      color: white;
+      margin-left: 15px;
+    }
+  }
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 40px;
+    cursor: pointer;
+    &-img {
+      width: 27px;
+      height: 28px;
+    }
+    &-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0adbe0;
+      margin-left: 10px;
     }
   }
 }

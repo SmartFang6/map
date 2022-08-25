@@ -8,20 +8,20 @@
 <template>
   <div class="layout-header">
     <div class="title">水域监管驾驶舱</div>
-    <div class="entry-btn" @click="onJump" />
+    <!-- <div class="entry-btn" @click="onJump" /> -->
   </div>
 </template>
 
 <script setup>
-import store from "@/store";
+// import store from "@/store";
 
-function onJump() {
-  const JUMP_URL =
-    "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
-      store?.state?.userInfo?.userId || "";
-  console.log(JUMP_URL, "JUMP_URL");
-  window.open(JUMP_URL);
-}
+// function onJump() {
+//   const JUMP_URL =
+//     "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+//       store?.state?.userInfo?.userId || "";
+//   console.log(JUMP_URL, "JUMP_URL");
+//   window.open(JUMP_URL);
+// }
 </script>
 
 <style lang="less" scoped>
