@@ -17,16 +17,22 @@
             class="custom-select"
           />
           -->
-          <!-- <el-button class="more-problem" @click="dialogVisible = true" link>
-            更多
-          </el-button> -->
+          <div class="operator" @click="onPanelTrigger">
+            <i :class="{ icon: true, 'is-reverse': collapsed }" />
+            <span>{{ collapsed ? "展开" : "收起" }}</span>
+          </div>
         </div>
         <div class="title">问题清单</div>
         <div class="operator-wrapper">
-          <div class="operator" @click="onPanelTrigger">
-            <i :class="{ icon: true, 'is-reverse': !collapsed }" />
-            <span>{{ collapsed ? "展开" : "收起" }}</span>
-          </div>
+          <!-- <div class="operator" @click="onShowMore">
+            <span>更多</span>
+          </div> -->
+        </div>
+        <div class="title">问题清单</div>
+        <div class="operator-wrapper">
+          <!-- <div class="operator" @click="onShowMore">
+            <span>更多</span>
+          </div> -->
         </div>
       </div>
     </div>
@@ -95,37 +101,20 @@
         </vue-seamless-scroll>
       </div>
     </div>
-    <!--#region 搜索区-->
-    <el-dialog v-model="dialogVisible" title="问题清单" width="48%">
-      <el-table
-        :data="dataList"
-        :header-cell-style="{ 'text-align': 'center' }"
-        :cell-style="{ 'text-align': 'center' }"
-      >
-        <el-table-column property="index" label="序号" width="60" />
-        <el-table-column
-          property="eventResponsibleUnitName"
-          label="责任部门"
-          width="80"
-        />
-        <el-table-column
-          property="eventSourceName"
-          label="事件来源"
-          width="100"
-        />
-        <el-table-column property="adnm" label="行政区域" width="80" />
-        <!-- <el-table-column property="rchnm" label="所在河湖" width="100" /> -->
-        <el-table-column property="eventTypeName" label="事件类型" />
-        <el-table-column
-          property="eventGradeName"
-          label="事件等级"
-          width="80"
-        />
-        <el-table-column property="occurTime" label="发生时间" width="100" />
-        <el-table-column property="status" label="状态" width="120" />
-      </el-table>
+    <!-- 问题列表更多弹窗 -->
+    <el-dialog
+      v-model="dialogVisible"
+      custom-class="problem-dialog"
+      width="70%"
+      append-to-body
+    >
+      <template #title>
+        <div class="pop-title">
+          <span>问题清单</span>
+        </div>
+      </template>
+      <TableMore ref="TableMoreRef" />
     </el-dialog>
-    <!--#endregion-->
   </div>
 </template>
 
@@ -147,6 +136,7 @@ import "element-plus/es/components/tooltip/style/css";
 import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 import moment from "moment";
 import { getEventQuestionList } from "@/apis/cockpitEventStats";
+import TableMore from "./TableMore/index.vue";
 
 const store = useStore();
 
@@ -161,9 +151,6 @@ const onPanelTrigger = () => {
     bottom: store.state.layout?.bottom === "close" ? "open" : "close",
   });
 };
-
-// 问题清单"更多"的弹窗
-let dialogVisible = ref(false);
 
 // 数据列表
 const dataList = ref([]);
@@ -194,7 +181,7 @@ let dataModel = ref(null);
 const getEventQuestionModel = async (queryParam) => {
   const param = Object.assign(
     {
-      adcd: "",
+      adcd: store?.state?.userInfo?.adminDivCode || "",
       code: "",
       startTime: "2021-07-24 18:29:29",
       endTime: "2022-08-24 18:29:29",
@@ -206,6 +193,12 @@ const getEventQuestionModel = async (queryParam) => {
   );
   return await getEventQuestionList(param);
 };
+
+// 打开更多弹窗
+let dialogVisible = ref(false);
+// function onShowMore() {
+//   dialogVisible.value = true;
+// }
 
 /**
  * 获取问题清单的展示列表
@@ -271,6 +264,24 @@ onBeforeUnmount(() => {
 });
 </script>
 
+<style lang="less">
+body .problem-dialog {
+  & {
+    background-color: rgba(#19385b, 0.8);
+    color: white;
+    border: 1px solid #64d2f7;
+    z-index: 9999;
+  }
+
+  :deep(.el-dialog__headerbtn .el-dialog__close) {
+    svg {
+      display: none;
+    }
+    background: url(@/assets/images/close-icon.png);
+    background-size: 100% 100%;
+  }
+}
+</style>
 <style lang="less" scoped>
 // 头部信息
 .problem-list {
@@ -465,12 +476,5 @@ onBeforeUnmount(() => {
   white-space: nowrap;
   // text-overflow: ellipsis;
   // overflow: hidden;
-}
-
-.more-problem.el-button.is-link {
-  padding-top: 6px;
-  color: #c4f0ff;
-  font-size: 20px;
-  font-family: YOUSHEBIAOTIHEI;
 }
 </style>
