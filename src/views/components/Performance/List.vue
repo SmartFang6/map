@@ -130,7 +130,7 @@ watch(
     height: 49px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
   }
   .table-body {
     height: 160px;
@@ -141,7 +141,7 @@ watch(
     display: flex;
     height: 32px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     &.stripe {
       background-color: rgba(11, 32, 59, 0.8);
     }

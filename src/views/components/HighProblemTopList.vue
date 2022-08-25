@@ -29,7 +29,7 @@
             <div class="index">{{ item.index }}</div>
             <div class="item-content">
               <div class="name">
-                <span>{{ item.name }}</span>
+                <span class="type-desc">{{ item.name }}</span>
                 <span>{{ item.value }}/{{ item.rate + "%" }}</span>
               </div>
               <div class="progress-outer">
@@ -65,30 +65,6 @@ let dataList = ref(null);
 //     rate: 30,
 //   });
 // }
-
-// 四乱类型映射
-const typeMapper = [
-  {
-    key: "1",
-    value: "乱占",
-  },
-  {
-    key: "2",
-    value: "乱建",
-  },
-  {
-    key: "3",
-    value: "乱堆",
-  },
-  {
-    key: "4",
-    value: "乱采",
-  },
-  {
-    key: "9",
-    value: "其他",
-  },
-];
 
 // 问题排行数据源
 let dataModel = ref(null);
@@ -132,39 +108,25 @@ const toggleTypeOrAreaList = (keyword) => {
   const model = toRaw(dataModel);
   let target =
     keyword === "type"
-      ? model?.eventStatHighIncidenceRankTypeList
+      ? model?.eventStatHighIncidenceRankCategoryCodeList
       : model?.eventStatHighIncidenceRankRegionList;
   if (!target) return;
   dataList.value = [];
   target?.forEach((field, index) => {
     if (keyword === "type") {
-      let typeName = "";
-      typeMapper.forEach((typeItem) => {
-        if (field.fourDisorderType === typeItem.key) {
-          typeName = typeItem.value;
-        }
-      });
-      let total = 0;
-      target.forEach((baseItem) => {
-        total += baseItem.typeNum;
-      });
       dataList.value.push({
         index: index + 1,
-        name: typeName,
-        value: field.typeNum,
-        rate: ((field.typeNum * 100) / total).toFixed(2),
+        name: field.eventCategoryName,
+        value: field.eventCategoryNum,
+        rate: field.completedRate ? field.completedRate * 100 : 0,
         code: field.fourDisorderType,
       });
     } else {
-      let total = 0;
-      target.forEach((baseItem) => {
-        total += baseItem.adcdNum;
-      });
       dataList.value.push({
         index: index + 1,
         name: field.adnm,
         value: field.adcdNum,
-        rate: ((field.adcdNum * 100) / total).toFixed(2),
+        rate: field.completedRate ? field.completedRate * 100 : 0,
         code: field.adcd,
       });
     }
@@ -196,7 +158,7 @@ watch(
 
 <style lang="less" scoped>
 .high-list {
-  padding-top: 13px;
+  padding-top: 6px;
   padding-left: 5px;
   padding-right: 20px;
   width: 100%;
@@ -271,6 +233,13 @@ watch(
     background-image: linear-gradient(-18deg, #0adbe0 0%, #14a2d2 100%),
       linear-gradient(90deg, rgba(89, 240, 93, 0.5) 0%, #59f05d 100%);
     background-blend-mode: normal, normal;
+  }
+
+  .type-desc {
+    max-width: 370px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 

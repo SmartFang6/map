@@ -24,10 +24,10 @@
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
           <div class="name">{{ champion?.eventResponsibleUnitCodeName }}</div>
-          <div class="value">
-            <span>{{
-              champion?.completedRate ? champion?.completedRate * 100 : 0
-            }}</span>
+          <div class="value" v-if="typeActive === 1">
+            <span>
+              {{ champion?.completedRate ? champion?.completedRate * 100 : 0 }}
+            </span>
             <span>%</span>
           </div>
         </div>
@@ -308,6 +308,7 @@ watch(
       padding-right: 16px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       box-sizing: border-box;
       &:first-child {
         margin-bottom: 20px;

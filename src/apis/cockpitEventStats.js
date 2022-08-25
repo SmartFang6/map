@@ -56,3 +56,14 @@ export const getEventQuestionList = (queryParams) => {
     data: queryParams,
   });
 };
+
+/**
+ * 获取事件高发排名的'类型'列表数据(新)
+ * @param {*} queryParams 查询参数
+ * @returns {Object}
+ */
+export const getEventTypeIncidenceRank = (queryParams) => {
+  return postHttp("/supervision/getEventStatHighIncidenceRank", {
+    data: queryParams,
+  });
+};

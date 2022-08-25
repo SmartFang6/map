@@ -449,7 +449,7 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(5),
   .table-row > div:nth-child(5) {
-    width: 140px;
+    width: 200px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(6),
