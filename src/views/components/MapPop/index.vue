@@ -17,7 +17,20 @@
         </div>
       </template>
       <div class="pop-body">
-        <img :src="noImg" alt="" class="left-img" />
+        <div class="left-img">
+          <el-carousel
+            indicator-position="none"
+            v-if="info.imageFileInfoList?.length > 0"
+          >
+            <el-carousel-item
+              v-for="item in info.imageFileInfoList"
+              :key="item.fileId"
+            >
+              <img :src="item.relativeUrl" alt="" class="left-img" />
+            </el-carousel-item>
+          </el-carousel>
+          <img :src="noImg" alt="" v-else />
+        </div>
         <ul>
           <li class="right-li">
             <span class="item-label">事件编号：</span
@@ -33,7 +46,9 @@
           </li>
           <li class="right-li">
             <span class="item-label">责任部门：</span
-            ><span class="item-value">{{ info.eventResponsibleUnitName }}</span>
+            ><span class="item-value">{{
+              info.eventResponsibleUnitCodeName
+            }}</span>
           </li>
           <li class="right-li">
             <span class="item-label">所属区域：</span
@@ -131,7 +146,7 @@ defineExpose({
 
     .left-img {
       width: 268px;
-      height: 156px;
+      height: 100%;
     }
 
     ul {
