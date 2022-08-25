@@ -94,7 +94,7 @@ let dataModel = ref(null);
 const getEventRiskModel = async (queryParam) => {
   const param = Object.assign(
     {
-      adcd: "330182",
+      adcd: "",
       code: "",
       startTime: "2021-07-24 18:29:29",
       endTime: "2022-08-24 18:29:29",
