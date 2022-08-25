@@ -2,6 +2,7 @@ const { defineConfig } = require("@vue/cli-service");
 
 const proxyUrl = process.env.VUE_APP_BASEURL || "/api";
 module.exports = defineConfig({
+  publicPath: "/cockpit/",
   transpileDependencies: true,
   devServer: {
     proxy: {
