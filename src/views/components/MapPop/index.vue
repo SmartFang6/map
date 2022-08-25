@@ -146,7 +146,7 @@ defineExpose({
 
     .left-img {
       width: 268px;
-      // height: 156px;
+      height: 100%;
     }
 
     ul {
