@@ -3,7 +3,7 @@
     <el-dialog v-model="dialogVisible" width="40%">
       <template #title>
         <div class="pop-title">
-          <span>{{ info?.adnm }}</span>
+          <span>{{ info?.eventSourceName }}</span>
           <!-- <el-button text :type="getTag(info.eventGrade)">{{
             info?.eventTypeName
           }}</el-button> -->
@@ -33,38 +33,62 @@
         </div>
         <ul>
           <li class="right-li">
-            <span class="item-label">事件编号：</span
-            ><span class="item-value">{{ info.eventId }}</span>
+            <span class="item-label">事件编号：</span>
+            <el-tooltip :content="info?.eventId" effect="light" placement="top">
+              <span class="item-value">{{ info?.eventId }}</span>
+            </el-tooltip>
           </li>
-          <li class="right-li">
+          <!-- <li class="right-li">
             <span class="item-label">问题来源：</span
             ><span class="item-value">{{ info.eventSourceName }}</span>
-          </li>
-          <li class="right-li">
+          </li> -->
+          <!-- <li class="right-li">
             <span class="item-label">事件等级：</span
             ><span class="item-value">{{ info.eventGradeName }}</span>
+          </li> -->
+          <li class="right-li">
+            <span class="item-label">责任部门：</span>
+            <el-tooltip
+              :content="info?.eventResponsibleUnitCodeName"
+              effect="light"
+              placement="top"
+            >
+              <span class="item-value">{{
+                info?.eventResponsibleUnitCodeName
+              }}</span>
+            </el-tooltip>
           </li>
           <li class="right-li">
-            <span class="item-label">责任部门：</span
-            ><span class="item-value">{{
-              info.eventResponsibleUnitCodeName
-            }}</span>
+            <span class="item-label">所属区域：</span>
+            <el-tooltip :content="info?.adnm" effect="light" placement="top">
+              <span class="item-value">{{ info?.adnm }}</span>
+            </el-tooltip>
           </li>
           <li class="right-li">
-            <span class="item-label">所属区域：</span
-            ><span class="item-value">{{ info.eventId }}</span>
+            <span class="item-label">所属河湖：</span>
+            <el-tooltip :content="info?.rchnm" effect="light" placement="top">
+              <span class="item-value">{{ info?.rchnm }}</span>
+            </el-tooltip>
           </li>
           <li class="right-li">
-            <span class="item-label">所属河湖：</span
-            ><span class="item-value">{{ info.rchnm }}</span>
+            <span class="item-label">发生时间：</span>
+            <el-tooltip
+              :content="info?.occurTime"
+              effect="light"
+              placement="top"
+            >
+              <span class="item-value">{{ info?.occurTime }}</span>
+            </el-tooltip>
           </li>
           <li class="right-li">
-            <span class="item-label">发生时间：</span
-            ><span class="item-value">{{ info.occurTime }}</span>
-          </li>
-          <li class="right-li">
-            <span class="item-label">事件状态：</span
-            ><span class="item-value">{{ info.eventStatusName }}</span>
+            <span class="item-label">事件状态：</span>
+            <el-tooltip
+              :content="info?.eventStatusName"
+              effect="light"
+              placement="top"
+            >
+              <span class="item-value">{{ info?.eventStatusName }}</span>
+            </el-tooltip>
           </li>
         </ul>
       </div>
@@ -154,23 +178,35 @@ defineExpose({
       margin-left: 50px;
 
       li {
+        display: flex;
         width: 100%;
-        line-height: 40px;
+        line-height: 30px;
         text-align: left;
+        margin-bottom: 15px;
       }
     }
 
     .item-label {
       width: 100px;
-      padding: 5px 10px;
+      min-width: 78px;
+      height: 30px;
       background: url(@/assets/images/pop-label.png);
       background-size: 100% 100%;
       color: #0adbe0;
+      text-align: center;
+      flex-shrink: 0;
     }
 
     .item-value {
       color: white;
       margin-left: 15px;
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden; //溢出内容隐藏
+      text-overflow: ellipsis; //文本溢出部分用省略号表示
+      display: -webkit-box; //特别显示模式
+      -webkit-line-clamp: 2; //行数
+      line-clamp: 2;
+      -webkit-box-orient: vertical; //盒子中内容竖直排列
     }
   }
   .footer {

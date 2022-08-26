@@ -24,9 +24,9 @@
         </div>
         <div class="title">问题清单</div>
         <div class="operator-wrapper">
-          <!-- <div class="operator" @click="onShowMore">
-            <span>更多</span>
-          </div> -->
+          <div class="operator" @click="onShowMore">
+            <!-- <span>更多</span> -->
+          </div>
         </div>
         <!-- <div class="title">问题清单</div>
         <div class="operator-wrapper">
@@ -107,6 +107,7 @@
       custom-class="problem-dialog"
       width="70%"
       append-to-body
+      top="10vh"
     >
       <template #title>
         <div class="pop-title">
@@ -196,9 +197,9 @@ const getEventQuestionModel = async (queryParam) => {
 
 // 打开更多弹窗
 let dialogVisible = ref(false);
-// function onShowMore() {
-//   dialogVisible.value = true;
-// }
+function onShowMore() {
+  // dialogVisible.value = true;
+}
 
 /**
  * 获取问题清单的展示列表
@@ -476,5 +477,13 @@ body .problem-dialog {
   white-space: nowrap;
   // text-overflow: ellipsis;
   // overflow: hidden;
+}
+
+.pop-title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: #0adbe0;
+  font-size: 24px;
 }
 </style>
