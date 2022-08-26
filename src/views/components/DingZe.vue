@@ -148,6 +148,8 @@ function arrTrans(num, arr) {
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 21px;
+    line-height: 21px;
   }
   .item-footer {
     box-sizing: border-box;

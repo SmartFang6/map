@@ -65,7 +65,7 @@ const bottomViewClose = computed(() => {
   top: 0;
   left: 0;
   overflow: hidden;
-  background: url(@/assets/images/layout-bg.png);
+  background: url(@/assets/images/layout-bg-1.png);
   background-size: 100%;
 
   .header_box {

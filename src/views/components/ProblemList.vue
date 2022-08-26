@@ -25,7 +25,7 @@
         <div class="title">问题清单</div>
         <div class="operator-wrapper">
           <div class="operator" @click="onShowMore">
-            <!-- <span>更多</span> -->
+            <span>更多</span>
           </div>
         </div>
         <!-- <div class="title">问题清单</div>
@@ -198,7 +198,7 @@ const getEventQuestionModel = async (queryParam) => {
 // 打开更多弹窗
 let dialogVisible = ref(false);
 function onShowMore() {
-  // dialogVisible.value = true;
+  dialogVisible.value = true;
 }
 
 /**

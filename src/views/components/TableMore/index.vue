@@ -5,22 +5,30 @@
       <ul>
         <li>
           <span>全部</span
-          ><span class="item-value" style="color: #fff">100</span
+          ><span class="item-value" style="color: #fff">{{
+            eventGrade["全部"]
+          }}</span
           ><span>个</span>
         </li>
         <li>
           <span>重大</span
-          ><span class="item-value" style="color: #e35f5f">100</span
+          ><span class="item-value" style="color: #e35f5f">{{
+            eventGrade["重大问题"]
+          }}</span
           ><span>个</span>
         </li>
         <li>
           <span>较严重</span
-          ><span class="item-value" style="color: #ffb401">100</span
+          ><span class="item-value" style="color: #ffb401">{{
+            eventGrade["较严重问题"]
+          }}</span
           ><span>个</span>
         </li>
         <li>
           <span>一般</span
-          ><span class="item-value" style="color: #0adbe0">100</span
+          ><span class="item-value" style="color: #0adbe0">{{
+            eventGrade["一般问题"]
+          }}</span
           ><span>个</span>
         </li>
       </ul>
@@ -80,6 +88,17 @@
             size="small"
           />
         </el-form-item>
+        <el-form-item label="上报时间" prop="dateRange">
+          <el-date-picker
+            v-model="searchFormData.dateRange"
+            class="search-date-range"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            value-format="YYYY-MM-DD HH:mm:ss"
+          />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="getData">查 询</el-button>
           <el-button type="warning" @click="onRest">重 置</el-button>
@@ -91,25 +110,52 @@
         :data="tableData"
         :header-cell-style="{ 'text-align': 'center' }"
         :cell-style="{ 'text-align': 'center' }"
-        max-height="50vh"
+        height="45vh"
         stripe
       >
         <el-table-column label="序号" type="index" width="60" />
         <el-table-column label="责任部门" prop="eventResponsibleUnitCodeName" />
         <el-table-column label="事件来源" prop="eventSourceName" />
         <el-table-column label="行政区域" prop="adnm" />
-        <el-table-column label="所在河湖" prop="rchnm	" />
-        <el-table-column label="事件类型" prop="eventTypeName" />
+        <el-table-column label="所在河湖" prop="rchnm" />
+        <el-table-column label="事件类型">
+          <template #default="{ row }">
+            <el-tooltip effect="dark" placement="top-start">
+              <template #content>
+                <p style="width: 500px; font-size: 14px; line-height: 20px">
+                  {{ row.eventTypeName }}
+                </p>
+              </template>
+              <div class="eventTypeName">
+                {{ row.eventTypeName }}
+              </div>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column label="事件等级" prop="eventGradeName" />
         <el-table-column label="发生时间" prop="occurTime" />
         <el-table-column label="上报人员" prop="reportUser" />
         <el-table-column label="状态" prop="eventStatusName" />
         <el-table-column label="操作" width="110">
           <template #default="{ row }">
-            <el-button link type="primary" @click="onCheck(row)"></el-button>
+            <el-button link type="primary" @click="onCheck(row)"
+              >查看</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagesize">
+        <el-pagination
+          layout="total, sizes, prev, pager, next"
+          :page-sizes="[10, 50, 100]"
+          v-model:pageSize="pageNum"
+          v-model:currentPage="pageIndex"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        >
+        </el-pagination>
+      </div>
       <!-- #endregion -->
     </div>
   </div>
@@ -120,7 +166,10 @@ import { reactive, toRefs, ref } from "vue";
 import { getEventQuestionList } from "@/apis/cockpitEventStats";
 import store from "@/store";
 import DictSelec from "@/components/DictSelect/index.vue";
-import { getListDistrict } from "@/apis/home.js";
+import {
+  getListDistrict,
+  getEventStatGradeForProblemList,
+} from "@/apis/home.js";
 import RchSelect from "@/components/RchSelect";
 
 // 查询数据 ---start
@@ -187,6 +236,24 @@ const acceptStatusList = [
     value: "2",
   },
 ];
+
+// 分页
+const pageData = reactive({
+  total: 10,
+  pageIndex: 1,
+  pageNum: 10,
+});
+const { total, pageIndex, pageNum } = toRefs(pageData);
+// 分页器函数 每页码数量改变时
+const handleSizeChange = (val) => {
+  pageData.pageNum = val;
+  getData();
+};
+// 分页器函数 当前页码改变时
+const handleCurrentChange = (val) => {
+  pageData.pageIndex = val;
+  getData();
+};
 // 查询数据 ---end
 
 let data = reactive({
@@ -195,43 +262,45 @@ let data = reactive({
     adcdSelected: [ADMIN_DIV_CODE],
     eventGrade: "",
     eventAcceptStatus: "",
+    dateRange: [],
+    searchText: "",
   },
   tableData: [],
+  eventGrade: {}, // 统计数量
 });
-const { searchFormData, tableData } = toRefs(data);
+const { searchFormData, tableData, eventGrade } = toRefs(data);
 
 // 获取table数据
 function getData() {
+  console.log(data.searchFormData, "data---");
   const params = {
-    adcd: store?.state?.userInfo?.adminDivCode || "",
+    adcd: data.searchFormData.adcdSelected[2] || ADMIN_DIV_CODE,
     code: "",
-    startTime: "2022-08-01 00:00:00",
-    endTime: "2022-08-31 23:59:59",
-    searchText: "",
-    pageNo: 1,
-    pageSize: 20,
+    startTime: data.searchFormData.dateRange[0],
+    endTime: data.searchFormData.dateRange[1],
+    searchText: data.searchFormData.searchText,
+    pageNo: pageData.pageIndex,
+    pageSize: pageData.pageNum,
   };
   getEventQuestionList(params)
     .then((res) => {
-      console.log(res, "getEventQuestionList");
       data.tableData = res.records;
+      pageData.total = res.total;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  getEventStatGradeForProblemList(params)
+    .then((res) => {
+      res.forEach((item) => {
+        data.eventGrade[item.eventGradeName] = item.allNum;
+      });
     })
     .catch((err) => {
       console.log(err);
     });
 }
 getData();
-
-// data.tableData = [
-//   {
-//     eventResponsibleUnitCodeName: "测试1",
-//     eventSourceName: "ceshi",
-//   },
-//   {
-//     eventResponsibleUnitCodeName: "测试2",
-//     eventSourceName: "ceshi",
-//   },
-// ];
 
 // 重置
 let searchFormRef = ref(null);
@@ -241,7 +310,16 @@ function onRest() {
 }
 // 查看详情
 function onCheck(row) {
-  console.log(row);
+  const ticket = store?.state?.userInfo?.userId || "";
+  const customPath = `workbench/eventCenter/showEvent?id=${row.id}&eventId=${row.eventId}`;
+  const JUMP_URL =
+    "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+    ticket +
+    "&customPath=" +
+    customPath;
+
+  window.open(JUMP_URL);
+  console.log(row, JUMP_URL);
 }
 
 defineExpose({});
@@ -270,6 +348,7 @@ defineExpose({});
 
         .item-value {
           font-size: 48px;
+          font-family: YOUSHEBIAOTIHEI;
         }
       }
     }
@@ -285,6 +364,12 @@ defineExpose({});
       }
       :deep(.search-input) {
         width: 170px;
+      }
+      :deep(.el-select .el-input__inner) {
+        color: white;
+      }
+      :deep(.el-cascader .el-input .el-input__inner) {
+        color: white;
       }
     }
 
@@ -311,6 +396,51 @@ defineExpose({});
     :deep(.el-table th.el-table__cell) {
       background-color: #174762;
     }
+    :deep(.el-table--enable-row-hover .el-table__body tr:hover > td) {
+      background-color: rgba(0, 0, 0, 0);
+    }
+
+    .pagesize {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+      :deep(.el-pagination__total) {
+        color: white;
+      }
+      :deep(.el-select .el-input__wrapper) {
+        background-color: transparent;
+        color: white;
+      }
+      :deep(.el-select .el-input__inner) {
+        color: white;
+      }
+      :deep(.btn-prev) {
+        background-color: transparent;
+        color: white;
+      }
+      :deep(.el-pager li) {
+        background-color: transparent;
+      }
+      :deep(.btn-next) {
+        background-color: transparent;
+        color: white;
+      }
+      :deep(.number) {
+        color: white;
+      }
+      :deep(.el-pager li.is-active) {
+        color: #1e93d7;
+      }
+    }
+  }
+  .eventTypeName {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden; //溢出内容隐藏
+    text-overflow: ellipsis; //文本溢出部分用省略号表示
+    display: -webkit-box; //特别显示模式
+    -webkit-line-clamp: 2; //行数
+    line-clamp: 2;
+    -webkit-box-orient: vertical; //盒子中内容竖直排列
   }
 }
 </style>
