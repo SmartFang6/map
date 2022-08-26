@@ -1,4 +1,4 @@
-import { postHttp } from "@/utils/axios";
+import { postHttp, getHttp } from "@/utils/axios";
 
 // 获取事件统计结果 (事件统计、问题来源、问题派发)
 /**
@@ -17,4 +17,31 @@ export const getEventStat = (data) => {
   return postHttp("/supervision/getEventStat", {
     data,
   });
+};
+
+//水域监管后台接口
+const BSER_URL = "http://192.168.2.238:8502/api";
+/**
+ * 查询数据库字典
+ * tableCode:columnCode,tableCode:columnCode,规则组装
+ * @param {string} tableColumnCodes 询字典集合
+ * @return {Object}
+ */
+export const getListDict = (tableColumnCodes) => {
+  return getHttp(BSER_URL + "/common/listDict", {
+    data: { tableColumnCodes },
+  });
+};
+
+// 下级行政区域列表查询
+export const getListDistrict = (data) => {
+  return getHttp(BSER_URL + "/common/listDistrict", { data });
+};
+/**
+ * 查询河段信息集合
+ * @param {Object<any>} data 查询参数
+ * @returns {Object<any>}
+ */
+export const getListRlrcReachInfo = (data) => {
+  return postHttp(BSER_URL + "/common/listRlrcReachInfo", { data });
 };
