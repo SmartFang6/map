@@ -39,7 +39,7 @@ export const getEventStatGradeForProblemList = (data) => {
 };
 
 //水域监管后台接口
-const BSER_URL = "http://192.168.2.238:8502/api";
+const BSER_URL = "https://web.dcyun.com:48467/api";
 /**
  * 查询数据库字典
  * tableCode:columnCode,tableCode:columnCode,规则组装
