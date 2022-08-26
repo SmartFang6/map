@@ -41,13 +41,13 @@
         class="search-form"
         size="small"
       >
-        <el-form-item label="事件来源" prop="eventSource">
+        <!-- <el-form-item label="事件来源" prop="eventSource">
           <DictSelec
             v-model:selectValue="searchFormData.eventSource"
             dict-string="water_one_inspection:event_source"
             class="search-input"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="行政区域" prop="adcdSelected">
           <el-cascader
             v-model="searchFormData.adcdSelected"
@@ -57,7 +57,7 @@
             class="search-input"
           />
         </el-form-item>
-        <el-form-item label="事件等级" prop="eventGrade">
+        <!-- <el-form-item label="事件等级" prop="eventGrade">
           <el-select v-model="searchFormData.eventGrade" placeholder="请选择">
             <el-option
               v-for="item in eventGradeOptions"
@@ -66,7 +66,7 @@
               :value="item.value"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="状态" prop="eventAcceptStatus">
           <el-select
             v-model="searchFormData.eventAcceptStatus"
@@ -165,7 +165,7 @@
 import { reactive, toRefs, ref, computed } from "vue";
 import { getEventQuestionList } from "@/apis/cockpitEventStats";
 import store from "@/store";
-import DictSelec from "@/components/DictSelect/index.vue";
+// import DictSelec from "@/components/DictSelect/index.vue";
 import {
   getListDistrict,
   getEventStatGradeForProblemList,
@@ -203,24 +203,24 @@ let adcdCascaderProps = {
 };
 
 // 事件等级
-const eventGradeOptions = [
-  {
-    label: "全部",
-    value: "",
-  },
-  {
-    label: "重大",
-    value: "1",
-  },
-  {
-    label: "较严重",
-    value: "2",
-  },
-  {
-    label: "一般",
-    value: "3",
-  },
-];
+// const eventGradeOptions = [
+//   {
+//     label: "全部",
+//     value: "",
+//   },
+//   {
+//     label: "重大",
+//     value: "1",
+//   },
+//   {
+//     label: "较严重",
+//     value: "2",
+//   },
+//   {
+//     label: "一般",
+//     value: "3",
+//   },
+// ];
 
 // 事件状态列表
 const acceptStatusList = [
@@ -296,6 +296,7 @@ function getData() {
     searchText: data.searchFormData.searchText,
     pageNo: pageData.pageIndex,
     pageSize: pageData.pageNum,
+    eventDealStatus: data.searchFormData.eventAcceptStatus,
   };
   getEventQuestionList(params)
     .then((res) => {
