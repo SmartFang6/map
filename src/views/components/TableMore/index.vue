@@ -84,7 +84,7 @@
           <RchSelect
             v-model="searchFormData.searchTextValue"
             v-model:label="searchFormData.searchText"
-            :adcd="ADMIN_DIV_CODE"
+            :adcd="lastAdcd"
             size="small"
           />
         </el-form-item>
@@ -162,7 +162,7 @@
 </template>
 
 <script setup>
-import { reactive, toRefs, ref } from "vue";
+import { reactive, toRefs, ref, computed } from "vue";
 import { getEventQuestionList } from "@/apis/cockpitEventStats";
 import store from "@/store";
 import DictSelec from "@/components/DictSelect/index.vue";
@@ -171,6 +171,7 @@ import {
   getEventStatGradeForProblemList,
 } from "@/apis/home.js";
 import RchSelect from "@/components/RchSelect";
+import moment from "moment";
 
 // 查询数据 ---start
 const ADMIN_DIV_CODE = store?.state?.userInfo?.adminDivCode || ""; // 用户所处行政编码
@@ -254,6 +255,14 @@ const handleCurrentChange = (val) => {
   pageData.pageIndex = val;
   getData();
 };
+
+let lastAdcd = computed(() => {
+  return (
+    data.searchFormData.adcdSelected[
+      data.searchFormData.adcdSelected.length - 1
+    ] || ADMIN_DIV_CODE
+  );
+});
 // 查询数据 ---end
 
 let data = reactive({
@@ -262,7 +271,10 @@ let data = reactive({
     adcdSelected: [ADMIN_DIV_CODE],
     eventGrade: "",
     eventAcceptStatus: "",
-    dateRange: [],
+    dateRange: [
+      moment(new Date()).startOf("year").format("YYYY-MM-DD 00:00:00"),
+      moment(new Date()).endOf("year").format("YYYY-MM-DD 23:59:59"),
+    ],
     searchText: "",
   },
   tableData: [],
@@ -274,17 +286,25 @@ const { searchFormData, tableData, eventGrade } = toRefs(data);
 function getData() {
   console.log(data.searchFormData, "data---");
   const params = {
-    adcd: data.searchFormData.adcdSelected[2] || ADMIN_DIV_CODE,
+    adcd:
+      data.searchFormData.adcdSelected[
+        data.searchFormData.adcdSelected.length - 1
+      ] || ADMIN_DIV_CODE,
     code: "",
-    startTime: data.searchFormData.dateRange[0],
-    endTime: data.searchFormData.dateRange[1],
+    startTime: data.searchFormData.dateRange?.[0],
+    endTime: data.searchFormData.dateRange?.[1],
     searchText: data.searchFormData.searchText,
     pageNo: pageData.pageIndex,
     pageSize: pageData.pageNum,
   };
   getEventQuestionList(params)
     .then((res) => {
-      data.tableData = res.records;
+      data.tableData = res.records.map((item) => {
+        return {
+          ...item,
+          occurTime: item.occurTime?.substring(0, 10),
+        };
+      });
       pageData.total = res.total;
     })
     .catch((err) => {
@@ -369,6 +389,9 @@ defineExpose({});
         color: white;
       }
       :deep(.el-cascader .el-input .el-input__inner) {
+        color: white;
+      }
+      :deep(.el-range-input) {
         color: white;
       }
     }
