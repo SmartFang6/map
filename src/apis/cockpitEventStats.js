@@ -67,3 +67,14 @@ export const getEventTypeIncidenceRank = (queryParams) => {
     data: queryParams,
   });
 };
+
+/**
+ * 获取处置绩效接口V2
+ * @param {*} queryParams 查询参数
+ * @returns {Object}
+ */
+export const getEventStatPointRankV2 = (queryParams) => {
+  return postHttp("/supervision/getEventStatPointRank/V2", {
+    data: queryParams,
+  });
+};

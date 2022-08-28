@@ -83,7 +83,7 @@
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
-import { getEventPointRank } from "@/apis/cockpitEventStats";
+import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
 let tabActive = ref("village");
 let typeActive = ref(1);
@@ -147,7 +147,7 @@ const getEventPointRankModel = async (queryParam) => {
     },
     queryParam
   );
-  return await getEventPointRank(param);
+  return await getEventStatPointRankV2(param);
 };
 
 /**
