@@ -93,10 +93,10 @@
         </ul>
       </div>
       <!-- 详情入口 -->
-      <div class="footer" @click="onJupmDetail">
+      <!-- <div class="footer" @click="onJupmDetail">
         <img src="@/assets/images/detail-icon.png" alt="" class="footer-img" />
         <span class="footer-text">查看详情</span>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>
@@ -118,9 +118,9 @@ function getTag(val) {
 }
 
 // 跳转后台详情
-function onJupmDetail() {
-  console.log("跳转后台详情");
-}
+// function onJupmDetail() {
+//   console.log("跳转后台详情");
+// }
 
 // 打开弹窗
 function open(val) {

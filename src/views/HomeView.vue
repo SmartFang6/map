@@ -17,12 +17,14 @@
       </div>
     </template>
     <template #left>
-      <!-- 事件统计 -->
-      <EventStatistics />
-      <!-- 问题来源 -->
-      <ProblemSource />
-      <!-- 问题派发 -->
-      <IssueDistribution />
+      <div class="left-box">
+        <!-- 事件统计 -->
+        <EventStatistics />
+        <!-- 问题来源 -->
+        <ProblemSource />
+        <!-- 问题派发 -->
+        <IssueDistribution />
+      </div>
     </template>
     <template #right>
       <!-- 风险管控-->
