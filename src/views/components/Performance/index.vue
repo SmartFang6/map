@@ -59,7 +59,7 @@
             <div class="name">
               {{ rankField?.eventResponsibleUnitCodeName }}
             </div>
-            <div class="score">
+            <div class="score" v-if="typeActive === 1">
               <span>
                 {{
                   rankField?.completedRate ? rankField?.completedRate * 100 : 0
