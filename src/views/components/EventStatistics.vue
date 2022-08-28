@@ -69,45 +69,48 @@ let configList = [
 </script>
 
 <style lang="less" scoped>
-.content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  padding: 15px;
-
-  &-item {
+.event {
+  height: 260px;
+  .content {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    width: 33%;
-    box-sizing: border-box;
-    padding: 15px 5px;
-    font-size: 16px;
-    font-family: MicrosoftYaHei;
-    color: #c4f0ff;
-  }
+    padding: 15px;
 
-  .item-img {
-    width: 49px;
-    height: 46px;
-  }
+    &-item {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 33%;
+      box-sizing: border-box;
+      padding: 15px 5px;
+      font-size: 16px;
+      font-family: MicrosoftYaHei;
+      color: #c4f0ff;
+    }
 
-  .item-value {
-    display: inline-block;
-    font-size: 30px;
-    font-family: AGENCYB;
-    letter-spacing: 4px;
-    color: #0adbe0;
-    max-width: 65px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+    .item-img {
+      width: 49px;
+      height: 46px;
+    }
 
-  .item-unit {
-    display: inline-block;
-    font-size: 12px;
+    .item-value {
+      display: inline-block;
+      font-size: 30px;
+      font-family: AGENCYB;
+      letter-spacing: 4px;
+      color: #0adbe0;
+      max-width: 65px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-unit {
+      display: inline-block;
+      font-size: 12px;
+    }
   }
 }
 </style>

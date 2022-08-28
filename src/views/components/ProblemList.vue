@@ -329,7 +329,8 @@ body .problem-dialog {
         & > i {
           width: 12px;
           height: 7px;
-          background: url(@/assets/images/custom-select-arrow-down.png);
+          background: url(@/assets/images/custom-select-arrow-down.png)
+            no-repeat;
           display: block;
           transition: transform var(--el-transition-duration);
           transform: rotateZ(180deg);

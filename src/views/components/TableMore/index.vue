@@ -326,6 +326,7 @@ getData();
 // 重置
 let searchFormRef = ref(null);
 function onRest() {
+  data.searchFormData.searchTextValue = "";
   searchFormRef.value.resetFields();
   getData();
 }
