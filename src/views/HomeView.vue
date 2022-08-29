@@ -145,7 +145,7 @@ function showPop(info) {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
+  // height: 100%;
   box-sizing: border-box;
   padding: 0 12px;
 }
