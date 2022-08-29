@@ -24,7 +24,10 @@
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
           <div class="name">{{ champion?.eventResponsibleUnitCodeName }}</div>
-          <div class="value" v-if="typeActive === 1">
+          <div
+            class="value"
+            v-if="typeActive === 1 && champion?.completedRate >= 0"
+          >
             <span>
               {{ champion?.completedRate ? champion?.completedRate * 100 : 0 }}
             </span>
@@ -61,7 +64,7 @@
             </div>
             <div
               class="score"
-              v-if="typeActive === 1 && rankField?.eventResponsibleUnitCodeName"
+              v-if="typeActive === 1 && rankField?.completedRate >= 0"
             >
               <span>
                 {{
