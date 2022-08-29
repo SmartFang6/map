@@ -126,7 +126,14 @@ let performanceList = ref([]);
 const setExcellentList = (rankSource) => {
   if (!rankSource || rankSource.length <= 0) {
     champion.value = {};
-    performanceList.value = [];
+    performanceList.value = [{}, {}];
+  } else if (rankSource.length === 1) {
+    champion.value = rankSource[0];
+    performanceList.value = [{}, {}];
+  } else if (rankSource.length === 2) {
+    champion.value = rankSource[0];
+    performanceList.value = rankSource.slice(1, 2);
+    performanceList.value.push({});
   } else {
     champion.value = rankSource[0];
     performanceList.value = rankSource.slice(1, 3);
