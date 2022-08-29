@@ -7,13 +7,17 @@
 
 <template>
   <div class="layout-header">
-    <div class="title">水域监管驾驶舱</div>
+    <div class="title">{{ currentAdcd }}水域监管驾驶舱</div>
     <div class="entry-btn" @click="onJump" />
   </div>
 </template>
 
 <script setup>
 import store from "@/store";
+import { ref } from "vue";
+
+let currentAdcd = ref("");
+currentAdcd.value = store.state.adcdName || "";
 
 let count = 1;
 function onJump() {
