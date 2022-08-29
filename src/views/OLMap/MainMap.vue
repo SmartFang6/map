@@ -177,12 +177,10 @@ export default {
         const curFeature = features[this.curIndex]
         this.layers.selectLayer.addFeatures([curFeature])// 高亮
         let properties = curFeature.getProperties()
-        console.log('cur', properties);
         properties.layerid = 'basicTotalLayer'
         properties.lgtd = getCenter(curFeature.getGeometry().getExtent())[0]
         properties.lttd = getCenter(curFeature.getGeometry().getExtent())[1]
         this.popInfo = properties
-        console.log('pop', properties);
         this.$nextTick(() => {
           this.areaHappyShow = true
         })

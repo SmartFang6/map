@@ -40,15 +40,15 @@ class AreaHappinessLayer extends BaseVectorLayer {
       )
       
       feature.setId(`${this.layerConfig.id}.${happyscore}`)
-      feature.set('properties', {})
+      feature.setProperties({})
       if (res.length === 0) {
-        feature.set('properties', {
+        feature.setProperties({
           adnm: feature.get('admin_div_name')
         })
       } else {
         for (let i = 0; i < res.length; i++) {
           if (res[i].adcd === happyscore) {
-            feature.set('properties', res[i])
+            feature.setProperties(res[i])
             break
           }
         }
