@@ -2,6 +2,7 @@ const { defineConfig } = require("@vue/cli-service");
 
 const proxyUrl = process.env.VUE_APP_BASEURL || "/api";
 module.exports = defineConfig({
+  publicPath: "/cockpit/",
   transpileDependencies: true,
   devServer: {
     proxy: {
@@ -16,6 +17,14 @@ module.exports = defineConfig({
         ws: true,
         pathRewrite: {
           "^/userApi": "/api",
+        },
+      },
+      "/oneInspection-api": {
+        target: "http://192.168.2.238:8502",
+        changeOrigin: true,
+        ws: true,
+        pathRewrite: {
+          "^/oneInspection-api": "/api",
         },
       },
     },

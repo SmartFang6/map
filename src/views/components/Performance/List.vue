@@ -74,10 +74,10 @@ watch(
         return;
       }
       dataList.value = [];
-      props.dataModel.forEach((item) => {
+      props.dataModel.forEach((item, rankNum) => {
         if (props.type === 1) {
           dataList.value.push({
-            index: item?.rankNo,
+            index: rankNum + 1,
             org: item?.eventResponsibleUnitCodeName,
             content: item?.content || "",
             count: item?.unitEventNum,
@@ -85,7 +85,7 @@ watch(
           });
         } else {
           dataList.value.push({
-            index: item?.rankNo,
+            index: rankNum + 1,
             org: item?.eventResponsibleUnitCodeName,
             content: item?.content || "",
             count: item?.point,
@@ -130,7 +130,7 @@ watch(
     height: 49px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
   }
   .table-body {
     height: 160px;
@@ -141,7 +141,7 @@ watch(
     display: flex;
     height: 32px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     &.stripe {
       background-color: rgba(11, 32, 59, 0.8);
     }

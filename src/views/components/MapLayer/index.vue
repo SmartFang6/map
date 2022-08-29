@@ -9,7 +9,7 @@
 <template>
   <div class="map-layer">
     <!--#region 时间单位切换-->
-    <div class="time-tabs">
+    <!-- <div class="time-tabs">
       <el-tabs v-model="timeActive" type="card">
         <el-tab-pane class="tab-item" label="本月" name="month"></el-tab-pane>
         <el-tab-pane label="本年" name="year"></el-tab-pane>
@@ -27,7 +27,7 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-    </div>
+    </div> -->
     <!--#endregion-->
 
     <!--#region 图类型切换-->

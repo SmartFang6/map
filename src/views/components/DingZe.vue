@@ -1,6 +1,6 @@
 <template>
   <div class="dingze">
-    <el-carousel indicator-position="none">
+    <el-carousel indicator-position="none" style="width: 100%">
       <el-carousel-item
         v-for="(item, index) in dataList"
         :key="index"
@@ -97,6 +97,7 @@ function arrTrans(num, arr) {
 
 <style lang="less" scoped>
 .dingze {
+  width: 100%;
   .carousel-item {
     display: flex;
     justify-content: space-around;
@@ -108,6 +109,7 @@ function arrTrans(num, arr) {
     justify-content: center;
     align-items: center;
     height: 100%;
+    margin-top: 15px;
   }
   .item-icon {
     width: 25px;
@@ -148,6 +150,8 @@ function arrTrans(num, arr) {
     max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 21px;
+    line-height: 21px;
   }
   .item-footer {
     box-sizing: border-box;

@@ -17,12 +17,14 @@
       </div>
     </template>
     <template #left>
-      <!-- 事件统计 -->
-      <EventStatistics />
-      <!-- 问题来源 -->
-      <ProblemSource />
-      <!-- 问题派发 -->
-      <IssueDistribution />
+      <div class="left-box">
+        <!-- 事件统计 -->
+        <EventStatistics />
+        <!-- 问题来源 -->
+        <ProblemSource />
+        <!-- 问题派发 -->
+        <IssueDistribution />
+      </div>
     </template>
     <template #right>
       <!-- 风险管控-->
@@ -56,7 +58,14 @@ import Map from "@/views/OLMap/MainMap";
 import store from "@/store";
 import moment from "moment";
 import MapPop from "./components/MapPop/index.vue";
+import router from "@/router";
 const eventBus = inject("EventBus");
+
+// 若未通过单点登录进入，重定向去401页面
+const USER_ID = store?.state?.userInfo?.userId;
+if (!USER_ID) {
+  router.replace("/401");
+}
 
 let leftData = ref({});
 

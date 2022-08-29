@@ -24,10 +24,13 @@
         <img src="@/assets/images/performance-first.png" />
         <div class="first-info">
           <div class="name">{{ champion?.eventResponsibleUnitCodeName }}</div>
-          <div class="value">
-            <span>{{
-              champion?.completedRate ? champion?.completedRate * 100 : 0
-            }}</span>
+          <div
+            class="value"
+            v-if="typeActive === 1 && champion?.completedRate >= 0"
+          >
+            <span>
+              {{ champion?.completedRate ? champion?.completedRate * 100 : 0 }}
+            </span>
             <span>%</span>
           </div>
         </div>
@@ -59,7 +62,10 @@
             <div class="name">
               {{ rankField?.eventResponsibleUnitCodeName }}
             </div>
-            <div class="score">
+            <div
+              class="score"
+              v-if="typeActive === 1 && rankField?.completedRate >= 0"
+            >
               <span>
                 {{
                   rankField?.completedRate ? rankField?.completedRate * 100 : 0
@@ -83,7 +89,7 @@
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
-import { getEventPointRank } from "@/apis/cockpitEventStats";
+import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
 let tabActive = ref("village");
 let typeActive = ref(1);
@@ -126,7 +132,14 @@ let performanceList = ref([]);
 const setExcellentList = (rankSource) => {
   if (!rankSource || rankSource.length <= 0) {
     champion.value = {};
-    performanceList.value = [];
+    performanceList.value = [{}, {}];
+  } else if (rankSource.length === 1) {
+    champion.value = rankSource[0];
+    performanceList.value = [{}, {}];
+  } else if (rankSource.length === 2) {
+    champion.value = rankSource[0];
+    performanceList.value = rankSource.slice(1, 2);
+    performanceList.value.push({});
   } else {
     champion.value = rankSource[0];
     performanceList.value = rankSource.slice(1, 3);
@@ -147,7 +160,7 @@ const getEventPointRankModel = async (queryParam) => {
     },
     queryParam
   );
-  return await getEventPointRank(param);
+  return await getEventStatPointRankV2(param);
 };
 
 /**
@@ -308,6 +321,7 @@ watch(
       padding-right: 16px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       box-sizing: border-box;
       &:first-child {
         margin-bottom: 20px;

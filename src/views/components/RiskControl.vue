@@ -26,7 +26,7 @@
             <span>{{ dataModel?.todayAddNum }}</span>
             <span>个</span>
           </div>
-          <div class="label">每日新增</div>
+          <div class="label">本月新增</div>
         </div>
       </div>
       <!--#endregion-->
@@ -48,7 +48,7 @@
             <span>{{ dataModel?.todayTimeoutNum }}</span>
             <span>个</span>
           </div>
-          <div class="label">每日超期</div>
+          <div class="label">当前超期</div>
         </div>
       </div>
       <!--#endregion-->
@@ -70,7 +70,7 @@
             <span>{{ dataModel?.todayImmediatelyTimeoutNum }}</span>
             <span>个</span>
           </div>
-          <div class="label">每日逾期</div>
+          <div class="label">当前逾期</div>
         </div>
       </div>
       <!--#endregion-->

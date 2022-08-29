@@ -7,12 +7,31 @@
 
 <template>
   <div class="layout-header">
-    <div class="title">水域监管驾驶舱</div>
-    <div class="entry-btn" />
+    <div class="title">{{ currentAdcd }}水域监管驾驶舱</div>
+    <div class="entry-btn" @click="onJump" />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import store from "@/store";
+import { ref } from "vue";
+
+let currentAdcd = ref("");
+currentAdcd.value = store.state.adcdName || "";
+
+let count = 1;
+function onJump() {
+  count += 1;
+  if (count > 5) {
+    const JUMP_URL =
+      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+        store?.state?.userInfo?.userId || "";
+    console.log(JUMP_URL, "JUMP_URL");
+    window.open(JUMP_URL);
+    count = 1;
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .layout-header {
@@ -41,14 +60,14 @@
     font-size: 24px;
     font-family: YouSheBiaoTiHei;
     font-size: 24px;
-    background: url(@/assets/images/entry-btn.png);
+    // background: url(@/assets/images/entry-btn.png);
     width: 268px;
     height: 37px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 10px;
-    cursor: pointer;
+    // cursor: pointer;
   }
 }
 </style>

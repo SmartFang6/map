@@ -15,6 +15,7 @@ export default createStore({
     },
     token: null,
     userInfo: {},
+    adcdName: "",
   },
   getters: {},
   mutations: {
@@ -30,6 +31,9 @@ export default createStore({
     },
     UPDATE_USER_INFO(state, payload) {
       state.userInfo = payload;
+    },
+    UPDATE_ADCD_NAME(state, payload) {
+      state.adcdName = payload;
     },
   },
   actions: {},

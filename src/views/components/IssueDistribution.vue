@@ -7,10 +7,12 @@
       </el-tabs>
     </Title>
 
-    <!-- 定性 -->
-    <DingXing v-if="activeName === 'dx'" />
-    <!-- 定责 -->
-    <DingZe v-if="activeName === 'dz'" />
+    <div class="out-side">
+      <!-- 定性 -->
+      <DingXing v-if="activeName === 'dx'" />
+      <!-- 定责 -->
+      <DingZe v-if="activeName === 'dz'" />
+    </div>
   </div>
 </template>
 
@@ -50,6 +52,12 @@ let activeName = ref("dx");
   :deep(.el-tabs--card > .el-tabs__header .el-tabs__item.is-active) {
     background: url(@/assets/images/checked.png);
     background-size: 100% 100%;
+  }
+  .out-side {
+    width: 100%;
+    height: calc(100% - 48px);
+    display: flex;
+    align-items: center;
   }
 }
 </style>
