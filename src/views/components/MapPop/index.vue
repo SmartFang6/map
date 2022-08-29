@@ -93,10 +93,10 @@
         </ul>
       </div>
       <!-- 详情入口 -->
-      <!-- <div class="footer" @click="onJupmDetail">
+      <div class="footer" @click="onJupmDetail">
         <img src="@/assets/images/detail-icon.png" alt="" class="footer-img" />
         <span class="footer-text">查看详情</span>
-      </div> -->
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -104,6 +104,7 @@
 <script setup>
 import { ref } from "vue";
 import noImg from "@/assets/images/no-img.png";
+import store from "@/store";
 let dialogVisible = ref(false);
 let info = ref({});
 
@@ -118,9 +119,26 @@ function getTag(val) {
 }
 
 // 跳转后台详情
-// function onJupmDetail() {
-//   console.log("跳转后台详情");
-// }
+function onJupmDetail() {
+  console.log("跳转后台详情", info.value);
+  const ticket = store?.state?.userInfo?.userId || "";
+  const pathObj = {
+    prePath: "/workbench/eventCenter/accept/list",
+    path: "/workbench/eventCenter/showEvent",
+    query: {
+      id: info.value.id,
+      eventId: info.value.eventId,
+    },
+  };
+  const JUMP_URL =
+    "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+    ticket +
+    "&params=" +
+    JSON.stringify(pathObj);
+
+  window.open(JUMP_URL);
+  console.log("详情跳转》》》", JUMP_URL);
+}
 
 // 打开弹窗
 function open(val) {

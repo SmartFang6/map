@@ -136,13 +136,13 @@
         <el-table-column label="发生时间" prop="occurTime" />
         <el-table-column label="上报人员" prop="reportUser" />
         <el-table-column label="状态" prop="eventStatusName" />
-        <!-- <el-table-column label="操作">
+        <el-table-column label="操作">
           <template #default="{ row }">
             <el-button link type="primary" @click="onCheck(row)"
               >查看</el-button
             >
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
       <div class="pagesize">
         <el-pagination
@@ -331,18 +331,25 @@ function onRest() {
   getData();
 }
 // 查看详情
-// function onCheck(row) {
-//   const ticket = store?.state?.userInfo?.userId || "";
-//   const customPath = `workbench/eventCenter/showEvent?id=${row.id}&eventId=${row.eventId}`;
-//   const JUMP_URL =
-//     "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
-//     ticket +
-//     "&customPath=" +
-//     customPath;
+function onCheck(row) {
+  const ticket = store?.state?.userInfo?.userId || "";
+  const pathObj = {
+    prePath: "/workbench/eventCenter/accept/list",
+    path: "/workbench/eventCenter/showEvent",
+    query: {
+      id: row.id,
+      eventId: row.eventId,
+    },
+  };
+  const JUMP_URL =
+    "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+    ticket +
+    "&params=" +
+    JSON.stringify(pathObj);
 
-//   window.open(JUMP_URL);
-//   console.log(row, JUMP_URL);
-// }
+  window.open(JUMP_URL);
+  console.log("详情跳转》》》", JUMP_URL);
+}
 
 defineExpose({});
 </script>
