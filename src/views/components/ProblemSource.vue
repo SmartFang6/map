@@ -292,6 +292,7 @@ function getPie3D(pieData, internalDiameterRatio) {
       },
     },
     legend: {
+      type: "scroll",
       orient: "vertical",
       right: 50,
       top: "center",
@@ -304,6 +305,11 @@ function getPie3D(pieData, internalDiameterRatio) {
         color: "#fff",
         rich: legendItemRich,
       },
+      pageTextStyle: {
+        color: "#fff",
+      },
+      pageIconInactiveColor: "#fff",
+      pageIconColor: "#ccc",
     },
     xAxis3D: {
       min: -1,
