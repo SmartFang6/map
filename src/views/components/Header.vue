@@ -7,7 +7,7 @@
 
 <template>
   <div class="layout-header">
-    <div class="title">{{ currentAdcd }}水域监管驾驶舱</div>
+    <div class="title">{{ currentAdcd }}水域监管一件事</div>
     <div class="entry-btn" @click="onJump" />
   </div>
 </template>
