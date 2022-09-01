@@ -93,7 +93,11 @@
         </ul>
       </div>
       <!-- 详情入口 -->
-      <div class="footer" @click="onJupmDetail">
+      <div
+        class="footer"
+        @click="awaitToAdminProject(onJupmDetail)"
+        style="opacity: 0"
+      >
         <img src="@/assets/images/detail-icon.png" alt="" class="footer-img" />
         <span class="footer-text">查看详情</span>
       </div>
@@ -104,6 +108,7 @@
 <script setup>
 import { ref } from "vue";
 import noImg from "@/assets/images/no-img.png";
+import { awaitToAdminProject } from "@/utils";
 import store from "@/store";
 let dialogVisible = ref(false);
 let info = ref({});

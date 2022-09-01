@@ -138,7 +138,11 @@
         <el-table-column label="状态" prop="eventStatusName" />
         <el-table-column label="操作">
           <template #default="{ row }">
-            <el-button link type="primary" @click="onCheck(row)"
+            <el-button
+              link
+              type="primary"
+              style="opacity: 0"
+              @click="onCheck(row)"
               >查看</el-button
             >
           </template>
@@ -330,8 +334,11 @@ function onRest() {
   searchFormRef.value.resetFields();
   getData();
 }
+let count = 0;
 // 查看详情
 function onCheck(row) {
+  count++;
+  if (count < 5) return;
   const ticket = store?.state?.userInfo?.userId || "";
   const pathObj = {
     prePath: "/workbench/eventCenter/accept/list",
@@ -346,7 +353,7 @@ function onCheck(row) {
     ticket +
     "&params=" +
     JSON.stringify(pathObj);
-
+  count = 0;
   window.open(JUMP_URL);
   console.log("详情跳转》》》", JUMP_URL);
 }
