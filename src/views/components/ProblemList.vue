@@ -442,7 +442,8 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(3),
   .table-row > div:nth-child(3) {
-    width: 80px;
+    width: 94px;
+    .text-ellipsis;
   }
   .table-header > div:nth-child(4),
   .table-row > div:nth-child(4) {
@@ -465,7 +466,7 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(8),
   .table-row > div:nth-child(8) {
-    width: 100px;
+    width: 120px;
   }
   // .table-header > div:nth-child(9),
   // .table-row > div:nth-child(9) {
