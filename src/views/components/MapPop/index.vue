@@ -107,6 +107,8 @@ import noImg from "@/assets/images/no-img.png";
 // import { awaitToAdminProject } from "@/utils";
 import store from "@/store";
 import { ElMessage } from "element-plus";
+import { getMD5_sign } from "@/utils/index";
+
 let dialogVisible = ref(false);
 let info = ref({});
 
@@ -134,8 +136,12 @@ function onJupmDetail() {
       },
     };
     const JUMP_URL =
-      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
       ticket +
+      "&sign=" +
+      getMD5_sign() +
+      "&ticket=" +
+      store?.state?.ticket +
       "&params=" +
       JSON.stringify(pathObj);
 

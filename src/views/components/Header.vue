@@ -16,6 +16,7 @@
 import store from "@/store";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
+import { getMD5_sign } from "@/utils/index";
 
 let currentAdcd = ref("");
 currentAdcd.value = store.state.adcdName || "";
@@ -23,9 +24,15 @@ currentAdcd.value = store.state.adcdName || "";
 function onJump() {
   if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
     const JUMP_URL =
-      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection" +
+        "&sign=" +
+        getMD5_sign() +
+        "&ticket=" +
+        store?.state?.ticket +
+        "&userId=" +
         store?.state?.userInfo?.userId || "";
-    console.log(JUMP_URL, "JUMP_URL");
+
+    console.log(JUMP_URL, "JUMP_URL", getMD5_sign());
     window.open(JUMP_URL);
   } else {
     ElMessage({

@@ -173,6 +173,7 @@ import {
 import RchSelect from "@/components/RchSelect";
 import moment from "moment";
 import { ElMessage } from "element-plus";
+import { getMD5_sign } from "@/utils/index";
 
 // 查询数据 ---start
 const ADMIN_DIV_CODE = store?.state?.userInfo?.adminDivCode || ""; // 用户所处行政编码
@@ -344,8 +345,12 @@ function onCheck(row) {
       },
     };
     const JUMP_URL =
-      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
+      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
       ticket +
+      "&sign=" +
+      getMD5_sign() +
+      "&ticket=" +
+      store?.state?.ticket +
       "&params=" +
       JSON.stringify(pathObj);
     window.open(JUMP_URL);

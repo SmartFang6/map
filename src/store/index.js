@@ -16,6 +16,7 @@ export default createStore({
     token: null,
     userInfo: {},
     adcdName: "",
+    ticket: "",
   },
   getters: {},
   mutations: {
@@ -34,6 +35,9 @@ export default createStore({
     },
     UPDATE_ADCD_NAME(state, payload) {
       state.adcdName = payload;
+    },
+    UPDATE_ADCD_TICKET(state, payload) {
+      state.ticket = payload;
     },
   },
   actions: {},

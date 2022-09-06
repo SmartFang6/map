@@ -13,6 +13,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import axios from "axios";
 import { ticketMap } from "./config.js";
+import { ElMessage } from "element-plus";
 const loading = ref(false);
 onBeforeMount(() => {
   getUserInformation();
@@ -27,17 +28,30 @@ const getUserInformation = () => {
   // 根据 ticket 匹配行政区域名称（暂时处理）
   const currentAdcd = ticketMap.filter((item) => item.ticket === ticket);
   console.log("currentAdcd----", currentAdcd);
+  store.commit("UPDATE_ADCD_TICKET", ticket || "");
   store.commit("UPDATE_ADCD_NAME", currentAdcd?.[0]?.name || "");
   axios
     .get(`/userApi/user/sso`, {
       params: route.query,
     })
     .then((res) => {
-      let data = res.data.message;
-      store.commit("UPDATE_TOKEN", data.token);
-      store.commit("UPDATE_USER_INFO", data);
-      router.push("/");
-      loading.value = false;
+      console.log(res, "res");
+      if (res.data.status === 0) {
+        let data = res.data.message;
+        store.commit("UPDATE_TOKEN", data.token);
+        store.commit("UPDATE_USER_INFO", data);
+        router.push("/");
+        loading.value = false;
+      } else {
+        ElMessage({
+          message: res.data.errmsg || "系统异常",
+          type: "error",
+          duration: 2 * 1000,
+        });
+        loading.value = false;
+
+        router.push("/401");
+      }
     });
 };
 </script>
