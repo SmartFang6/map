@@ -7,33 +7,25 @@ export const NoticeEvt = {
   NOTICE_HOME: "noticeHome",
 };
 
-export const adcdMap = {
-  1: "苍南县",
-  2: "吴兴区",
-  3: "定海区",
-  4: "建德市",
-  5: "义乌市",
-};
-
 export const ticketMap = [
   {
     name: "苍南县",
-    ticket: "GE_78f38b7bd60d4536b512bfbe5afebd76",
+    ticket: "52AC28D30148995B8F34B0C0209CD63B",
   },
   {
     name: "吴兴区",
-    ticket: "GE_dea3b697cbcb4ee7a5c359b7d3c5c29f",
+    ticket: "5506EE3FF57CB116438CB87D74A2D8AE",
   },
   {
     name: "定海区",
-    ticket: "GE_e91e9faa0b414ff6a77e34a1466bb6cf",
+    ticket: "7026F336D8F42AAE1887156908030CB7",
   },
   {
     name: "建德市",
-    ticket: "bc4ab2b1f376486dab5d17e5febacd3b",
+    ticket: "FC37BAB8805D85AF2576563A20F66658",
   },
   {
     name: "义乌市",
-    ticket: "GE_9e15a8269f0948d1b2ec92acfeca63fa",
+    ticket: "5719416B1AF12B2653A222FAF5792252",
   },
 ];
