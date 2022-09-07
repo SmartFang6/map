@@ -16,7 +16,7 @@
         </div>
         <div class="title">
           <p>问题清单</p>
-          <i class="icon-zoom">111</i>
+          <i class="icon-zoom"></i>
         </div>
         <div class="custom-select-wrapper">
           <!--
@@ -309,10 +309,13 @@ body .problem-dialog {
         top;
       margin: 0 auto;
       .title {
-        color: #fff;
-        font-size: 24px;
+        display: flex;
+        align-items: center;
         width: 322px;
+        font-size: 24px;
+        padding-left: 117px;
         font-family: YOUSHEBIAOTIHEI;
+        color: #fff;
       }
       .custom-select-wrapper,
       .operator-wrapper {
@@ -320,7 +323,7 @@ body .problem-dialog {
       }
       .custom-select-wrapper {
         display: flex;
-        justify-content: flex-end;
+        justify-content: flex-start;
         padding-right: 25px;
         box-sizing: border-box;
       }
@@ -348,6 +351,14 @@ body .problem-dialog {
           font-family: YOUSHEBIAOTIHEI;
           padding-left: 11px;
         }
+      }
+      .icon-zoom {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-left: 47px;
+        background: url(@/assets/images/icon-zoom.png) no-repeat;
+        background-size: 100% 100%;
       }
     }
   }

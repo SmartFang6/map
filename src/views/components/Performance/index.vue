@@ -28,8 +28,8 @@
       <!--#region 标题尾部功能区-->
       <template #more>
         <div class="tools">
-          <i class="icon-square">111</i>
-          <i class="icon-zoom">111</i>
+          <i class="icon-square"></i>
+          <i class="icon-zoom"></i>
         </div>
       </template>
       <!--#endregion-->
@@ -194,6 +194,7 @@ watch(
   }
 
   :deep(.tools) {
+    display: flex;
     position: absolute;
     right: 0;
     padding-right: 48px;
@@ -205,6 +206,20 @@ watch(
 
     i[class^="icon-"]:first-child {
       margin-left: 0;
+    }
+
+    .icon-square {
+      width: 18px;
+      height: 18px;
+      background: url(@/assets/images/icon-square.png) no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .icon-zoom {
+      width: 16px;
+      height: 16px;
+      background: url(@/assets/images/icon-zoom.png) no-repeat;
+      background-size: 100% 100%;
     }
   }
 }
