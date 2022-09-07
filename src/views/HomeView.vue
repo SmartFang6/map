@@ -29,7 +29,9 @@
     </template>
     <template #right>
       <!-- 风险管控-->
-      <RiskControl />
+      <!-- <RiskControl /> -->
+      <!-- 趋势分析-->
+      <TrendAnalysis />
       <!-- 处置绩效 -->
       <Performance />
       <!-- 高发问题排名-->
@@ -49,7 +51,8 @@ import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
 //import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
-import RiskControl from "./components/RiskControl.vue";
+// import RiskControl from "./components/RiskControl.vue";
+import TrendAnalysis from "./components/TrendAnalysis.vue";
 import Performance from "./components/Performance/index.vue";
 import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";

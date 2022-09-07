@@ -10,8 +10,9 @@
     <div class="problem-list-header">
       <div class="shake-hands">
         <div class="operator-wrapper">
-          <div class="operator" @click="onShowMore">
-            <span>全部</span>
+          <div class="operator problem-button-all" @click="onShowMore">
+            <span class="problem-button-text">全部</span>
+            <i class="icon-arrow-down"></i>
           </div>
         </div>
         <div class="title">
@@ -91,14 +92,27 @@
             >
               <div>{{ row.eventTypeName }}</div>
             </el-tooltip>
-            <div>{{ row.eventGradeName }}</div>
+            <div
+              :style="
+                'color: ' + (row.eventGrade === '3' ? '#00dcf0' : '#ff8300')
+              "
+            >
+              {{ row.eventGradeName }}
+            </div>
             <div>{{ row.occurTime }}</div>
             <el-tooltip
               :content="row.status"
               effect="dark"
               placement="top-start"
             >
-              <div class="one-line">{{ row.status }}</div>
+              <div
+                class="one-line"
+                :style="
+                  'color: ' + (row.eventStatus === '1' ? '#ffc025' : '#00dcf0')
+                "
+              >
+                {{ row.status }}
+              </div>
             </el-tooltip>
           </div>
         </vue-seamless-scroll>
@@ -221,9 +235,11 @@ const getEventProblemList = () => {
       adnm: feild.adnm,
       rchnm: feild.rchnm,
       eventTypeName: feild.eventTypeName,
+      eventGrade: feild.eventGrade,
       eventGradeName: feild.eventGradeName,
       occurTime: moment(feild.occurTime).format("YYYY-MM-DD"),
       status: feild.eventStatusName,
+      eventStatus: feild.eventStatus,
     });
   });
 };
@@ -319,7 +335,10 @@ body .problem-dialog {
       }
       .custom-select-wrapper,
       .operator-wrapper {
+        display: flex;
         width: 149px;
+        margin-top: 6px;
+        justify-content: flex-end;
       }
       .custom-select-wrapper {
         display: flex;
@@ -331,7 +350,7 @@ body .problem-dialog {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin-left: 20px;
+        margin-left: 3px;
         cursor: pointer;
         & > i {
           width: 12px;
@@ -351,6 +370,21 @@ body .problem-dialog {
           font-family: YOUSHEBIAOTIHEI;
           padding-left: 11px;
         }
+        & > span.problem-button-text {
+          font-size: 14px;
+          font-family: MicrosoftYaHei;
+          color: #c4f0ff;
+        }
+      }
+      .problem-button-all {
+        width: 81px;
+        height: 24px;
+        margin-right: 8px;
+        background: url(@/assets/images/problem-list-btn-all.png) no-repeat;
+        background-size: 100% 100%;
+      }
+      .icon-arrow-down {
+        margin: 0 9px 0 11px;
       }
       .icon-zoom {
         display: inline-block;
@@ -359,6 +393,7 @@ body .problem-dialog {
         margin-left: 47px;
         background: url(@/assets/images/icon-zoom.png) no-repeat;
         background-size: 100% 100%;
+        cursor: pointer;
       }
     }
   }
@@ -418,17 +453,20 @@ body .problem-dialog {
   width: 785px;
   margin: 0 auto;
   .table-header {
-    color: #fff;
-    font-size: 14px;
     display: flex;
     align-items: center;
-    height: 30px;
     width: 100%;
+    height: 32px;
+    font-size: 14px;
+    font-family: MicrosoftYaHei;
+    color: #ffffff;
+    border-bottom: 1px solid #01fffc;
   }
   .table-body {
-    font-size: 14px;
-    color: #8ac0e0;
     height: 150px;
+    font-size: 14px;
+    font-family: MicrosoftYaHei;
+    color: #ffffff;
     overflow: hidden;
   }
   .table-row {
@@ -448,12 +486,15 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(1),
   .table-row > div:nth-child(1) {
-    width: 60px;
+    width: 56px;
   }
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {
-    width: 120px;
+    width: 100px;
     .text-ellipsis;
+  }
+  .table-row > div:nth-child(2) {
+    color: #00dcf0;
   }
   .table-header > div:nth-child(3),
   .table-row > div:nth-child(3) {
@@ -465,23 +506,27 @@ body .problem-dialog {
     width: 90px;
     .text-ellipsis;
   }
+  .table-row > div:nth-child(4) {
+    color: #00dcf0;
+  }
   .table-header > div:nth-child(5),
   .table-row > div:nth-child(5) {
-    width: 200px;
+    width: 170px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(6),
   .table-row > div:nth-child(6) {
-    width: 70px;
+    width: 68px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(7),
   .table-row > div:nth-child(7) {
-    width: 100px;
+    width: 88px;
   }
   .table-header > div:nth-child(8),
   .table-row > div:nth-child(8) {
-    width: 120px;
+    width: 124px;
+    .text-ellipsis;
   }
   // .table-header > div:nth-child(9),
   // .table-row > div:nth-child(9) {

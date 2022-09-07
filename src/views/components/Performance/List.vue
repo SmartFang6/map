@@ -12,7 +12,7 @@
     <template v-if="type === 1">
       <div class="table-header">
         <div>排名</div>
-        <div>部门/乡镇名称</div>
+        <div>名称</div>
         <!-- <div>部门/乡镇名称</div> -->
         <!-- <div>行政区划</div> -->
         <div>问题数</div>
@@ -43,7 +43,7 @@
     <template v-if="type === 2">
       <div class="table-header">
         <div>排名</div>
-        <div>部门/乡镇名称</div>
+        <div>名称</div>
         <!-- <div>部门/乡镇名称</div> -->
         <!-- <div>行政区划</div> -->
         <div>分数</div>
@@ -149,6 +149,7 @@ watch(
   font-family: MicrosoftYaHei;
   color: #c4f0ff;
   padding: 0 20px;
+  margin-left: 8px;
   overflow: hidden;
   .table-header {
     height: 46px;
