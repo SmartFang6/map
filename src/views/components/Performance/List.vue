@@ -8,39 +8,63 @@
 
 <template>
   <div class="performance-table">
-    <div class="table-header">
-      <div>排名</div>
-      <div>名称</div>
-      <!-- <div>部门/乡镇名称</div> -->
-      <!-- <div>行政区划</div> -->
-      <div v-if="type === 1">问题数</div>
-      <div v-if="type === 1">销号率</div>
-      <div v-if="type === 2">分数</div>
-    </div>
-    <div class="table-body">
-      <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
-        <div
-          v-for="item in dataList"
-          :key="item.index"
-          :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
-        >
-          <div>{{ item.index }}</div>
-          <el-tooltip :content="item.org" effect="dark" placement="top-start">
-            <div>{{ item.org }}</div>
-          </el-tooltip>
-          <!-- <el-tooltip
-            :content="item.content"
-            effect="dark"
-            placement="top-start"
+    <!--#region '销号率'的表格内容-->
+    <template v-if="type === 1">
+      <div class="table-header">
+        <div>排名</div>
+        <div>部门/乡镇名称</div>
+        <!-- <div>部门/乡镇名称</div> -->
+        <!-- <div>行政区划</div> -->
+        <div>问题数</div>
+        <div>处理数</div>
+        <div>消号率</div>
+      </div>
+      <div class="table-body">
+        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
+          <div
+            v-for="item in dataList"
+            :key="item.index"
+            :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
           >
-            <div>{{ item.content }}</div>
-          </el-tooltip> -->
-          <div v-if="type === 1">{{ item.count }}</div>
-          <div v-if="type === 1">{{ item.rate }}</div>
-          <div v-if="type === 2">{{ item.point }}</div>
-        </div>
-      </vue-seamless-scroll>
-    </div>
+            <div>{{ item.index }}</div>
+            <el-tooltip :content="item.org" effect="dark" placement="top-start">
+              <div>{{ item.org }}</div>
+            </el-tooltip>
+            <div>{{ item.count }}</div>
+            <div>{{ item.count }}</div>
+            <div>{{ item.rate }}</div>
+          </div>
+        </vue-seamless-scroll>
+      </div>
+    </template>
+    <!--#endregion-->
+
+    <!--#region '考核'的表格内容-->
+    <template v-if="type === 2">
+      <div class="table-header">
+        <div>排名</div>
+        <div>部门/乡镇名称</div>
+        <!-- <div>部门/乡镇名称</div> -->
+        <!-- <div>行政区划</div> -->
+        <div>分数</div>
+      </div>
+      <div class="table-body">
+        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
+          <div
+            v-for="item in dataList"
+            :key="item.index"
+            :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
+          >
+            <div>{{ item.index }}</div>
+            <el-tooltip :content="item.org" effect="dark" placement="top-start">
+              <div>{{ item.org }}</div>
+            </el-tooltip>
+            <div>{{ item.point }}</div>
+          </div>
+        </vue-seamless-scroll>
+      </div>
+    </template>
+    <!--#endregion-->
   </div>
 </template>
 
@@ -68,7 +92,6 @@ watch(
   () => [props.dataModel, props.type],
   () => {
     nextTick(() => {
-      console.log(props.dataModel, props.type);
       if (!props.dataModel || props.dataModel.length <= 0) {
         dataList.value = [];
         return;
@@ -118,73 +141,85 @@ watch(
 <style lang="less" scoped>
 .performance-table {
   width: 488px;
-  height: 229px;
-  background-image: url("@/assets/images/performance-list.png");
-  background-size: 100%;
+  height: 215px;
+  background-color: rgba(1, 2, 5, 0.4);
+  box-shadow: inset 0px 2px 1px 0px #002480;
   box-sizing: border-box;
-  color: #fff;
   font-size: 16px;
-  padding: 0 10px 9px;
+  font-family: MicrosoftYaHei;
+  color: #c4f0ff;
+  padding: 0 20px;
   overflow: hidden;
   .table-header {
-    height: 49px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: space-around;
   }
   .table-body {
-    height: 160px;
+    height: 168px;
     width: 100%;
     overflow: hidden;
   }
   .table-row {
     display: flex;
     height: 32px;
+    margin-top: 2px;
     align-items: center;
     justify-content: space-around;
     &.stripe {
-      background-color: rgba(11, 32, 59, 0.8);
+      background-color: rgba(3, 55, 138, 0.2);
     }
+  }
+  .table-row:first-child {
+    margin: 0;
   }
   .table-header > div,
   .table-row > div {
-    text-align: center;
+    text-align: left;
     padding-left: 10px;
   }
   .table-header > div:nth-child(1),
   .table-row > div:nth-child(1) {
-    width: 80px;
+    width: 56px;
     text-align: center;
     padding-left: 0px;
   }
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {
-    width: 180px;
+    width: 148px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     display: inline-block;
+  }
+  .table-row > div:nth-child(2) {
+    color: #ffffff;
   }
   .table-header > div:nth-child(3),
   .table-row > div:nth-child(3) {
-    width: 100px;
+    width: 86px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     display: inline-block;
   }
+  .table-row > div:nth-child(3) {
+    color: #00dcf0;
+  }
   .table-header > div:nth-child(4),
   .table-row > div:nth-child(4) {
-    width: 100px;
+    width: 86px;
   }
   .table-row > div:nth-child(4) {
-    color: #00f5ff;
+    color: #00dcf0;
   }
   .table-header > div:nth-child(5),
   .table-row > div:nth-child(5) {
+    width: 86px;
   }
   .table-row > div:nth-child(5) {
-    color: #32da85;
+    color: #00dcf0;
   }
 }
 </style>

@@ -230,7 +230,7 @@ export default {
   width: 85%;
   height: 85%;
   display: flex;
-  justify-content: start !important;
+  justify-content: flex-start !important;
   flex-direction: column;
   align-items: center;
   position: relative;

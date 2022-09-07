@@ -9,6 +9,15 @@
   <div class="problem-list">
     <div class="problem-list-header">
       <div class="shake-hands">
+        <div class="operator-wrapper">
+          <div class="operator" @click="onShowMore">
+            <span>全部</span>
+          </div>
+        </div>
+        <div class="title">
+          <p>问题清单</p>
+          <i class="icon-zoom">111</i>
+        </div>
         <div class="custom-select-wrapper">
           <!--
           <el-select
@@ -20,12 +29,6 @@
           <div class="operator" @click="onPanelTrigger">
             <i :class="{ icon: true, 'is-reverse': collapsed }" />
             <span>{{ collapsed ? "展开" : "收起" }}</span>
-          </div>
-        </div>
-        <div class="title">问题清单</div>
-        <div class="operator-wrapper">
-          <div class="operator" @click="onShowMore">
-            <span>更多</span>
           </div>
         </div>
         <!-- <div class="title">问题清单</div>
@@ -324,6 +327,7 @@ body .problem-dialog {
       .operator {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
         margin-left: 20px;
         cursor: pointer;
         & > i {

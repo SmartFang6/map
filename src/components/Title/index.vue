@@ -1,7 +1,8 @@
 <template>
   <div class="Title">
     <span class="Title-text">{{ props.title }}</span>
-    <slot />
+    <slot name="tabs" />
+    <slot name="more" />
   </div>
 </template>
 
@@ -18,8 +19,9 @@ const props = defineProps({
 .Title {
   display: flex;
   align-items: center;
+  position: relative;
   width: 100%;
-  height: 48px;
+  height: 53px;
   box-sizing: border-box;
   padding: 0 12px;
   background: url(@/assets/images/title-bg.png);

@@ -9,14 +9,16 @@
 <template>
   <div class="high-list-wrapper">
     <Title title="事件高发排名">
-      <el-tabs
-        v-model="tabActive"
-        type="card"
-        @tab-click="onHandleTypeOrAreaClick"
-      >
-        <el-tab-pane class="tab-item" label="类型" name="type"></el-tab-pane>
-        <el-tab-pane label="地区" name="area"></el-tab-pane>
-      </el-tabs>
+      <template #tabs>
+        <el-tabs
+          v-model="tabActive"
+          type="card"
+          @tab-click="onHandleTypeOrAreaClick"
+        >
+          <el-tab-pane class="tab-item" label="类型" name="type"></el-tab-pane>
+          <el-tab-pane label="地区" name="area"></el-tab-pane>
+        </el-tabs>
+      </template>
     </Title>
     <div class="high-list">
       <div class="high-list-container">

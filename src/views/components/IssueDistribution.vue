@@ -1,10 +1,12 @@
 <template>
   <div class="IssueDistribution">
     <Title title="问题派发">
-      <el-tabs v-model="activeName" type="card">
-        <el-tab-pane class="tab-item" label="定性" name="dx"></el-tab-pane>
-        <el-tab-pane label="定责" name="dz"></el-tab-pane>
-      </el-tabs>
+      <template #tabs>
+        <el-tabs v-model="activeName" type="card">
+          <el-tab-pane class="tab-item" label="定性" name="dx"></el-tab-pane>
+          <el-tab-pane label="定责" name="dz"></el-tab-pane>
+        </el-tabs>
+      </template>
     </Title>
 
     <div class="out-side">

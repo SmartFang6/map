@@ -7,81 +7,47 @@
 
 <template>
   <div class="performance">
-    <Title title="处置绩效">
-      <el-tabs
-        v-model="tabActive"
-        type="card"
-        @tab-click="onHandleTownOrDeptClick"
-      >
-        <el-tab-pane class="tab-item" label="乡镇" name="village"></el-tab-pane>
-        <el-tab-pane label="部门" name="department"></el-tab-pane>
-      </el-tabs>
+    <Title title="处理绩效">
+      <!--#region 标题导航栏-->
+      <template #tabs>
+        <el-tabs
+          v-model="tabActive"
+          type="card"
+          @tab-click="onHandleTownOrDeptClick"
+        >
+          <el-tab-pane
+            class="tab-item"
+            label="乡镇"
+            name="village"
+          ></el-tab-pane>
+          <el-tab-pane label="部门" name="department"></el-tab-pane>
+        </el-tabs>
+      </template>
+      <!--#endregion-->
+
+      <!--#region 标题尾部功能区-->
+      <template #more>
+        <div class="tools">
+          <i class="icon-square">111</i>
+          <i class="icon-zoom">111</i>
+        </div>
+      </template>
+      <!--#endregion-->
     </Title>
-    <!--#region 奖牌栏-->
-    <div class="medal-bar">
-      <!--#region 第一名-->
-      <div class="first">
-        <img src="@/assets/images/performance-first.png" />
-        <div class="first-info">
-          <div class="name">{{ champion?.eventResponsibleUnitCodeName }}</div>
-          <div
-            class="value"
-            v-if="typeActive === 1 && champion?.completedRate >= 0"
-          >
-            <span>
-              {{ champion?.completedRate ? champion?.completedRate * 100 : 0 }}
-            </span>
-            <span>%</span>
-          </div>
-        </div>
+    <div class="navi-bar">
+      <div
+        v-for="typeItem in typeList"
+        :key="typeItem.value"
+        :class="{ tab: true, active: typeActive === typeItem.value }"
+        @click="typeActive = typeItem.value"
+      >
+        {{ typeItem.label }}
       </div>
-      <!--#endregion-->
-
-      <!--#region 其他-->
-      <div class="other">
-        <div class="tabs">
-          <div
-            v-for="type in typeList"
-            :key="type.value"
-            :class="{ tab: true, active: typeActive === type.value }"
-            @click="typeActive = type.value"
-          >
-            {{ type.label }}
-          </div>
-        </div>
-        <!--#region 列表-->
-        <div class="other-list">
-          <div
-            class="other-item"
-            v-for="(rankField, index) in performanceList"
-            :key="index"
-          >
-            <div class="no">
-              <span>No.</span><span>{{ index + 2 }}</span>
-            </div>
-            <div class="name">
-              {{ rankField?.eventResponsibleUnitCodeName }}
-            </div>
-            <div
-              class="score"
-              v-if="typeActive === 1 && rankField?.completedRate >= 0"
-            >
-              <span>
-                {{
-                  rankField?.completedRate ? rankField?.completedRate * 100 : 0
-                }}
-              </span>
-              <span>%</span>
-            </div>
-          </div>
-        </div>
-        <!--#endregion-->
-      </div>
-      <!--#endregion-->
     </div>
-    <!--#endregion-->
 
+    <!--#region 列表区-->
     <List :dataModel="rankingList" :type="typeActive" />
+    <!--#endregion-->
   </div>
 </template>
 
@@ -91,60 +57,27 @@ import List from "./List.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
+// 乡镇/部门的选择标签
 let tabActive = ref("village");
+// 销号率/考核的选择标签
 let typeActive = ref(1);
+// 表格分类的列表
 const typeList = reactive([
   {
-    label: "销号率排名",
+    label: "销号率",
     value: 1,
   },
   {
-    label: "考核排名",
+    label: "考核",
     value: 2,
   },
 ]);
 
-// 监听绩效的排名类型切换
-watch(
-  () => typeActive.value,
-  (Actived) => {
-    rankingList.value = toggleTownOrDeptList(tabActive.value, Actived);
-    setExcellentList(rankingList.value);
-  },
-  {
-    immediate: false,
-  }
-);
-
 // 处置绩效组件数据源
 let dataModel = ref([]);
 
-// 处置绩效的排名冠军数据
-let champion = ref(null);
-
 // 绩效排名列表
 let rankingList = ref([]);
-
-// 绩效排名的表格数据
-let performanceList = ref([]);
-
-// 设置处置绩效的前三名数据
-const setExcellentList = (rankSource) => {
-  if (!rankSource || rankSource.length <= 0) {
-    champion.value = {};
-    performanceList.value = [{}, {}];
-  } else if (rankSource.length === 1) {
-    champion.value = rankSource[0];
-    performanceList.value = [{}, {}];
-  } else if (rankSource.length === 2) {
-    champion.value = rankSource[0];
-    performanceList.value = rankSource.slice(1, 2);
-    performanceList.value.push({});
-  } else {
-    champion.value = rankSource[0];
-    performanceList.value = rankSource.slice(1, 3);
-  }
-};
 
 // 获取处置绩效的数据
 const getEventPointRankModel = async (queryParam) => {
@@ -170,7 +103,6 @@ const getEventPointRankModel = async (queryParam) => {
  */
 const onHandleTownOrDeptClick = (context) => {
   rankingList.value = toggleTownOrDeptList(context.paneName, typeActive.value);
-  setExcellentList(rankingList.value);
 };
 
 /**
@@ -193,10 +125,20 @@ const toggleTownOrDeptList = (local, stamp) => {
         ? model?.departmentRank?.completedRankList
         : model?.departmentRank?.pointRankList;
   }
-  console.log("target", target);
   // 获取百分比的总数
   return target;
 };
+
+// 监听绩效的排名类型切换
+watch(
+  () => typeActive.value,
+  (Actived) => {
+    rankingList.value = toggleTownOrDeptList(tabActive.value, Actived);
+  },
+  {
+    immediate: false,
+  }
+);
 
 // 获取注入的时间区间
 let dateRange = inject("dateRange");
@@ -205,13 +147,11 @@ let dateRange = inject("dateRange");
 watch(
   () => dateRange,
   async (dateRange) => {
-    console.log("dateRange", dateRange);
     // 先加载一次数据
     dataModel = await getEventPointRankModel({
       ...dateRange.value,
     });
     rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
-    setExcellentList(rankingList.value);
     console.log(dataModel);
   },
   {
@@ -231,6 +171,8 @@ watch(
   }
 
   :deep(.el-tabs--card > .el-tabs__header .el-tabs__item) {
+    font-size: 18px;
+    font-family: YOUSHEBIAOTIHEI;
     box-sizing: border-box;
     border: none;
     color: white;
@@ -248,6 +190,47 @@ watch(
   }
   :deep(.el-tabs--card > .el-tabs__header .el-tabs__item.is-active) {
     background: url(@/assets/images/checked.png);
+    background-size: 100% 100%;
+  }
+
+  :deep(.tools) {
+    position: absolute;
+    right: 0;
+    padding-right: 48px;
+
+    i[class^="icon-"] {
+      margin-left: 20px;
+      cursor: pointer;
+    }
+
+    i[class^="icon-"]:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.navi-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px 0 0;
+  letter-spacing: 1px;
+  // color: #c4f0ff;
+  color: #ffffff;
+  font-size: 18px;
+  font-family: YOUSHEBIAOTIHEI;
+  .tab {
+    width: auto;
+    height: 27px;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .tab.active {
+    width: 135px;
+    padding: 0;
+    background: url(@/assets/images/performance-tab-selected.png) no-repeat;
     background-size: 100% 100%;
   }
 }
