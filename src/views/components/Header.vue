@@ -8,7 +8,7 @@
 <template>
   <div class="layout-header">
     <div class="title">{{ currentAdcd }}水域监管一件事</div>
-    <div class="entry-btn" @click="onJump" />
+    <div class="entry-btn" @click="onJump">工作人员入口</div>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ function onJump() {
 <style lang="less" scoped>
 .layout-header {
   width: 100%;
-  height: 75px;
+  height: 70px;
   background: url(@/assets/images/layout-header.png);
   background-size: 100%;
   display: flex;
@@ -65,19 +65,20 @@ function onJump() {
   & > .entry-btn {
     position: absolute;
     right: 0;
-    top: 16px;
+    bottom: 0;
     color: #fff;
-    font-size: 24px;
+    font-size: 20px;
     font-family: YouSheBiaoTiHei;
-    font-size: 24px;
     background: url(@/assets/images/entry-btn.png);
-    width: 268px;
-    height: 37px;
+    background-size: contain;
+    width: 266px;
+    height: 47px;
+    padding-top: 18px;
+    padding-left: 100px;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 10px;
-    // cursor: pointer;
+    cursor: pointer;
   }
 }
 </style>

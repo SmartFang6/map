@@ -55,8 +55,8 @@ const bottomViewClose = computed(() => {
 </script>
 
 <style scoped lang="less">
-@topH: 80px;
-@sideW: 505px;
+@topH: 75px;
+@sideW: 507px;
 @bottomH: 256px;
 .cockpit {
   width: 100vw;

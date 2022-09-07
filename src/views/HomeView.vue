@@ -7,6 +7,7 @@
           @changeTime="mapRef?.changeTime"
           @changeLayerType="mapRef?.changeLayerType"
         /> -->
+        <CenterToolsBar />
         <MapLayer
           @changeTime="onChangeTime"
           @changeLayerType="onChangeLayerType"
@@ -46,7 +47,7 @@ import Header from "./components/Header";
 import { inject, provide, ref } from "vue";
 import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
-import ProblemSource from "./components/ProblemSource.vue";
+//import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
 import RiskControl from "./components/RiskControl.vue";
 import Performance from "./components/Performance/index.vue";
@@ -58,6 +59,7 @@ import Map from "@/views/OLMap/MainMap";
 import store from "@/store";
 import moment from "moment";
 import MapPop from "./components/MapPop/index.vue";
+import CenterToolsBar from "./components/CenterToolsBar.vue";
 import router from "@/router";
 const eventBus = inject("EventBus");
 
