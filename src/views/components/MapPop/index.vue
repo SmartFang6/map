@@ -93,11 +93,7 @@
         </ul>
       </div>
       <!-- 详情入口 -->
-      <div
-        class="footer"
-        @click="awaitToAdminProject(onJupmDetail)"
-        style="opacity: 0"
-      >
+      <div class="footer" @click="onJupmDetail">
         <img src="@/assets/images/detail-icon.png" alt="" class="footer-img" />
         <span class="footer-text">查看详情</span>
       </div>
@@ -108,8 +104,11 @@
 <script setup>
 import { ref } from "vue";
 import noImg from "@/assets/images/no-img.png";
-import { awaitToAdminProject } from "@/utils";
+// import { awaitToAdminProject } from "@/utils";
 import store from "@/store";
+import { ElMessage } from "element-plus";
+import { getMD5_sign } from "@/utils/index";
+
 let dialogVisible = ref(false);
 let info = ref({});
 
@@ -126,23 +125,34 @@ function getTag(val) {
 // 跳转后台详情
 function onJupmDetail() {
   console.log("跳转后台详情", info.value);
-  const ticket = store?.state?.userInfo?.userId || "";
-  const pathObj = {
-    prePath: "/workbench/eventCenter/accept/list",
-    path: "/workbench/eventCenter/showEvent",
-    query: {
-      id: info.value.id,
-      eventId: info.value.eventId,
-    },
-  };
-  const JUMP_URL =
-    "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
-    ticket +
-    "&params=" +
-    JSON.stringify(pathObj);
+  if (store?.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
+    const ticket = store?.state?.userInfo?.userId || "";
+    const pathObj = {
+      prePath: "/workbench/eventCenter/accept/list",
+      path: "/workbench/eventCenter/showEvent",
+      query: {
+        id: info.value.id,
+        eventId: info.value.eventId,
+      },
+    };
+    const JUMP_URL =
+      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
+      ticket +
+      "&sign=" +
+      getMD5_sign() +
+      "&ticket=" +
+      store?.state?.ticket +
+      "&params=" +
+      JSON.stringify(pathObj);
 
-  window.open(JUMP_URL);
-  console.log("详情跳转》》》", JUMP_URL);
+    window.open(JUMP_URL);
+    console.log("详情跳转》》》", JUMP_URL);
+  } else {
+    ElMessage({
+      message: "本功能暂未开放",
+      type: "warning",
+    });
+  }
 }
 
 // 打开弹窗

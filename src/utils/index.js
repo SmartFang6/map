@@ -11,3 +11,14 @@ function toAdminProjectFn() {
   };
 }
 export const awaitToAdminProject = toAdminProjectFn();
+import md5 from "md5";
+import dayjs from "dayjs";
+import store from "@/store";
+export const getMD5_sign = () => {
+  const date = new Date();
+  const dateStr = dayjs(date).format("YYYY-MM-DD").replaceAll("-", "");
+  const userId = store?.state?.userInfo?.userId || "";
+  const text = dateStr + userId;
+  const _res = md5(text).toLocaleUpperCase();
+  return _res;
+};

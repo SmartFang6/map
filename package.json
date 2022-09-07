@@ -13,6 +13,7 @@
     "echarts": "^5.1.2",
     "echarts-gl": "^2.0.9",
     "element-plus": "^2.2.13",
+    "md5": "^2.3.0",
     "moment": "^2.29.4",
     "ol": "^6.5.0",
     "postcss-px-to-viewport-8-plugin": "^1.1.5",

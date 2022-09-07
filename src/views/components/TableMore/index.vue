@@ -138,11 +138,7 @@
         <el-table-column label="状态" prop="eventStatusName" />
         <el-table-column label="操作">
           <template #default="{ row }">
-            <el-button
-              link
-              type="primary"
-              style="opacity: 0"
-              @click="onCheck(row)"
+            <el-button link type="primary" @click="onCheck(row)"
               >查看</el-button
             >
           </template>
@@ -176,6 +172,8 @@ import {
 } from "@/apis/home.js";
 import RchSelect from "@/components/RchSelect";
 import moment from "moment";
+import { ElMessage } from "element-plus";
+import { getMD5_sign } from "@/utils/index";
 
 // 查询数据 ---start
 const ADMIN_DIV_CODE = store?.state?.userInfo?.adminDivCode || ""; // 用户所处行政编码
@@ -334,28 +332,35 @@ function onRest() {
   searchFormRef.value.resetFields();
   getData();
 }
-let count = 0;
 // 查看详情
 function onCheck(row) {
-  count++;
-  if (count < 5) return;
-  const ticket = store?.state?.userInfo?.userId || "";
-  const pathObj = {
-    prePath: "/workbench/eventCenter/accept/list",
-    path: "/workbench/eventCenter/showEvent",
-    query: {
-      id: row.id,
-      eventId: row.eventId,
-    },
-  };
-  const JUMP_URL =
-    "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&ticket=" +
-    ticket +
-    "&params=" +
-    JSON.stringify(pathObj);
-  count = 0;
-  window.open(JUMP_URL);
-  console.log("详情跳转》》》", JUMP_URL);
+  if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
+    const ticket = store?.state?.userInfo?.userId || "";
+    const pathObj = {
+      prePath: "/workbench/eventCenter/accept/list",
+      path: "/workbench/eventCenter/showEvent",
+      query: {
+        id: row.id,
+        eventId: row.eventId,
+      },
+    };
+    const JUMP_URL =
+      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
+      ticket +
+      "&sign=" +
+      getMD5_sign() +
+      "&ticket=" +
+      store?.state?.ticket +
+      "&params=" +
+      JSON.stringify(pathObj);
+    window.open(JUMP_URL);
+    console.log("详情跳转》》》", JUMP_URL);
+  } else {
+    ElMessage({
+      message: "本功能暂未开放",
+      type: "warning",
+    });
+  }
 }
 
 defineExpose({});
