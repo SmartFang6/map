@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 
 // 事件
 const emits = defineEmits(["search"]);

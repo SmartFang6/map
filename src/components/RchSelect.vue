@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, watch, defineEmits } from "vue";
+import { ref, watch } from "vue";
 import { getListRlrcReachInfo } from "@/apis/home.js";
 
 const props = defineProps({
