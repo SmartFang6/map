@@ -14,6 +14,7 @@ import { useStore } from "vuex";
 import axios from "axios";
 import { ticketMap } from "./config.js";
 import { ElMessage } from "element-plus";
+import { getMD5_sign } from "@/utils";
 const loading = ref(false);
 onBeforeMount(() => {
   getUserInformation();
@@ -30,9 +31,20 @@ const getUserInformation = () => {
   console.log("currentAdcd----", currentAdcd);
   store.commit("UPDATE_ADCD_TICKET", ticket || "");
   store.commit("UPDATE_ADCD_NAME", currentAdcd?.[0]?.name || "");
+  // 处理sso参数
+  const _ENV = process.env.VUE_APP_ENV;
+  let _params = route.query;
+  if (_ENV === "dev") {
+    // 开发环境实时生成所需参数 sign ;生成规则 8位日期拼接userId用MD5加密后大写字符串
+    const _sign = getMD5_sign(route.query?.userId);
+    _params = {
+      ..._params,
+      sign: _sign,
+    };
+  }
   axios
     .get(`/userApi/user/sso`, {
-      params: route.query,
+      params: _params,
     })
     .then((res) => {
       console.log(res, "res");
