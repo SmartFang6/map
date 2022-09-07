@@ -10,6 +10,9 @@ module.exports = defineConfig({
         target: "http://192.168.2.238:8504",
         changeOrigin: true, // 是否改变域名
         ws: true,
+        pathRewrite: {
+          [proxyUrl]: "/api",
+        },
       },
       "/userApi": {
         target: "http://192.168.2.238:8501",
