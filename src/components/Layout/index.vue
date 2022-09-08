@@ -124,8 +124,7 @@ const bottomViewClose = computed(() => {
     right: 0;
     margin: 0 auto;
     // background: rgba(72, 108, 8, 0.71);
-    background: url(@/assets/images/layout-bottom-bg.png) no-repeat center
-      bottom;
+    // background: url(@/assets/images/layout-bottom-bg.png) no-repeat center bottom;
     .btn {
       width: 100px;
       height: 40px;

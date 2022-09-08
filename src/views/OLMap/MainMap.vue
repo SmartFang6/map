@@ -21,7 +21,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, orgHighLightLayer, pointLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
+import { basicTotalLayer, canalLayer, hillpondLayer, lakeLayer, orgHighLightLayer, otherwaterLayer, pointLayer, reservoirLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -36,6 +36,8 @@ import BasicTotalLayer from './layers/BasicTotalLayer'
 import { getCenter } from 'ol/extent'
 import DCWMSLayer from './layers/impl/DCWMSLayer'
 import store from "@/store";
+import * as LayerEnum from '@/utils/LayerEnum';
+import MainMapWMSLayer from './layers/impl/MainMapWMSLayer'
 
 export default {
   name: "FirstMap",
@@ -47,7 +49,7 @@ export default {
   data() {
     return {
       adcd: store?.state?.userInfo?.adminDivCode || "330182",
-      curLayer: 'pointLayer', // 当前图层，默认为统计图
+      curLayer: 'pointLayer', // LayerEnum.RIVER_LAYER, // 当前图层，默认为统计图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
@@ -98,7 +100,17 @@ export default {
         selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
         basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
-        lineManageLayer: new DCWMSLayer(riverManageLineLayer), // 河道管理范围线
+        lineManageLayer: new MainMapWMSLayer(riverManageLineLayer), // 河道管理范围线
+        [LayerEnum.RIVER_LAYER]: new MainMapWMSLayer(riverLayer), // 河道
+        [LayerEnum.RESERVOIR_LAYER]: new MainMapWMSLayer(reservoirLayer), // 水库
+        [LayerEnum.HILLPOND_LAYER]: new MainMapWMSLayer(hillpondLayer), // 山塘
+        [LayerEnum.LAKE_LAYER]: new MainMapWMSLayer(lakeLayer), // 湖泊
+        [LayerEnum.CANAL_LAYER]: new MainMapWMSLayer(canalLayer), // 人工水道
+        [LayerEnum.OTHERWATER_LAYER]: new MainMapWMSLayer(otherwaterLayer), // 其他水域
+        [LayerEnum.FINISHED_PROJ]: new DCLayer(), // 完工
+        [LayerEnum.BUILDING_PROJ]: new DCLayer(), // 在建
+        [LayerEnum.VIDEO_LAYER]: new DCLayer(), // 视频点
+        [LayerEnum.SECTION_LAYER]: new DCLayer(), // 水质断面
       };
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
@@ -117,8 +129,8 @@ export default {
           searchInfo: {}
         }))
       }
-      // 初始化加载点位图
-      this.layers.pointLayer.load(new LayerParams({
+      // 初始化加载河道
+      this.layers[this.curLayer].load(new LayerParams({
         vm: this,
         searchInfo: {
           adcd: this.adcd,
@@ -126,6 +138,15 @@ export default {
           endTime: this.endTime
         }
       }))
+      // 初始化加载点位图
+      // this.layers.pointLayer.load(new LayerParams({
+      //   vm: this,
+      //   searchInfo: {
+      //     adcd: this.adcd,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime
+      //   }
+      // }))
       // 初始化加载统计图
       // this.layers.basicTotalLayer.load(new LayerParams({
       //   vm: this,
@@ -137,9 +158,18 @@ export default {
       // }))
       this.layers.selectLayer.addLayer(this.map)
       // 监听地图缩放，加载管理范围线
-      // if (this.adcd === '330182') {
-        this.watchMapZoom()
-      // }
+      this.watchMapZoom()
+    },
+    // 切换图层
+    changeLayer(layerName) {
+      if (layerName !== this.curLayer) {
+        this.layers[this.curLayer].removeLayer(this.map)
+        this.layers[layerName].load(new LayerParams({
+          vm: this,
+          searchInfo: {}
+        }))
+        this.curLayer = layerName
+      }
     },
     // 监听地图缩放
     watchMapZoom() {

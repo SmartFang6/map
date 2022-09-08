@@ -142,7 +142,7 @@ watch(
 .performance-table {
   width: 488px;
   height: 215px;
-  background-color: rgba(1, 2, 5, 0.4);
+  background-color: rgba(1, 2, 5, 0.1);
   box-shadow: inset 0px 2px 1px 0px #002480;
   box-sizing: border-box;
   font-size: 16px;
