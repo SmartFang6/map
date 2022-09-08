@@ -39,7 +39,15 @@ let dateRange = inject("dateRange");
 // 趋势的图标对象
 const chart = ref(null);
 const chartOption = ref({
+  color: ["#ffc600", "#00ecff"],
+  grid: {
+    top: 32,
+    left: 30,
+    bottom: 20,
+    right: 45,
+  },
   tooltip: {
+    show: true,
     trigger: "axis",
     axisPointer: {
       type: "cross",
@@ -47,9 +55,26 @@ const chartOption = ref({
         color: "#999",
       },
     },
+    textStyle: {
+      fontSize: 14,
+      fontFamily: "Microsoft YaHei",
+      color: "#fff",
+    },
+    backgroundColor: "rgba(0, 19, 83, 0.8)",
+    borderWidth: 0,
   },
   legend: {
-    data: ["销号率", "问题数"],
+    data: [
+      { icon: "circle", name: "销号率" },
+      { icon: "circle", name: "问题数" },
+    ],
+    textStyle: {
+      fontSize: 14,
+      fontFamily: "Microsoft YaHei",
+      color: "#fff",
+    },
+    itemGap: 30,
+    itemHeight: 10,
   },
   xAxis: [
     {
@@ -68,6 +93,21 @@ const chartOption = ref({
         "11月",
         "12月",
       ],
+      axisLine: {
+        lineStyle: {
+          color: "#658598",
+        },
+      },
+      axisLabel: {
+        show: true,
+        interval: 0,
+        fontSize: 14,
+        fontFamily: "Microsoft YaHei",
+        color: "#809fac",
+      },
+      axisTick: {
+        show: false,
+      },
       axisPointer: {
         type: "shadow",
       },
@@ -76,48 +116,108 @@ const chartOption = ref({
   yAxis: [
     {
       type: "value",
-      name: "问题数",
+      name: "问题数量",
+      nameTextStyle: {
+        fontSize: 14,
+        fontFamily: "Microsoft YaHei",
+        color: "#fff",
+      },
       min: 0,
       max: 10,
       interval: 2,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: "#658598",
+        },
+      },
       axisLabel: {
+        show: true,
         formatter: "{value}",
+        fontSize: 14,
+        fontFamily: "Microsoft YaHei",
+        color: "#809fac",
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: ["#a5cbe1"],
+          type: [2, 8],
+          dashOffset: 5,
+          opacity: 0.5,
+        },
       },
     },
     {
       type: "value",
       name: "销号率",
+      nameTextStyle: {
+        fontSize: 14,
+        fontFamily: "Microsoft YaHei",
+        color: "#fff",
+      },
       min: 0,
       max: 100,
       interval: 20,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: "#658598",
+        },
+      },
       axisLabel: {
-        formatter: "{value} %",
+        show: true,
+        formatter: "{value}%",
+        fontSize: 14,
+        fontFamily: "Microsoft YaHei",
+        color: "#809fac",
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          color: ["#a5cbe1"],
+          type: [2, 8],
+          dashOffset: 5,
+          opacity: 0.1,
+        },
       },
     },
   ],
   series: [
     {
-      name: "销号率",
+      name: "问题数",
       type: "bar",
+      barWidth: 6,
       tooltip: {
         valueFormatter: function (value) {
-          return value + " %";
+          return value + "%";
         },
       },
-      data: [
-        2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3,
-      ],
+      data: [7, 5, 6, 3, 3, 8, 5, 9, 2, 4, 7, 3],
     },
     {
-      name: "问题数",
+      name: "销号率",
       type: "line",
+      stack: "Total",
+      smooth: true,
       yAxisIndex: 1,
+      lineStyle: {
+        width: 3,
+      },
+      showSymbol: false,
+      areaStyle: {
+        opacity: 0.3,
+        color: "#00ecff",
+      },
+      emphasis: {
+        focus: "series",
+      },
       tooltip: {
         valueFormatter: function (value) {
           return value;
         },
       },
-      data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+      data: [60, 54, 72, 80, 61, 32, 41, 18, 55, 58, 60, 71],
     },
   ],
 });
@@ -147,7 +247,6 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .trend-analysis {
-  flex: 1;
   width: 100%;
   box-sizing: border-box;
 
