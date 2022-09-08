@@ -16,11 +16,13 @@ import pointRed from '@/assets/map/pointRed.png'
 import pointGreen from '@/assets/map/pointGreen.png'
 import pointYellow from '@/assets/map/pointYellow.png'
 import { getPointList } from '@/apis/map'
+import * as LayerEnum from '@/utils/LayerEnum'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
 
 export const geoserverWmsUrl = {
   adcdWMS: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/wms',
   adcdOWS: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/ows',
+  waterRegionInvestigationWMS: 'https://gis.dcyun.com:48164/geoserver/WaterRegionInvestigation/wms',
 }
 // 天地图 影像图
 export const tdtImg = {
@@ -318,22 +320,320 @@ export const riverManageLineLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    // url: geoserverPath.beautifulWms,
-    // params: {
-    //   LAYERS: 'BeautifulRiverLake:vw_river_manageline',
-    //   VERSION: '1.3.0',
-    //   SRS: 'EPSG:4326',
-    //   STYLES: '',
-    //   sld_body: SldUtils.createSld([{
-    //     rules: [{
-    //       type: StyleTypeEnum.lineString,
-    //       stroke: {
-    //         color: '#CF011C',
-    //         width: 1
-    //       }
-    //     }]
-    //   }], 'BeautifulRiverLake:vw_river_manageline')
-    // },
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_river_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([{
+        rules: [{
+          type: StyleTypeEnum.lineString,
+          stroke: {
+            color: '#CF011C',
+            width: 1
+          }
+        }]
+      }], 'WaterRegionInvestigation:vw_river_manageline')
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 河道
+export const riverLayer = {
+  id: LayerEnum.RIVER_LAYER,
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_river_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            { // 省级河流
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+              filter: ['EqualTo', ['grade', '省级']],
+            }, { // 市级河流
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+              filter: ['EqualTo', ['grade', '市级']],
+            }, { // 县级河流
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+              filter: ['EqualTo', ['grade', '县级']],
+            }, { // 乡级河流
+              type: StyleTypeEnum.polygon,
+              maxScale: 1 / 0.000005364418029785156, // 表示到达这个分辨率后再出现该类型元素
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+              filter: ['EqualTo', ['grade', '乡级']],
+            }, { // 字体
+              type: StyleTypeEnum.polygon,
+              text: {
+                text: 'name',
+                font: {
+                  family: '宋体',
+                  size: 20,
+                },
+                stroke: {
+                  color: '#FFFFFF',
+                  width: 1,
+                },
+                fill: { color: '#000000' },
+              },
+            },
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_river_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 水库
+export const reservoirLayer = {
+  id: LayerEnum.RESERVOIR_LAYER,
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_reservoir_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+            }, { // 字体
+              type: StyleTypeEnum.polygon,
+              text: {
+                text: 'name',
+                font: {
+                  family: '宋体',
+                  size: 20,
+                },
+                stroke: {
+                  color: '#FFFFFF',
+                  width: 1,
+                },
+                fill: { color: '#000000' },
+              },
+            },
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_reservoir_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 山塘
+export const hillpondLayer = {
+  id: LayerEnum.HILLPOND_LAYER,
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_hillypond_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+            }, { // 字体
+              type: StyleTypeEnum.polygon,
+              text: {
+                text: 'name',
+                font: {
+                  family: '宋体',
+                  size: 20,
+                },
+                stroke: {
+                  color: '#FFFFFF',
+                  width: 1,
+                },
+                fill: { color: '#000000' },
+              },
+            },
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_hillypond_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 湖泊
+export const lakeLayer = {
+  id: LayerEnum.LAKE_LAYER,
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_lake_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+            }, { // 字体
+              type: StyleTypeEnum.polygon,
+              text: {
+                text: 'name',
+                font: {
+                  family: '宋体',
+                  size: 20,
+                },
+                stroke: {
+                  color: '#FFFFFF',
+                  width: 1,
+                },
+                fill: { color: '#000000' },
+              },
+            },
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_lake_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 人工水道
+export const canalLayer = {
+  id: LayerEnum.CANAL_LAYER,
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_canal_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+            }, { // 字体
+              type: StyleTypeEnum.polygon,
+              text: {
+                text: 'name',
+                font: {
+                  family: '宋体',
+                  size: 20,
+                },
+                stroke: {
+                  color: '#FFFFFF',
+                  width: 1,
+                },
+                fill: { color: '#000000' },
+              },
+            },
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_canal_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 其他水域
+export const otherwaterLayer = {
+  id: LayerEnum.OTHERWATER_LAYER,
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_otherwater_area',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.polygon,
+              fill: { color: '#00FFFF' },
+              stroke: {
+                color: '#00FFFF',
+                width: 2,
+              },
+            }, { // 字体
+              type: StyleTypeEnum.polygon,
+              text: {
+                text: 'name',
+                font: {
+                  family: '宋体',
+                  size: 20,
+                },
+                stroke: {
+                  color: '#FFFFFF',
+                  width: 1,
+                },
+                fill: { color: '#000000' },
+              },
+            },
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_otherwater_area'),
+    },
     crossOrigin: 'anonymous'
   },
   zIndex: 18
