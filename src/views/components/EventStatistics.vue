@@ -4,7 +4,7 @@
     <ul class="content">
       <li class="content-item" v-for="(item, idx) in configList" :key="idx">
         <img :src="item.icon" alt="icon" class="item-img" />
-        <div>
+        <div class="value-wrapper">
           <p>
             <span class="item-value" :title="eventStatEvent?.[item.key] || 0">{{
               eventStatEvent?.[item.key] || 0
@@ -15,12 +15,16 @@
         </div>
       </li>
     </ul>
+
+    <EventStatisticsChart />
   </div>
 </template>
 
 <script setup>
 import { inject, computed } from "vue";
 import Title from "@/components/Title/index.vue";
+import EventStatisticsChart from "./EventStatisticsChart.vue";
+
 let leftData = inject("leftData");
 
 let eventStatEvent = computed(() => {
@@ -48,44 +52,33 @@ let configList = [
     key: "completedNum",
   },
   {
-    icon: require("@/assets/event-icon/icon_4.png"),
-    label: "逾期问题",
-    unit: "个",
-    key: "dueDateNum",
-  },
-  {
     icon: require("@/assets/event-icon/icon_5.png"),
     label: "销号率",
     unit: "%",
     key: "completedRate",
-  },
-  {
-    icon: require("@/assets/event-icon/icon_6.png"),
-    label: "平均耗时",
-    unit: "天",
-    key: "completedAverageCostTime",
   },
 ];
 </script>
 
 <style lang="less" scoped>
 .event {
-  height: 260px;
+  height: 315px;
+  display: flex;
+  flex-direction: column;
   .content {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    margin-top: 10px;
+    padding: 0 2px;
 
     &-item {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      width: 33%;
       box-sizing: border-box;
-      padding: 15px 5px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: #c4f0ff;
@@ -105,6 +98,22 @@ let configList = [
       max-width: 65px;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .value-wrapper {
+      display: flex;
+      margin-left: 4px;
+      flex-direction: column;
+      & > p:first-child {
+        & > span:first-child {
+          line-height: 28px;
+        }
+        align-items: flex-end;
+        justify-content: flex-end;
+      }
+      & > p {
+        display: flex;
+      }
     }
 
     .item-unit {

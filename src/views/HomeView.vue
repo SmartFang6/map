@@ -49,7 +49,7 @@ import Header from "./components/Header";
 import { inject, provide, ref } from "vue";
 import { NoticeEvt } from "@/views/config";
 import EventStatistics from "./components/EventStatistics.vue";
-//import ProblemSource from "./components/ProblemSource.vue";
+import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
 // import RiskControl from "./components/RiskControl.vue";
 import TrendAnalysis from "./components/TrendAnalysis.vue";
@@ -102,7 +102,7 @@ function getLeftData(st = null, et = null) {
       if (Number.isNaN(val)) {
         val = 0;
       } else {
-        val = val.toFixed(1);
+        val = val.toFixed(0);
       }
       res.eventStatEvent.completedRate = val;
     }
