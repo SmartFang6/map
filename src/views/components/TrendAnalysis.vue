@@ -58,6 +58,7 @@ const chartOption = ref({
     textStyle: {
       fontSize: 14,
       fontFamily: "Microsoft YaHei",
+      align: "left",
       color: "#fff",
     },
     backgroundColor: "rgba(0, 19, 83, 0.8)",
@@ -190,7 +191,7 @@ const chartOption = ref({
       barWidth: 6,
       tooltip: {
         valueFormatter: function (value) {
-          return value + "%";
+          return value;
         },
       },
       data: [7, 5, 6, 3, 3, 8, 5, 9, 2, 4, 7, 3],
@@ -206,15 +207,36 @@ const chartOption = ref({
       },
       showSymbol: false,
       areaStyle: {
-        opacity: 0.3,
-        color: "#00ecff",
+        normal: {
+          color: {
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0.1,
+                color: "#00ecff",
+              },
+              {
+                offset: 0.5,
+                color: "rgba(0, 236, 255, 0.54)",
+              },
+              {
+                offset: 0.9,
+                color: "rgb(27, 29, 32, 0.1)",
+              },
+            ],
+          },
+          opacity: 0.3,
+        },
       },
       emphasis: {
         focus: "series",
       },
       tooltip: {
         valueFormatter: function (value) {
-          return value;
+          return value + "%";
         },
       },
       data: [60, 54, 72, 80, 61, 32, 41, 18, 55, 58, 60, 71],

@@ -28,7 +28,7 @@
       <!--#region 标题尾部功能区-->
       <template #more>
         <div class="tools">
-          <i class="icon-square"></i>
+          <i class="icon-square" @click="carouselDialogVisible = true"></i>
           <i class="icon-zoom"></i>
         </div>
       </template>
@@ -48,12 +48,17 @@
     <!--#region 列表区-->
     <List :dataModel="rankingList" :type="typeActive" />
     <!--#endregion-->
+
+    <!--#region 图片轮播的弹窗区-->
+    <CarouselDialog v-model:visible="carouselDialogVisible" />
+    <!--#endregion-->
   </div>
 </template>
 
 <script setup>
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
+import CarouselDialog from "./CarouselDialog.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
@@ -78,6 +83,9 @@ let dataModel = ref([]);
 
 // 绩效排名列表
 let rankingList = ref([]);
+
+// 图片轮播的弹窗展示
+let carouselDialogVisible = ref(false);
 
 // 获取处置绩效的数据
 const getEventPointRankModel = async (queryParam) => {

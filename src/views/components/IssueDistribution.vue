@@ -1,6 +1,6 @@
 <template>
   <div class="IssueDistribution">
-    <Title title="问题派发">
+    <Title title="事件派发">
       <template #tabs>
         <el-tabs v-model="activeName" type="card">
           <el-tab-pane class="tab-item" label="定性" name="dx"></el-tab-pane>
@@ -28,7 +28,7 @@ let activeName = ref("dx");
 
 <style lang="less" scoped>
 .IssueDistribution {
-  flex: 1;
+  height: 302px;
 
   :deep(.el-tabs) {
     height: auto;

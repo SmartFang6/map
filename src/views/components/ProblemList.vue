@@ -323,6 +323,7 @@ body .problem-dialog {
       box-sizing: border-box;
       background: url(@/assets/images/problem-list-title.png) no-repeat center
         top;
+      background-size: 100% 100%;
       margin: 0 auto;
       .title {
         display: flex;
