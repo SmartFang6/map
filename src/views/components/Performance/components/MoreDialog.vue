@@ -311,7 +311,8 @@ watch(
         user-select: none;
       }
       .active {
-        border: solid 1px #14a2d2;
+        // border: solid 1px #14a2d2;
+        background: url(@/assets/images/checked.png) no-repeat -10px -10px;
       }
     }
   }
