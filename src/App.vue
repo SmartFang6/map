@@ -34,6 +34,10 @@ a {
   src: url(@/assets/font-family/AGENCYB.TTF);
 }
 @font-face {
+  font-family: "AgencyFB-Bold";
+  src: url(@/assets/font-family/AgencyFB-Bold.ttf);
+}
+@font-face {
   font-family: "FZZDHJW";
   src: url(@/assets/font-family/FZZDHJW.TTF);
 }

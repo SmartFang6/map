@@ -65,6 +65,8 @@
 import { ref, nextTick } from "vue";
 import { countEventClassCount } from "@/apis/home";
 import * as Echarts from "echarts";
+import { useStore } from "vuex";
+const store = useStore();
 // 按区域的玫瑰图 数据
 const regionData = ref([]);
 // 按类型的玫瑰图 数据
@@ -105,7 +107,7 @@ const colorList = ref([
   randomRgbColor(),
   randomRgbColor(),
 ]);
-const chartData = (data, show) => {
+const chartData = (data, show, name) => {
   return {
     legend: {
       show: false,
@@ -122,7 +124,7 @@ const chartData = (data, show) => {
     color: colorList,
     series: [
       {
-        name: "Nightingale Chart",
+        name: "事件统计" + name,
         type: "pie",
         radius: [108, 220],
         center: ["50%", "52%"],
@@ -131,9 +133,11 @@ const chartData = (data, show) => {
           label: {
             show: true,
             fontSize: "36",
+            fontFamily: "AgencyFB-Bold",
             fontWeight: "bold",
           },
         },
+        startAngle: 135,
         labelLine: {
           show: false,
         },
@@ -146,7 +150,6 @@ const chartData = (data, show) => {
           color: "#0adbe0",
           fontFamily: "AgencyFB-Bold",
           formatter: (p) => {
-            console.log(p);
             let { name, proportion, value } = p.data;
             let newName = name.length > 5 ? name.slice(0, 4) + "..." : name;
             return `${value}/${proportion}%\n${newName}`;
@@ -163,9 +166,9 @@ const chartData = (data, show) => {
 let rShow = true;
 let tShow = true;
 // 按区域的图表数据
-const regionOption = ref(chartData(regionData, rShow));
+const regionOption = ref(chartData(regionData, rShow, "区域"));
 // 按类型的图表数据
-const typeOption = ref(chartData(typeData, tShow));
+const typeOption = ref(chartData(typeData, tShow, "类型"));
 // 按区域refs
 const regionChartRef = ref(null);
 // 按类型refs
@@ -179,25 +182,26 @@ nextTick(() => {
   addEchartsData();
   charEvent();
 });
+// 图表 移入移出事件。处理图表中心的显示bug
 const charEvent = () => {
   regionChart.on("mouseover", () => {
     rShow = false;
-    regionOption.value = chartData(regionData, rShow);
+    regionOption.value = chartData(regionData, rShow, "区域");
     regionChart.setOption(regionOption.value);
   });
   regionChart.on("mouseout", () => {
     rShow = true;
-    regionOption.value = chartData(regionData, rShow);
+    regionOption.value = chartData(regionData, rShow, "区域");
     regionChart.setOption(regionOption.value);
   });
   typeChart.on("mouseover", () => {
     rShow = false;
-    typeOption.value = chartData(typeData, rShow);
+    typeOption.value = chartData(typeData, rShow, "类型");
     typeChart.setOption(typeOption.value);
   });
   typeChart.on("mouseout", () => {
     rShow = true;
-    typeOption.value = chartData(typeData, rShow);
+    typeOption.value = chartData(typeData, rShow, "类型");
     typeChart.setOption(typeOption.value);
   });
 };
@@ -207,27 +211,33 @@ const addEchartsData = () => {
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
     try {
+      const { dateObj, userInfo } = store.state;
       let data = {
-        adcd: "330182",
+        adcd: userInfo.adminDivCode,
+        ...dateObj,
       };
       let { eventAdcdCount, eventTypeCount } = await countEventClassCount(data);
       //区域
-      regionData.value = eventAdcdCount.map((i) => {
-        return {
-          name: i.obj,
-          value: i.amount,
-          proportion: i.proportion,
-        };
-      });
+      regionData.value = eventAdcdCount
+        .map((i) => {
+          return {
+            name: i.obj,
+            value: i.amount,
+            proportion: (i.proportion * 100).toFixed(0),
+          };
+        })
+        .filter((i) => i.value !== 0);
       regionData.value = regionData.value.sort((a, b) => b.value - a.value);
       // 类型
-      typeData.value = eventTypeCount.map((i) => {
-        return {
-          name: i.obj,
-          value: i.amount,
-          proportion: i.proportion,
-        };
-      });
+      typeData.value = eventTypeCount
+        .map((i) => {
+          return {
+            name: i.obj,
+            value: i.amount,
+            proportion: (i.proportion * 100).toFixed(0),
+          };
+        })
+        .filter((i) => i.value !== 0);
       typeData.value = typeData.value.sort((a, b) => b.value - a.value);
       resolve();
     } catch (error) {
@@ -268,11 +278,16 @@ const addEchartsData = () => {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  justify-content: space-between;
+  // justify-content: space-between;
   .legend {
     --color: "#fff";
     display: flex;
     align-items: center;
+    width: 49.5%;
+    margin-right: 0.5%;
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
     .circle {
       width: 10px;
       height: 10px;

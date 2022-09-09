@@ -7,7 +7,7 @@
           @changeTime="mapRef?.changeTime"
           @changeLayerType="mapRef?.changeLayerType"
         /> -->
-        <CenterToolsBar />
+        <CenterToolsBar @changeTime="onChangeTime" />
         <MapLayer
           @changeTime="onChangeTime"
           @changeLayerType="onChangeLayerType"
