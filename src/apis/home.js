@@ -82,8 +82,5 @@ export const countEventClassCount = (data) => {
   return postHttp("/supervision/countEventClassCount", { data });
 };
 export const getEventDistributeInfo = (data) => {
-  return postHttp(
-    "http://10.33.159.217:8504/api" + "/supervision/getEventDistributeInfo",
-    { data }
-  );
+  return postHttp("/supervision/getEventDistributeInfo", { data });
 };
