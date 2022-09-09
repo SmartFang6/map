@@ -22,7 +22,7 @@
         <!-- 事件统计 -->
         <EventStatistics />
         <!-- 问题来源 -->
-        <ProblemSource @select="mapRef?.value?.mapPanToSelectRow" />
+        <ProblemSource />
         <!-- 问题派发 -->
         <IssueDistribution />
       </div>
@@ -39,7 +39,7 @@
     </template>
     <template #bottom>
       <!-- 问题清单 -->
-      <ProblemList />
+      <ProblemList @select="mapRef?.mapPanToSelectRow" />
     </template>
   </Layout>
 </template>
