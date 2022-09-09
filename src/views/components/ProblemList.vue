@@ -10,33 +10,13 @@
     <div class="problem-list-header">
       <div class="shake-hands">
         <div class="operator-wrapper">
-          <!-- <div class="operator problem-button-all">
-            <span class="problem-button-text">全部</span>
-            <i class="icon-arrow-down"></i>
-          </div> -->
-          <div class="operator problem-dropdown">
-            <el-dropdown>
-              <div class="dropdown-inner">
-                <span>{{ activeType.label }}</span>
-                <img src="@/assets/images/center-tools-dropdown-arrow.png" />
-              </div>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item
-                    v-for="(typeItem, index) in typeList"
-                    :key="index"
-                    @click="activeType = typeItem"
-                  >
-                    {{ typeItem.label }}
-                  </el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
+          <div class="operator" @click="onShowMore">
+            <span class="marright">更多</span>
           </div>
         </div>
         <div class="title">
           <p>问题清单</p>
-          <i class="icon-zoom" @click="onShowMore"></i>
+          <!-- <i class="icon-zoom" @click="onShowMore"></i> -->
         </div>
         <div class="custom-select-wrapper">
           <!--
@@ -213,36 +193,6 @@ const dataList = ref([]);
 // 问题清单数据源
 let dataModel = ref(null);
 
-// 问题清单的筛选类型
-const typeList = ref([
-  {
-    label: "全部",
-    value: null,
-  },
-  {
-    label: "预审",
-    value: 1,
-  },
-  {
-    label: "待受理",
-    value: 2,
-  },
-  {
-    label: "已受理",
-    value: 3,
-  },
-  {
-    label: "待处理",
-    value: 4,
-  },
-  {
-    label: "已销号",
-    value: 5,
-  },
-]);
-
-// 选中的类型数据
-let activeType = ref(typeList.value[0]);
 /**
  * 通过接口获取问题清单的列表数据
  * @param {Object} queryParam
@@ -536,10 +486,11 @@ body .problem-dialog {
     align-items: center;
     width: 100%;
     height: 32px;
+    border-bottom: 1px solid #01fffc;
     font-size: 14px;
     font-family: MicrosoftYaHei;
+    text-align: left;
     color: #ffffff;
-    border-bottom: 1px solid #01fffc;
   }
   .table-body {
     height: 150px;
@@ -550,9 +501,10 @@ body .problem-dialog {
   }
   .table-row {
     display: flex;
+    width: 100%;
     height: 30px;
     align-items: center;
-    width: 100%;
+    text-align: left;
     &.stripe {
       background: rgba(0, 0, 0, 0.2);
     }
@@ -565,11 +517,16 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(1),
   .table-row > div:nth-child(1) {
-    width: 56px;
+    width: 45px;
+    margin-left: 14px;
+  }
+  .table-row > div:nth-child(1) {
+    text-indent: 2px;
   }
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {
-    width: 100px;
+    width: 110px;
+    margin-left: 10px;
     .text-ellipsis;
   }
   .table-row > div:nth-child(2) {
@@ -577,12 +534,14 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(3),
   .table-row > div:nth-child(3) {
-    width: 94px;
+    width: 76px;
+    margin-left: 10px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(4),
   .table-row > div:nth-child(4) {
-    width: 90px;
+    width: 75px;
+    margin-left: 10px;
     .text-ellipsis;
   }
   .table-row > div:nth-child(4) {
@@ -590,28 +549,27 @@ body .problem-dialog {
   }
   .table-header > div:nth-child(5),
   .table-row > div:nth-child(5) {
-    width: 170px;
+    width: 124px;
+    margin-left: 10px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(6),
   .table-row > div:nth-child(6) {
-    width: 68px;
+    width: 60px;
+    margin-left: 10px;
     .text-ellipsis;
   }
   .table-header > div:nth-child(7),
   .table-row > div:nth-child(7) {
-    width: 88px;
+    width: 84px;
+    margin-left: 10px;
   }
   .table-header > div:nth-child(8),
   .table-row > div:nth-child(8) {
-    width: 124px;
+    width: 120px;
+    margin-left: 12px;
     .text-ellipsis;
   }
-  // .table-header > div:nth-child(9),
-  // .table-row > div:nth-child(9) {
-  //   width: 100px;
-  //   .text-ellipsis;
-  // }
 }
 
 .one-line {
@@ -626,5 +584,9 @@ body .problem-dialog {
   align-items: center;
   color: #0adbe0;
   font-size: 24px;
+}
+
+.marright {
+  margin-right: 3px;
 }
 </style>
