@@ -79,7 +79,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 import { countEventClassCount } from "@/apis/home";
 import * as Echarts from "echarts";
 import { useStore } from "vuex";
@@ -193,11 +193,8 @@ const typeChartRef = ref(null);
 // 两个图表
 let regionChart = null;
 let typeChart = null;
-nextTick(() => {
-  regionChart = Echarts.init(regionChartRef.value);
-  typeChart = Echarts.init(typeChartRef.value);
+onMounted(() => {
   addEchartsData();
-  charEvent();
 });
 // 图表 移入移出事件。处理图表中心的显示bug
 const charEvent = () => {
@@ -262,6 +259,9 @@ const addEchartsData = () => {
     }
   }).then(() => {
     nextTick(() => {
+      regionChart = Echarts.init(regionChartRef.value);
+      typeChart = Echarts.init(typeChartRef.value);
+      charEvent();
       // 按区域
       regionChart.setOption(regionOption.value);
       // //按类型
