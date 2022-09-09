@@ -109,12 +109,12 @@ const changeDate = (payload) => {
   const { value } = payload;
   currentDateType.value = payload;
   const year = new Date().getFullYear();
-  const month = new Date().getFullYear();
+  const month = new Date().getMonth();
   const dataObj = {
     endTime:
       value === "year"
         ? moment().format("YYYY-12-31 HH:mm:SS")
-        : moment(new Date(year, month + 1)).format("YYYY-MM-DD HH:mm:SS"),
+        : moment(new Date(year, month + 1, 0)).format("YYYY-MM-DD HH:mm:SS"),
     startTime:
       value === "year"
         ? moment().format("YYYY-01-01 HH:mm:SS")
