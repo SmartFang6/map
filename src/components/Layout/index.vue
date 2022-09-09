@@ -113,6 +113,7 @@ const bottomViewClose = computed(() => {
   }
   .side-content {
     width: @sideW;
+    height: 100%;
   }
   .left_side {
     left: 0;
