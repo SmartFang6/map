@@ -4,14 +4,10 @@
 <template>
   <div class="carousel-dialog">
     <!--#region 轮播的内容区-->
-    <el-dialog
-      v-model="dialogVisible"
-      width="60%"
-      @before-close="onHandleDialogClosed"
-    >
+    <el-dialog v-model="dialogVisible" width="60%">
       <el-carousel indicator-position="outside">
-        <el-carousel-item v-for="item in 4" :key="item">
-          <h3 text="2xl" justify="center">{{ item }}</h3>
+        <el-carousel-item v-for="(item, index) in galleryList" :key="index">
+          <img class="gallery-inner" :src="item.url" :alt="item.name" />
         </el-carousel-item>
       </el-carousel>
       <!--#endregion-->
@@ -33,13 +29,7 @@ const props = defineProps({
 const emits = defineEmits(["update:visible"]);
 
 // 是否开启弹窗
-let dialogVisible = ref(false);
-
-// 弹窗关闭前的回调
-const onHandleDialogClosed = () => {
-  dialogVisible.value = false;
-  emits("update:visible", false);
-};
+const dialogVisible = ref(false);
 
 // 监听父组件的开启弹窗参数
 watch(
@@ -51,6 +41,47 @@ watch(
     immediate: true,
   }
 );
+
+// 监听本组件的弹窗展示参数,并同步父组件
+watch(
+  () => dialogVisible.value,
+  (dialogVisible) => {
+    if (!dialogVisible) {
+      emits("update:visible", false);
+    }
+  },
+  {
+    immediate: false,
+  }
+);
+
+const galleryList = ref([
+  {
+    id: 1001,
+    name: "rule",
+    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202209/02/cms_55236964872586607774644.jpg",
+  },
+  {
+    id: 1002,
+    name: "rule",
+    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202207/04/cms_67344705967398992624193.jpg",
+  },
+  {
+    id: 1003,
+    name: "rule",
+    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202208/09/cms_6834115643127880877769.jpg",
+  },
+  {
+    id: 1004,
+    name: "rule",
+    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202103/23/cms_81509214635837408606126.jpg",
+  },
+  {
+    id: 1005,
+    name: "rule",
+    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202203/10/cms_1430663409879255511237.jpg",
+  },
+]);
 </script>
 
 <style lang="less" scoped>
@@ -63,6 +94,11 @@ watch(
     opacity: 0.75;
     line-height: 300px;
     margin: 0;
+  }
+
+  .gallery-inner {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

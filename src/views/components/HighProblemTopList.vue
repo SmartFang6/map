@@ -246,6 +246,7 @@ watch(
 }
 
 .high-list-wrapper {
+  height: 302px;
   :deep(.el-tabs--card > .el-tabs__header .el-tabs__item) {
     box-sizing: border-box;
     border: none;

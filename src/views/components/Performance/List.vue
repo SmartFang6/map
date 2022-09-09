@@ -147,7 +147,7 @@ watch(
   box-sizing: border-box;
   font-size: 16px;
   font-family: MicrosoftYaHei;
-  color: #c4f0ff;
+  color: #7ed5f1;
   padding: 0 20px;
   margin-left: 8px;
   overflow: hidden;
