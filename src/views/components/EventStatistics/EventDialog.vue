@@ -2,9 +2,17 @@
   <div class="event-statis">
     <div class="region">
       <ChartTitle title="按区域" />
-      <div class="chart">
+
+      <div class="chart" v-if="regionData.length > 0">
         <div ref="regionChartRef"></div>
       </div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
+
       <div class="legend-list">
         <div
           class="legend"
@@ -29,11 +37,20 @@
         </div>
       </div>
     </div>
+
     <div class="type">
       <ChartTitle title="按类型" />
-      <div class="chart">
+
+      <div class="chart" v-if="typeData.length > 0">
         <div ref="typeChartRef"></div>
       </div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
+
       <div class="legend-list">
         <div
           class="legend"

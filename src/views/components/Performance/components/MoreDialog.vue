@@ -33,13 +33,23 @@
           :title="item?.eventResponsibleUnitCodeName || ''"
         />
       </div>
-      <div class="echart_right" ref="verticalChart"></div>
+      <div
+        class="echart_right"
+        ref="verticalChart"
+        v-if="chartData?.length > 0"
+      ></div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from "vue";
+import { ref, watch, nextTick } from "vue";
 import * as Echarts from "echarts";
 import ProgressBar from "@/views/components/ProgressBar";
 
@@ -59,19 +69,6 @@ const emits = defineEmits(["update:visible"]);
 
 // 所有数据
 const dataAll = ref(null);
-watch(
-  () => props.moreData,
-  (moreData) => {
-    nextTick(() => {
-      dataAll.value = moreData;
-      dealData();
-    });
-  },
-  {
-    immediate: true,
-    deep: true,
-  }
-);
 
 // 组件数据
 const problemSourceList = ref([]);
@@ -87,7 +84,10 @@ const dealData = () => {
       };
     }
   );
-  draw(chartData.value);
+  console.log(chartData.value, "chartData");
+  nextTick(() => {
+    draw(chartData.value);
+  });
 };
 
 // tabs
@@ -114,6 +114,7 @@ const chartData = ref([]);
 // 柱状图 dom
 const verticalChart = ref(null);
 const draw = (data) => {
+  if (!verticalChart.value) return;
   let chart = Echarts.init(verticalChart.value);
   const option = {
     color: [
@@ -255,10 +256,6 @@ const draw = (data) => {
   chart.setOption(option);
 };
 
-onMounted(() => {
-  draw(chartData.value);
-});
-
 // 是否开启弹窗
 const dialogVisible = ref(false);
 
@@ -270,6 +267,17 @@ watch(
   },
   {
     immediate: true,
+  }
+);
+watch(
+  () => props.moreData,
+  (moreData) => {
+    dataAll.value = moreData;
+    dealData();
+  },
+  {
+    immediate: true,
+    deep: true,
   }
 );
 
@@ -338,9 +346,16 @@ watch(
     display: flex;
     justify-content: space-between;
     > div {
-      width: 450px;
+      width: 36vw;
       height: 500px;
     }
+    // & > div:nth-child(1) {
+    //   flex: 1;
+    // }
+    // & > div:nth-child(2) {
+    //   width: 37%;
+    //   height: 500px;
+    // }
 
     .echart_left {
       padding-right: 10px;

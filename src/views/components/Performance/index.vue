@@ -28,7 +28,8 @@
       <!--#region 标题尾部功能区-->
       <template #more>
         <div class="tools">
-          <i class="icon-square" @click="carouselDialogVisible = true"></i>
+          <!-- 暂时注释，未完成的弹窗不展示 -->
+          <!-- <i class="icon-square" @click="carouselDialogVisible = true"></i> -->
           <i class="icon-zoom" @click="moreDialogVisible = true"></i>
         </div>
       </template>
@@ -62,6 +63,7 @@
       append-to-body
       :destroy-on-close="true"
       custom-class="common_dialog"
+      width="75vw"
     >
       <MoreDialog :moreData="moreData" />
     </el-dialog>
