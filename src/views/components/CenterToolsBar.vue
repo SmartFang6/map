@@ -83,7 +83,7 @@ import { ref } from "vue";
 import { useStore } from "vuex";
 import moment from "moment";
 // 事件
-const emits = defineEmits(["search"]);
+const emits = defineEmits(["search", "changeTime"]);
 const store = useStore();
 // 搜索组件激活状态(自动伸缩)
 const searchActive = ref(false);
@@ -119,6 +119,7 @@ const changeDate = (payload) => {
         : moment(new Date()).startOf("month").format("YYYY-MM-01 00:00:00"),
   };
   store.commit("UPDATE_DATE", dataObj);
+  emits("changeTime", dataObj);
 };
 changeDate(dateTypes[0]);
 </script>
