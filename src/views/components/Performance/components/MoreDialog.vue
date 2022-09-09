@@ -18,7 +18,16 @@
     </div>
 
     <div class="content_wrap">
-      <div class="echart_left"><ProgressBar /></div>
+      <div class="echart_left">
+        <ProgressBar
+          v-for="(item, index) in problemSourceList"
+          :no="index + 1"
+          :count="item?.point || 0"
+          :key="item?.point || index"
+          flexType="row"
+          :title="item?.eventResponsibleUnitCodeName || ''"
+        />
+      </div>
       <div class="echart_right" ref="verticalChart"></div>
     </div>
   </div>
@@ -60,12 +69,15 @@ watch(
   }
 );
 
+// 组件数据
+const problemSourceList = ref([]);
 // 处理数据
 const dealData = () => {
   console.log(
-    "dataAll.value[activeTab.value]?.completedRankList",
-    dataAll.value[activeTab.value]?.completedRankList
+    "dataAll.value[activeTab.value]?.pointRankList",
+    dataAll.value[activeTab.value]?.pointRankList
   );
+  problemSourceList.value = dataAll.value[activeTab.value]?.pointRankList;
   chartData.value = dataAll.value[activeTab.value]?.completedRankList?.map(
     (item) => {
       return {
