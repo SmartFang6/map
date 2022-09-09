@@ -1,172 +1,198 @@
 <template>
-  <div class="dingze">
-    <el-carousel indicator-position="none" style="width: 100%">
-      <el-carousel-item
-        v-for="(item, index) in dataList"
-        :key="index"
-        class="carousel-item"
-      >
-        <div
-          class="item"
-          v-for="(itm, idx) in item"
-          :key="itm.eventResponsibleUnitCode"
-        >
-          <div class="" v-if="itm !== 0">
-            <el-progress
-              type="circle"
-              :percentage="itm.unitCompletedRate"
-              :stroke-width="18"
-              :color="colors[idx]"
-              :show-text="false"
-              :width="80"
-              stroke-linecap="butt"
-              :class="`item-${idx}`"
-            />
-            <ul>
-              <li class="item-value" :style="{ color: colors[idx] }">
-                {{ itm.unitCompletedRate }} %
-              </li>
-              <li class="item-name" :title="itm.eventResponsibleUnitCodeName">
-                {{ itm.eventResponsibleUnitCodeName }}
-              </li>
-              <li class="item-footer footer-top">
-                问题总数
-                <span
-                  class="item-footer-value"
-                  :style="{ color: colors[idx] }"
-                  >{{ itm.unitEventNum }}</span
-                >
-              </li>
-              <li class="item-footer">
-                已销号
-                <span
-                  class="item-footer-value"
-                  :style="{ color: colors[idx] }"
-                  >{{ itm.unitCompletedNum }}</span
-                >
-              </li>
-            </ul>
+  <div class="responsble">
+    <div
+      v-for="(item, index) in unitList"
+      :key="index"
+      :class="['unit-item', getStyle()]"
+    >
+      <div class="content">
+        <div class="name">{{ item.eventResponsibleUnitCodeName }}</div>
+        <div class="info">
+          <div class="value">
+            <span>{{ item.unitEventNum }}</span>
+            <span>个</span>
+            <span>/</span>
           </div>
-          <div v-else>
-            <div
-              class="item-icon item-icon-bg"
-              v-if="idx !== item.length - 1"
-            ></div>
+          <div class="rate">
+            <span>{{ (item.unitCompletedRate * 100).toFixed(0) }}</span>
+            <span>%</span>
           </div>
         </div>
-      </el-carousel-item>
-    </el-carousel>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, inject, ref } from "vue";
-const colors = ["#32DA85", "#00F5FF", "#FFCD19", "#E35F5F"];
+import { inject, computed } from "vue";
 
-let dataList = ref([]);
-// 获取注入数据
-let leftData = inject("leftData");
+// 左侧注入数据
+const leftData = inject("leftData");
 
-// 定性
-let eventResponsibleUnitList = computed(() => {
-  return leftData.value?.eventResponsibleUnitList || [];
+// 责任单位列表
+const unitList = computed(() => {
+  if (!leftData || !leftData.value.eventResponsibleUnitList) {
+    return [];
+  }
+  return leftData.value.eventResponsibleUnitList;
 });
-dataList.value = arrTrans(4, eventResponsibleUnitList.value);
 
-/**
- * num 为二维数组中的item 数量
- * arr 为一维数组
- */
-function arrTrans(num, arr) {
-  if (!arr.length) return [];
-  // 一维数组转换为二维数组
-  const iconsArr = []; // 声明数组
-  arr.forEach((item, index) => {
-    // Math.floor() 计算结果为下舍整数，如小于1的都取0
-    const page = Math.floor(index / num); // 计算该元素为第几个素组内
-    if (!iconsArr[page]) {
-      // 判断是否存在，不存在则创建一个空的二维数组
-      iconsArr[page] = [];
-    }
-    iconsArr[page].push(item);
-    iconsArr[page].push(0);
-  });
-  return iconsArr;
-}
+let i = -1;
+const styles = ["style1", "style2", "style3", "style4"];
+const getStyle = () => {
+  if (i >= 3) {
+    i = 0;
+    return styles[0];
+  }
+  i++;
+  return styles[i];
+};
 </script>
 
 <style lang="less" scoped>
-.dingze {
+.responsble {
   width: 100%;
-  .carousel-item {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-top: 2px;
+  overflow: hidden;
+}
+.unit-item {
+  width: 49%;
+  height: 44px;
+  margin: 6px 0;
+  display: flex;
+  align-items: center;
+  .content {
     display: flex;
-    justify-content: space-around;
     align-items: center;
-  }
-  .item {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin-top: 15px;
-  }
-  .item-icon {
-    width: 25px;
-    height: 11px;
-    margin-bottom: 40px;
-  }
-  .item-icon-bg {
-    background: url(@/assets/images/issue_icon.png);
-    background-size: 100% 100%;
-  }
-  .item-0 {
-    :deep(.el-progress-circle__track) {
-      stroke: #13606d;
-    }
-  }
-  .item-1 {
-    :deep(.el-progress-circle__track) {
-      stroke: #0c4b65;
-    }
-  }
-  .item-2 {
-    :deep(.el-progress-circle__track) {
-      stroke: #344242;
-    }
-  }
-  .item-3 {
-    :deep(.el-progress-circle__track) {
-      stroke: #332b3a;
-    }
-  }
-  .item-value {
-    font-family: AGENCYB;
-    font-size: 24px;
-  }
-  .item-name {
-    font-family: MicrosoftYaHei;
-    color: #fff;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 21px;
-    line-height: 21px;
-  }
-  .item-footer {
+    justify-content: space-between;
+    width: 219px;
+    height: 44px;
+    margin-left: 10px;
+    background: url(@/assets/images/responsble-unit-bg.png);
+    background-size: contain;
     box-sizing: border-box;
-    padding: 8px;
-    margin-top: 10px;
-    background: url(@/assets/images/issue_footer.png);
-    background-size: 100% 100%;
-    color: #c4f0ff;
+    padding: 0px 10px 0 17px;
+    overflow: hidden;
+    .name {
+      font-family: FZZDHJW;
+      font-size: 20px;
+      padding-top: 6px;
+      color: #fff;
+      text-shadow: 0px 3px 3px rgba(0, 12, 59, 0.5);
+      text-align: left;
+      line-height: 20px;
+    }
+    .info {
+      width: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      text-shadow: 0px 3px 3px rgba(0, 12, 59, 0.5);
+    }
+    .value {
+      color: #00d4f4;
+      font-size: 26px;
+      font-family: AGENCYB;
+      display: flex;
+      width: 60px;
+      justify-content: flex-end;
+      & > span:nth-child(1) {
+        display: flex;
+        align-items: flex-end;
+      }
+      & > span:nth-child(2) {
+        font-size: 18px;
+        padding-left: 3px;
+        padding-right: 2px;
+        display: flex;
+        align-items: flex-end;
+        padding-bottom: 3.5px;
+      }
+      & > span:nth-child(3) {
+        font-family: MicrosoftYaHei;
+        font-size: 24px;
+        font-weight: 100;
+      }
+    }
+    .rate {
+      color: #a3efff;
+      font-family: AGENCYB;
+      display: flex;
+      align-items: flex-end;
+      padding-left: 4px;
+      & > span:nth-child(1) {
+        font-size: 26px;
+        padding-top: 3px;
+      }
+      & > span:nth-child(2) {
+        font-weight: 100;
+        font-size: 18px;
+        padding-left: 3px;
+        padding-bottom: 1.5px;
+      }
+    }
   }
-  .footer-top {
-    margin-top: 10px;
+}
+.style1 {
+  &:before {
+    margin-left: 7px;
+    display: block;
+    content: "";
+    width: 2px;
+    height: 44px;
+    background: url(@/assets/images/responsble-unit-style-1.png);
+    background-size: contain;
   }
-  .item-footer-value {
-    font-family: AGENCYB;
-    font-size: 24px;
+  &:after {
+    margin-left: 7px;
+    display: block;
+    content: "";
+    width: 2px;
+    height: 44px;
+  }
+}
+.style2 {
+  margin-left: -2px;
+  &:after {
+    margin-left: 10px;
+    display: block;
+    content: "";
+    width: 2px;
+    height: 44px;
+    background: url(@/assets/images/responsble-unit-style-2.png);
+  }
+}
+.style3 {
+  &:before {
+    margin-left: 7px;
+    display: block;
+    content: "";
+    width: 2px;
+    height: 44px;
+  }
+  &:after {
+    margin-left: 7px;
+    display: block;
+    content: "";
+    width: 2px;
+    height: 44px;
+    background: url(@/assets/images/responsble-unit-style-1.png);
+    background-size: contain;
+  }
+}
+.style4 {
+  margin-left: -2px;
+  &:after {
+    margin-left: 10px;
+    display: block;
+    content: "";
+    width: 2px;
+    height: 44px;
   }
 }
 </style>

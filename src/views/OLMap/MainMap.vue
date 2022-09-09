@@ -407,6 +407,14 @@ export default {
         '</Filter>'
       return queryXML
     },
+    // 根据地图下方问题清单点击跳转
+    mapPanToSelectRow(params) {
+      console.log('地图缩放至所选行', params);
+      if(params.longitude && params.latitude) {
+        this.map.getView().setCenter([params.longitude, params.latitude])
+        this.map.getView().setZoom(17)
+      }
+    }
   },
 };
 </script>

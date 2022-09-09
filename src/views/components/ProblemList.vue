@@ -58,6 +58,7 @@
             v-for="row in dataList"
             :key="row.index"
             :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+            @click="emits('select', row)"
           >
             <div>{{ row.index }}</div>
             <el-tooltip
@@ -150,12 +151,14 @@ import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
-import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 import moment from "moment";
 import { getEventQuestionList } from "@/apis/cockpitEventStats";
 import TableMore from "./TableMore/index.vue";
 
 const store = useStore();
+
+const emits = defineEmits(["select"]);
 
 // 是否折叠
 const collapsed = computed(() => {
@@ -228,6 +231,7 @@ const getEventProblemList = () => {
   dataList.value = [];
   target.forEach((feild, pos) => {
     dataList.value.push({
+      ...feild,
       index: pos + 1,
       eventResponsibleUnitName: feild.eventResponsibleUnitCodeName,
       eventSourceName: feild.eventSourceName,

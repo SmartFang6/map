@@ -39,7 +39,7 @@
     </template>
     <template #bottom>
       <!-- 问题清单 -->
-      <ProblemList />
+      <ProblemList @select="mapRef?.mapPanToSelectRow" />
     </template>
   </Layout>
 </template>
@@ -48,7 +48,7 @@
 import Header from "./components/Header";
 import { inject, provide, ref } from "vue";
 import { NoticeEvt } from "@/views/config";
-import EventStatistics from "./components/EventStatistics.vue";
+import EventStatistics from "./components/EventStatistics/index.vue";
 import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
 // import RiskControl from "./components/RiskControl.vue";
@@ -149,9 +149,10 @@ function showPop(info) {
 .left-box {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  // height: 100%;
+  justify-content: space-between;
+  height: 100%;
   box-sizing: border-box;
-  padding: 0 12px;
+  padding-bottom: 15px;
+  padding-left: 23px;
 }
 </style>

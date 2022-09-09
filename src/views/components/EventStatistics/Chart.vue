@@ -61,7 +61,7 @@ import { ref, onMounted } from "vue";
 // 统计类型
 const types = ref([
   {
-    label: "事件",
+    label: "类型",
     value: 1,
   },
   {
@@ -81,12 +81,12 @@ let svg = null;
 
 // 测试数据
 const mockData = [
-  { label: "河长巡河", color: "#03ffa9", value: 10 * Math.random() },
-  { label: "AI智能发现", color: "#00ecff", value: 10 * Math.random() },
-  { label: "无人机发现", color: "#ff4d65", value: 10 * Math.random() },
-  { label: "平台上报", color: "#ff9700", value: 10 * Math.random() },
-  { label: "监测站点", color: "#17b3ff", value: 10 * Math.random() },
-  { label: "监测站点", color: "#ffd633", value: 10 * Math.random() },
+  { label: "河长巡河", color: "#03ffa9", value: 1 * Math.random() },
+  { label: "AI智能发现", color: "#00ecff", value: 1 * Math.random() },
+  { label: "无人机发现", color: "#ff4d65", value: 1 * Math.random() },
+  { label: "平台上报", color: "#ff9700", value: 1 * Math.random() },
+  { label: "监测站点", color: "#17b3ff", value: 1 * Math.random() },
+  { label: "监测站点", color: "#ffd633", value: 1 * Math.random() },
 ];
 
 onMounted(() => {
@@ -167,7 +167,7 @@ onMounted(() => {
 
 .legend-item {
   display: flex;
-  color: #d9f0fe;
+  color: #91cae8;
   font-size: 14px;
   align-items: center;
   padding: 0.5px 0;
