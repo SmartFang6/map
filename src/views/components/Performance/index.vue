@@ -63,7 +63,8 @@
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
 import CarouselDialog from "./CarouselDialog.vue";
-import MoreDialog from "./MoreDialog.vue";
+// import MoreDialog from "./MoreDialog.vue";
+import MoreDialog from "./components/MoreDialog.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
