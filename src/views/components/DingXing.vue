@@ -4,11 +4,11 @@
       <div class="nature-item">
         <div class="name">重大</div>
         <div class="value">
-          <span>34.21</span>
+          <span>{{ data.serious.rate }}</span>
           <span>%</span>
         </div>
         <div class="num">
-          <span>7</span>
+          <span>{{ data.serious.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -16,11 +16,11 @@
       <div class="nature-item">
         <div class="name">较严重</div>
         <div class="value">
-          <span>34.21</span>
+          <span>{{ data.lowSerious.rate }}</span>
           <span>%</span>
         </div>
         <div class="num">
-          <span>7</span>
+          <span>{{ data.lowSerious.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -28,11 +28,11 @@
       <div class="nature-item">
         <div class="name">一般</div>
         <div class="value">
-          <span>34.21</span>
+          <span>{{ data.general.rate }}</span>
           <span>%</span>
         </div>
         <div class="num">
-          <span>7</span>
+          <span>{{ data.general.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -41,7 +41,56 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { inject, computed } from "vue";
+
+// 左侧注入数据
+const leftData = inject("leftData");
+
+// 定性数据
+const data = computed(() => {
+  const data = {
+    // 一般
+    general: {
+      value: 0,
+      rate: 0,
+    },
+    // 较严重
+    lowSerious: {
+      value: 0,
+      rate: 0,
+    },
+    // 重大
+    serious: {
+      value: 0,
+      rate: 0,
+    },
+  };
+  if (!leftData || !leftData.value.eventGradeList) {
+    return data;
+  }
+  leftData.value.eventGradeList.forEach((grade) => {
+    if (grade.eventGrade === "1") {
+      data.serious.value = grade.eventGradeNum;
+      data.serious.rate = ((grade.eventGradeNum / grade.allNum) * 100).toFixed(
+        2
+      );
+    } else if (grade.eventGrade === "2") {
+      data.lowSerious.value = grade.eventGradeNum;
+      data.lowSerious.rate = (
+        (grade.eventGradeNum / grade.allNum) *
+        100
+      ).toFixed(2);
+    } else {
+      data.general.value = grade.eventGradeNum;
+      data.general.rate = ((grade.eventGradeNum / grade.allNum) * 100).toFixed(
+        2
+      );
+    }
+  });
+  return data;
+});
+</script>
 
 <style lang="less" scoped>
 .nature {

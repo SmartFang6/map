@@ -14,7 +14,7 @@
         <div class="bg" />
         <div class="content">
           <div class="value">
-            <span>79</span>
+            <span>{{ total }}</span>
             <span>个</span>
           </div>
           <div class="label">事件来源</div>
@@ -36,6 +36,7 @@
             }}%</span
           >
         </div>
+        <!--
         <div
           v-for="(item, index) in leftData.eventSourceList.filter(
             (d, i) => i <= 1
@@ -50,16 +51,26 @@
             }}%</span
           >
         </div>
+        -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { inject, computed } from "vue";
 
 // 左侧注入数据
 const leftData = inject("leftData");
+
+// 来源总数
+const total = computed(() => {
+  console.log(leftData.value.eventSourceList, "111");
+  if (!leftData || !leftData.value.eventSourceList) {
+    return 0;
+  }
+  return leftData.value.eventSourceList[0].allNum;
+});
 </script>
 
 <style lang="less" scoped>
