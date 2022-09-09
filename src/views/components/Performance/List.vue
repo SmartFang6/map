@@ -117,7 +117,6 @@ watch(
           });
         }
       });
-      console.log("perform dataList", dataList);
     });
   },
   {

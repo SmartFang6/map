@@ -3,8 +3,8 @@
 -->
 <template>
   <div class="carousel-dialog">
-    <!--#region 轮播的内容区-->
     <el-dialog v-model="dialogVisible" width="60%">
+      <!--#region 轮播的内容区-->
       <el-carousel indicator-position="outside">
         <el-carousel-item v-for="(item, index) in galleryList" :key="index">
           <img class="gallery-inner" :src="item.url" :alt="item.name" />
@@ -87,6 +87,12 @@ const galleryList = ref([
 <style lang="less" scoped>
 .carousel-dialog {
   display: block;
+
+  :deep(.el-dialog) {
+    border: 1px solid #64d2f7;
+    color: white;
+    background-color: rgba(25, 56, 91, 0.8);
+  }
 
   :deep(.el-carousel__item h3) {
     display: flex;
