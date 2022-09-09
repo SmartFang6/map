@@ -1,7 +1,13 @@
 <template>
   <div class="event">
-    <Title title="事件统计" />
-    <ul class="content" @click="dialogVisible = true">
+    <Title title="事件统计">
+      <template #more>
+        <div class="tools" @click="showMore = true">
+          <i class="icon-zoom" />
+        </div>
+      </template>
+    </Title>
+    <ul class="content">
       <li class="content-item" v-for="(item, idx) in configList" :key="idx">
         <img :src="item.icon" alt="icon" class="item-img" />
         <div class="value-wrapper">
@@ -18,7 +24,7 @@
 
     <EventStatisticsChart />
     <el-dialog
-      v-model="dialogVisible"
+      v-model="showMore"
       width="1140px"
       append-to-body
       destroy-on-close
@@ -39,7 +45,7 @@ import Title from "@/components/Title/index.vue";
 import EventStatisticsChart from "./Chart.vue";
 import EventDialog from "./EventDialog.vue";
 let leftData = inject("leftData");
-const dialogVisible = ref(false);
+const showMore = ref(false);
 let eventStatEvent = computed(() => {
   return leftData.value?.eventStatEvent;
 });
@@ -78,6 +84,35 @@ let configList = [
   height: 315px;
   display: flex;
   flex-direction: column;
+  :deep(.tools) {
+    display: flex;
+    position: absolute;
+    right: 0;
+    padding-right: 48px;
+
+    i[class^="icon-"] {
+      margin-left: 20px;
+      cursor: pointer;
+    }
+
+    i[class^="icon-"]:first-child {
+      margin-left: 0;
+    }
+
+    .icon-square {
+      width: 18px;
+      height: 18px;
+      background: url(@/assets/images/icon-square.png) no-repeat;
+      background-size: 100% 100%;
+    }
+
+    .icon-zoom {
+      width: 16px;
+      height: 16px;
+      background: url(@/assets/images/icon-zoom.png) no-repeat;
+      background-size: 100% 100%;
+    }
+  }
   .content {
     display: flex;
     flex-direction: row;
