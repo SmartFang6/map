@@ -2,7 +2,7 @@
   <div class="problem-source">
     <Title title="事件来源">
       <template #more>
-        <div class="tools">
+        <div class="tools" @click="moreCall">
           <i class="icon-zoom" />
         </div>
       </template>
@@ -14,7 +14,7 @@
         <div class="bg" />
         <div class="content">
           <div class="value">
-            <span>79</span>
+            <span>{{ total }}</span>
             <span>个</span>
           </div>
           <div class="label">事件来源</div>
@@ -36,6 +36,7 @@
             }}%</span
           >
         </div>
+        <!--
         <div
           v-for="(item, index) in leftData.eventSourceList.filter(
             (d, i) => i <= 1
@@ -50,16 +51,35 @@
             }}%</span
           >
         </div>
+        -->
       </div>
     </div>
+    <el-dialog v-model="show" append-to-body custom-class="common_dialog">
+      <EventSource />
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { inject } from "vue";
+import EventSource from "@/views/dialog/EventSource";
+import { inject, computed, ref } from "vue";
 
 // 左侧注入数据
 const leftData = inject("leftData");
+
+// 来源总数
+const total = computed(() => {
+  console.log(leftData.value.eventSourceList, "111");
+  if (!leftData || !leftData.value.eventSourceList) {
+    return 0;
+  }
+  return leftData.value.eventSourceList[0].allNum;
+});
+
+const show = ref(false);
+const moreCall = () => {
+  show.value = true;
+};
 </script>
 
 <style lang="less" scoped>

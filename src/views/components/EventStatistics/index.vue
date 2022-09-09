@@ -23,7 +23,7 @@
 <script setup>
 import { inject, computed } from "vue";
 import Title from "@/components/Title/index.vue";
-import EventStatisticsChart from "./EventStatisticsChart.vue";
+import EventStatisticsChart from "./Chart.vue";
 
 let leftData = inject("leftData");
 
@@ -81,7 +81,7 @@ let configList = [
       box-sizing: border-box;
       font-size: 16px;
       font-family: MicrosoftYaHei;
-      color: #c4f0ff;
+      color: #91cae8;
     }
 
     .item-img {

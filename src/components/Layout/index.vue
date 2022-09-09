@@ -5,14 +5,18 @@
     </div>
     <div class="side left_side" :class="{ closeWL: leftSideViewClose }">
       <!--      <div class="btn btnL" @click="switchSideL">&lt;</div>-->
-      <slot name="left" />
+      <div class="side-content">
+        <slot name="left" />
+      </div>
     </div>
     <div style="width: 100vw; height: 100vh">
       <slot name="map"></slot>
     </div>
     <div class="side right_side" :class="{ closeWR: rightSideViewClose }">
       <!--      <div class="btn btnR" @click="switchSideR">&gt;</div>-->
-      <slot name="right" />
+      <div class="side-content">
+        <slot name="right" />
+      </div>
     </div>
     <div class="bottom_view">
       <!-- <div @click="switchBottom" class="btn">X</div> -->
@@ -77,8 +81,12 @@ const bottomViewClose = computed(() => {
     z-index: 999;
   }
   .side {
-    width: @sideW;
-    height: calc(100vh - @topH);
+    // width: @sideW;
+    // height: calc(100vh - @topH);
+    width: 590px;
+    top: 0;
+    padding-top: @topH;
+
     position: absolute;
     z-index: 100;
     bottom: 0;
@@ -103,14 +111,21 @@ const bottomViewClose = computed(() => {
       left: -40px;
     }
   }
+  .side-content {
+    width: @sideW;
+    height: 100%;
+  }
   .left_side {
     left: 0;
+    background: url(@/assets/images/layout-left-bg.png);
+    background-size: 100%;
   }
   .right_side {
     right: 0;
+    background: url(@/assets/images/layout-right-bg.png);
+    background-size: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
   .bottom_view {
     // width: calc(100vw - 2 * @sideW);

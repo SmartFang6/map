@@ -54,8 +54,17 @@
     <!--#endregion-->
 
     <!--#region 处置绩效-更多内容的弹窗区-->
-    <MoreDialog v-model:visible="moreDialogVisible" />
+    <!-- <MoreDialog v-model:visible="moreDialogVisible" /> -->
     <!--#endregion-->
+
+    <el-dialog
+      v-model="moreDialogVisible"
+      append-to-body
+      :destroy-on-close="true"
+      custom-class="common_dialog"
+    >
+      <MoreDialog :moreData="moreData" />
+    </el-dialog>
   </div>
 </template>
 
@@ -160,6 +169,7 @@ watch(
 // 获取注入的时间区间
 let dateRange = inject("dateRange");
 
+const moreData = ref({});
 // 监测查询时间
 watch(
   () => dateRange,
@@ -168,6 +178,7 @@ watch(
     dataModel = await getEventPointRankModel({
       ...dateRange.value,
     });
+    moreData.value = dataModel;
     rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
     console.log(dataModel);
   },
