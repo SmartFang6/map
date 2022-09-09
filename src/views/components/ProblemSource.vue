@@ -76,7 +76,7 @@ const total = computed(() => {
   return leftData.value.eventSourceList[0].allNum;
 });
 
-const show = ref(true);
+const show = ref(false);
 const moreCall = () => {
   show.value = true;
 };
