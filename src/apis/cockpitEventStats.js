@@ -78,3 +78,14 @@ export const getEventStatPointRankV2 = (queryParams) => {
     data: queryParams,
   });
 };
+
+/**
+ * 获取政策制度列表
+ * @param {*} queryParams 查询参数
+ * @returns [Array]
+ */
+export const getPoliciesSystemsList = (queryParams) => {
+  return postHttp("/supervision/getPolicyInfo", {
+    data: queryParams,
+  });
+};

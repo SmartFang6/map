@@ -36,7 +36,8 @@
         <!-- 处置绩效 -->
         <Performance />
         <!-- 高发问题排名-->
-        <HighProblemTopList />
+        <!--<HighProblemTopList />-->
+        <PoliciesSystems />
       </div>
     </template>
     <template #bottom>
@@ -56,7 +57,7 @@ import IssueDistribution from "./components/IssueDistribution.vue";
 // import RiskControl from "./components/RiskControl.vue";
 import TrendAnalysis from "./components/TrendAnalysis.vue";
 import Performance from "./components/Performance/index.vue";
-import HighProblemTopList from "./components/HighProblemTopList.vue";
+// import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
 import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
@@ -66,6 +67,8 @@ import moment from "moment";
 import MapPop from "./components/MapPop/index.vue";
 import CenterToolsBar from "./components/CenterToolsBar.vue";
 import router from "@/router";
+import PoliciesSystems from "./components/PoliciesSystems.vue";
+
 const eventBus = inject("EventBus");
 
 // 若未通过单点登录进入，重定向去401页面
