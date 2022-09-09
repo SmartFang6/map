@@ -276,7 +276,8 @@ onMounted(() => {
   .trend-content {
     width: 484px;
     height: 240px;
-    margin: 9px 13px 0 9px;
+    margin: 0;
+    margin-top: 9px;
   }
 
   .trend-chart {
