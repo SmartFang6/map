@@ -1,3 +1,11 @@
+<!------------------------------------------------------
+ ¦ 事件来源 更多弹窗
+ ¦ 搜索、日期类型、统计、配置等..
+ ¦
+ ¦ xxx
+ ¦ xxx
+ ¦ FilePath: src/views/dialog/EventSource.vue
+ ¦----------------------------------------------------->
 <template>
   <div class="">
     <div class="header_title">事件来源</div>
@@ -40,6 +48,12 @@
         :rate="item?.eventSourceSolveRate || 0"
         flexType="row"
         :title="item?.eventSourceName || ''"
+      />
+      <el-empty
+        v-if="!problemSourceList || !problemSourceList.length"
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
       />
     </div>
   </div>
