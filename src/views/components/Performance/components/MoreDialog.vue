@@ -17,6 +17,11 @@
       </div>
     </div>
 
+    <div class="two_title">
+      <ChartTitle :title="'消耗率排名'" />
+      <ChartTitle :title="'考核排名'" />
+    </div>
+
     <div class="content_wrap">
       <div class="echart_left">
         <ProgressBar
@@ -314,6 +319,15 @@ watch(
         // border: solid 1px #14a2d2;
         background: url(@/assets/images/checked.png) no-repeat -10px -10px;
       }
+    }
+  }
+
+  .two_title {
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    > div {
+      width: 50%;
     }
   }
 

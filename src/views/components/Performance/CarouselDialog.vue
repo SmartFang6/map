@@ -56,31 +56,31 @@ watch(
 );
 
 const galleryList = ref([
-  {
-    id: 1001,
-    name: "rule",
-    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202209/02/cms_55236964872586607774644.jpg",
-  },
-  {
-    id: 1002,
-    name: "rule",
-    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202207/04/cms_67344705967398992624193.jpg",
-  },
-  {
-    id: 1003,
-    name: "rule",
-    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202208/09/cms_6834115643127880877769.jpg",
-  },
-  {
-    id: 1004,
-    name: "rule",
-    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202103/23/cms_81509214635837408606126.jpg",
-  },
-  {
-    id: 1005,
-    name: "rule",
-    url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202203/10/cms_1430663409879255511237.jpg",
-  },
+  // {
+  //   id: 1001,
+  //   name: "rule",
+  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202209/02/cms_55236964872586607774644.jpg",
+  // },
+  // {
+  //   id: 1002,
+  //   name: "rule",
+  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202207/04/cms_67344705967398992624193.jpg",
+  // },
+  // {
+  //   id: 1003,
+  //   name: "rule",
+  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202208/09/cms_6834115643127880877769.jpg",
+  // },
+  // {
+  //   id: 1004,
+  //   name: "rule",
+  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202103/23/cms_81509214635837408606126.jpg",
+  // },
+  // {
+  //   id: 1005,
+  //   name: "rule",
+  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202203/10/cms_1430663409879255511237.jpg",
+  // },
 ]);
 </script>
 
