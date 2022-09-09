@@ -28,14 +28,16 @@
       </div>
     </template>
     <template #right>
-      <!-- 风险管控-->
-      <!-- <RiskControl /> -->
-      <!-- 趋势分析-->
-      <TrendAnalysis />
-      <!-- 处置绩效 -->
-      <Performance />
-      <!-- 高发问题排名-->
-      <HighProblemTopList />
+      <div class="right-box">
+        <!-- 风险管控-->
+        <!-- <RiskControl /> -->
+        <!-- 趋势分析-->
+        <TrendAnalysis />
+        <!-- 处置绩效 -->
+        <Performance />
+        <!-- 高发问题排名-->
+        <HighProblemTopList />
+      </div>
     </template>
     <template #bottom>
       <!-- 问题清单 -->
@@ -146,13 +148,19 @@ function showPop(info) {
   width: 100%;
   height: 100%;
 }
-.left-box {
+.left-box,
+.right-box {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
   box-sizing: border-box;
   padding-bottom: 15px;
+}
+.left-box {
   padding-left: 23px;
+}
+.right-box {
+  padding-right: 23px;
 }
 </style>
