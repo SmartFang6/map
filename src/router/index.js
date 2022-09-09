@@ -13,6 +13,11 @@ const routes = [
     component: () => import("@/views/ssoLogin.vue"),
   },
   {
+    path: "/test",
+    name: "test",
+    component: () => import("@/views/test.vue"),
+  },
+  {
     path: "/401",
     name: "401",
     meta: {

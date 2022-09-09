@@ -10,8 +10,7 @@
       :key="item.id"
       :label="item[props.labelKey]"
       :value="item[props.valueKey]"
-    >
-    </el-option>
+    ></el-option>
   </el-select>
   <el-checkbox-group
     v-if="props.type === 'checkbox'"
@@ -23,8 +22,9 @@
       v-for="item in options"
       :key="item.id"
       :label="item[props.valueKey]"
-      >{{ item[props.labelKey] }}</el-checkbox
     >
+      {{ item[props.labelKey] }}
+    </el-checkbox>
   </el-checkbox-group>
 </template>
 

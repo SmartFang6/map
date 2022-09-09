@@ -43,9 +43,9 @@
       <div v-for="(item, index) in mockData" :key="index" class="legend-item">
         <span class="dot" :style="{ background: item.color }" />
         <span class="name">{{ item.label }}</span>
-        <span class="value" :style="{ color: item.color }">{{
-          item.value.toFixed(0)
-        }}</span>
+        <span class="value" :style="{ color: item.color }">
+          {{ item.value.toFixed(0) }}
+        </span>
         <span class="unit">个</span>
       </div>
     </div>

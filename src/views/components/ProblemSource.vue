@@ -2,7 +2,7 @@
   <div class="problem-source">
     <Title title="事件来源">
       <template #more>
-        <div class="tools">
+        <div class="tools" @click="moreCall">
           <i class="icon-zoom" />
         </div>
       </template>
@@ -30,11 +30,11 @@
           class="bubble-item"
         >
           <span>{{ item.eventSourceName }}</span>
-          <span
-            >{{ item.eventSourceNum }}/{{
+          <span>
+            {{ item.eventSourceNum }}/{{
               (item.eventSourceRate * 100).toFixed(0)
-            }}%</span
-          >
+            }}%
+          </span>
         </div>
         <!--
         <div
@@ -54,11 +54,20 @@
         -->
       </div>
     </div>
+    <el-dialog
+      v-model="show"
+      append-to-body
+      destroy-on-close
+      custom-class="common_dialog"
+    >
+      <EventSource />
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import EventSource from "@/views/dialog/EventSource";
+import { inject, computed, ref } from "vue";
 
 // 左侧注入数据
 const leftData = inject("leftData");
@@ -71,6 +80,11 @@ const total = computed(() => {
   }
   return leftData.value.eventSourceList[0].allNum;
 });
+
+const show = ref(false);
+const moreCall = () => {
+  show.value = true;
+};
 </script>
 
 <style lang="less" scoped>

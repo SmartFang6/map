@@ -34,6 +34,10 @@ a {
   src: url(@/assets/font-family/AGENCYB.TTF);
 }
 @font-face {
+  font-family: "AgencyFB-Bold";
+  src: url(@/assets/font-family/AgencyFB-Bold.ttf);
+}
+@font-face {
   font-family: "FZZDHJW";
   src: url(@/assets/font-family/FZZDHJW.TTF);
 }
@@ -44,5 +48,39 @@ a {
 @font-face {
   font-family: "YOUSHEBIAOTIHEI";
   src: url(@/assets/font-family/YOUSHEBIAOTIHEI-2.TTF);
+}
+.common_dialog {
+  background: #051445 !important;
+  border: 1px solid #64d2f7;
+  position: relative;
+  top: 0;
+  left: 0;
+
+  &::after,
+  &::before {
+    position: absolute;
+    top: 0;
+    display: block;
+    content: "";
+    width: 8px;
+    height: 16px;
+    background: #64d2f7;
+  }
+  &::after {
+    left: 0;
+  }
+  &::before {
+    right: 0;
+  }
+  .title {
+    font-family: YouSheBiaoTiHei;
+    font-size: 26px;
+    color: #0adbe0;
+  }
+  .el-dialog__close {
+    border: 1px solid #64d2f7;
+    color: #64d2f7 !important;
+    background: rgba(100, 210, 247, 0.38);
+  }
 }
 </style>

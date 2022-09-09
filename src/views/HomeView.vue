@@ -28,14 +28,17 @@
       </div>
     </template>
     <template #right>
-      <!-- 风险管控-->
-      <!-- <RiskControl /> -->
-      <!-- 趋势分析-->
-      <TrendAnalysis />
-      <!-- 处置绩效 -->
-      <Performance />
-      <!-- 高发问题排名-->
-      <HighProblemTopList />
+      <div class="right-box">
+        <!-- 风险管控-->
+        <!-- <RiskControl /> -->
+        <!-- 趋势分析-->
+        <TrendAnalysis />
+        <!-- 处置绩效 -->
+        <Performance />
+        <!-- 高发问题排名-->
+        <!--<HighProblemTopList />-->
+        <PoliciesSystems />
+      </div>
     </template>
     <template #bottom>
       <!-- 问题清单 -->
@@ -54,7 +57,7 @@ import IssueDistribution from "./components/IssueDistribution.vue";
 // import RiskControl from "./components/RiskControl.vue";
 import TrendAnalysis from "./components/TrendAnalysis.vue";
 import Performance from "./components/Performance/index.vue";
-import HighProblemTopList from "./components/HighProblemTopList.vue";
+// import HighProblemTopList from "./components/HighProblemTopList.vue";
 import ProblemList from "./components/ProblemList.vue";
 import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
@@ -64,6 +67,8 @@ import moment from "moment";
 import MapPop from "./components/MapPop/index.vue";
 import CenterToolsBar from "./components/CenterToolsBar.vue";
 import router from "@/router";
+import PoliciesSystems from "./components/PoliciesSystems.vue";
+
 const eventBus = inject("EventBus");
 
 // 若未通过单点登录进入，重定向去401页面
@@ -146,13 +151,19 @@ function showPop(info) {
   width: 100%;
   height: 100%;
 }
-.left-box {
+.left-box,
+.right-box {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
   box-sizing: border-box;
   padding-bottom: 15px;
+}
+.left-box {
   padding-left: 23px;
+}
+.right-box {
+  padding-right: 23px;
 }
 </style>
