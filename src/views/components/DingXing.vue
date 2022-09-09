@@ -72,20 +72,13 @@ const data = computed(() => {
   leftData.value.eventGradeList.forEach((grade) => {
     if (grade.eventGrade === "1") {
       data.serious.value = grade.eventGradeNum;
-      data.serious.rate = ((grade.eventGradeNum / grade.allNum) * 100).toFixed(
-        2
-      );
+      data.serious.rate = (grade.eventGradeRate * 100).toFixed(2);
     } else if (grade.eventGrade === "2") {
       data.lowSerious.value = grade.eventGradeNum;
-      data.lowSerious.rate = (
-        (grade.eventGradeNum / grade.allNum) *
-        100
-      ).toFixed(2);
+      data.lowSerious.rate = (grade.eventGradeRate * 100).toFixed(2);
     } else {
       data.general.value = grade.eventGradeNum;
-      data.general.rate = ((grade.eventGradeNum / grade.allNum) * 100).toFixed(
-        2
-      );
+      data.general.rate = (grade.eventGradeRate * 100).toFixed(2);
     }
   });
   return data;
