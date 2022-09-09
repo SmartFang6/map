@@ -68,7 +68,11 @@ a {
   &::before {
     right: 0;
   }
-
+  .title {
+    font-family: YouSheBiaoTiHei;
+    font-size: 26px;
+    color: #0adbe0;
+  }
   .el-dialog__close {
     border: 1px solid #64d2f7;
     color: #64d2f7 !important;

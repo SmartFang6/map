@@ -30,11 +30,11 @@
           class="bubble-item"
         >
           <span>{{ item.eventSourceName }}</span>
-          <span
-            >{{ item.eventSourceNum }}/{{
+          <span>
+            {{ item.eventSourceNum }}/{{
               (item.eventSourceRate * 100).toFixed(0)
-            }}%</span
-          >
+            }}%
+          </span>
         </div>
         <!--
         <div

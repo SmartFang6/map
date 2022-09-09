@@ -12,8 +12,9 @@
             size="small"
             class="tag"
             effect="dark"
-            >{{ info.eventGradeName }}</el-tag
           >
+            {{ info.eventGradeName }}
+          </el-tag>
         </div>
       </template>
       <div class="pop-body">
@@ -53,9 +54,9 @@
               effect="light"
               placement="top"
             >
-              <span class="item-value">{{
-                info?.eventResponsibleUnitCodeName
-              }}</span>
+              <span class="item-value">
+                {{ info?.eventResponsibleUnitCodeName }}
+              </span>
             </el-tooltip>
           </li>
           <li class="right-li">

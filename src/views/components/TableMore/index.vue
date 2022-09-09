@@ -4,32 +4,32 @@
       <!-- #region 等级统计数量-->
       <ul>
         <li>
-          <span>全部</span
-          ><span class="item-value" style="color: #fff">{{
-            eventGrade["全部"]
-          }}</span
-          ><span>个</span>
+          <span>全部</span>
+          <span class="item-value" style="color: #fff">
+            {{ eventGrade["全部"] }}
+          </span>
+          <span>个</span>
         </li>
         <li>
-          <span>重大</span
-          ><span class="item-value" style="color: #e35f5f">{{
-            eventGrade["重大问题"]
-          }}</span
-          ><span>个</span>
+          <span>重大</span>
+          <span class="item-value" style="color: #e35f5f">
+            {{ eventGrade["重大问题"] }}
+          </span>
+          <span>个</span>
         </li>
         <li>
-          <span>较严重</span
-          ><span class="item-value" style="color: #ffb401">{{
-            eventGrade["较严重问题"]
-          }}</span
-          ><span>个</span>
+          <span>较严重</span>
+          <span class="item-value" style="color: #ffb401">
+            {{ eventGrade["较严重问题"] }}
+          </span>
+          <span>个</span>
         </li>
         <li>
-          <span>一般</span
-          ><span class="item-value" style="color: #0adbe0">{{
-            eventGrade["一般问题"]
-          }}</span
-          ><span>个</span>
+          <span>一般</span>
+          <span class="item-value" style="color: #0adbe0">
+            {{ eventGrade["一般问题"] }}
+          </span>
+          <span>个</span>
         </li>
       </ul>
       <!-- #endregion -->
@@ -138,9 +138,9 @@
         <el-table-column label="状态" prop="eventStatusName" />
         <el-table-column label="操作">
           <template #default="{ row }">
-            <el-button link type="primary" @click="onCheck(row)"
-              >查看</el-button
-            >
+            <el-button link type="primary" @click="onCheck(row)">
+              查看
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -153,8 +153,7 @@
           :total="total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
       <!-- #endregion -->
     </div>
