@@ -19,7 +19,7 @@
         <div>处理数</div>
         <div>消号率</div>
       </div>
-      <div class="table-body">
+      <div class="table-body" v-if="dataList.length > 0">
         <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
           <div
             v-for="item in dataList"
@@ -36,6 +36,12 @@
           </div>
         </vue-seamless-scroll>
       </div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
     </template>
     <!--#endregion-->
 

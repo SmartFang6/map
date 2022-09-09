@@ -54,7 +54,7 @@
         -->
       </div>
     </div>
-    <el-empty v-else description="暂无数据" />
+    <el-empty v-else description="暂无数据" class="dc-empty" />
     <el-dialog
       v-model="show"
       append-to-body
@@ -90,9 +90,9 @@ const moreCall = () => {
 
 <style lang="less" scoped>
 .problem-source {
-  :deep(.el-empty__image) {
-    opacity: 0.5;
-  }
+  // :deep(.el-empty__image) {
+  //   opacity: 0.5;
+  // }
   height: 313px;
   display: flex;
   flex-direction: column;
