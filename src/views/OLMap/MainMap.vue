@@ -38,6 +38,9 @@ import DCWMSLayer from './layers/impl/DCWMSLayer'
 import store from "@/store";
 import * as LayerEnum from '@/utils/LayerEnum';
 import MainMapWMSLayer from './layers/impl/MainMapWMSLayer'
+import { getFeatures } from './common/common';
+import GeoJSON from 'ol/format/GeoJSON';
+import { geoserverPath } from './config/geoserverConfig';
 
 export default {
   name: "FirstMap",
@@ -49,7 +52,7 @@ export default {
   data() {
     return {
       adcd: store?.state?.userInfo?.adminDivCode || "330182",
-      curLayer: 'pointLayer', // LayerEnum.RIVER_LAYER, // 当前图层，默认为统计图
+      curLayer: LayerEnum.RIVER_LAYER, // 当前图层，默认为点位图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
@@ -129,33 +132,9 @@ export default {
           searchInfo: {}
         }))
       }
-      // 初始化加载河道
-      this.layers[this.curLayer].load(new LayerParams({
-        vm: this,
-        searchInfo: {
-          adcd: this.adcd,
-          startTime: this.startTime,
-          endTime: this.endTime
-        }
-      }))
-      // 初始化加载点位图
-      // this.layers.pointLayer.load(new LayerParams({
-      //   vm: this,
-      //   searchInfo: {
-      //     adcd: this.adcd,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }
-      // }))
-      // 初始化加载统计图
-      // this.layers.basicTotalLayer.load(new LayerParams({
-      //   vm: this,
-      //   searchInfo: {
-      //     adcd: this.adcd,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime,
-      //   }
-      // }))
+      // 初始化加载图层
+      this.initLayers(['pointLayer'])
+      // 轮播图高亮图层
       this.layers.selectLayer.addLayer(this.map)
       // 监听地图缩放，加载管理范围线
       this.watchMapZoom()
@@ -220,23 +199,29 @@ export default {
         }
       }, 2000)
     },
-    // 时间筛选
+    // 修改筛选条件：仅对问题图层起作用
+    changeFilter(params) {
+      console.log('修改筛选条件', params);
+    },
+    // 时间筛选：仅对问题图层起作用
     changeTime(val) {
       console.log('切换时间', val);
       this.startTime = val.startTime
       this.endTime = val.endTime
-      // 先移除当前图层
-      this.layers[this.curLayer].removeLayer(this.map, this)
-      // 再重新加载当前图层
-      let searchInfo = {
-        adcd: this.adcd,
-        startTime: val.startTime,
-        endTime: val.endTime,
+      if (this.baseLayers[0] === 'pointLayer') {
+        // 先移除当前图层
+        this.layers.pointLayer.removeLayer(this.map, this)
+        // 再重新加载当前图层
+        let searchInfo = {
+          adcd: this.adcd,
+          startTime: val.startTime,
+          endTime: val.endTime,
+        }
+        this.layers.pointLayer.load(new LayerParams({
+          vm: this,
+          searchInfo,
+        }))
       }
-      this.layers[this.curLayer].load(new LayerParams({
-        vm: this,
-        searchInfo,
-      }))
     },
     // 统计图点位图切换
     changeLayerType(val) {
@@ -282,8 +267,13 @@ export default {
     },
     // 加载/移除单个图层
     changeLayerVisible(layerid, status) {
+      console.log('visible', layerid, status);
       if (status) {
-        let searchInfo = {};
+        let searchInfo = {
+          adcd: this.adcd,
+          startTime: this.startTime,
+          endTime: this.endTime
+        };
         this.layers[layerid].load(
           new LayerParams({
             vm: this,
@@ -316,8 +306,106 @@ export default {
         if (clickFeature) {
           // 有元素选中
           this.$emit('showPop', clickFeature.getProperties().properties)
+        } else {
+          // 没有元素选中，则进行地图服务空间查询
+          // 根据当前地图展示图层，对应要查询的服务名称
+          let searchServers = []
+          this.baseLayers.forEach((layer) => {
+            switch(layer) {
+              case LayerEnum.RIVER_LAYER:
+                searchServers.push('WaterRegionInvestigation:vw_river_area')
+                break
+              case LayerEnum.RESERVOIR_LAYER:
+                searchServers.push('WaterRegionInvestigation:vw_reservoir_area')
+                break
+              case LayerEnum.HILLPOND_LAYER:
+                searchServers.push('WaterRegionInvestigation:vw_hillypond_area')
+                break
+              case LayerEnum.LAKE_LAYER:
+                searchServers.push('WaterRegionInvestigation:vw_lake_area')
+                break
+              case LayerEnum.CANAL_LAYER:
+                searchServers.push('WaterRegionInvestigation:vw_canal_area')
+                break
+              case LayerEnum.OTHERWATER_LAYER:
+                searchServers.push('WaterRegionInvestigation:vw_otherwater_area')
+                break
+              default:
+                break
+            }
+          })
+          // 空间查询
+          this.getFeatureByLocation(searchServers, evt.coordinate)
         }
       });
+    },
+    async getFeatureByLocation(types, coord) {
+      // 通过点击的点查询空间数据
+      const res = await getFeatures(this.getUrl(types, coord[0], coord[1]))
+      const features = new GeoJSON().readFeatures(res.data)
+      if (features.length > 0) {
+        // 这里只有河道需要走wms服务，所以不写什么判断了，后面有自己再加判断好了
+        const feature = features[0]
+        const properties = feature.getProperties()
+        switch(features[0].id_.split('.')[0]) {
+          case 'vw_river_area':
+            properties.layerid = LayerEnum.RIVER_LAYER
+            break
+          case 'vw_reservoir_area':
+            properties.layerid = LayerEnum.RESERVOIR_LAYER
+            break
+          case 'vw_hillypond_area':
+            properties.layerid = LayerEnum.HILLPOND_LAYER
+            break
+          case 'vw_lake_area':
+            properties.layerid = LayerEnum.LAKE_LAYER
+            break
+          case 'vw_canal_area':
+            properties.layerid = LayerEnum.CANAL_LAYER
+            break
+          case 'vw_otherwater_area':
+            properties.layerid = LayerEnum.OTHERWATER_LAYER
+            break
+        }
+        this.$emit('showPop', properties)
+      }
+    },
+    getUrl(types, lng, lat) {
+      // 空间数据地址
+      // let geoserverUrl = ''
+      // if (this.curLayer === 'riverLayer' || this.curLayer === 'reservoirArea' || this.curLayer === 'poolArea') {
+      //   geoserverUrl = geoserverPath.riverLakeWms
+      // } else if (this.curLayer === 'ortherWaterway') {
+      //   geoserverUrl = geoserverPath.oneMapCityWms
+      // }
+      const geoserverUrl = geoserverPath.waterRegionInvestigationWMS
+      const url = `${geoserverUrl}?service=WFS&version=1.0.0&request=GetFeature
+      &typeName=${types.join(',')}&outputformat=json
+      &filter=${this.getQueryParams(lng, lat)}`
+      return encodeURI(url)
+    },
+    getQueryParams(lng, lat) {
+      // wfs 通过点击的点查询空间数据
+      const distance = 50
+      const queryXML =
+        `${
+          '<Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">' +
+          '<And>' +
+          '<DWithin>' +
+          '<PropertyName>wkb_geometry</PropertyName>' +
+          '<gml:Point>' +
+          '<gml:coordinates>'
+        }${lng},${lat}</gml:coordinates>` +
+        '</gml:Point>' +
+        `<ogc:Distance units="m">${distance}</ogc:Distance>` + // 设置缓冲区大小，方便点击事件的触发，暂定10m
+        '</DWithin>' +
+        '<PropertyIsLike xmlns="http://www.opengis.net/ogc" wildCard="*" singleChar="." escapeChar="!">' +
+        '<PropertyName>county_adcd</PropertyName>' +
+        `<Literal>${this.adcd}</Literal>` +
+        '</PropertyIsLike>' +
+        '</And>' +
+        '</Filter>'
+      return queryXML
     },
   },
 };
