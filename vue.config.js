@@ -7,8 +7,8 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       [proxyUrl]: {
-        // target: "http://192.168.2.238:8504",
-        target: "http://10.33.159.7:8504",
+        target: "http://192.168.2.238:8504",
+        // target: "http://10.33.159.7:8504",
         changeOrigin: true, // 是否改变域名
         ws: true,
         pathRewrite: {
