@@ -64,3 +64,12 @@ export const getListDistrict = (data) => {
 export const getListRlrcReachInfo = (data) => {
   return postHttp(BSER_URL + "/common/listRlrcReachInfo", { data });
 };
+
+/**
+ * 事件来源更多: 完整事件来源列表
+ * @param {Object<any>} data 查询参数
+ * @returns {Object<any>}
+ */
+export const getEventSourceInfo = (data) => {
+  return postHttp("/supervision/getEventSourceInfo", { data });
+};

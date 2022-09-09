@@ -5,41 +5,41 @@
       <li class="tag_view--item">
         <div>
           <p>事件总数</p>
-          100
+          {{ info?.eventNum || 0 }}
           <span>个</span>
         </div>
       </li>
       <li class="tag_view--item">
         <div style="color: #e35f5f">
           <p>已解决</p>
-          100
+          {{ info?.eventSolveNum || 0 }}
           <span>个</span>
         </div>
       </li>
       <li class="tag_view--item">
         <div style="color: #ffb401">
           <p>未解决</p>
-          100
+          {{ info?.eventUnSolveNum || 0 }}
           <span>个</span>
         </div>
       </li>
       <li class="tag_view--item">
         <div style="color: #0adbe0">
           <p>解决率</p>
-          100
-          <span>个</span>
+          {{ info?.eventSourceSolveRate || 0 }}
+          <span>%</span>
         </div>
       </li>
     </ul>
     <div>
       <ProgressBar
-        v-for="i in 12"
-        :no="i"
-        :count="i * 8"
-        :key="i"
-        :rate="i * 8"
+        v-for="(item, index) in problemSourceList"
+        :no="index + 1"
+        :count="item?.allNum || 0"
+        :key="item?.eventSource || index"
+        :rate="item?.eventSourceSolveRate || 0"
         flexType="row"
-        title="标题标题标题标题标题"
+        :title="item?.eventSourceName || ''"
       />
     </div>
   </div>
@@ -50,6 +50,31 @@
  EventSource 事件来源
  **/
 import ProgressBar from "@/views/components/ProgressBar";
+import { getEventSourceInfo } from "@/apis/home";
+import { onMounted, ref } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+const info = ref({});
+const problemSourceList = ref([]);
+const getData = async () => {
+  const { userInfo, dateObj = {} } = store?.state || {};
+  const params = {
+    adcd: userInfo?.adminDivCode || "",
+    endTime: dateObj?.endTime || "",
+    startTime: dateObj?.startTime || "",
+  };
+  info.value = {};
+  problemSourceList.value = [];
+  const message = await getEventSourceInfo(params);
+  if (!message) return;
+  info.value = message;
+  problemSourceList.value = message?.voList || [];
+};
+
+onMounted(() => {
+  getData();
+});
 </script>
 
 <style scoped lang="less">

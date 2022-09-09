@@ -1,7 +1,7 @@
 <!------------------------------------------------------
  ¦ 中间的工具栏
  ¦ 搜索、日期类型、统计、配置等..
- ¦ 
+ ¦
  ¦ Author: 大风
  ¦ Date: 2022-09-07 16:08:51
  ¦ FilePath: src/views/components/CenterToolsBar.vue
@@ -33,7 +33,7 @@
               <el-dropdown-item
                 v-for="(dateType, index) in dateTypes"
                 :key="index"
-                @click="currentDateType = dateType"
+                @click="changeDate(dateType)"
               >
                 {{ dateType.label }}
               </el-dropdown-item>
@@ -80,10 +80,11 @@
 
 <script setup>
 import { ref } from "vue";
-
+import { useStore } from "vuex";
+import moment from "moment";
 // 事件
 const emits = defineEmits(["search"]);
-
+const store = useStore();
 // 搜索组件激活状态(自动伸缩)
 const searchActive = ref(false);
 
@@ -94,16 +95,34 @@ const searchText = ref("");
 const dateTypes = [
   {
     label: "本年",
-    value: "",
+    value: "year",
   },
   {
     label: "本月",
-    value: "",
+    value: "month",
   },
 ];
 
 // 当前(选中)的时间类型
-const currentDateType = ref(dateTypes[0]);
+const currentDateType = ref();
+const changeDate = (payload) => {
+  const { value } = payload;
+  currentDateType.value = payload;
+  const year = new Date().getFullYear();
+  const month = new Date().getFullYear();
+  const dataObj = {
+    endTime:
+      value === "year"
+        ? moment().format("YYYY-12-31 HH:mm:SS")
+        : moment(new Date(year, month + 1)).format("YYYY-MM-DD HH:mm:SS"),
+    startTime:
+      value === "year"
+        ? moment().format("YYYY-01-01 HH:mm:SS")
+        : moment(new Date()).format("YYYY-MM-01 HH:mm:SS"),
+  };
+  store.commit("UPDATE_DATE", dataObj);
+};
+changeDate(dateTypes[0]);
 </script>
 
 <style lang="less" scoped>
