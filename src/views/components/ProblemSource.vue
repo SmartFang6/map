@@ -30,11 +30,11 @@
           class="bubble-item"
         >
           <span>{{ item.eventSourceName }}</span>
-          <span
-            >{{ item.eventSourceNum }}/{{
+          <span>
+            {{ item.eventSourceNum }}/{{
               (item.eventSourceRate * 100).toFixed(0)
-            }}%</span
-          >
+            }}%
+          </span>
         </div>
         <!--
         <div
@@ -54,7 +54,12 @@
         -->
       </div>
     </div>
-    <el-dialog v-model="show" append-to-body custom-class="common_dialog">
+    <el-dialog
+      v-model="show"
+      append-to-body
+      destroy-on-close
+      custom-class="common_dialog"
+    >
       <EventSource />
     </el-dialog>
   </div>

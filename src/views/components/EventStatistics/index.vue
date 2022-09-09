@@ -1,14 +1,14 @@
 <template>
   <div class="event">
     <Title title="事件统计" />
-    <ul class="content">
+    <ul class="content" @click="dialogVisible = true">
       <li class="content-item" v-for="(item, idx) in configList" :key="idx">
         <img :src="item.icon" alt="icon" class="item-img" />
         <div class="value-wrapper">
           <p>
-            <span class="item-value" :title="eventStatEvent?.[item.key] || 0">{{
-              eventStatEvent?.[item.key] || 0
-            }}</span>
+            <span class="item-value" :title="eventStatEvent?.[item.key] || 0">
+              {{ eventStatEvent?.[item.key] || 0 }}
+            </span>
             <span class="item-unit">{{ item?.unit }}</span>
           </p>
           <p>{{ item?.label }}</p>
@@ -17,16 +17,29 @@
     </ul>
 
     <EventStatisticsChart />
+    <el-dialog
+      v-model="dialogVisible"
+      width="1140px"
+      append-to-body
+      destroy-on-close
+      top="2vh"
+      custom-class="common_dialog"
+    >
+      <template #header>
+        <div class="title">事件统计</div>
+      </template>
+      <EventDialog />
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import { inject, computed, ref } from "vue";
 import Title from "@/components/Title/index.vue";
 import EventStatisticsChart from "./Chart.vue";
-
+import EventDialog from "./EventDialog.vue";
 let leftData = inject("leftData");
-
+const dialogVisible = ref(false);
 let eventStatEvent = computed(() => {
   return leftData.value?.eventStatEvent;
 });

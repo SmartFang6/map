@@ -17,9 +17,20 @@ export default createStore({
     userInfo: {},
     adcdName: "",
     ticket: "",
+    dateObj: {
+      endTime: "",
+      startTime: "",
+    },
   },
   getters: {},
   mutations: {
+    UPDATE_DATE: (state, payload) => {
+      if (!payload) return;
+      state.dateObj = {
+        ...state.dateObj,
+        ...payload,
+      };
+    },
     UPDATE_LAYOUT: (state, payload) => {
       if (!payload) return;
       state.layout = {
