@@ -60,7 +60,6 @@ watch(
     nextTick(() => {
       dataAll.value = moreData;
       dealData();
-      console.log("传入数据", moreData);
     });
   },
   {
@@ -73,10 +72,6 @@ watch(
 const problemSourceList = ref([]);
 // 处理数据
 const dealData = () => {
-  console.log(
-    "dataAll.value[activeTab.value]?.pointRankList",
-    dataAll.value[activeTab.value]?.pointRankList
-  );
   problemSourceList.value = dataAll.value[activeTab.value]?.pointRankList;
   chartData.value = dataAll.value[activeTab.value]?.completedRankList?.map(
     (item) => {
@@ -88,7 +83,6 @@ const dealData = () => {
     }
   );
   draw(chartData.value);
-  console.log("chartData.value", chartData.value);
 };
 
 // tabs
@@ -331,7 +325,30 @@ watch(
     > div {
       width: 450px;
       height: 500px;
-      border: 1px solid red;
+    }
+
+    .echart_left {
+      padding-right: 10px;
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        /*滚动条整体样式*/
+        width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+        height: 1px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        /*滚动条里面小方块*/
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background: rgba(206, 205, 205, 0.75);
+      }
+
+      &::-webkit-scrollbar-track {
+        /*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.15);
+      }
     }
   }
 }
