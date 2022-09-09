@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="header_title">标题名称</div>
+    <div class="header_title">事件来源</div>
     <ul class="tag_view">
       <li class="tag_view--item">
         <div>

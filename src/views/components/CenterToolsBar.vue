@@ -108,17 +108,15 @@ const currentDateType = ref();
 const changeDate = (payload) => {
   const { value } = payload;
   currentDateType.value = payload;
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth();
   const dataObj = {
     endTime:
       value === "year"
-        ? moment().format("YYYY-12-31 HH:mm:SS")
-        : moment(new Date(year, month + 1, 0)).format("YYYY-MM-DD HH:mm:SS"),
+        ? moment(new Date()).endOf("month").format("YYYY-12-31 23:59:59")
+        : moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59"),
     startTime:
       value === "year"
-        ? moment().format("YYYY-01-01 HH:mm:SS")
-        : moment(new Date()).format("YYYY-MM-01 HH:mm:SS"),
+        ? moment(new Date()).startOf("month").format("YYYY-01-01 00:00:00")
+        : moment(new Date()).startOf("month").format("YYYY-MM-01 00:00:00"),
   };
   store.commit("UPDATE_DATE", dataObj);
 };
