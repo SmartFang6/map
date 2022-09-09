@@ -43,7 +43,7 @@ const chartOption = ref({
   grid: {
     top: 32,
     left: 30,
-    bottom: 20,
+    bottom: 25,
     right: 45,
   },
   tooltip: {
@@ -104,7 +104,7 @@ const chartOption = ref({
         interval: 0,
         fontSize: 14,
         fontFamily: "Microsoft YaHei",
-        color: "#809fac",
+        color: "#53a3ca",
       },
       axisTick: {
         show: false,
@@ -121,7 +121,7 @@ const chartOption = ref({
       nameTextStyle: {
         fontSize: 14,
         fontFamily: "Microsoft YaHei",
-        color: "#fff",
+        color: "#7ec0e1",
       },
       min: 0,
       max: 10,
@@ -137,7 +137,7 @@ const chartOption = ref({
         formatter: "{value}",
         fontSize: 14,
         fontFamily: "Microsoft YaHei",
-        color: "#809fac",
+        color: "#7ec0e1",
       },
       splitLine: {
         show: true,
@@ -155,7 +155,7 @@ const chartOption = ref({
       nameTextStyle: {
         fontSize: 14,
         fontFamily: "Microsoft YaHei",
-        color: "#fff",
+        color: "#6eafd4",
       },
       min: 0,
       max: 100,
@@ -171,7 +171,7 @@ const chartOption = ref({
         formatter: "{value}%",
         fontSize: 14,
         fontFamily: "Microsoft YaHei",
-        color: "#809fac",
+        color: "#53a3ca",
       },
       splitLine: {
         show: true,
@@ -270,6 +270,7 @@ onMounted(() => {
 <style lang="less" scoped>
 .trend-analysis {
   width: 100%;
+  height: 303px;
   box-sizing: border-box;
 
   .trend-content {

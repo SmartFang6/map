@@ -10,14 +10,33 @@
     <div class="problem-list-header">
       <div class="shake-hands">
         <div class="operator-wrapper">
-          <div class="operator problem-button-all" @click="onShowMore">
+          <!-- <div class="operator problem-button-all">
             <span class="problem-button-text">全部</span>
             <i class="icon-arrow-down"></i>
+          </div> -->
+          <div class="operator problem-dropdown">
+            <el-dropdown>
+              <div class="dropdown-inner">
+                <span>{{ activeType.label }}</span>
+                <img src="@/assets/images/center-tools-dropdown-arrow.png" />
+              </div>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item
+                    v-for="(typeItem, index) in typeList"
+                    :key="index"
+                    @click="activeType = typeItem"
+                  >
+                    {{ typeItem.label }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
         </div>
         <div class="title">
           <p>问题清单</p>
-          <i class="icon-zoom"></i>
+          <i class="icon-zoom" @click="onShowMore"></i>
         </div>
         <div class="custom-select-wrapper">
           <!--
@@ -191,6 +210,36 @@ const dataList = ref([]);
 // 问题清单数据源
 let dataModel = ref(null);
 
+// 问题清单的筛选类型
+const typeList = ref([
+  {
+    label: "全部",
+    value: null,
+  },
+  {
+    label: "预审",
+    value: 1,
+  },
+  {
+    label: "待受理",
+    value: 2,
+  },
+  {
+    label: "已受理",
+    value: 3,
+  },
+  {
+    label: "待处理",
+    value: 4,
+  },
+  {
+    label: "已销号",
+    value: 5,
+  },
+]);
+
+// 选中的类型数据
+let activeType = ref(typeList.value[0]);
 /**
  * 通过接口获取问题清单的列表数据
  * @param {Object} queryParam
@@ -306,7 +355,7 @@ body .problem-dialog {
 // 头部信息
 .problem-list {
   width: 100%;
-  height: 100%;
+  height: 258px;
   &-header {
     height: 61px;
     width: 1039px;
@@ -395,6 +444,31 @@ body .problem-dialog {
         background: url(@/assets/images/icon-zoom.png) no-repeat;
         background-size: 100% 100%;
         cursor: pointer;
+      }
+      .problem-dropdown {
+        display: flex;
+        width: 81px;
+        height: 24px;
+        margin-right: 8px;
+        background: url(@/assets/images/problem-list-btn-all.png) no-repeat;
+        background-size: 100% 100%;
+        cursor: pointer;
+        .dropdown-inner {
+          display: flex;
+          align-items: center;
+          width: 81px;
+          box-sizing: border-box;
+          justify-content: flex-end;
+          padding: 0;
+          color: #c4f0ff;
+          font-size: 14px;
+          & > span {
+            margin-right: 10px;
+          }
+          & > img {
+            margin-right: 8px;
+          }
+        }
       }
     }
   }

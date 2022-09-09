@@ -29,7 +29,7 @@
       <template #more>
         <div class="tools">
           <i class="icon-square" @click="carouselDialogVisible = true"></i>
-          <i class="icon-zoom"></i>
+          <i class="icon-zoom" @click="moreDialogVisible = true"></i>
         </div>
       </template>
       <!--#endregion-->
@@ -52,6 +52,10 @@
     <!--#region 图片轮播的弹窗区-->
     <CarouselDialog v-model:visible="carouselDialogVisible" />
     <!--#endregion-->
+
+    <!--#region 处置绩效-更多内容的弹窗区-->
+    <MoreDialog v-model:visible="moreDialogVisible" />
+    <!--#endregion-->
   </div>
 </template>
 
@@ -59,6 +63,7 @@
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
 import CarouselDialog from "./CarouselDialog.vue";
+import MoreDialog from "./MoreDialog.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
@@ -84,8 +89,11 @@ let dataModel = ref([]);
 // 绩效排名列表
 let rankingList = ref([]);
 
-// 图片轮播的弹窗展示
-let carouselDialogVisible = ref(false);
+// 开启图片轮播弹窗的参数
+const carouselDialogVisible = ref(false);
+
+// 开启处置绩效-更多内容的弹窗参数
+const moreDialogVisible = ref(false);
 
 // 获取处置绩效的数据
 const getEventPointRankModel = async (queryParam) => {
@@ -173,6 +181,7 @@ watch(
 .performance {
   display: flex;
   flex-direction: column;
+  height: 305px;
   :deep(.el-tabs) {
     height: auto;
     margin-left: 10px;
