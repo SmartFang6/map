@@ -2,7 +2,7 @@
   <div class="problem-source">
     <Title title="事件来源">
       <template #more>
-        <div class="tools">
+        <div class="tools" @click="moreCall">
           <i class="icon-zoom" />
         </div>
       </template>
@@ -54,11 +54,15 @@
         -->
       </div>
     </div>
+    <el-dialog v-model="show" append-to-body custom-class="common_dialog">
+      <EventSource />
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import EventSource from "@/views/dialog/EventSource";
+import { inject, computed, ref } from "vue";
 
 // 左侧注入数据
 const leftData = inject("leftData");
@@ -71,6 +75,11 @@ const total = computed(() => {
   }
   return leftData.value.eventSourceList[0].allNum;
 });
+
+const show = ref(true);
+const moreCall = () => {
+  show.value = true;
+};
 </script>
 
 <style lang="less" scoped>
