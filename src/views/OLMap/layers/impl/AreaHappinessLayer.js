@@ -37,7 +37,7 @@ class AreaHappinessLayer extends BaseVectorLayer {
     // 获取幸福指数
 
     const res = await postRequest(
-      'http://web.dcyun.com:48448/api/evaluateIndex/listHappinessIndex',
+      'https://sgpt.yw.gov.cn:6006/api/evaluateIndex/listHappinessIndex',
       {
         indexId: '0',
         indexLevel: 'town',

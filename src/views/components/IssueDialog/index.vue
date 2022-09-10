@@ -5,30 +5,30 @@
       <li>
         <span>派发总数</span>
         <span class="item-value" style="color: #fff">
-          {{ eventGradeInfo?.unitEventNumTotal }}
+          {{ eventGradeInfo?.unitEventNumTotal || 0 }}
         </span>
         <span>个</span>
       </li>
       <li>
         <span>已解决</span>
         <span class="item-value" style="color: #e35f5f">
-          {{ eventGradeInfo?.unitCompletedNumTotal }}
+          {{ eventGradeInfo?.unitCompletedNumTotal || 0 }}
         </span>
         <span>个</span>
       </li>
       <li>
         <span>未解决</span>
         <span class="item-value" style="color: #ffb401">
-          {{ eventGradeInfo?.unitNoCompletedNumTotal }}
+          {{ eventGradeInfo?.unitNoCompletedNumTotal || 0 }}
         </span>
         <span>个</span>
       </li>
       <li>
         <span>解决率</span>
         <span class="item-value" style="color: #0adbe0">
-          {{ eventGradeInfo?.unitCompletedRateTotal }}
+          {{ eventGradeInfo?.unitCompletedRateTotal || 0 }}
         </span>
-        <span>个</span>
+        <span>%</span>
       </li>
     </ul>
     <div class="center">

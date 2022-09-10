@@ -43,7 +43,7 @@
       <ProgressBar
         v-for="(item, index) in problemSourceList"
         :no="index + 1"
-        :count="item?.allNum || 0"
+        :count="item?.eventSourceNum || 0"
         :key="item?.eventSource || index"
         :rate="item?.eventSourceSolveRate || 0"
         flexType="row"
