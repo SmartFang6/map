@@ -40,9 +40,17 @@
 
     <!--#region 图表标注-->
     <div class="chart-legend">
-      <div v-for="(item, index) in mockData" :key="index" class="legend-item">
+      <div v-for="(item, index) in dataList" :key="index" class="legend-item">
         <span class="dot" :style="{ background: item.color }" />
-        <span class="name">{{ item.label }}</span>
+        <el-tooltip
+          v-if="item.label.length > 5"
+          effect="dark"
+          :content="item.label"
+          placement="top"
+        >
+          <span class="name">{{ item.label }}</span>
+        </el-tooltip>
+        <span v-else class="name">{{ item.label }}</span>
         <span class="value" :style="{ color: item.color }">
           {{ item.value.toFixed(0) }}
         </span>
@@ -56,10 +64,20 @@
 <script setup>
 import donut3D from "./donut3D.js";
 import * as d3 from "d3";
-import { ref, onMounted } from "vue";
+import { ref, watch, inject, computed } from "vue";
+import { getEventIncidenceRank } from "@/apis/cockpitEventStats";
+
+const colors = [
+  "#03ffa9",
+  "#00ecff",
+  "#ff4d65",
+  "#ff9700",
+  "#17b3ff",
+  "#ffd633",
+];
 
 // 统计类型
-const types = ref([
+const types = [
   {
     label: "类型",
     value: 1,
@@ -68,39 +86,78 @@ const types = ref([
     label: "区域",
     value: 2,
   },
-]);
+];
 
 // 选中的类型
-const currentType = ref(types.value[0]);
+const currentType = ref(types[0]);
 
 // 图表容器
 const chartContainer = ref(null);
 
+// 获取注入的时间区间
+let dateRange = inject("dateRange");
+
 // d3 对象
 let svg = null;
 
-// 测试数据
-const mockData = [
-  { label: "河长巡河", color: "#03ffa9", value: 1 * Math.random() },
-  { label: "AI智能发现", color: "#00ecff", value: 1 * Math.random() },
-  { label: "无人机发现", color: "#ff4d65", value: 1 * Math.random() },
-  { label: "平台上报", color: "#ff9700", value: 1 * Math.random() },
-  { label: "监测站点", color: "#17b3ff", value: 1 * Math.random() },
-  { label: "监测站点", color: "#ffd633", value: 1 * Math.random() },
-];
+// 数据源 & 拉取数据
+const dataSource = ref([]);
+watch(
+  () => dateRange.value,
+  async (dateRange) => {
+    dataSource.value = await getEventIncidenceRank({
+      ...dateRange,
+    });
+  },
+  { immediate: true }
+);
 
-onMounted(() => {
-  //.attr("width", 200)
-  //.attr("height", 150)
-  svg = d3
-    .select(chartContainer.value)
-    .append("svg")
-    .attr("class", "chart-svg")
-    .attr("viewBox", "0 0 200 150");
-
-  svg.append("g").attr("id", "salesDonut");
-  donut3D.draw("salesDonut", mockData, 100, 62, 100, 60, 25, 0.57);
+// 数据列表
+const dataList = computed(() => {
+  const isType = currentType.value.value === 1;
+  const source = isType
+    ? dataSource.value?.eventStatHighIncidenceRankCategoryCodeList
+    : dataSource.value?.eventStatHighIncidenceRankRegionList;
+  if (!Array.isArray(source) || source.length <= 0) {
+    return [];
+  }
+  return source
+    .filter((a, index) => index < 6)
+    .map((item, index) => {
+      return {
+        color: colors[index],
+        label: isType ? item.eventCategoryName : item.adnm,
+        value: isType ? item.eventCategoryNum : item.adcdNum,
+        rate: item.completedRate * 100,
+      };
+    });
 });
+
+watch(
+  () => dataList.value,
+  (dataList) =>
+    dataList.length > 0 &&
+    setTimeout(() => {
+      const d = [...dataList];
+      for (let i = d.length; i < colors.length; i++) {
+        d.push({
+          value: 0,
+          color: colors[i],
+        });
+      }
+      if (!svg) {
+        svg = d3
+          .select(chartContainer.value)
+          .append("svg")
+          .attr("class", "chart-svg")
+          .attr("viewBox", "0 0 200 150");
+        svg.append("g").attr("id", "donut3D");
+        donut3D.draw("donut3D", d, 100, 62, 100, 60, 25, 0.57);
+      } else {
+        donut3D.transition("donut3D", d, 100, 60, 25, 0.57);
+      }
+    }, 1)
+);
 </script>
 
 <style lang="less" scoped>
@@ -181,6 +238,10 @@ onMounted(() => {
   & .name {
     width: 90px;
     text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
   }
   & .value {
     font-size: 20px;
