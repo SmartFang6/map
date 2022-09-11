@@ -2,9 +2,17 @@
   <div class="event-statis">
     <div class="region">
       <ChartTitle title="按区域" />
-      <div class="chart">
+
+      <div class="chart" v-if="regionData.length > 0">
         <div ref="regionChartRef"></div>
       </div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
+
       <div class="legend-list">
         <div
           class="legend"
@@ -29,11 +37,20 @@
         </div>
       </div>
     </div>
+
     <div class="type">
       <ChartTitle title="按类型" />
-      <div class="chart">
+
+      <div class="chart" v-if="typeData.length > 0">
         <div ref="typeChartRef"></div>
       </div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
+
       <div class="legend-list">
         <div
           class="legend"
@@ -62,7 +79,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 import { countEventClassCount } from "@/apis/home";
 import * as Echarts from "echarts";
 import { useStore } from "vuex";
@@ -176,11 +193,8 @@ const typeChartRef = ref(null);
 // 两个图表
 let regionChart = null;
 let typeChart = null;
-nextTick(() => {
-  regionChart = Echarts.init(regionChartRef.value);
-  typeChart = Echarts.init(typeChartRef.value);
+onMounted(() => {
   addEchartsData();
-  charEvent();
 });
 // 图表 移入移出事件。处理图表中心的显示bug
 const charEvent = () => {
@@ -245,6 +259,9 @@ const addEchartsData = () => {
     }
   }).then(() => {
     nextTick(() => {
+      regionChart = Echarts.init(regionChartRef.value);
+      typeChart = Echarts.init(typeChartRef.value);
+      charEvent();
       // 按区域
       regionChart.setOption(regionOption.value);
       // //按类型

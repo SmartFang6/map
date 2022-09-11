@@ -24,7 +24,7 @@ currentAdcd.value = store.state.adcdName || "";
 function onJump() {
   if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
     const JUMP_URL =
-      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection" +
+      "https://sgpt.yw.gov.cn:6006/oneInspection/ssoLogin?moduleId=water_one_inspection" +
         "&sign=" +
         getMD5_sign() +
         "&ticket=" +

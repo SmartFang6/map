@@ -10,7 +10,7 @@
       <!--E标题尾部功能区-->
     </Title>
     <!-- S内容区域 -->
-    <div class="list">
+    <div class="list" v-if="PoliciesSystemsList.length > 0">
       <vue-seamless-scroll
         :data="PoliciesSystemsList"
         :class-option="{ step: 0.3 }"
@@ -24,6 +24,7 @@
         </div>
       </vue-seamless-scroll>
     </div>
+    <el-empty v-else description="暂无数据" :image-size="80" class="dc-empty" />
     <!-- E内容区域 -->
   </div>
 </template>

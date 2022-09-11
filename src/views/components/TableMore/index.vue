@@ -344,7 +344,7 @@ function onCheck(row) {
       },
     };
     const JUMP_URL =
-      "https://web.dcyun.com:48467/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
+      "https://sgpt.yw.gov.cn:6006/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
       ticket +
       "&sign=" +
       getMD5_sign() +

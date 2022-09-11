@@ -28,7 +28,8 @@
       <!--#region 标题尾部功能区-->
       <template #more>
         <div class="tools">
-          <i class="icon-square" @click="carouselDialogVisible = true"></i>
+          <!-- 暂时注释，未完成的弹窗不展示 -->
+          <!-- <i class="icon-square" @click="carouselDialogVisible = true"></i> -->
           <i class="icon-zoom" @click="moreDialogVisible = true"></i>
         </div>
       </template>
@@ -54,8 +55,18 @@
     <!--#endregion-->
 
     <!--#region 处置绩效-更多内容的弹窗区-->
-    <MoreDialog v-model:visible="moreDialogVisible" />
+    <!-- <MoreDialog v-model:visible="moreDialogVisible" /> -->
     <!--#endregion-->
+
+    <el-dialog
+      v-model="moreDialogVisible"
+      append-to-body
+      :destroy-on-close="true"
+      custom-class="common_dialog"
+      width="75vw"
+    >
+      <MoreDialog :moreData="moreData" />
+    </el-dialog>
   </div>
 </template>
 
@@ -63,7 +74,8 @@
 import Title from "@/components/Title/index.vue";
 import List from "./List.vue";
 import CarouselDialog from "./CarouselDialog.vue";
-import MoreDialog from "./MoreDialog.vue";
+// import MoreDialog from "./MoreDialog.vue";
+import MoreDialog from "./components/MoreDialog.vue";
 import { ref, reactive, toRaw, inject, watch } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
@@ -159,6 +171,7 @@ watch(
 // 获取注入的时间区间
 let dateRange = inject("dateRange");
 
+const moreData = ref({});
 // 监测查询时间
 watch(
   () => dateRange,
@@ -167,6 +180,7 @@ watch(
     dataModel = await getEventPointRankModel({
       ...dateRange.value,
     });
+    moreData.value = dataModel;
     rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
     console.log(dataModel);
   },

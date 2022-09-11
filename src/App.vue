@@ -83,4 +83,7 @@ a {
     background: rgba(100, 210, 247, 0.38);
   }
 }
+.dc-empty {
+  opacity: 0.25;
+}
 </style>

@@ -39,7 +39,7 @@ export const getEventStatGradeForProblemList = (data) => {
 };
 
 //水域监管后台接口
-const BSER_URL = "https://web.dcyun.com:48467/api";
+const BSER_URL = "https://sgpt.yw.gov.cn:6006/manage-api";
 /**
  * 查询数据库字典
  * tableCode:columnCode,tableCode:columnCode,规则组装
@@ -82,8 +82,5 @@ export const countEventClassCount = (data) => {
   return postHttp("/supervision/countEventClassCount", { data });
 };
 export const getEventDistributeInfo = (data) => {
-  return postHttp(
-    "http://10.33.159.217:8504/api" + "/supervision/getEventDistributeInfo",
-    { data }
-  );
+  return postHttp("/supervision/getEventDistributeInfo", { data });
 };
