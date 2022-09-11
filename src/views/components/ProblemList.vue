@@ -260,7 +260,6 @@ let dateRange = inject("dateRange");
 watch(
   () => dateRange,
   async (dateRange) => {
-    console.log("dateRange", dateRange);
     // 先加载一次数据
     dataModel = await getEventQuestionModel({
       ...dateRange.value,

@@ -114,7 +114,6 @@ let dateRange = inject("dateRange");
 watch(
   () => dateRange,
   async (dateRange) => {
-    console.log("RiskdateRange", dateRange);
     // 先加载一次数据
     dataModel.value = await getEventRiskModel({
       ...dateRange.value,

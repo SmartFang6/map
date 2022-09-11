@@ -182,7 +182,6 @@ watch(
     });
     moreData.value = dataModel;
     rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
-    console.log(dataModel);
   },
   {
     immediate: true,
