@@ -8,215 +8,203 @@
 
 <template>
   <div class="map-layer">
-    <!--#region 时间单位切换-->
-    <!-- <div class="time-tabs">
-      <el-tabs v-model="timeActive" type="card">
-        <el-tab-pane class="tab-item" label="本月" name="month"></el-tab-pane>
-        <el-tab-pane label="本年" name="year"></el-tab-pane>
-        <el-tab-pane label="自定义" name="custom">
-          <div>
-            <el-date-picker
-              v-model="dateRange"
-              class="date-picker"
-              type="monthrange"
-              size="small"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              prefix-icon="none"
-              ref="datePickerRef"
-            ></el-date-picker>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </div> -->
-    <!--#endregion-->
+    <div class="btns">
+      <div
+        :class="{ btn: true, active: layerActive }"
+        @click="layerActive = !layerActive"
+      >
+        <img src="@/assets/images/chart-types.png" />
+        <span>专题图</span>
+      </div>
+      <div class="btn" @click="watersDescriptionDialogVisible = true">
+        <img src="@/assets/images/chart-description.png" />
+        <span>水域概况</span>
+      </div>
+    </div>
+    <div v-if="layerActive" class="layer-types">
+      <div
+        v-for="(layer, index) in layerTypes"
+        :key="index"
+        class="layer-type-item"
+      >
+        <div class="title">{{ layer.title }}</div>
+        <div
+          v-for="(item, i) in layer.items"
+          :key="i"
+          :class="{ item: true, active: currentLayerType === item.value }"
+          @click="onChangeLayer(item.value)"
+        >
+          {{ item.label }}
+        </div>
+      </div>
+      <div class="close" @click="layerActive = false">
+        <img src="@/assets/images/chart-arrow-up.png" />
+      </div>
+    </div>
 
-    <!--#region 图类型切换-->
-    <!-- 暂时隐藏，默认展示点位图，后续做市级再放出来 -->
-    <!-- <div class="graph-tabs">
-      <div
-        class="graph-style"
-        :class="{ active: graphActive === '1' }"
-        @click="graphActive = '1'"
-      >
-        统计图
-      </div>
-      <div
-        class="graph-style"
-        :class="{ active: graphActive === '2' }"
-        @click="graphActive = '2'"
-      >
-        点位图
-      </div>
-    </div> -->
-    <!--#endregion-->
+    <WatersDescriptionDialog v-model:visible="watersDescriptionDialogVisible" />
   </div>
 </template>
 
-<script>
-import moment from "moment";
-import { reactive, toRefs, watch } from "vue";
+<script setup>
+import { ref } from "vue";
+import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 
-export default {
-  name: "MapLayer",
-  emits: ["changeTime", "changeLayerType"],
-  setup(props, { emit }) {
-    const state = reactive({
-      timeActive: "year",
-      graphActive: "2",
-      datePickerRef: null,
-      dateRange: [],
-      searchTime: null,
-    });
+// 事件
+const emits = defineEmits(["changeLayer"]);
 
-    // 监听时间切换状态发送事件
-    watch(
-      () => state.timeActive,
-      (timeActive) => {
-        if (timeActive === "month") {
-          emit("changeTime", {
-            startTime: moment(new Date())
-              .startOf("month")
-              .format("YYYY-MM-DD 00:00:00"),
-            endTime: moment(new Date())
-              .endOf("month")
-              .format("YYYY-MM-DD 23:59:59"),
-          });
-        } else if (timeActive === "year") {
-          emit("changeTime", {
-            startTime: moment(new Date())
-              .startOf("year")
-              .format("YYYY-MM-DD 00:00:00"),
-            endTime: moment(new Date())
-              .endOf("year")
-              .format("YYYY-MM-DD 23:59:59"),
-          });
-        } else {
-          state.datePickerRef.$el?.nextElementSibling.click();
-        }
+// 是否显示水域概况弹窗
+const watersDescriptionDialogVisible = ref(false);
+
+// 专题图是否激活
+const layerActive = ref(false);
+
+// 图层类型
+const layerTypes = [
+  {
+    title: "水域调查",
+    items: [
+      {
+        label: "河道",
+        value: "riverLayer",
       },
       {
-        immediate: true,
-      }
-    );
-
-    // 自定义事件发生变化后发送事件
-    watch(
-      () => state.dateRange,
-      (dateRange) => {
-        if (!dateRange || !dateRange[0] || !dateRange[1]) {
-          return;
-        }
-        let [startTime, endTime] = dateRange;
-        endTime = moment(endTime).endOf("day").format("YYYY-MM-DD 23:59:59");
-        emit("changeTime", {
-          startTime,
-          endTime,
-        });
-      }
-    );
-
-    // 监听图形切换状态发送事件
-    watch(
-      () => state.graphActive,
-      (graphActive) => emit("changeLayerType", graphActive),
+        label: "水库",
+        value: "reservoirLayer",
+      },
       {
-        immediate: true,
-      }
-    );
-
-    return {
-      ...toRefs(state),
-    };
+        label: "山塘",
+        value: "hillpondLayer",
+      },
+      {
+        label: "湖泊",
+        value: "lakeLayer",
+      },
+      {
+        label: "人工水道",
+        value: "canalLayer",
+      },
+      {
+        label: "其他水域",
+        value: "otherwaterLayer",
+      },
+    ],
   },
+  {
+    title: "涉水项目",
+    items: [
+      {
+        label: "完工",
+        value: "finishedProj",
+      },
+      {
+        label: "在建",
+        value: "buildingProj",
+      },
+    ],
+  },
+  {
+    title: "监测点",
+    items: [
+      {
+        label: "视频点",
+        value: "videoLayer",
+      },
+      {
+        label: "水质断面",
+        value: "sectionLayer",
+      },
+    ],
+  },
+];
+
+// 当前选中的图层类型
+const currentLayerType = ref("");
+
+// 图层切换
+const onChangeLayer = (layer) => {
+  currentLayerType.value = layer;
+  emits("changeLayer", layer);
 };
 </script>
 
 <style lang="less" scoped>
 .map-layer {
+  // width: 830px;
+  // height: 83px;
+  // margin: 0 auto;
+  display: flex;
   position: absolute;
-  top: 80px;
-  left: 500px;
-  right: 500px;
-  line-height: initial;
-  font-size: 16px;
+  left: 50%;
+  top: 193px;
+  margin-left: -415px;
   z-index: 100;
-
-  :deep(.el-tabs--card > .el-tabs__header .el-tabs__item) {
-    box-sizing: border-box;
-    border: none;
-    color: white;
-  }
-  :deep(.el-tabs--card > .el-tabs__header .el-tabs__nav) {
-    border: none;
-  }
-  :deep(.el-tabs--card > .el-tabs__header) {
-    border: none;
-  }
-  :deep(.el-tabs__header) {
-    margin: 0;
-  }
-  :deep(.el-tabs--card > .el-tabs__header .el-tabs__item.is-active) {
-    background: url(@/assets/images/checked.png);
-    background-size: 100% 100%;
-  }
 }
 
-.time-tabs {
+.btns > .btn {
+  width: 138px;
+  height: 36px;
+  background: url(@/assets/images/chart-bg.png);
   display: flex;
-  justify-content: center;
-  font-family: YOUSHEBIAOTIHEI;
-  width: 100%;
-  .el-tabs {
-    width: 100%;
+  align-items: center;
+  padding-left: 19px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #7be5ff;
+  cursor: pointer;
+  font-family: MicrosoftYaHei;
+  margin-bottom: 10px;
+  & > span {
+    padding-left: 14px;
   }
-  .el-tab-pane {
-    width: 100%;
-  }
-  :deep(.el-tabs__nav-scroll) {
-    display: flex;
-    aling-items: center;
-    justify-content: center;
-  }
-  :deep(.el-date-editor) {
-    // opacity: 0;
-    // background: transparent;
-    background: rgba(11, 27, 48, 0.75);
+  &.active {
+    background: url(@/assets/images/chart-bg-active.png);
     color: #fff;
-  }
-  :deep(.el-date-editor .el-range-input) {
-    color: #c4f0ff;
-  }
-  :deep(.el-date-editor.el-input__wrapper) {
-    // box-shadow: none;
-    width: 180px;
+    font-weight: bold;
   }
 }
 
-.graph-tabs {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  color: #c4f0ff;
-  float: right;
-  right: 60px;
-  top: 20px;
-
-  .graph-style {
-    color: #c4f0ff;
-    font-size: 16px;
-    width: 130px;
-    height: 38px;
+.layer-types {
+  margin-left: 5px;
+  width: 150px;
+  background-color: rgba(4, 46, 113, 0.88);
+  text-align: left;
+  box-sizing: border-box;
+  padding-top: 20px;
+  .title {
+    font-family: YOUSHEBIAOTIHEI;
+    font-size: 24px;
+    color: #00d4f4;
+    padding-left: 14px;
+  }
+  .item {
+    color: #fff;
+    font-size: 14px;
+    font-family: MicrosoftYaHei;
+    cursor: pointer;
+    padding: 3.5px 18px 3.5px 47px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &.active {
+      color: #00d4f4;
+      &::after {
+        display: block;
+        content: "";
+        background: url(@/assets/images/chart-checked.png);
+        width: 12px;
+        height: 8px;
+      }
+    }
+  }
+  .close {
+    height: 17px;
+    margin-top: 10px;
+    background: rgba(68, 195, 255, 0.74);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    &.active {
-      color: #fff;
-      background: url(@/assets/images/performance-tab-active.png);
-    }
-  }
-  .date-picker {
-    float: left;
   }
 }
 </style>
