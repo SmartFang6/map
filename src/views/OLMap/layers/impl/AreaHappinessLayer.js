@@ -3,6 +3,7 @@ import * as common from '../../common/common'
 import { geoServerConfig } from '../../config/mapConfig'
 import GeoJSON from 'ol/format/GeoJSON'
 import { postRequest } from '@/utils/axios'
+import {getDomainName} from "@/utils/config";
 class AreaHappinessLayer extends BaseVectorLayer {
   constructor(layerConfig) {
     super(layerConfig)
@@ -35,9 +36,9 @@ class AreaHappinessLayer extends BaseVectorLayer {
       this.adcdFeatures[adcd] = new GeoJSON().readFeatures(result)
     }
     // 获取幸福指数
-
+    const domainName = getDomainName()
     const res = await postRequest(
-      'https://sgpt.yw.gov.cn:6006/api/evaluateIndex/listHappinessIndex',
+      domainName + '/api/evaluateIndex/listHappinessIndex',
       {
         indexId: '0',
         indexLevel: 'town',

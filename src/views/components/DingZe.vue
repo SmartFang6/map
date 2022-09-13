@@ -80,7 +80,7 @@ const getStyle = () => {
     overflow: hidden;
     .name {
       font-family: FZZDHJW;
-      font-size: 20px;
+      font-size: 18px;
       padding-top: 6px;
       color: #fff;
       text-shadow: 0px 3px 3px rgba(0, 12, 59, 0.5);
@@ -88,7 +88,7 @@ const getStyle = () => {
       line-height: 20px;
     }
     .info {
-      width: 120px;
+      width: 80px;
       display: flex;
       align-items: center;
       justify-content: flex-end;

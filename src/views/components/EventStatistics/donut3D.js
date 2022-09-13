@@ -109,22 +109,31 @@ Donut3D.draw=function(id, data, x /*center x*/, y/*center y*/,
 	
 	var slices = d3.select("#"+id).append("g").attr("transform", "translate(" + x + "," + y + ")")
 		.attr("class", "slices");
-		
-	slices.selectAll(".innerSlice").data(_data).enter().append("path").attr("class", "innerSlice")
-		.style("fill", function(d) { return d3.hsl(d.data.color).darker(1.5); })
-		.attr("d",function(d){ return pieInner(d, rx+0.5,ry+0.5, h, ir);})
-		.each(function(d){this._current=d;});
+
+	const elements = [];
+	elements.push(
+		slices.selectAll(".innerSlice").data(_data).enter().append("path").attr("class", "innerSlice")
+			.style("fill", function(d) { return d3.hsl(d.data.color).darker(1.5); })
+			.attr("d",function(d){ return pieInner(d, rx+0.5,ry+0.5, h, ir);})
+			.each(function(d){this._current=d;})
+	);
 	
-	slices.selectAll(".topSlice").data(_data).enter().append("path").attr("class", "topSlice")
-		.style("fill", function(d) { return d.data.color; })
-		.style("stroke", function(d) { return d.data.color; })
-		.attr("d",function(d){ return pieTop(d, rx, ry, ir);})
-		.each(function(d){this._current=d;});
+	elements.push(
+		slices.selectAll(".topSlice").data(_data).enter().append("path").attr("class", "topSlice")
+			.style("fill", function(d) { return d.data.color; })
+			.style("stroke", function(d) { return d.data.color; })
+			.attr("d",function(d){ return pieTop(d, rx, ry, ir);})
+			.each(function(d){this._current=d;})
+	);
 	
-	slices.selectAll(".outerSlice").data(_data).enter().append("path").attr("class", "outerSlice")
-		.style("fill", function(d) { return d3.hsl(d.data.color).darker(1.2); })
-		.attr("d",function(d){ return pieOuter(d, rx-.5,ry-.5, h);})
-		.each(function(d){this._current=d;});
+	elements.push(
+		slices.selectAll(".outerSlice").data(_data).enter().append("path").attr("class", "outerSlice")
+			.style("fill", function(d) { return d3.hsl(d.data.color).darker(1.2); })
+			.attr("d",function(d){ return pieOuter(d, rx-.5,ry-.5, h);})
+			.each(function(d){this._current=d;})
+	);
+
+	return elements;
 
 	/*
 	slices.selectAll(".percent").data(_data).enter().append("text").attr("class", "percent")

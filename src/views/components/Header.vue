@@ -17,22 +17,18 @@ import store from "@/store";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
 import { getMD5_sign } from "@/utils/index";
+import { getDomainName } from "@/utils/config";
 
 let currentAdcd = ref("");
 currentAdcd.value = store.state.adcdName || "";
 
 function onJump() {
   if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
-    const JUMP_URL =
-      "https://sgpt.yw.gov.cn:6006/oneInspection/ssoLogin?moduleId=water_one_inspection" +
-        "&sign=" +
-        getMD5_sign() +
-        "&ticket=" +
-        store?.state?.ticket +
-        "&userId=" +
-        store?.state?.userInfo?.userId || "";
-
-    console.log(JUMP_URL, "JUMP_URL", getMD5_sign());
+    const domainName = getDomainName();
+    const ticket = store?.state?.ticket || "";
+    const userId = store?.state?.userInfo?.userId || "";
+    const sign = getMD5_sign();
+    const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}`;
     window.open(JUMP_URL);
   } else {
     ElMessage({

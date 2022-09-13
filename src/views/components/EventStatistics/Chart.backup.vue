@@ -37,15 +37,42 @@
       <div class="chart-container" ref="chartContainer" />
     </div>
     <!--#endregion-->
+
+    <!--#region 图表标注-->
+    <div class="chart-legend">
+      <div v-for="(item, index) in dataList" :key="index" class="legend-item">
+        <span class="dot" :style="{ background: item.color }" />
+        <el-tooltip
+          v-if="item.label.length > 5"
+          effect="dark"
+          :content="item.label"
+          placement="top"
+        >
+          <span class="name">{{ item.label }}</span>
+        </el-tooltip>
+        <span v-else class="name">{{ item.label }}</span>
+        <span class="value" :style="{ color: item.color }">
+          {{ item.value.toFixed(0) }}
+        </span>
+        <span class="unit">个</span>
+      </div>
+    </div>
+    <!--#endregion-->
+
+    <!--#region 图表tooltip-->
+    <div class="chart-tooltip">
+      <div class="label"></div>
+      <div class="value"></div>
+    </div>
+    <!--#endregion-->
   </div>
 </template>
 
 <script setup>
+import donut3D from "./donut3D.js";
+import * as d3 from "d3";
 import { ref, watch, inject, computed } from "vue";
 import { getEventIncidenceRank } from "@/apis/cockpitEventStats";
-import "echarts-gl";
-import * as Echarts from "echarts";
-import getPie3DOptions, { getParametricEquation } from "./getPie3DOptions";
 
 const colors = [
   "#03ffa9",
@@ -102,12 +129,10 @@ const dataList = computed(() => {
     .filter((a, index) => index < 6)
     .map((item, index) => {
       return {
-        name: isType ? item.eventCategoryName : item.adnm,
+        color: colors[index],
+        label: isType ? item.eventCategoryName : item.adnm,
         value: isType ? item.eventCategoryNum : item.adcdNum,
         rate: item.completedRate * 100,
-        itemStyle: {
-          color: colors[index],
-        },
       };
     });
   const total = result
@@ -121,124 +146,64 @@ const dataList = computed(() => {
   });
 });
 
-let option = ref({});
-let chartTool = null;
-let hoveredIndex = "";
+// d3 对象
+let svg = null;
+const initChart = (d) => {
+  svg = d3
+    .select(chartContainer.value)
+    .append("svg")
+    .attr("class", "chart-svg")
+    .attr("viewBox", "0 0 200 150");
+  svg.append("g").attr("id", "donut3D");
 
-function chartMouseover(params) {
-  // 准备重新渲染扇形所需的参数
-  let isSelected;
-  let isHovered;
-  let startRatio;
-  let endRatio;
-  let k;
-  let i;
+  const donut3DElements = donut3D.draw(
+    "donut3D",
+    d,
+    100,
+    62,
+    100,
+    60,
+    25,
+    0.57
+  );
 
-  // 如果触发 mouseover 的扇形当前已高亮，则不做操作
-  if (hoveredIndex === params.seriesIndex) {
-    return;
+  // 初始化提示工具
+  const tooltip = d3.select(".chart-tooltip");
+  const mouseover = () => tooltip.style("opacity", 1).style("z-index", 999);
+  const mouseleave = () => tooltip.style("opacity", 0).style("z-index", 0);
+  const mousemove = (event, { data }) => {
+    d3.select(".chart-tooltip .label").text(data?.label);
+    d3.select(".chart-tooltip .value").text(`${data.value}个 (${data.rate}%)`);
+    const { pageX, pageY } = event;
+    tooltip.style("left", `${pageX + 14}px`).style("top", `${pageY + 15}px`);
+  };
 
-    // 否则进行高亮及必要的取消高亮操作
-  } else {
-    // 如果当前有高亮的扇形，取消其高亮状态（对 option 更新）
-    if (hoveredIndex !== "") {
-      // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 false。
-      isSelected = option.value.series[hoveredIndex].pieStatus.selected;
-      isHovered = false;
-      startRatio = option.value.series[hoveredIndex].pieData.startRatio;
-      endRatio = option.value.series[hoveredIndex].pieData.endRatio;
-      k = option.value.series[hoveredIndex].pieStatus.k;
-      i =
-        option.value.series[hoveredIndex].pieData.value ===
-        option.value.series[0].pieData.value
-          ? 35
-          : 10;
-      // 对当前点击的扇形，执行取消高亮操作（对 option 更新）
-      option.value.series[hoveredIndex].parametricEquation =
-        getParametricEquation(
-          startRatio,
-          endRatio,
-          isSelected,
-          isHovered,
-          k,
-          i
-        );
-      option.value.series[hoveredIndex].pieStatus.hovered = isHovered;
-
-      // 将此前记录的上次选中的扇形对应的系列号 seriesIndex 清空
-      hoveredIndex = "";
-    }
-
-    // 如果触发 mouseover 的扇形不是透明圆环，将其高亮（对 option 更新）
-    if (params.seriesName !== "mouseoutSeries") {
-      // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 true。
-      isSelected = option.value.series[params.seriesIndex].pieStatus.selected;
-      isHovered = true;
-      startRatio = option.value.series[params.seriesIndex].pieData.startRatio;
-      endRatio = option.value.series[params.seriesIndex].pieData.endRatio;
-      k = option.value.series[params.seriesIndex].pieStatus.k;
-
-      // 对当前点击的扇形，执行高亮操作（对 option 更新）
-      option.value.series[params.seriesIndex].parametricEquation =
-        getParametricEquation(
-          startRatio,
-          endRatio,
-          isSelected,
-          isHovered,
-          k,
-          option.value.series[params.seriesIndex].pieData.value / 5 + 5 // 控制高亮柱状高度
-        );
-      option.value.series[params.seriesIndex].pieStatus.hovered = isHovered;
-
-      // 记录上次高亮的扇形对应的系列号 seriesIndex
-      hoveredIndex = params.seriesIndex;
-    }
-
-    // 使用更新后的 option，渲染图表
-    chartTool.setOption(option);
-  }
-}
-
-// 修正取消高亮失败的 bug
-function globaloutHandler() {
-  if (hoveredIndex !== "") {
-    // 从 option.series 中读取重新渲染扇形所需的参数，将是否高亮设置为 true。
-    let isSelected = option.value.series[hoveredIndex].pieStatus.selected;
-    let isHovered = false;
-    let k = option.value.series[hoveredIndex].pieStatus.k;
-    let startRatio = option.value.series[hoveredIndex].pieData.startRatio;
-    let endRatio = option.value.series[hoveredIndex].pieData.endRatio;
-    // 对当前点击的扇形，执行取消高亮操作（对 option 更新）
-    let i =
-      option.value.series[hoveredIndex].pieData.value ===
-      option.value.series[0].pieData.value
-        ? 35
-        : 10;
-    option.value.series[hoveredIndex].parametricEquation =
-      getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, i);
-    option.value.series[hoveredIndex].pieStatus.hovered = isHovered;
-
-    // 将此前记录的上次选中的扇形对应的系列号 seriesIndex 清空
-    hoveredIndex = "";
-  }
-
-  // 使用更新后的 option，渲染图表
-  chartTool.setOption(option);
-}
+  donut3DElements.forEach((element) => {
+    element
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave)
+      .on("mouseover", mouseover);
+  });
+};
 
 watch(
   () => dataList.value,
-  (dataList) => {
-    if (dataList && dataList.length > 0) {
-      if (!chartTool) {
-        chartTool = Echarts.init(chartContainer.value);
-        chartTool.on("mouseover", chartMouseover);
-        chartTool.on("globalout", globaloutHandler);
+  (dataList) =>
+    dataList.length > 0 &&
+    setTimeout(() => {
+      const d = [...dataList];
+      for (let i = d.length; i < colors.length; i++) {
+        d.push({
+          value: 0,
+          color: colors[i],
+        });
       }
-      option.value = getPie3DOptions(dataList, 0.59);
-      chartTool.setOption(option.value);
-    }
-  }
+      if (!svg) {
+        initChart(d);
+      } else {
+        donut3D.transition("donut3D", d, 100, 60, 25, 0.57);
+      }
+    }, 1)
 );
 </script>
 
@@ -270,10 +235,6 @@ watch(
   }
   .chart-container {
     left: 18px;
-    width: 400px;
-    height: 220px;
-    max-height: 200px;
-    text-align: left;
   }
 }
 

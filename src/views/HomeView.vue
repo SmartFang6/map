@@ -4,10 +4,25 @@
     <template #map>
       <div class="map">
         <CenterToolsBar @changeTime="onChangeTime" />
-        <MapLayer @changeLayer="mapRef?.changeLayer" />
+        <MapLayer
+          @selectLayers="mapRef?.initLayers"
+          @changeLegend="
+            ({ layerName, legend }) => mapRef?.changeLegend(layerName, legend)
+          "
+        />
         <Map ref="mapRef" @showPop="showPop" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
+        <el-dialog
+          v-model="dialogShow"
+          width="50%"
+          append-to-body
+          destroy-on-close
+          custom-class="common_dialog"
+        >
+          <!-- 视频点 -->
+          <VideoDialog v-if="currentDialog === LayerEnum.VIDEO_LAYER" />
+        </el-dialog>
       </div>
     </template>
     <template #left>
@@ -44,6 +59,7 @@
 import Header from "./components/Header";
 import { inject, provide, ref } from "vue";
 import { NoticeEvt } from "@/views/config";
+import * as LayerEnum from "@/utils/LayerEnum"; // 图层id
 import EventStatistics from "./components/EventStatistics/index.vue";
 import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
@@ -61,7 +77,7 @@ import MapPop from "./components/MapPop/index.vue";
 import CenterToolsBar from "./components/CenterToolsBar.vue";
 import router from "@/router";
 import PoliciesSystems from "./components/PoliciesSystems.vue";
-
+import VideoDialog from "./dialog/VideoDialog.vue";
 const eventBus = inject("EventBus");
 
 // 若未通过单点登录进入，重定向去401页面
@@ -73,6 +89,7 @@ if (!USER_ID) {
 let leftData = ref({});
 
 let dateRange = ref({});
+
 // 获取左侧栏数据
 function getLeftData(st = null, et = null) {
   const _startTime =
@@ -123,11 +140,20 @@ function onChangeTime(val) {
 }
 
 // 地图点位弹窗
+const dialogShow = ref(false);
+// 当前展示的弹窗
+const currentDialog = ref("");
 let MapPopRef = ref(null);
 function showPop(info) {
   console.log(info);
-  console.log(MapPopRef, "MapPopRef");
-  MapPopRef.value.open(info);
+  currentDialog.value = info.layerid;
+  if (info.layerid === "point") {
+    MapPopRef.value.open(info);
+    return;
+  }
+  if (info.layerid === LayerEnum.VIDEO_LAYER) {
+    dialogShow.value = true;
+  }
 }
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
