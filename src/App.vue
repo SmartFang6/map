@@ -78,6 +78,8 @@ a {
     color: #0adbe0;
   }
   .el-dialog__close {
+    position: relative;
+    z-index: 1;
     border: 1px solid #64d2f7;
     color: #64d2f7 !important;
     background: rgba(100, 210, 247, 0.38);
@@ -93,6 +95,7 @@ a {
   letter-spacing: 0;
   color: #0adbe0;
   margin-bottom: 20px;
+  z-index: 0;
 }
 .dc-empty {
   opacity: 0.25;

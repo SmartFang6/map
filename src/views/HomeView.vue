@@ -15,13 +15,20 @@
         <MapPop ref="MapPopRef" />
         <el-dialog
           v-model="dialogShow"
-          width="50%"
+          :width="
+            currentDialog === LayerEnum.RESERVOIR_LAYER ||
+            currentDialog === LayerEnum.HILLPOND_LAYER
+              ? '50%'
+              : '30%'
+          "
           append-to-body
           destroy-on-close
           custom-class="common_dialog"
         >
-          <!-- 视频点 -->
-          <VideoDialog v-if="currentDialog === LayerEnum.VIDEO_LAYER" />
+          <component
+            :is="dialogEmnu[currentDialog]"
+            :info="mapInfo"
+          ></component>
         </el-dialog>
       </div>
     </template>
@@ -57,7 +64,7 @@
 
 <script setup>
 import Header from "./components/Header";
-import { inject, provide, ref } from "vue";
+import { inject, provide, ref, shallowRef } from "vue";
 import { NoticeEvt } from "@/views/config";
 import * as LayerEnum from "@/utils/LayerEnum"; // 图层id
 import EventStatistics from "./components/EventStatistics/index.vue";
@@ -77,7 +84,11 @@ import MapPop from "./components/MapPop/index.vue";
 import CenterToolsBar from "./components/CenterToolsBar.vue";
 import router from "@/router";
 import PoliciesSystems from "./components/PoliciesSystems.vue";
+// 地图弹窗 -----
+// 视频点弹窗
 import VideoDialog from "./dialog/VideoDialog.vue";
+// 河道弹窗
+import RiverDialog from "./dialog/RiverDialog.vue";
 const eventBus = inject("EventBus");
 
 // 若未通过单点登录进入，重定向去401页面
@@ -142,15 +153,25 @@ function onChangeTime(val) {
 const dialogShow = ref(false);
 // 当前展示的弹窗
 const currentDialog = ref("");
+// 弹窗组件
+const dialogEmnu = shallowRef({
+  [LayerEnum.RIVER_LAYER]: RiverDialog, // 河道弹窗
+  [LayerEnum.VIDEO_LAYER]: VideoDialog, // 视频弹窗
+});
+const mapInfo = ref({});
 let MapPopRef = ref(null);
 function showPop(info) {
   console.log(info);
   currentDialog.value = info.layerid;
+  mapInfo.value = info;
   if (info.layerid === "point") {
     MapPopRef.value.open(info);
     return;
   }
-  if (info.layerid === LayerEnum.VIDEO_LAYER) {
+  if (
+    info.layerid === LayerEnum.VIDEO_LAYER ||
+    info.layerid === LayerEnum.RIVER_LAYER
+  ) {
     dialogShow.value = true;
   }
 }
