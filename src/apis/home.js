@@ -1,4 +1,5 @@
 import { postHttp, getHttp } from "@/utils/axios";
+import { getDomainName } from "@/utils/config";
 
 // 获取事件统计结果 (事件统计、问题来源、问题派发)
 /**
@@ -39,7 +40,8 @@ export const getEventStatGradeForProblemList = (data) => {
 };
 
 //水域监管后台接口
-const BSER_URL = "https://sgpt.yw.gov.cn:6006/manage-api";
+// const BSER_URL = "https://sgpt.yw.gov.cn:6006/manage-api";
+const BSER_URL = getDomainName() + "/manage-api";
 /**
  * 查询数据库字典
  * tableCode:columnCode,tableCode:columnCode,规则组装
