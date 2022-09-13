@@ -21,6 +21,8 @@ export default createStore({
       endTime: "",
       startTime: "",
     },
+    // 当前激活的过滤器
+    activeFilter: null,
   },
   getters: {},
   mutations: {

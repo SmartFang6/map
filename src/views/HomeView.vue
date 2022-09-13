@@ -78,6 +78,7 @@ if (!USER_ID) {
 let leftData = ref({});
 
 let dateRange = ref({});
+
 // 获取左侧栏数据
 function getLeftData(st = null, et = null) {
   const _startTime =
