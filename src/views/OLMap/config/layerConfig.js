@@ -413,6 +413,102 @@ export const riverLayer = {
   zIndex: 18
 }
 
+// 管理范围线
+export const lineManageLayer = {
+  id: 'lineManageLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_river_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              // fill: { color: '#ff4d65' },
+              stroke: {
+                color: '#ff4d65',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_river_manageline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 临水线
+export const lineWaterLayer = {
+  id: 'lineWaterLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_river_approachline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              // fill: { color: '#ff4d65' },
+              stroke: {
+                color: '#ffd633',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_river_approachline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 中心线
+export const lineCenterLayer = {
+  id: 'lineCenterLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_river_centerline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              // fill: { color: '#ff4d65' },
+              stroke: {
+                color: '#ff9700',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_river_centerline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
 // 水库
 export const reservoirLayer = {
   id: LayerEnum.RESERVOIR_LAYER,

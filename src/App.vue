@@ -83,6 +83,17 @@ a {
     background: rgba(100, 210, 247, 0.38);
   }
 }
+.header_title {
+  position: relative;
+  top: -40px;
+  font-family: YouSheBiaoTiHei;
+  font-size: 26px;
+  text-align: left;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: #0adbe0;
+  margin-bottom: 20px;
+}
 .dc-empty {
   opacity: 0.25;
 }

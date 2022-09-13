@@ -41,6 +41,7 @@ import MainMapWMSLayer from './layers/impl/MainMapWMSLayer'
 import { getFeatures } from './common/common';
 import GeoJSON from 'ol/format/GeoJSON';
 import { geoserverPath } from './config/geoserverConfig';
+import RiverLayer from './layers/impl/RiverLayer';
 
 export default {
   name: "FirstMap",
@@ -104,7 +105,8 @@ export default {
         basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
         lineManageLayer: new MainMapWMSLayer(riverManageLineLayer), // 河道管理范围线
-        [LayerEnum.RIVER_LAYER]: new MainMapWMSLayer(riverLayer), // 河道
+        // [LayerEnum.RIVER_LAYER]: new MainMapWMSLayer(riverLayer), // 河道
+        [LayerEnum.RIVER_LAYER]: new RiverLayer(riverLayer),
         [LayerEnum.RESERVOIR_LAYER]: new MainMapWMSLayer(reservoirLayer), // 水库
         [LayerEnum.HILLPOND_LAYER]: new MainMapWMSLayer(hillpondLayer), // 山塘
         [LayerEnum.LAKE_LAYER]: new MainMapWMSLayer(lakeLayer), // 湖泊
@@ -137,7 +139,7 @@ export default {
       // 轮播图高亮图层
       this.layers.selectLayer.addLayer(this.map)
       // 监听地图缩放，加载管理范围线
-      this.watchMapZoom()
+      // this.watchMapZoom()
     },
     // 切换图层
     changeLayer(layerName) {
@@ -249,6 +251,7 @@ export default {
     },
     // 初始化加载图层
     initLayers(layers) {
+      console.log('initlayers', layers);
       const layerArr = layers;
       // 需要加载的图层
       const addLayers = layerArr.filter(
@@ -264,6 +267,11 @@ export default {
       removeLayers.forEach((layer) => {
         this.changeLayerVisible(layer, false);
       });
+    },
+    // 修改图例
+    changeLegend(layerid, legend) {
+      console.log('legend', layerid, legend);
+      this.layers[layerid].changeLegend(legend, this)
     },
     // 加载/移除单个图层
     changeLayerVisible(layerid, status) {
@@ -342,6 +350,7 @@ export default {
     async getFeatureByLocation(types, coord) {
       // 通过点击的点查询空间数据
       const res = await getFeatures(this.getUrl(types, coord[0], coord[1]))
+      console.log('location', types, coord, res);
       const features = new GeoJSON().readFeatures(res.data)
       if (features.length > 0) {
         // 这里只有河道需要走wms服务，所以不写什么判断了，后面有自己再加判断好了
