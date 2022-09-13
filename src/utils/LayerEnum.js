@@ -2,10 +2,14 @@
  * @Author: chuyingf chuyingf@163.com
  * @Date: 2022-09-08 10:48:05
  * @LastEditors: chuyingf chuyingf@163.com
- * @LastEditTime: 2022-09-08 11:00:42
+ * @LastEditTime: 2022-09-13 08:51:38
  * @FilePath: \river-lake-cockpit-front\src\utils\LayerEnum.js
  * @Description: 图层枚举值配置
  */
+/**
+ * 问题-点位图层
+ */
+export const QUESTION_POINT_LAYER = "pointLayer";
 /**
  * 河道
  */
