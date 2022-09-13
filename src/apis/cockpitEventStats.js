@@ -89,3 +89,25 @@ export const getPoliciesSystemsList = (queryParams) => {
     data: queryParams,
   });
 };
+
+/**
+ * 获取趋势分析结果的列表数据
+ * @param {*} queryParams 查询参数
+ * @returns {Object}
+ */
+export const getEventStatTrendAnalysisList = (queryParams) => {
+  return postHttp("/supervision/getEventStatTrendAnalysisList", {
+    data: queryParams,
+  });
+};
+
+/**
+ * 获取标题统计信息
+ * @param {*} queryParams 查询参数
+ * @returns {Object}
+ */
+export const getEventTitleCount = (queryParams) => {
+  return postHttp("/supervision/eventTitleCount", {
+    data: queryParams,
+  });
+};

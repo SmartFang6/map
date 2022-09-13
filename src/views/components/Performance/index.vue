@@ -18,9 +18,9 @@
           <el-tab-pane
             class="tab-item"
             label="乡镇"
-            name="village"
+            name="zoneRank"
           ></el-tab-pane>
-          <el-tab-pane label="部门" name="department"></el-tab-pane>
+          <el-tab-pane label="部门" name="departmentRank"></el-tab-pane>
         </el-tabs>
       </template>
       <!--#endregion-->
@@ -29,7 +29,7 @@
       <template #more>
         <div class="tools">
           <!-- 暂时注释，未完成的弹窗不展示 -->
-          <!-- <i class="icon-square" @click="carouselDialogVisible = true"></i> -->
+          <i class="icon-square" @click="carouselDialogVisible = true"></i>
           <i class="icon-zoom" @click="moreDialogVisible = true"></i>
         </div>
       </template>
@@ -80,7 +80,7 @@ import { ref, reactive, toRaw, inject, watch } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 
 // 乡镇/部门的选择标签
-let tabActive = ref("village");
+let tabActive = ref("zoneRank");
 // 销号率/考核的选择标签
 let typeActive = ref(1);
 // 表格分类的列表
@@ -141,19 +141,9 @@ const onHandleTownOrDeptClick = (context) => {
  */
 const toggleTownOrDeptList = (local, stamp) => {
   const model = toRaw(dataModel);
-  let target = null;
-  if (local === "village") {
-    target =
-      stamp === 1
-        ? model?.zoneRank?.completedRankList
-        : model?.zoneRank?.pointRankList;
-  } else {
-    target =
-      stamp === 1
-        ? model?.departmentRank?.completedRankList
-        : model?.departmentRank?.pointRankList;
-  }
   // 获取百分比的总数
+  const target =
+    stamp === 1 ? model[local]?.completedRankList : model[local]?.pointRankList;
   return target;
 };
 
@@ -182,7 +172,6 @@ watch(
     });
     moreData.value = dataModel;
     rankingList.value = toggleTownOrDeptList(tabActive.value, typeActive.value);
-    console.log(dataModel);
   },
   {
     immediate: true,

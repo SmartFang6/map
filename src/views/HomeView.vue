@@ -3,15 +3,8 @@
     <template #header><Header /></template>
     <template #map>
       <div class="map">
-        <!-- <MapLayer
-          @changeTime="mapRef?.changeTime"
-          @changeLayerType="mapRef?.changeLayerType"
-        /> -->
         <CenterToolsBar @changeTime="onChangeTime" />
-        <MapLayer
-          @changeTime="onChangeTime"
-          @changeLayerType="onChangeLayerType"
-        />
+        <MapLayer @selectLayers="mapRef?.initLayers" />
         <Map ref="mapRef" @showPop="showPop" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
@@ -127,10 +120,6 @@ function onChangeTime(val) {
   console.log(val, "on-change-time");
   getLeftData(val.startTime, val.endTime);
   mapRef.value?.changeTime(val);
-}
-function onChangeLayerType(val) {
-  console.log(val, "change-layer-type");
-  mapRef.value?.changeLayerType(val);
 }
 
 // 地图点位弹窗

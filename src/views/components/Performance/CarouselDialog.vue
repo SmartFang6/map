@@ -91,7 +91,7 @@ const galleryList = ref([
   :deep(.el-dialog) {
     border: 1px solid #64d2f7;
     color: white;
-    background-color: rgb(5, 20, 69, 0.8);
+    background-color: rgba(5, 20, 69, 0.8);
     // background-color: rgba(25, 56, 91, 0.8);
   }
 

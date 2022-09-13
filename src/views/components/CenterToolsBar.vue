@@ -47,23 +47,23 @@
     <!--#region 统计-->
     <div class="stat">
       <div class="stat-item">
-        <div class="label">本月新增</div>
+        <div class="label">{{ currentDateType.label }}新增</div>
         <div class="value">
-          <span>34</span>
+          <span>{{ statData?.todayAddNum || 0 }}</span>
           <span>个</span>
         </div>
       </div>
       <div class="stat-item">
         <div class="label">即将逾期</div>
         <div class="value">
-          <span>34</span>
+          <span>{{ statData?.todayImmediatelyTimeoutNum || 0 }}</span>
           <span>个</span>
         </div>
       </div>
       <div class="stat-item">
-        <div class="label">本月逾期</div>
+        <div class="label">{{ currentDateType.label }}逾期</div>
         <div class="value">
-          <span>34</span>
+          <span>{{ statData?.todayTimeoutNum || 0 }}</span>
           <span>个</span>
         </div>
       </div>
@@ -82,6 +82,8 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import moment from "moment";
+import { getEventRiskControl } from "@/apis/cockpitEventStats";
+
 // 事件
 const emits = defineEmits(["search", "changeTime"]);
 const store = useStore();
@@ -103,9 +105,12 @@ const dateTypes = [
   },
 ];
 
+// 统计数据
+const statData = ref(null);
+
 // 当前(选中)的时间类型
 const currentDateType = ref();
-const changeDate = (payload) => {
+const changeDate = async (payload) => {
   const { value } = payload;
   currentDateType.value = payload;
   const dataObj = {
@@ -120,6 +125,10 @@ const changeDate = (payload) => {
   };
   store.commit("UPDATE_DATE", dataObj);
   emits("changeTime", dataObj);
+  statData.value = await getEventRiskControl({
+    ...dataObj,
+    adcd: store?.state?.userInfo?.adminDivCode || "330182",
+  });
 };
 changeDate(dateTypes[0]);
 </script>
