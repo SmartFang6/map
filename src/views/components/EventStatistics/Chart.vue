@@ -58,6 +58,12 @@
       </div>
     </div>
     <!--#endregion-->
+
+    <!--#region 图表tooltip-->
+    <div class="chart-tooltip">
+      <div class="label"></div>
+    </div>
+    <!--#endregion-->
   </div>
 </template>
 
@@ -97,9 +103,6 @@ const chartContainer = ref(null);
 // 获取注入的时间区间
 let dateRange = inject("dateRange");
 
-// d3 对象
-let svg = null;
-
 // 数据源 & 拉取数据
 const dataSource = ref([]);
 watch(
@@ -133,6 +136,45 @@ const dataList = computed(() => {
     });
 });
 
+// d3 对象
+let svg = null;
+const initChart = (d) => {
+  svg = d3
+    .select(chartContainer.value)
+    .append("svg")
+    .attr("class", "chart-svg")
+    .attr("viewBox", "0 0 200 150");
+  svg.append("g").attr("id", "donut3D");
+
+  const donut3DElements = donut3D.draw(
+    "donut3D",
+    d,
+    100,
+    62,
+    100,
+    60,
+    25,
+    0.57
+  );
+
+  // 初始化提示工具
+  const tooltip = d3.select(".chart-tooltip");
+  const mouseover = () => tooltip.style("opacity", 0);
+  const mouseleave = () => tooltip.style("opacity", 0);
+  const mousemove = (event, { data }) => {
+    d3.select(".chart-tooltip .label").text(data?.label);
+    const [x, y] = d3.pointer(event);
+    tooltip.attr("transform", `translate(${x}, ${y})`);
+  };
+
+  donut3DElements.forEach((element) => {
+    element
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave)
+      .on("mouseover", mouseover);
+  });
+};
+
 watch(
   () => dataList.value,
   (dataList) =>
@@ -146,13 +188,7 @@ watch(
         });
       }
       if (!svg) {
-        svg = d3
-          .select(chartContainer.value)
-          .append("svg")
-          .attr("class", "chart-svg")
-          .attr("viewBox", "0 0 200 150");
-        svg.append("g").attr("id", "donut3D");
-        donut3D.draw("donut3D", d, 100, 62, 100, 60, 25, 0.57);
+        initChart(d);
       } else {
         donut3D.transition("donut3D", d, 100, 60, 25, 0.57);
       }
@@ -261,5 +297,12 @@ watch(
 .chart-svg {
   width: 200px;
   height: 150px;
+}
+.chart-tooltip {
+  position: absolute;
+  background: #000;
+  color: #fff;
+  .label {
+  }
 }
 </style>

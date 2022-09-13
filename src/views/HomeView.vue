@@ -4,7 +4,7 @@
     <template #map>
       <div class="map">
         <CenterToolsBar @changeTime="onChangeTime" />
-        <MapLayer @changeLayer="mapRef?.changeLayer" />
+        <MapLayer @selectLayers="mapRef?.initLayers" />
         <Map ref="mapRef" @showPop="showPop" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
