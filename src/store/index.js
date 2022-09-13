@@ -21,6 +21,8 @@ export default createStore({
       endTime: "",
       startTime: "",
     },
+    // 当前激活的过滤器
+    activeFilter: null,
   },
   getters: {},
   mutations: {
@@ -49,6 +51,9 @@ export default createStore({
     },
     UPDATE_ADCD_TICKET(state, payload) {
       state.ticket = payload;
+    },
+    UPDATE_ACTIVE_FILTER(state, payload) {
+      state.activeFilter = payload;
     },
   },
   actions: {},
