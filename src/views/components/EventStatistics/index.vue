@@ -170,4 +170,13 @@ let configList = [
     }
   }
 }
+.content-item {
+  cursor: pointer;
+  box-sizing: border-box;
+  padding: 5px;
+  &.active {
+    background: url(@/assets/images/stat-checked.png);
+    background-size: 100%;
+  }
+}
 </style>

@@ -69,7 +69,7 @@ import { ref, computed, watch } from "vue";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 
 // 事件
-const emits = defineEmits(["selectLayers"]);
+const emits = defineEmits(["selectLayers", "changeLegend"]);
 
 // 是否显示水域概况弹窗
 const watersDescriptionDialogVisible = ref(false);
@@ -113,15 +113,10 @@ const legends = computed(() => {
 watch(
   () => legends.value,
   (legends) => {
-    emits(
-      "selectLayers",
-      selectLayers.value.map((layer) => {
-        return {
-          layerName: layer,
-          legend: layer === "riverLayer" ? legends : [],
-        };
-      })
-    );
+    emits("changeLegend", {
+      layerName: "riverLayer",
+      legend: legends,
+    });
   },
   { deep: true }
 );
@@ -138,7 +133,8 @@ const onSelectLayers = (layer, index) => {
   } else {
     selectLayers.value.push(layer);
   }
-
+  emits("selectLayers", selectLayers.value);
+  /*
   if (legends.value.length > 0) {
     emits(
       "selectLayers",
@@ -151,7 +147,7 @@ const onSelectLayers = (layer, index) => {
     );
   } else {
     emits("selectLayers", selectLayers.value);
-  }
+  }*/
 };
 </script>
 
