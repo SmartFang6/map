@@ -18,7 +18,7 @@
     </div>
 
     <div class="two_title">
-      <ChartTitle :title="'消耗率排名'" />
+      <ChartTitle :title="'销号率排名'" />
       <ChartTitle :title="'考核排名'" />
     </div>
 
@@ -27,7 +27,8 @@
         <ProgressBar
           v-for="(item, index) in problemSourceList"
           :no="index + 1"
-          :count="item?.point || 0"
+          :count="item?.unitEventNum || 0"
+          :rate="item?.completedRate || 0"
           :key="item?.point || index"
           flexType="row"
           :title="item?.eventResponsibleUnitCodeName || ''"
@@ -74,13 +75,13 @@ const dataAll = ref(null);
 const problemSourceList = ref([]);
 // 处理数据
 const dealData = () => {
-  problemSourceList.value = dataAll.value[activeTab.value]?.pointRankList;
-  chartData.value = dataAll.value[activeTab.value]?.completedRankList?.map(
+  problemSourceList.value = dataAll.value[activeTab.value]?.completedRankList;
+  chartData.value = dataAll.value[activeTab.value]?.pointRankList?.map(
     (item) => {
       return {
         ...item,
-        name: item.eventResponsibleUnitCodeName,
-        count: item.unitEventNum,
+        name: item?.eventResponsibleUnitCodeName,
+        count: item?.point,
       };
     }
   );
@@ -218,7 +219,7 @@ const draw = (data) => {
 
     yAxis: [
       {
-        name: "考核排名",
+        name: "分数",
         nameTextStyle: {
           color: "#fff",
         },
@@ -243,7 +244,7 @@ const draw = (data) => {
     series: [
       {
         yAxisIndex: 0,
-        name: "考核排名",
+        name: "分数",
         type: "bar",
         barWidth: 20,
         data: data.map((item) => item.count),

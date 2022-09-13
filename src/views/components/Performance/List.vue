@@ -16,8 +16,8 @@
         <!-- <div>部门/乡镇名称</div> -->
         <!-- <div>行政区划</div> -->
         <div>问题数</div>
-        <div>处理数</div>
-        <div>消号率</div>
+        <div>已办结</div>
+        <div>销号率</div>
       </div>
       <div class="table-body" v-if="dataList.length > 0">
         <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
@@ -31,7 +31,7 @@
               <div>{{ item.org }}</div>
             </el-tooltip>
             <div>{{ item.count }}</div>
-            <div>{{ item.count }}</div>
+            <div>{{ item.completed }}</div>
             <div>{{ item.rate }}</div>
           </div>
         </vue-seamless-scroll>
@@ -109,7 +109,8 @@ watch(
             index: rankNum + 1,
             org: item?.eventResponsibleUnitCodeName,
             content: item?.content || "",
-            count: item?.unitEventNum,
+            count: item?.unitEventNum || 0,
+            completed: item?.unitCompletedNum || 0,
             rate: (item?.completedRate ? item?.completedRate * 100 : 0) + "%",
           });
         } else {
@@ -117,9 +118,7 @@ watch(
             index: rankNum + 1,
             org: item?.eventResponsibleUnitCodeName,
             content: item?.content || "",
-            count: item?.point,
             point: item?.point,
-            rate: "100%",
           });
         }
       });
