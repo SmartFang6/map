@@ -5,7 +5,20 @@
       :key="index"
       :class="['unit-item', getStyle()]"
     >
-      <div class="content">
+      <div
+        :class="{
+          content: true,
+          active:
+            activeFilter?.type === 'responsible' &&
+            activeFilter?.value === item.eventResponsibleUnitCode,
+        }"
+        @click="
+          store.commit('UPDATE_ACTIVE_FILTER', {
+            type: 'responsible',
+            value: item.eventResponsibleUnitCode,
+          })
+        "
+      >
         <div class="name">{{ item.eventResponsibleUnitCodeName }}</div>
         <div class="info">
           <div class="value">
@@ -24,10 +37,16 @@
 </template>
 
 <script setup>
-import { inject, computed } from "vue";
+import { useStore } from "vuex";
+import { inject, computed, watch } from "vue";
+
+const store = useStore();
 
 // 左侧注入数据
 const leftData = inject("leftData");
+
+// 活动的过滤器
+const activeFilter = computed(() => store.state.activeFilter);
 
 // 责任单位列表
 const unitList = computed(() => {
@@ -39,6 +58,13 @@ const unitList = computed(() => {
 
 let i = -1;
 const styles = ["style1", "style2", "style3", "style4"];
+
+// activeFilter 更新会触发重新渲染
+watch(
+  () => activeFilter.value,
+  () => (i = -1)
+);
+
 const getStyle = () => {
   if (i >= 3) {
     i = 0;
@@ -78,6 +104,10 @@ const getStyle = () => {
     box-sizing: border-box;
     padding: 0px 10px 0 17px;
     overflow: hidden;
+    cursor: pointer;
+    &.active {
+      background-image: url(@/assets/images/responsible-checked.png);
+    }
     .name {
       font-family: FZZDHJW;
       font-size: 18px;

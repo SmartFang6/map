@@ -8,7 +8,22 @@
       </template>
     </Title>
     <ul class="content">
-      <li class="content-item" v-for="(item, idx) in configList" :key="idx">
+      <li
+        v-for="(item, idx) in configList"
+        :key="idx"
+        :class="{
+          'content-item': true,
+          active:
+            activeFilter?.type === 'eventStat' &&
+            activeFilter?.value === item.key,
+        }"
+        @click="
+          store.commit('UPDATE_ACTIVE_FILTER', {
+            type: 'eventStat',
+            value: item.key,
+          })
+        "
+      >
         <img :src="item.icon" alt="icon" class="item-img" />
         <div class="value-wrapper">
           <p>
@@ -44,11 +59,17 @@ import { inject, computed, ref } from "vue";
 import Title from "@/components/Title/index.vue";
 import EventStatisticsChart from "./Chart.vue";
 import EventDialog from "./EventDialog.vue";
+import { useStore } from "vuex";
+
 let leftData = inject("leftData");
 const showMore = ref(false);
 let eventStatEvent = computed(() => {
   return leftData.value?.eventStatEvent;
 });
+
+const store = useStore();
+// 激活的过滤器
+const activeFilter = computed(() => store.state.activeFilter);
 
 // 数据配置项
 let configList = [

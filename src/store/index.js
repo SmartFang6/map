@@ -52,6 +52,9 @@ export default createStore({
     UPDATE_ADCD_TICKET(state, payload) {
       state.ticket = payload;
     },
+    UPDATE_ACTIVE_FILTER(state, payload) {
+      state.activeFilter = payload;
+    },
   },
   actions: {},
   modules: {},
