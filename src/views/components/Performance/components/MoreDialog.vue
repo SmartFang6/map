@@ -210,6 +210,7 @@ const draw = (data) => {
         show: false,
       },
       axisLabel: {
+        rotate: 45,
         interval: 0, // 设置这里强制全部显示
         textStyle: {
           color: "#fff",

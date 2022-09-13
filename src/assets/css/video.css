@@ -1,0 +1,87 @@
+.cutspan{
+    width: 40px;
+      height: 40px;
+      position: absolute;
+      right: 155px;
+        
+  }
+  .voicespan{
+    width: 40px;
+      height: 40px;
+      position: absolute;
+      right: 195px;
+  }
+  .contorspan{
+    width: 40px;
+    height: 100%;
+    text-align: center;
+    line-height: 40px;
+    
+     
+  }
+  .contorspan:hover ul{display:block;}
+  
+  .cloud-ctrl{
+  list-style: none;
+      position: absolute;
+      bottom: 23px;
+      width: 9em;
+      left: -10.5em;
+      height: 7em;
+      padding: 0;
+      display: none;
+      color: white;
+    background-color: rgba(43,51,63,0.7);
+  }
+   .cloud-ctrl li {
+      float: left;
+      padding: 0;
+      margin: 0.2em;
+      list-style: none;
+      border: none;
+      width: 2.6em;
+      height: 2em;
+      text-align: center;
+      line-height: 2em;
+      font-weight: 900;
+      cursor: pointer;
+      
+      box-sizing: border-box;
+  }
+   .focus-ctrl {
+      position: absolute;
+      bottom: 23px;
+      left: -2em;
+      width: 6em;
+      height: 7em;
+      padding: 0;
+     color: white;
+     display: none;
+      background-color: rgba(43,51,63,0.7);
+      margin-left: 0.5em;
+  }
+  .focus-ctrl li {
+      float: left;
+      padding: 0;
+      margin: 0.2em;
+      list-style: none;
+      border: none;
+      width: 2.6em;
+      height: 2em;
+      text-align: center;
+      line-height: 2em;
+      font-weight: 900;
+      cursor: pointer;
+      box-sizing: border-box;
+      position: relative;
+  }
+  .focus-ctrl li span {
+      position: absolute;
+      left: 0;
+      top: -0.2em;
+      display: inline-block;
+      font-size: 2em;
+      width: 100%;
+      text-align: center;
+      line-height: 1em;
+  }
