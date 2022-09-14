@@ -471,7 +471,7 @@ export default {
       console.log('地图缩放至所选行', params);
       if(params.longitude && params.latitude) {
         this.map.getView().setCenter([params.longitude, params.latitude])
-        this.map.getView().setZoom(17)
+        this.map.getView().setZoom(16)
       }
     }
   },
