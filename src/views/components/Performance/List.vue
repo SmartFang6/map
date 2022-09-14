@@ -111,7 +111,10 @@ watch(
             content: item?.content || "",
             count: item?.unitEventNum || 0,
             completed: item?.unitCompletedNum || 0,
-            rate: (item?.completedRate ? item?.completedRate * 100 : 0) + "%",
+            rate:
+              (item?.completedRate
+                ? Number(`${item?.completedRate}e${2}`)
+                : 0) + "%",
           });
         } else {
           dataList.value.push({

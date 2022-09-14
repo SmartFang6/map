@@ -22,3 +22,16 @@ export const getMD5_sign = (USERID = null) => {
   const _res = md5(text).toLocaleUpperCase();
   return _res;
 };
+/**
+ * 适应性 px
+ *
+ * **/
+export const adjustSize = (pxNum) => {
+  let clientWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+  if (!clientWidth || !pxNum) return pxNum;
+  let adjustSize = (pxNum / 1920) * clientWidth;
+  return adjustSize || pxNum;
+};

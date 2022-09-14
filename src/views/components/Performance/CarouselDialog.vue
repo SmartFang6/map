@@ -106,10 +106,10 @@ const galleryList = ref([
     top: 18px;
 
     .title-wrap {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 400;
       font-family: YouSheBiaoTiHei;
-      color: #fff;
+      color: #0adbe0;
     }
   }
 
