@@ -111,3 +111,14 @@ export const getEventTitleCount = (queryParams) => {
     data: queryParams,
   });
 };
+
+/**
+ * 获取问题清单的列表(9月12日新接口，新增筛选参数)
+ * @param {*} queryParams 查询参数
+ * @returns {Object}
+ */
+export const getEventStatReportProblemList = (queryParams) => {
+  return postHttp("/supervision/listEventStatReportProblemNewRecordBySearch", {
+    data: queryParams,
+  });
+};
