@@ -21,7 +21,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, canalLayer, hillpondLayer, lakeLayer, orgHighLightLayer, otherwaterLayer, pointLayer, reservoirLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
+import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -38,6 +38,7 @@ import DCWMSLayer from './layers/impl/DCWMSLayer'
 import store from "@/store";
 import * as LayerEnum from '@/utils/LayerEnum';
 import MainMapWMSLayer from './layers/impl/MainMapWMSLayer'
+import MainMapWMSWithLinesLayer from './layers/impl/MainMapWMSWithLinesLayer' // 包括水域及其范围线、临水线
 import { getFeatures } from './common/common';
 import GeoJSON from 'ol/format/GeoJSON';
 import { geoserverPath } from './config/geoserverConfig';
@@ -53,18 +54,26 @@ export default {
   data() {
     return {
       adcd: store?.state?.userInfo?.adminDivCode || "330182",
+      startTime: moment(new Date()).startOf('year').format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(new Date()).endOf('year').format('YYYY-MM-DD 23:59:59'),
+      eventCompleteStatus: '', // 是否已办结
+      willExpireStatus: '', // 是否即将逾期
+      expireStatus: '', // 本年逾期
+      thisMonthNewStatus: '', // 本年新增
+      eventGradeStatus: '', // 定性参数
+      eventSourceDepartCode: '', // 定责参数
       curLayer: LayerEnum.RIVER_LAYER, // 当前图层，默认为点位图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
       address: "",
-      startTime: moment(new Date()).startOf('year').format('YYYY-MM-DD 00:00:00'),
-      endTime: moment(new Date()).endOf('year').format('YYYY-MM-DD 23:59:59'),
       townss: [], // 统计图
       areaHappyShow: false,
       curIndex: 0,
       popInfo: {},
       lineManageShow: false,
+      threeLines: [], // 三线
+      threeLineLayers: [LayerEnum.RIVER_LAYER, LayerEnum.RESERVOIR_LAYER, LayerEnum.HILLPOND_LAYER, LayerEnum.LAKE_LAYER, LayerEnum.OTHERWATER_LAYER], // 需要加载三线的图层
     };
   },
   watch: {
@@ -104,14 +113,14 @@ export default {
         selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
         basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
-        lineManageLayer: new MainMapWMSLayer(riverManageLineLayer), // 河道管理范围线
+        // lineManageLayer: new MainMapWMSLayer(riverManageLineLayer), // 河道管理范围线
         // [LayerEnum.RIVER_LAYER]: new MainMapWMSLayer(riverLayer), // 河道
         [LayerEnum.RIVER_LAYER]: new RiverLayer(riverLayer),
-        [LayerEnum.RESERVOIR_LAYER]: new MainMapWMSLayer(reservoirLayer), // 水库
-        [LayerEnum.HILLPOND_LAYER]: new MainMapWMSLayer(hillpondLayer), // 山塘
-        [LayerEnum.LAKE_LAYER]: new MainMapWMSLayer(lakeLayer), // 湖泊
+        [LayerEnum.RESERVOIR_LAYER]: new MainMapWMSWithLinesLayer(reservoirLayer, reservoirManageLayer, reservoirWaterLayer), // 水库
+        [LayerEnum.HILLPOND_LAYER]: new MainMapWMSWithLinesLayer(hillpondLayer, hillpondManageLayer, hillpondWaterLayer), // 山塘
+        [LayerEnum.LAKE_LAYER]: new MainMapWMSWithLinesLayer(lakeLayer, lakeManageLayer, lakeWaterLayer), // 湖泊
         [LayerEnum.CANAL_LAYER]: new MainMapWMSLayer(canalLayer), // 人工水道
-        [LayerEnum.OTHERWATER_LAYER]: new MainMapWMSLayer(otherwaterLayer), // 其他水域
+        [LayerEnum.OTHERWATER_LAYER]: new MainMapWMSWithLinesLayer(otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer), // 其他水域
         [LayerEnum.FINISHED_PROJ]: new DCLayer(), // 完工
         [LayerEnum.BUILDING_PROJ]: new DCLayer(), // 在建
         [LayerEnum.VIDEO_LAYER]: new DCLayer(), // 视频点
@@ -128,12 +137,12 @@ export default {
       // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
       // 加载河道管理范围线
-      if (this.lineManageShow) {
-        this.layers.lineManageLayer.load(new LayerParams({
-          vm: this,
-          searchInfo: {}
-        }))
-      }
+      // if (this.lineManageShow) {
+      //   this.layers.lineManageLayer.load(new LayerParams({
+      //     vm: this,
+      //     searchInfo: {}
+      //   }))
+      // }
       // 初始化加载图层
       this.initLayers(['pointLayer'])
       // 轮播图高亮图层
@@ -153,24 +162,24 @@ export default {
       }
     },
     // 监听地图缩放
-    watchMapZoom() {
-      this.map.getView().on('change:resolution', evt => {
-        if(this.map.getView().getZoom() > 14) {
-          if (!this.lineManageShow) { // 如果此时地图上没展示范围线，则加载
-            this.layers.lineManageLayer.load(new LayerParams({
-              vm: this,
-              searchInfo: {}
-            }))
-            this.lineManageShow = true
-          }
-        } else {
-          if (this.lineManageShow) {
-            this.layers.lineManageLayer.removeLayer(this.map, this)
-            this.lineManageShow = false
-          }
-        }
-      })
-    },
+    // watchMapZoom() {
+    //   this.map.getView().on('change:resolution', evt => {
+    //     if(this.map.getView().getZoom() > 14) {
+    //       if (!this.lineManageShow) { // 如果此时地图上没展示范围线，则加载
+    //         this.layers.lineManageLayer.load(new LayerParams({
+    //           vm: this,
+    //           searchInfo: {}
+    //         }))
+    //         this.lineManageShow = true
+    //       }
+    //     } else {
+    //       if (this.lineManageShow) {
+    //         this.layers.lineManageLayer.removeLayer(this.map, this)
+    //         this.lineManageShow = false
+    //       }
+    //     }
+    //   })
+    // },
     // 移除轮播
     removeInterval() {
       if (this.interval) {
@@ -204,6 +213,28 @@ export default {
     // 修改筛选条件：仅对问题图层起作用
     changeFilter(params) {
       console.log('修改筛选条件', params);
+      // if (params) {
+      //   this.pointParams = {...params, ...{
+      //     adcd: this.adcd,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime
+      //   }}
+      // }
+      const allParams = ['eventCompleteStatus', 'willExpireStatus', 'expireStatus', 'thisMonthNewStatus', 'eventGradeStatus', 'eventSourceDepartCode']
+      allParams.forEach(paramName => {
+        if (params[paramName] === undefined) {
+          this[paramName] = ''
+        } else {
+          this[paramName] = params[paramName]
+        }
+      })
+      
+      if (this.baseLayers.indexOf('pointLayer') === -1) { // 如果此时地图展示的不是问题点位图层，则切换图层
+        this.initLayers(['pointLayer'])
+      } else { // 如果此时地图展示的是问题图层，则移除后重新加载
+        this.changeLayerVisible('pointLayer', false)
+        this.changeLayerVisible('pointLayer', true)
+      }
     },
     // 时间筛选：仅对问题图层起作用
     changeTime(val) {
@@ -271,7 +302,15 @@ export default {
     // 修改图例
     changeLegend(layerid, legend) {
       console.log('legend', layerid, legend);
-      this.layers[layerid].changeLegend(legend, this)
+      this.threeLines = legend
+      // 需要添加三线的图层
+      // const threeLineLayers = []
+      this.baseLayers.forEach(layer => {
+        if (this.threeLineLayers.indexOf(layer) !== -1) {
+          this.layers[layer].changeLegend(legend, this)
+        }
+      })
+      // this.layers[layerid].changeLegend(legend, this)
     },
     // 加载/移除单个图层
     changeLayerVisible(layerid, status) {
@@ -280,7 +319,13 @@ export default {
         let searchInfo = {
           adcd: this.adcd,
           startTime: this.startTime,
-          endTime: this.endTime
+          endTime: this.endTime,
+          eventCompleteStatus: this.eventCompleteStatus,
+          willExpireStatus: this.willExpireStatus,
+          expireStatus: this.expireStatus,
+          thisMonthNewStatus: this.thisMonthNewStatus,
+          eventGradeStatus: this.eventGradeStatus,
+          eventSourceDepartCode: this.eventSourceDepartCode,
         };
         this.layers[layerid].load(
           new LayerParams({
@@ -288,6 +333,11 @@ export default {
             searchInfo,
           })
         );
+
+        // 如果需要加载水域调查图层，且图例有勾选，则再添加对应图层的三线
+        if (this.threeLines.length > 0 && this.threeLineLayers.indexOf(layerid) !== -1) {
+          this.layers[layerid].changeLegend(this.threeLines, this)
+        } 
 
         this.baseLayers.push(layerid);
       } else {
@@ -421,7 +471,7 @@ export default {
       console.log('地图缩放至所选行', params);
       if(params.longitude && params.latitude) {
         this.map.getView().setCenter([params.longitude, params.latitude])
-        this.map.getView().setZoom(17)
+        this.map.getView().setZoom(16)
       }
     }
   },

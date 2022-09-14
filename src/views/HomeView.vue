@@ -58,14 +58,14 @@
     </template>
     <template #bottom>
       <!-- 问题清单 -->
-      <ProblemList @select="mapRef?.mapPanToSelectRow" />
+      <ProblemList @select="mapRef?.mapPanToSelectRow" :search="activeFilter" />
     </template>
   </Layout>
 </template>
 
 <script setup>
 import Header from "./components/Header";
-import { inject, provide, ref, shallowRef } from "vue";
+import { inject, provide, ref, shallowRef, watch } from "vue";
 import { NoticeEvt } from "@/views/config";
 import * as LayerEnum from "@/utils/LayerEnum"; // 图层id
 import EventStatistics from "./components/EventStatistics/index.vue";
@@ -99,8 +99,10 @@ import reservoirDialog from "./dialog/ReservoirDialog";
 import CanalDialog from "./dialog/CanalDialog.vue";
 // 其他水域弹窗
 import OtherwaterDialog from "./dialog/OtherwaterDialog.vue";
-const eventBus = inject("EventBus");
 
+import useActiveFilter from "./useActiveFilter.js";
+
+const eventBus = inject("EventBus");
 // 若未通过单点登录进入，重定向去401页面
 const USER_ID = store?.state?.userInfo?.userId;
 if (!USER_ID) {
@@ -191,6 +193,19 @@ function showPop(info) {
   dialogShow.value = true;
   // }
 }
+
+// 全局联动过滤参数改变时调用地图方法
+const activeFilter = useActiveFilter();
+watch(
+  () => activeFilter.value,
+  (activeFilter) => {
+    console.log("activeFilter changed =>", activeFilter);
+    mapRef.value?.changeFilter({
+      ...activeFilter,
+    });
+  }
+);
+
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
 // TODO

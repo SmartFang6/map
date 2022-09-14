@@ -103,7 +103,7 @@ const activeFilter = computed(() => store.state.activeFilter);
 // stat list
 const statList = computed(() => [
   {
-    label: `${currentDateType.value?.label}新增`,
+    label: "本月新增",
     value: statData.value?.todayAddNum || 0,
     type: "thisMonthNewStatus",
   },
@@ -113,7 +113,7 @@ const statList = computed(() => [
     type: "willExpireStatus",
   },
   {
-    label: `${currentDateType.value?.label}逾期`,
+    label: "本月逾期",
     value: statData.value?.todayTimeoutNum || 0,
     type: "expireStatus",
   },

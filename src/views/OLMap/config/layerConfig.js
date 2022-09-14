@@ -410,7 +410,7 @@ export const riverLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 管理范围线
@@ -537,7 +537,7 @@ export const reservoirLayer = {
                 text: 'name',
                 font: {
                   family: '宋体',
-                  size: 20,
+                  size: 16,
                 },
                 stroke: {
                   color: '#FFFFFF',
@@ -549,6 +549,68 @@ export const reservoirLayer = {
           ],
         },
       ], 'WaterRegionInvestigation:vw_reservoir_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 17
+}
+
+// 水库-管理范围线
+export const reservoirManageLayer = {
+  id: 'reservoirManageLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_reservoir_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ff4d65',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_reservoir_manageline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 水库-临水线
+export const reservoirWaterLayer = {
+  id: 'reservoirWaterLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_reservoir_approachline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ffd633',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_reservoir_approachline'),
     },
     crossOrigin: 'anonymous'
   },
@@ -598,6 +660,68 @@ export const hillpondLayer = {
     },
     crossOrigin: 'anonymous'
   },
+  zIndex: 17
+}
+
+// 山塘-管理范围线
+export const hillpondManageLayer = {
+  id: 'hillpondManageLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_hillypond_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ff4d65',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_hillypond_manageline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 水库-临水线
+export const hillpondWaterLayer = {
+  id: 'hillpondWaterLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_hillypond_approachline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ffd633',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_hillypond_approachline'),
+    },
+    crossOrigin: 'anonymous'
+  },
   zIndex: 18
 }
 
@@ -637,6 +761,68 @@ export const lakeLayer = {
           ],
         },
       ], 'WaterRegionInvestigation:vw_lake_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 17
+}
+
+// 湖泊-管理范围线
+export const lakeManageLayer = {
+  id: 'lakeManageLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_lake_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ff4d65',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_lake_manageline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 湖泊-临水线
+export const lakeWaterLayer = {
+  id: 'lakeWaterLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_lake_approachline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ffd633',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_lake_approachline'),
     },
     crossOrigin: 'anonymous'
   },
@@ -686,8 +872,70 @@ export const canalLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
+
+// 人工水道-管理范围线
+// export const canalManageLayer = {
+//   id: 'canalManageLayer',
+//   type: LayerTypeEnum.image,
+//   source: {
+//     type: SourceTypeEnum.imagewms,
+//     url: geoserverPath.waterRegionInvestigationWMS,
+//     params: {
+//       LAYERS: 'WaterRegionInvestigation:vw_lake_manageline',
+//       VERSION: '1.3.0',
+//       SRS: 'EPSG:4326',
+//       STYLES: '',
+//       sld_body: SldUtils.createSld([
+//         {
+//           rules: [
+//             {
+//               type: StyleTypeEnum.lineString,
+//               stroke: {
+//                 color: '#ff4d65',
+//                 width: 1,
+//               },
+//             }
+//           ],
+//         },
+//       ], 'WaterRegionInvestigation:vw_lake_manageline'),
+//     },
+//     crossOrigin: 'anonymous'
+//   },
+//   zIndex: 18
+// }
+
+// // 水库-临水线
+// export const canalWaterLayer = {
+//   id: 'canalWaterLayer',
+//   type: LayerTypeEnum.image,
+//   source: {
+//     type: SourceTypeEnum.imagewms,
+//     url: geoserverPath.waterRegionInvestigationWMS,
+//     params: {
+//       LAYERS: 'WaterRegionInvestigation:vw_lake_approachline',
+//       VERSION: '1.3.0',
+//       SRS: 'EPSG:4326',
+//       STYLES: '',
+//       sld_body: SldUtils.createSld([
+//         {
+//           rules: [
+//             {
+//               type: StyleTypeEnum.lineString,
+//               stroke: {
+//                 color: '#ffd633',
+//                 width: 1,
+//               },
+//             }
+//           ],
+//         },
+//       ], 'WaterRegionInvestigation:vw_lake_approachline'),
+//     },
+//     crossOrigin: 'anonymous'
+//   },
+//   zIndex: 18
+// }
 
 // 其他水域
 export const otherwaterLayer = {
@@ -729,6 +977,68 @@ export const otherwaterLayer = {
           ],
         },
       ], 'WaterRegionInvestigation:vw_otherwater_area'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 17
+}
+
+// 其他水域-管理范围线
+export const otherwaterManageLayer = {
+  id: 'otherwaterManageLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_otherwater_manageline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ff4d65',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_otherwater_manageline'),
+    },
+    crossOrigin: 'anonymous'
+  },
+  zIndex: 18
+}
+
+// 湖泊-临水线
+export const otherwaterWaterLayer = {
+  id: 'otherwaterWaterLayer',
+  type: LayerTypeEnum.image,
+  source: {
+    type: SourceTypeEnum.imagewms,
+    url: geoserverPath.waterRegionInvestigationWMS,
+    params: {
+      LAYERS: 'WaterRegionInvestigation:vw_otherwater_approachline',
+      VERSION: '1.3.0',
+      SRS: 'EPSG:4326',
+      STYLES: '',
+      sld_body: SldUtils.createSld([
+        {
+          rules: [
+            {
+              type: StyleTypeEnum.lineString,
+              stroke: {
+                color: '#ffd633',
+                width: 1,
+              },
+            }
+          ],
+        },
+      ], 'WaterRegionInvestigation:vw_otherwater_approachline'),
     },
     crossOrigin: 'anonymous'
   },
