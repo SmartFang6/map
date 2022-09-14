@@ -2,7 +2,7 @@
  * @Author: chuyingf chuyingf@163.com
  * @Date: 2022-09-08 15:43:09
  * @LastEditors: chuyingf chuyingf@163.com
- * @LastEditTime: 2022-09-13 17:08:37
+ * @LastEditTime: 2022-09-14 11:21:45
  * @FilePath: \river-lake-cockpit-front\src\views\OLMap\layers\impl\MainMapWMSLayer.js
  * @Description: 大屏的wms图层通用配置，主要设置cql_filter参数
  */
@@ -38,20 +38,6 @@ class RiverLayer extends BaseLayer {
     this.changeLayer(legends, 'lineManageLayer', vm)
     this.changeLayer(legends, 'lineWaterLayer', vm)
     this.changeLayer(legends, 'lineCenterLayer', vm)
-    // if (legends.indexOf('lineManageLayer') !== -1) { // 如果需要加载管理线
-    //   if (this.threeLines.indexOf('lineManageLayer') === -1) {
-    //     this.layers.lineManageLayer.load(new LayerParams({
-    //       vm,
-    //       searchInfo: {}
-    //     }))
-    //     this.threeLines.push('lineManageLayer')
-    //   }
-    // } else {
-    //   if (this.threeLines.indexOf('lineManageLayer') !== -1) {
-    //     this.layers.lineManageLayer.removeLayer(vm.map, vm)
-    //     this.threeLines.splice(this.threeLines.indexOf('lineManageLayer'), 1);
-    //   }
-    // }
   }
 
   changeLayer(legends, layerid, vm) {
@@ -69,6 +55,13 @@ class RiverLayer extends BaseLayer {
         this.threeLines.splice(this.threeLines.indexOf(layerid), 1);
       }
     }
+  }
+
+  removeLayer(map) {
+    super.removeLayer(map)
+    this.threeLines.forEach(layer => {
+      this.layers[layer].removeLayer(map)
+    })
   }
 }
 export default RiverLayer

@@ -46,7 +46,17 @@
 
     <!--#region 统计-->
     <div class="stat">
-      <div v-for="(item, index) in statList" :key="index" class="stat-item">
+      <div
+        v-for="(item, index) in statList"
+        :key="index"
+        :class="{ 'stat-item': true, active: activeFilter?.type === item.type }"
+        @click="
+          store.commit('UPDATE_ACTIVE_FILTER', {
+            type: item.type,
+            value: 1,
+          })
+        "
+      >
         <div class="label">{{ item.label }}</div>
         <div class="value">
           <span>{{ item.value }}</span>
@@ -89,21 +99,23 @@ const currentDateType = ref(null);
 
 // 激活的过滤器
 const activeFilter = computed(() => store.state.activeFilter);
-console.log(activeFilter);
 
 // stat list
 const statList = computed(() => [
   {
     label: `${currentDateType.value?.label}新增`,
     value: statData.value?.todayAddNum || 0,
+    type: "thisMonthNewStatus",
   },
   {
     label: "即将逾期",
     value: statData.value?.todayImmediatelyTimeoutNum || 0,
+    type: "willExpireStatus",
   },
   {
     label: `${currentDateType.value?.label}逾期`,
     value: statData.value?.todayTimeoutNum || 0,
+    type: "expireStatus",
   },
 ]);
 
@@ -236,8 +248,9 @@ changeDate(dateTypes[0]);
 }
 .stat {
   width: 551px;
-  height: 67px;
-  background: url(@/assets/images/center-stat-bg.png);
+  height: 75px;
+  background: url(@/assets/images/center-stat-bg.png) no-repeat;
+  box-sizing: border-box;
   background-size: contain;
   display: flex;
   justify-content: space-around;
@@ -245,6 +258,17 @@ changeDate(dateTypes[0]);
   box-sizing: border-box;
 }
 .stat-item {
+  cursor: pointer;
+  width: 154px;
+  height: 64px;
+  padding-bottom: 8px;
+  box-sizing: border-box;
+  &.active {
+    background-image: url(@/assets/images/center-tools-bar-checked.png);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-size: contain;
+  }
   & .label {
     font-family: YouSheBiaoTiHei;
     color: #e0ecff;

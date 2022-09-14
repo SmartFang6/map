@@ -156,6 +156,7 @@ let configList = [
     .item-img {
       width: 49px;
       height: 46px;
+      opacity: 0.5;
     }
 
     .item-value {
@@ -194,10 +195,14 @@ let configList = [
 .content-item {
   cursor: pointer;
   box-sizing: border-box;
-  padding: 5px;
+  border-bottom: solid 4px transparent;
+  padding: 0 2.5px 6px;
   &.active {
-    background: url(@/assets/images/stat-checked.png);
     background-size: 100%;
+    border-bottom: solid 4px #ffe475;
+    .item-img {
+      opacity: 1;
+    }
   }
 }
 </style>
