@@ -54,13 +54,19 @@ export default {
   data() {
     return {
       adcd: store?.state?.userInfo?.adminDivCode || "330182",
+      startTime: moment(new Date()).startOf('year').format('YYYY-MM-DD 00:00:00'),
+      endTime: moment(new Date()).endOf('year').format('YYYY-MM-DD 23:59:59'),
+      eventCompleteStatus: '', // 是否已办结
+      willExpireStatus: '', // 是否即将逾期
+      expireStatus: '', // 本年逾期
+      thisMonthNewStatus: '', // 本年新增
+      eventGradeStatus: '', // 定性参数
+      eventSourceDepartCode: '', // 定责参数
       curLayer: LayerEnum.RIVER_LAYER, // 当前图层，默认为点位图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
       lttd: "",
       address: "",
-      startTime: moment(new Date()).startOf('year').format('YYYY-MM-DD 00:00:00'),
-      endTime: moment(new Date()).endOf('year').format('YYYY-MM-DD 23:59:59'),
       townss: [], // 统计图
       areaHappyShow: false,
       curIndex: 0,
@@ -207,6 +213,28 @@ export default {
     // 修改筛选条件：仅对问题图层起作用
     changeFilter(params) {
       console.log('修改筛选条件', params);
+      // if (params) {
+      //   this.pointParams = {...params, ...{
+      //     adcd: this.adcd,
+      //     startTime: this.startTime,
+      //     endTime: this.endTime
+      //   }}
+      // }
+      const allParams = ['eventCompleteStatus', 'willExpireStatus', 'expireStatus', 'thisMonthNewStatus', 'eventGradeStatus', 'eventSourceDepartCode']
+      allParams.forEach(paramName => {
+        if (params[paramName] === undefined) {
+          this[paramName] = ''
+        } else {
+          this[paramName] = params[paramName]
+        }
+      })
+      
+      if (this.baseLayers.indexOf('pointLayer') === -1) { // 如果此时地图展示的不是问题点位图层，则切换图层
+        this.initLayers(['pointLayer'])
+      } else { // 如果此时地图展示的是问题图层，则移除后重新加载
+        this.changeLayerVisible('pointLayer', false)
+        this.changeLayerVisible('pointLayer', true)
+      }
     },
     // 时间筛选：仅对问题图层起作用
     changeTime(val) {
@@ -291,7 +319,13 @@ export default {
         let searchInfo = {
           adcd: this.adcd,
           startTime: this.startTime,
-          endTime: this.endTime
+          endTime: this.endTime,
+          eventCompleteStatus: this.eventCompleteStatus,
+          willExpireStatus: this.willExpireStatus,
+          expireStatus: this.expireStatus,
+          thisMonthNewStatus: this.thisMonthNewStatus,
+          eventGradeStatus: this.eventGradeStatus,
+          eventSourceDepartCode: this.eventSourceDepartCode,
         };
         this.layers[layerid].load(
           new LayerParams({
@@ -437,7 +471,7 @@ export default {
       console.log('地图缩放至所选行', params);
       if(params.longitude && params.latitude) {
         this.map.getView().setCenter([params.longitude, params.latitude])
-        this.map.getView().setZoom(17)
+        this.map.getView().setZoom(16)
       }
     }
   },

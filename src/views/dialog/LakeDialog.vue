@@ -1,4 +1,4 @@
-<!-- 河道图层弹窗 -->
+<!-- 湖泊图层弹窗 -->
 <template>
   <div class="map-pop">
     <div class="header_title">{{ props.info?.name }}</div>
@@ -9,12 +9,6 @@
           <span class="value">{{ props.info?.city }}</span>
         </li>
         <li>
-          <span class="label">所属流域：</span>
-          <span class="value">
-            {{ props.info?.bas }}
-          </span>
-        </li>
-        <li>
           <span class="label">平均宽度：</span>
           <span class="value">{{ props.info?.width?.toFixed(1) }}m</span>
         </li>
@@ -23,21 +17,21 @@
           <span class="value">{{ props.info?.length?.toFixed(2) }}km</span>
         </li>
         <li>
-          <span class="label">起点：</span>
-          <span class="value">{{ props.info?.sname }}</span>
-        </li>
-        <li>
-          <span class="label">终点：</span>
-          <span class="value">{{ props.info?.ename }}</span>
-        </li>
-        <li>
           <span class="label">水域面积：</span>
           <span class="value">{{ props.info?.area?.toFixed(1) }}m²</span>
         </li>
         <li>
-          <span class="label">是否为重要水域：</span>
+          <span class="label">最高允许蓄水位：</span>
+          <span class="value">{{ props.info?.masl }}</span>
+        </li>
+        <li>
+          <span class="label">水域容积：</span>
+          <span class="value">{{ props.info?.vol }}</span>
+        </li>
+        <li>
+          <span class="label">主要功能：</span>
           <span class="value">
-            {{ props.info?.imp !== "否" ? "是" : "否" }}
+            {{ props.info?.function }}
           </span>
         </li>
       </ul>

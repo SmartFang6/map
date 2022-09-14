@@ -19,12 +19,12 @@
           :width="
             currentDialog === LayerEnum.RESERVOIR_LAYER ||
             currentDialog === LayerEnum.HILLPOND_LAYER
-              ? '50%'
-              : '30%'
+              ? '860px'
+              : '468px'
           "
           append-to-body
           destroy-on-close
-          custom-class="common_dialog"
+          custom-class="map_dialog"
         >
           <component
             :is="dialogEmnu[currentDialog]"
@@ -88,8 +88,18 @@ import PoliciesSystems from "./components/PoliciesSystems.vue";
 // 地图弹窗 -----
 // 视频点弹窗
 import VideoDialog from "./dialog/VideoDialog.vue";
+// 水域弹窗
 // 河道弹窗
 import RiverDialog from "./dialog/RiverDialog.vue";
+// 湖泊弹窗
+import LakeDialog from "./dialog/LakeDialog.vue";
+// 水库
+import reservoirDialog from "./dialog/ReservoirDialog";
+// 人工水道弹窗
+import CanalDialog from "./dialog/CanalDialog.vue";
+// 其他水域弹窗
+import OtherwaterDialog from "./dialog/OtherwaterDialog.vue";
+
 import useActiveFilter from "./useActiveFilter.js";
 
 const eventBus = inject("EventBus");
@@ -159,6 +169,10 @@ const currentDialog = ref("");
 // 弹窗组件
 const dialogEmnu = shallowRef({
   [LayerEnum.RIVER_LAYER]: RiverDialog, // 河道弹窗
+  [LayerEnum.LAKE_LAYER]: LakeDialog, // 湖泊弹窗
+  [LayerEnum.RESERVOIR_LAYER]: reservoirDialog, // 水库弹窗
+  [LayerEnum.OTHERWATER_LAYER]: OtherwaterDialog, // 人工水道
+  [LayerEnum.CANAL_LAYER]: CanalDialog, // 其他水域
   [LayerEnum.VIDEO_LAYER]: VideoDialog, // 视频弹窗
 });
 // 地图弹窗信息
@@ -173,12 +187,11 @@ function showPop(info) {
     return;
   }
   // 因为地图点位和弹窗写的还不全，先把有的弹窗的组件展示，后续写全的时候if判断可以删除。
-  if (
-    info.layerid === LayerEnum.VIDEO_LAYER ||
-    info.layerid === LayerEnum.RIVER_LAYER
-  ) {
-    dialogShow.value = true;
-  }
+  // if (
+  //   info.layerid !== LayerEnum.HILLPOND_LAYER
+  // ) {
+  dialogShow.value = true;
+  // }
 }
 
 // 全局联动过滤参数改变时调用地图方法

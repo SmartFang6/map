@@ -125,5 +125,7 @@ export const getPointList = (data) => {
   //       problemStatus: "1",
   //     },
   //   ];
-  return postHttp("/supervision/getEventStatPointLocationList", { data }); // http://10.33.158.26:8504/api
+  return postHttp("/supervision/listEventStatReportProblemNewRecordBySearch", {
+    data,
+  }); // http://10.33.158.26:8504/api
 };
