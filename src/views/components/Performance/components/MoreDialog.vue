@@ -28,7 +28,7 @@
           v-for="(item, index) in problemSourceList"
           :no="index + 1"
           :count="item?.unitEventNum || 0"
-          :rate="item?.completedRate || 0"
+          :rate="item?.completed || 0"
           :key="item?.point || index"
           flexType="row"
           :title="item?.eventResponsibleUnitCodeName || ''"
@@ -75,7 +75,16 @@ const dataAll = ref(null);
 const problemSourceList = ref([]);
 // 处理数据
 const dealData = () => {
-  problemSourceList.value = dataAll.value[activeTab.value]?.completedRankList;
+  problemSourceList.value = dataAll.value[
+    activeTab.value
+  ]?.completedRankList?.map((item) => {
+    return {
+      ...item,
+      completed: item?.completedRate
+        ? Number(`${item?.completedRate}e${2}`)
+        : 0,
+    };
+  });
   chartData.value = dataAll.value[activeTab.value]?.pointRankList?.map(
     (item) => {
       return {
@@ -307,7 +316,9 @@ watch(
   .top_title {
     display: flex;
     .title_wrap {
-      font-size: 24px;
+      font-size: 26px;
+      font-family: YouSheBiaoTiHei;
+      color: #0adbe0;
     }
 
     .tabs_wrap {
