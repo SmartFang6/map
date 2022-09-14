@@ -209,8 +209,12 @@ export default function (pieData, internalDiameterRatio) {
       // bottom: 210,
       right: 0,
       top: -5,
+      // y: "center",
       formatter: (name) => {
         const item = pieData.filter((i) => i.name === name)[0];
+        if (!item) {
+          return null;
+        }
         const idx = pieData.findIndex((i) => i.name === name);
         const text = name.length > 6 ? name.slice(0, 6) + "..." : name;
         return `${text} {value${idx}|${item.value}}个`;
@@ -240,8 +244,8 @@ export default function (pieData, internalDiameterRatio) {
     grid3D: {
       show: false,
       boxHeight: 8,
-      top: -22,
-      left: -90,
+      top: -28,
+      left: -98,
       viewControl: {
         // 3d效果可以放大、旋转等，请自己去查看官方配置
         alpha: 35,
@@ -250,7 +254,7 @@ export default function (pieData, internalDiameterRatio) {
         zoomSensitivity: 0,
         panSensitivity: 0,
         autoRotate: true,
-        distance: 170,
+        distance: 160,
       },
       // 后处理特效可以为画面添加高光、景深、环境光遮蔽（SSAO）、调色等效果。可以让整个画面更富有质感。
       postEffect: {

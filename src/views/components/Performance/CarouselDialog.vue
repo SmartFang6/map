@@ -3,7 +3,14 @@
 -->
 <template>
   <div class="carousel-dialog">
-    <el-dialog v-model="dialogVisible" width="60%">
+    <el-dialog
+      v-model="dialogVisible"
+      custom-class="common_dialog"
+      width="60vw"
+    >
+      <div class="top-title">
+        <h2 class="title-wrap">考核制度</h2>
+      </div>
       <!--#region 轮播的内容区-->
       <el-carousel indicator-position="outside">
         <el-carousel-item v-for="(item, index) in galleryList" :key="index">
@@ -88,19 +95,22 @@ const galleryList = ref([
 .carousel-dialog {
   display: block;
 
-  :deep(.el-dialog) {
-    border: 1px solid #64d2f7;
-    color: white;
-    background-color: rgba(5, 20, 69, 0.8);
-    // background-color: rgba(25, 56, 91, 0.8);
+  :deep(.el-dialog__body) {
+    // padding: 0;
+    opacity: 1;
   }
 
-  :deep(.el-carousel__item h3) {
+  .top-title {
     display: flex;
-    color: #475669;
-    opacity: 0.75;
-    line-height: 300px;
-    margin: 0;
+    position: absolute;
+    top: 18px;
+
+    .title-wrap {
+      font-size: 26px;
+      font-weight: 400;
+      font-family: YouSheBiaoTiHei;
+      color: #0adbe0;
+    }
   }
 
   .gallery-inner {

@@ -46,24 +46,10 @@
 
     <!--#region 统计-->
     <div class="stat">
-      <div class="stat-item">
-        <div class="label">{{ currentDateType.label }}新增</div>
+      <div v-for="(item, index) in statList" :key="index" class="stat-item">
+        <div class="label">{{ item.label }}</div>
         <div class="value">
-          <span>{{ statData?.todayAddNum || 0 }}</span>
-          <span>个</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <div class="label">即将逾期</div>
-        <div class="value">
-          <span>{{ statData?.todayImmediatelyTimeoutNum || 0 }}</span>
-          <span>个</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <div class="label">{{ currentDateType.label }}逾期</div>
-        <div class="value">
-          <span>{{ statData?.todayTimeoutNum || 0 }}</span>
+          <span>{{ item.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -79,19 +65,47 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import moment from "moment";
 import { getEventRiskControl } from "@/apis/cockpitEventStats";
 
 // 事件
 const emits = defineEmits(["search", "changeTime"]);
+
 const store = useStore();
+
 // 搜索组件激活状态(自动伸缩)
 const searchActive = ref(false);
 
 // 搜索字符串
 const searchText = ref("");
+
+// 统计数据
+const statData = ref(null);
+
+// 当前(选中)的时间类型
+const currentDateType = ref(null);
+
+// 激活的过滤器
+const activeFilter = computed(() => store.state.activeFilter);
+console.log(activeFilter);
+
+// stat list
+const statList = computed(() => [
+  {
+    label: `${currentDateType.value?.label}新增`,
+    value: statData.value?.todayAddNum || 0,
+  },
+  {
+    label: "即将逾期",
+    value: statData.value?.todayImmediatelyTimeoutNum || 0,
+  },
+  {
+    label: `${currentDateType.value?.label}逾期`,
+    value: statData.value?.todayTimeoutNum || 0,
+  },
+]);
 
 // 时间类型
 const dateTypes = [
@@ -105,11 +119,6 @@ const dateTypes = [
   },
 ];
 
-// 统计数据
-const statData = ref(null);
-
-// 当前(选中)的时间类型
-const currentDateType = ref();
 const changeDate = async (payload) => {
   const { value } = payload;
   currentDateType.value = payload;
