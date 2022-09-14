@@ -270,7 +270,7 @@ watch(
   }
   .chart-container {
     left: 18px;
-    width: 400px;
+    width: 420px;
     height: 200px;
     max-height: 200px;
     text-align: left;

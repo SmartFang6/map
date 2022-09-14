@@ -1,7 +1,7 @@
 <template>
   <div class="nature">
     <div class="nature-types">
-      <div class="nature-item">
+      <div class="nature-item" @click="onSetActiveFilter(1)">
         <div class="name">重大</div>
         <div class="value">
           <span>{{ data.serious.rate }}</span>
@@ -13,7 +13,7 @@
         </div>
       </div>
 
-      <div class="nature-item">
+      <div class="nature-item" @click="onSetActiveFilter(2)">
         <div class="name">较严重</div>
         <div class="value">
           <span>{{ data.lowSerious.rate }}</span>
@@ -25,7 +25,7 @@
         </div>
       </div>
 
-      <div class="nature-item">
+      <div class="nature-item" @click="onSetActiveFilter(3)">
         <div class="name">一般</div>
         <div class="value">
           <span>{{ data.general.rate }}</span>
@@ -43,6 +43,7 @@
 
 <script setup>
 import { inject, computed } from "vue";
+import { useStore } from "vuex";
 
 // 左侧注入数据
 const leftData = inject("leftData");
@@ -83,6 +84,14 @@ const data = computed(() => {
   });
   return data;
 });
+
+const store = useStore();
+const onSetActiveFilter = (value) => {
+  store.commit("UPDATE_ACTIVE_FILTER", {
+    type: "nature",
+    value,
+  });
+};
 </script>
 
 <style lang="less" scoped>
@@ -110,6 +119,9 @@ const data = computed(() => {
   background-size: contain;
   box-sizing: border-box;
   margin: 19px 0;
+  cursor: pointer;
+  position: relative;
+  z-index: 99;
   .name {
     font-size: 18px;
     font-family: FZZYJW;
