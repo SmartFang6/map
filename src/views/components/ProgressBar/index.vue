@@ -27,7 +27,9 @@
         </el-tooltip>
       </div>
       <div class="progress_view">
-        <div class="rate_tag" :style="{ width: `${rate}%` }" />
+        <div class="rate_box">
+          <div class="rate_tag" :style="{ width: `${rate}%` }" />
+        </div>
         <p>
           <span class="count" :style="{ color: colors[no] }">{{ count }}</span>
           <span>&nbsp;/&nbsp;</span>
@@ -114,42 +116,47 @@ const colors = {
     .title {
       text-align: left;
       color: #e6f8ff;
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .progress_view {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       width: 100%;
-      height: 16px;
-      background-color: rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      position: relative;
-      top: 0;
-      left: 0;
-
-      .rate_tag {
-        height: 100%;
-        background-image: linear-gradient(-18deg, #0adbe0 0%, #14a2d2 100%),
-          linear-gradient(90deg, rgba(89, 240, 93, 0.5) 0%, #59f05d 100%);
-        background-blend-mode: normal, normal;
+      // position: relative;
+      // top: 0;
+      // left: 0;
+      .rate_box {
+        width: calc(100% - 90px);
+        height: 16px;
+        background-color: rgba(255, 255, 255, 0.15);
         border-radius: 8px;
+        .rate_tag {
+          height: 100%;
+          background-image: linear-gradient(-18deg, #0adbe0 0%, #14a2d2 100%),
+            linear-gradient(90deg, rgba(89, 240, 93, 0.5) 0%, #59f05d 100%);
+          background-blend-mode: normal, normal;
+          border-radius: 8px;
+        }
       }
 
       p {
-        position: absolute;
-        right: 0;
         bottom: 16px;
+        min-width: 70px;
+        max-width: 90px;
         margin: 0;
         padding: 0;
         height: 24px;
         line-height: 24px;
         color: #9ce7fd;
-
+        text-align: right;
         .count {
-          font-size: 18px;
+          font-size: 32px;
         }
 
         .rate {
-          font-size: 14px;
+          font-size: 16px;
         }
       }
     }
