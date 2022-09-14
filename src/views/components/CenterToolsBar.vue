@@ -99,7 +99,6 @@ const currentDateType = ref(null);
 
 // 激活的过滤器
 const activeFilter = computed(() => store.state.activeFilter);
-console.log(activeFilter);
 
 // stat list
 const statList = computed(() => [

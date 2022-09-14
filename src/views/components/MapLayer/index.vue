@@ -11,7 +11,7 @@
     <div class="btns">
       <div
         :class="{ btn: true, active: layerActive }"
-        @click="layerActive = !layerActive"
+        @click="onTriggerLayerActive"
       >
         <img src="@/assets/images/chart-types.png" />
         <span>专题图</span>
@@ -37,7 +37,7 @@
           {{ item.label }}
         </div>
       </div>
-      <div class="close" @click="layerActive = false">
+      <div class="close" @click="onTriggerLayerActive">
         <img src="@/assets/images/chart-arrow-up.png" />
       </div>
     </div>
@@ -83,11 +83,6 @@ const selectLayers = ref([]);
 // 当前选中的图层类型索引
 let selectLayersTypeIndex = null;
 
-// 只有河道需要显示线条图层
-const mapLineFilterVisible = computed(() => {
-  return !!selectLayers.value.find((layer) => layer === "riverLayer");
-});
-
 // 河道线数据集
 const mapLineFilterData = ref({
   // 管理线范围
@@ -97,6 +92,23 @@ const mapLineFilterData = ref({
   // 中心线
   lineCenterLayer: false,
 });
+
+// 只有河道需要显示线条图层
+const mapLineFilterVisible = computed(() => {
+  return !!selectLayers.value.find((layer) => layer === "riverLayer");
+});
+
+// 如果不需要显示河道线，则重置选中数据
+watch(
+  () => mapLineFilterVisible.value,
+  (mapLineFilterVisible) => {
+    if (!mapLineFilterVisible) {
+      mapLineFilterData.value.lineManageLayer = false;
+      mapLineFilterData.value.lineWaterLayer = false;
+      mapLineFilterData.value.lineCenterLayer = false;
+    }
+  }
+);
 
 // mapLineFilterData 转 地图所需数据
 const legends = computed(() => {
@@ -113,10 +125,12 @@ const legends = computed(() => {
 watch(
   () => legends.value,
   (legends) => {
-    emits("changeLegend", {
-      layerName: "riverLayer",
-      legend: legends,
-    });
+    if (mapLineFilterVisible.value) {
+      emits("changeLegend", {
+        layerName: "riverLayer",
+        legend: legends,
+      });
+    }
   },
   { deep: true }
 );
@@ -148,6 +162,16 @@ const onSelectLayers = (layer, index) => {
   } else {
     emits("selectLayers", selectLayers.value);
   }*/
+};
+
+// 图层开关
+const onTriggerLayerActive = () => {
+  if (!(layerActive.value = !layerActive.value)) {
+    // 关闭时清空数据
+    selectLayers.value = [];
+    selectLayersTypeIndex = null;
+    emits("selectLayers", ["pointLayer"]);
+  }
 };
 </script>
 
