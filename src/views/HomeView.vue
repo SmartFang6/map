@@ -58,7 +58,7 @@
     </template>
     <template #bottom>
       <!-- 问题清单 -->
-      <ProblemList @select="mapRef?.mapPanToSelectRow" :search="{ a: 111 }" />
+      <ProblemList @select="mapRef?.mapPanToSelectRow" :search="activeFilter" />
     </template>
   </Layout>
 </template>
