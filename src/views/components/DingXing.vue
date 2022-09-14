@@ -88,7 +88,7 @@ const data = computed(() => {
 const store = useStore();
 const onSetActiveFilter = (value) => {
   store.commit("UPDATE_ACTIVE_FILTER", {
-    type: "nature",
+    type: "eventGradeStatus",
     value,
   });
 };
