@@ -58,7 +58,7 @@
     </template>
     <template #bottom>
       <!-- 问题清单 -->
-      <ProblemList @select="mapRef?.mapPanToSelectRow" />
+      <!-- <ProblemList @select="mapRef?.mapPanToSelectRow" /> -->
     </template>
   </Layout>
 </template>
@@ -75,7 +75,7 @@ import IssueDistribution from "./components/IssueDistribution.vue";
 import TrendAnalysis from "./components/TrendAnalysis.vue";
 import Performance from "./components/Performance/index.vue";
 // import HighProblemTopList from "./components/HighProblemTopList.vue";
-import ProblemList from "./components/ProblemList.vue";
+// import ProblemList from "./components/ProblemList.vue";
 import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
