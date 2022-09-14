@@ -209,8 +209,12 @@ export default function (pieData, internalDiameterRatio) {
       // bottom: 210,
       right: 0,
       top: -5,
+      // y: "center",
       formatter: (name) => {
         const item = pieData.filter((i) => i.name === name)[0];
+        if (!item) {
+          return null;
+        }
         const idx = pieData.findIndex((i) => i.name === name);
         const text = name.length > 6 ? name.slice(0, 6) + "..." : name;
         return `${text} {value${idx}|${item.value}}个`;

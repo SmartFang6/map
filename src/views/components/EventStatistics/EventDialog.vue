@@ -81,6 +81,7 @@
 <script setup>
 import { ref, nextTick, onMounted } from "vue";
 import { countEventClassCount } from "@/apis/home";
+import { adjustSize } from "@/utils";
 import * as Echarts from "echarts";
 import { useStore } from "vuex";
 const store = useStore();
@@ -143,13 +144,13 @@ const chartData = (data, show, name) => {
       {
         name: "事件统计" + name,
         type: "pie",
-        radius: [108, 220],
+        radius: [adjustSize(120), adjustSize(220)],
         center: ["50%", "52%"],
         roseType: "area",
         emphasis: {
           label: {
             show: true,
-            fontSize: "36",
+            fontSize: adjustSize(36) + "",
             fontFamily: "AgencyFB-Bold",
             fontWeight: "bold",
           },
@@ -163,7 +164,7 @@ const chartData = (data, show, name) => {
           show,
           focus: "self",
           position: "center",
-          fontSize: "36",
+          fontSize: adjustSize(36) + "",
           color: "#0adbe0",
           fontFamily: "AgencyFB-Bold",
           formatter: (p) => {

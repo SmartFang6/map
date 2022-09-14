@@ -159,6 +159,7 @@ const dialogEmnu = shallowRef({
   [LayerEnum.RIVER_LAYER]: RiverDialog, // 河道弹窗
   [LayerEnum.VIDEO_LAYER]: VideoDialog, // 视频弹窗
 });
+// 地图弹窗信息
 const mapInfo = ref({});
 let MapPopRef = ref(null);
 function showPop(info) {
@@ -169,6 +170,7 @@ function showPop(info) {
     MapPopRef.value.open(info);
     return;
   }
+  // 因为地图点位和弹窗写的还不全，先把有的弹窗的组件展示，后续写全的时候if判断可以删除。
   if (
     info.layerid === LayerEnum.VIDEO_LAYER ||
     info.layerid === LayerEnum.RIVER_LAYER
