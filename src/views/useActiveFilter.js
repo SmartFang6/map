@@ -6,7 +6,8 @@
 ¦ FilePath: src/views/useActiveFilter.js
 ¦------------------------------------------------------*/
 
-import { useStore, computed } from "vuex";
+import { computed } from "vue";
+import { useStore } from "vuex";
 
 /**
  * 全局联动过滤参数
@@ -27,7 +28,7 @@ export default function () {
     }
 
     if (activeFilter.type === "eventStat") {
-      switch(activeFilter.value) {
+      switch (activeFilter.value) {
         // 问题总数，直接传空对象
         case "allNum":
           return params;
@@ -52,4 +53,4 @@ export default function () {
 
     return params;
   });
-};
+}

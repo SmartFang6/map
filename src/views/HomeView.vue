@@ -65,7 +65,7 @@
 
 <script setup>
 import Header from "./components/Header";
-import { inject, provide, ref, shallowRef } from "vue";
+import { inject, provide, ref, shallowRef, watch } from "vue";
 import { NoticeEvt } from "@/views/config";
 import * as LayerEnum from "@/utils/LayerEnum"; // 图层id
 import EventStatistics from "./components/EventStatistics/index.vue";
@@ -75,7 +75,7 @@ import IssueDistribution from "./components/IssueDistribution.vue";
 import TrendAnalysis from "./components/TrendAnalysis.vue";
 import Performance from "./components/Performance/index.vue";
 // import HighProblemTopList from "./components/HighProblemTopList.vue";
-import ProblemList from "./components/ProblemList.vue";
+// import ProblemList from "./components/ProblemList.vue";
 import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
@@ -90,8 +90,9 @@ import PoliciesSystems from "./components/PoliciesSystems.vue";
 import VideoDialog from "./dialog/VideoDialog.vue";
 // 河道弹窗
 import RiverDialog from "./dialog/RiverDialog.vue";
-const eventBus = inject("EventBus");
+import useActiveFilter from "./useActiveFilter.js";
 
+const eventBus = inject("EventBus");
 // 若未通过单点登录进入，重定向去401页面
 const USER_ID = store?.state?.userInfo?.userId;
 if (!USER_ID) {
@@ -179,6 +180,19 @@ function showPop(info) {
     dialogShow.value = true;
   }
 }
+
+// 全局联动过滤参数改变时调用地图方法
+const activeFilter = useActiveFilter();
+watch(
+  () => activeFilter.value,
+  (activeFilter) => {
+    console.log("activeFilter changed =>", activeFilter);
+    mapRef.value?.changeFilter({
+      ...activeFilter,
+    });
+  }
+);
+
 //例: 通知地图
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
 // TODO
