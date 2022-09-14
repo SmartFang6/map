@@ -4,6 +4,7 @@
     <template #map>
       <div class="map">
         <CenterToolsBar @changeTime="onChangeTime" />
+        <!-- 图层切换 -->
         <MapLayer
           @selectLayers="mapRef?.initLayers"
           @changeLegend="
