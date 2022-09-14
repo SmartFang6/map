@@ -236,7 +236,7 @@ watch(
         chartTool.on("globalout", globaloutHandler);
       }
       option.value = getPie3DOptions(dataList, 0.59);
-      chartTool.setOption(option.value);
+      chartTool.setOption(option.value, true);
     }
   }
 );
@@ -271,7 +271,7 @@ watch(
   .chart-container {
     left: 18px;
     width: 400px;
-    height: 220px;
+    height: 200px;
     max-height: 200px;
     text-align: left;
   }
