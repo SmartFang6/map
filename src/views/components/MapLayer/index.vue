@@ -45,7 +45,7 @@
     <WatersDescriptionDialog v-model:visible="watersDescriptionDialogVisible" />
 
     <!--#region 选中河道图层时显示过滤线-->
-    <div v-if="mapLineFilterVisible" class="map-line-filter">
+    <div v-if="mapLineFilterVisible" :class="['map-line-filter', legendsStyle]">
       <el-checkbox v-model="mapLineFilterData.lineManageLayer">
         <i class="red" />
         <span>管理范围线</span>
@@ -67,6 +67,14 @@
 import layerTypes from "./layerTypes.js";
 import { ref, computed, watch } from "vue";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+
+// 图例样式（根据底部问题清单是否收起判断用什么样式)
+const legendsStyle = computed(() =>
+  store.state?.layout?.bottom === "open" ? "default" : "bottom"
+);
 
 // 事件
 const emits = defineEmits(["selectLayers", "changeLegend"]);
@@ -93,10 +101,12 @@ const mapLineFilterData = ref({
   lineCenterLayer: false,
 });
 
-// 只有河道需要显示线条图层
-const mapLineFilterVisible = computed(() => {
-  return !!selectLayers.value.find((layer) => layer === "riverLayer");
-});
+// 只有水域调查图层才有三条线
+const mapLineFilterVisible = computed(() =>
+  selectLayers.value.some((selected) =>
+    layerTypes[0].items.find((type) => type.value === selected)
+  )
+);
 
 // 如果不需要显示河道线，则重置选中数据
 watch(
@@ -148,20 +158,6 @@ const onSelectLayers = (layer, index) => {
     selectLayers.value.push(layer);
   }
   emits("selectLayers", selectLayers.value);
-  /*
-  if (legends.value.length > 0) {
-    emits(
-      "selectLayers",
-      selectLayers.value.map((layer) => {
-        return {
-          layerName: layer,
-          legend: layer === "riverLayer" ? legends.value : [],
-        };
-      })
-    );
-  } else {
-    emits("selectLayers", selectLayers.value);
-  }*/
 };
 
 // 图层开关
@@ -273,10 +269,16 @@ const onTriggerLayerActive = () => {
   box-sizing: border-box;
   position: absolute;
   left: calc(830px - @width);
-  top: 420px;
   z-index: 100;
   padding: 20px;
   background-color: rgba(4, 46, 113, 0.88);
+  transition: all 0.5s;
+  &.default {
+    top: 420px;
+  }
+  &.bottom {
+    top: 650px;
+  }
   :deep(.el-checkbox) {
     color: #fff;
   }

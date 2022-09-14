@@ -157,7 +157,7 @@ import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 import moment from "moment";
 // import { getEventQuestionList } from "@/apis/cockpitEventStats"; // 问题列表接口(旧)
 import { getEventStatReportProblemList } from "@/apis/cockpitEventStats"; // 问题列表接口(新)
@@ -165,6 +165,7 @@ import TableMore from "./TableMore/index.vue";
 
 const store = useStore();
 
+// 监听父组件传递的查询参数
 const props = defineProps({
   search: {
     type: Array,
@@ -173,18 +174,6 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["select"]);
-
-// 监听父组件传递的查询参数
-watch(
-  () => props.search,
-  (search) => {
-    console.log(search);
-  },
-  {
-    immediate: true,
-    deep: true,
-  }
-);
 
 // 是否折叠
 const collapsed = computed(() => {
@@ -274,20 +263,23 @@ const getEventProblemList = () => {
 
 // 获取注入的时间区间
 let dateRange = inject("dateRange");
+// 定时器的查询参数
+const searchType = ref(null);
 
 // 监测查询时间
 watch(
-  () => dateRange,
-  async (dateRange) => {
+  () => [dateRange.value, props.search],
+  async (searchList) => {
     // 先加载一次数据
     dataModel = await getEventQuestionModel({
-      ...dateRange.value,
+      ...searchList[0],
+      ...searchList[1],
     });
     getEventProblemList();
+    searchType.value = searchList[1] || {};
   },
   {
     immediate: true,
-    deep: true,
   }
 );
 
@@ -299,9 +291,9 @@ onBeforeMount(async () => {
   timer = setInterval(async () => {
     dataModel = await getEventQuestionModel({
       ...dateRange.value,
+      ...searchType.value,
     });
     getEventProblemList();
-    console.log(dataModel, dataList);
   }, 3 * 60 * 1000);
 });
 
