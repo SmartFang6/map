@@ -159,12 +159,32 @@ import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
 // import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 import moment from "moment";
-import { getEventQuestionList } from "@/apis/cockpitEventStats";
+// import { getEventQuestionList } from "@/apis/cockpitEventStats"; // 问题列表接口(旧)
+import { getEventStatReportProblemList } from "@/apis/cockpitEventStats"; // 问题列表接口(新)
 import TableMore from "./TableMore/index.vue";
 
 const store = useStore();
 
+const props = defineProps({
+  search: {
+    type: Array,
+    required: true,
+  },
+});
+
 const emits = defineEmits(["select"]);
+
+// 监听父组件传递的查询参数
+watch(
+  () => props.search,
+  (search) => {
+    console.log(search);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
 // 是否折叠
 const collapsed = computed(() => {
@@ -179,7 +199,7 @@ const onPanelTrigger = () => {
 };
 
 // 数据列表
-const dataList = ref([]);
+const dataList = ref(null);
 
 // 示例数据
 // for (let i = 1; i < 10; i++) {
@@ -217,7 +237,8 @@ const getEventQuestionModel = async (queryParam) => {
     },
     queryParam
   );
-  return await getEventQuestionList(param);
+  // return await getEventQuestionList(param);
+  return await getEventStatReportProblemList(param);
 };
 
 // 打开更多弹窗
@@ -232,24 +253,22 @@ function onShowMore() {
  * @returns {undefined}
  */
 const getEventProblemList = () => {
-  const target = toRaw(dataModel)?.records;
-  if (!target) return;
-  dataList.value = [];
-  target.forEach((feild, pos) => {
-    dataList.value.push({
-      ...feild,
-      index: pos + 1,
-      eventResponsibleUnitName: feild.eventResponsibleUnitCodeName,
-      eventSourceName: feild.eventSourceName,
-      adnm: feild.adnm,
-      rchnm: feild.rchnm,
-      eventTypeName: feild.eventTypeName,
-      eventGrade: feild.eventGrade,
-      eventGradeName: feild.eventGradeName,
-      occurTime: moment(feild.occurTime).format("YYYY-MM-DD"),
-      status: feild.eventStatusName,
-      eventStatus: feild.eventStatus,
-    });
+  const target = toRaw(dataModel);
+  dataList.value = target?.map((item, index) => {
+    return {
+      ...item,
+      index: index + 1,
+      eventResponsibleUnitName: item.eventResponsibleUnitCodeName,
+      eventSourceName: item.eventSourceName,
+      adnm: item.adnm,
+      rchnm: item.rchnm,
+      eventTypeName: item.eventTypeName,
+      eventGrade: item.eventGrade,
+      eventGradeName: item.eventGradeName,
+      occurTime: moment(item.occurTime).format("YYYY-MM-DD"),
+      status: item.eventStatusName,
+      eventStatus: item.eventStatus,
+    };
   });
 };
 

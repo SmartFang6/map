@@ -16,29 +16,29 @@
         <img src="@/assets/images/chart-types.png" />
         <span>专题图</span>
       </div>
+      <div class="layer-types" :class="layerActive ? '' : 'h0'">
+        <div
+          v-for="(layer, index) in layerTypes"
+          :key="index"
+          class="layer-type-item"
+        >
+          <div class="title">{{ layer.title }}</div>
+          <div
+            v-for="(item, i) in layer.items"
+            :key="i"
+            :class="{ item: true, active: selectLayers.includes(item.value) }"
+            @click="onSelectLayers(item.value, index)"
+          >
+            {{ item.label }}
+          </div>
+        </div>
+        <div class="close" @click="onTriggerLayerActive">
+          <img src="@/assets/images/chart-arrow-up.png" />
+        </div>
+      </div>
       <div class="btn" @click="watersDescriptionDialogVisible = true">
         <img src="@/assets/images/chart-description.png" />
         <span>水域概况</span>
-      </div>
-    </div>
-    <div v-if="layerActive" class="layer-types">
-      <div
-        v-for="(layer, index) in layerTypes"
-        :key="index"
-        class="layer-type-item"
-      >
-        <div class="title">{{ layer.title }}</div>
-        <div
-          v-for="(item, i) in layer.items"
-          :key="i"
-          :class="{ item: true, active: selectLayers.includes(item.value) }"
-          @click="onSelectLayers(item.value, index)"
-        >
-          {{ item.label }}
-        </div>
-      </div>
-      <div class="close" @click="onTriggerLayerActive">
-        <img src="@/assets/images/chart-arrow-up.png" />
       </div>
     </div>
 
@@ -189,38 +189,46 @@ const onTriggerLayerActive = () => {
 }
 
 .btns > .btn {
-  width: 138px;
-  height: 36px;
-  background: url(@/assets/images/chart-bg.png);
   display: flex;
   align-items: center;
+  width: 138px;
+  height: 36px;
+  margin-top: 10px;
+  background: url(@/assets/images/chart-bg.png);
+  background-size: 100% 100%;
   padding-left: 19px;
   box-sizing: border-box;
   font-size: 14px;
   color: #7be5ff;
   cursor: pointer;
+  user-select: none;
   font-family: MicrosoftYaHei;
-  margin-bottom: 10px;
   & > span {
     padding-left: 14px;
   }
   &.active {
     background: url(@/assets/images/chart-bg-active.png);
+    background-size: 100% 100%;
     color: #fff;
     font-weight: bold;
   }
 }
-
+.h0 {
+  height: 0 !important;
+  padding: 0 !important;
+}
 .layer-types {
-  margin-left: 5px;
-  width: 150px;
+  // width: 150px;
+  padding-top: 6px;
   background-color: rgba(4, 46, 113, 0.88);
   text-align: left;
   box-sizing: border-box;
-  padding-top: 20px;
+  transition: height 0.4s;
+  height: 81%;
+  overflow: hidden;
   .title {
     font-family: YOUSHEBIAOTIHEI;
-    font-size: 24px;
+    font-size: 20px;
     color: #00d4f4;
     padding-left: 14px;
   }
@@ -229,7 +237,7 @@ const onTriggerLayerActive = () => {
     font-size: 14px;
     font-family: MicrosoftYaHei;
     cursor: pointer;
-    padding: 3.5px 18px 3.5px 47px;
+    padding: 4px 18px 4px 47px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -239,6 +247,7 @@ const onTriggerLayerActive = () => {
         display: block;
         content: "";
         background: url(@/assets/images/chart-checked.png);
+        background-size: 100% 100%;
         width: 12px;
         height: 8px;
       }
