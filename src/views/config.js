@@ -36,4 +36,9 @@ export const ticketMap = [
     name: "义乌市",
     ticket: "5719416B1AF12B2653A222FAF5792252",
   },
+  {
+    adcd: "330602",
+    name: "越城区",
+    ticket: "D2D8A3A838C8276EB599FCF48C5001C1",
+  },
 ];

@@ -1,4 +1,4 @@
-<!-- 河道图层弹窗 -->
+<!-- 其他水域图层弹窗 -->
 <template>
   <div class="map-pop">
     <div class="header_title">{{ props.info?.name }}</div>
@@ -15,30 +15,16 @@
           </span>
         </li>
         <li>
-          <span class="label">平均宽度：</span>
-          <span class="value">{{ props.info?.width?.toFixed(1) }}m</span>
-        </li>
-        <li>
-          <span class="label">河流长度：</span>
-          <span class="value">{{ props.info?.length?.toFixed(2) }}km</span>
-        </li>
-        <li>
-          <span class="label">起点：</span>
-          <span class="value">{{ props.info?.sname }}</span>
-        </li>
-        <li>
-          <span class="label">终点：</span>
-          <span class="value">{{ props.info?.ename }}</span>
-        </li>
-        <li>
           <span class="label">水域面积：</span>
           <span class="value">{{ props.info?.area?.toFixed(1) }}m²</span>
         </li>
         <li>
-          <span class="label">是否为重要水域：</span>
-          <span class="value">
-            {{ props.info?.imp !== "否" ? "是" : "否" }}
-          </span>
+          <span class="label">水域容积：</span>
+          <span class="value">{{ props.info?.vol?.toFixed(2) }}万m³</span>
+        </li>
+        <li>
+          <span class="label">平均水深：</span>
+          <span class="value">{{ props.info?.averdep?.toFixed(1) }}m</span>
         </li>
       </ul>
     </div>
@@ -74,7 +60,7 @@ const props = defineProps({
   }
 
   .label {
-    width: 150px;
+    width: 98px;
     min-width: 78px;
     text-align: right;
     font-family: MicrosoftYaHei;
