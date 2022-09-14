@@ -8,7 +8,7 @@
  ¦----------------------------------------------------->
 
 <template>
-  <div class="event-stat-chart">
+  <div v-if="data" class="event-stat-chart">
     <!--#region 类型切换-->
     <div class="types">
       <el-dropdown>
@@ -46,6 +46,14 @@ import { getEventIncidenceRank } from "@/apis/cockpitEventStats";
 import "echarts-gl";
 import * as Echarts from "echarts";
 import getPie3DOptions, { getParametricEquation } from "./getPie3DOptions";
+
+const props = defineProps({
+  data: {
+    type: Object,
+    default: () => null,
+  },
+});
+console.log(props);
 
 const colors = [
   "#03ffa9",
@@ -93,23 +101,26 @@ watch(
 const dataList = computed(() => {
   const isType = currentType.value.value === 1;
   const source = isType
-    ? dataSource.value?.eventStatHighIncidenceRankCategoryCodeList
-    : dataSource.value?.eventStatHighIncidenceRankRegionList;
+    ? props.data?.eventTypeCount
+    : props.data?.eventAdcdCount;
   if (!Array.isArray(source) || source.length <= 0) {
     return [];
   }
   const result = source
+    .sort((a, b) => b.amount - a.amount)
     .filter((a, index) => index < 6)
     .map((item, index) => {
       return {
-        name: isType ? item.eventCategoryName : item.adnm,
-        value: isType ? item.eventCategoryNum : item.adcdNum,
-        rate: item.completedRate * 100,
+        name: item.obj,
+        value: item.amount,
+        rate: (item.proportion * 100).toFixed(2),
         itemStyle: {
           color: colors[index],
         },
       };
     });
+  return result;
+  /*
   const total = result
     .map((item) => item.value)
     .reduce((prev, curr) => prev + curr, 0);
@@ -118,7 +129,7 @@ const dataList = computed(() => {
       ...item,
       rate: ((item.value / total) * 100).toFixed(2),
     };
-  });
+  });*/
 });
 
 let option = ref({});
