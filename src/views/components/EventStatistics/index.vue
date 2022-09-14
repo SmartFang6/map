@@ -27,8 +27,8 @@
         <img :src="item.icon" alt="icon" class="item-img" />
         <div class="value-wrapper">
           <p>
-            <span class="item-value" :title="eventStatEvent?.[item.key] || 0">
-              {{ eventStatEvent?.[item.key] || 0 }}
+            <span class="item-value" :title="data?.[item.key] || 0">
+              {{ data?.[item.key] || 0 }}
             </span>
             <span class="item-unit">{{ item?.unit }}</span>
           </p>
@@ -37,7 +37,7 @@
       </li>
     </ul>
 
-    <EventStatisticsChart />
+    <EventStatisticsChart :data="data" />
     <el-dialog
       v-model="showMore"
       width="1140px"
@@ -55,19 +55,28 @@
 </template>
 
 <script setup>
-import { inject, computed, ref } from "vue";
+import { inject, computed, ref, watch } from "vue";
 import Title from "@/components/Title/index.vue";
 import EventStatisticsChart from "./Chart.vue";
 import EventDialog from "./EventDialog.vue";
 import { useStore } from "vuex";
-
-let leftData = inject("leftData");
-const showMore = ref(false);
-let eventStatEvent = computed(() => {
-  return leftData.value?.eventStatEvent;
-});
+import { countEventClassCount } from "@/apis/home";
 
 const store = useStore();
+const showMore = ref(false);
+
+const data = ref({});
+const dateRange = inject("dateRange");
+watch(
+  () => dateRange.value,
+  async (dateRange) => {
+    data.value = await countEventClassCount(dateRange);
+    if (data.value.eventSourceSolveRate) {
+      data.value.eventSourceSolveRate.toFixed(0);
+    }
+  }
+);
+
 // 激活的过滤器
 const activeFilter = computed(() => store.state.activeFilter);
 
@@ -77,25 +86,25 @@ let configList = [
     icon: require("@/assets/event-icon/icon_1.png"),
     label: "问题总数",
     unit: "个",
-    key: "allNum",
+    key: "eventNum",
   },
   {
     icon: require("@/assets/event-icon/icon_2.png"),
     label: "未办结",
     unit: "个",
-    key: "unCompleteNum",
+    key: "eventUnSolveNum",
   },
   {
     icon: require("@/assets/event-icon/icon_3.png"),
     label: "已办结",
     unit: "个",
-    key: "completedNum",
+    key: "eventSolveNum",
   },
   {
     icon: require("@/assets/event-icon/icon_5.png"),
     label: "销号率",
     unit: "%",
-    key: "completedRate",
+    key: "eventSourceSolveRate",
   },
 ];
 </script>

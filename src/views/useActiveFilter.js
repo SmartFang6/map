@@ -30,18 +30,18 @@ export default function () {
     if (activeFilter.type === "eventStat") {
       switch (activeFilter.value) {
         // 问题总数，直接传空对象
-        case "allNum":
+        case "eventNum":
           return params;
         // 未办结
-        case "unCompleteNum":
+        case "eventUnSolveNum":
           params.eventCompleteStatus = 0;
           break;
         // 已办结
-        case "completedNum":
+        case "eventSolveNum":
           params.eventCompleteStatus = 1;
           break;
         // 消耗率
-        case "completedRate":
+        case "eventSourceSolveRate":
           params.eventCompleteStatus = 1;
           break;
         default:
