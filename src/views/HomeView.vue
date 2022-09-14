@@ -95,6 +95,8 @@ import RiverDialog from "./dialog/RiverDialog.vue";
 import LakeDialog from "./dialog/LakeDialog.vue";
 // 水库
 import reservoirDialog from "./dialog/ReservoirDialog";
+// 山塘
+import PoolDialog from "./dialog/PoolDialog.vue";
 // 人工水道弹窗
 import CanalDialog from "./dialog/CanalDialog.vue";
 // 其他水域弹窗
@@ -171,6 +173,7 @@ const dialogEmnu = shallowRef({
   [LayerEnum.RIVER_LAYER]: RiverDialog, // 河道弹窗
   [LayerEnum.LAKE_LAYER]: LakeDialog, // 湖泊弹窗
   [LayerEnum.RESERVOIR_LAYER]: reservoirDialog, // 水库弹窗
+  [LayerEnum.HILLPOND_LAYER]: PoolDialog, // 山塘
   [LayerEnum.OTHERWATER_LAYER]: OtherwaterDialog, // 人工水道
   [LayerEnum.CANAL_LAYER]: CanalDialog, // 其他水域
   [LayerEnum.VIDEO_LAYER]: VideoDialog, // 视频弹窗
