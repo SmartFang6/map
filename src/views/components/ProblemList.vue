@@ -199,7 +199,7 @@ const onPanelTrigger = () => {
 };
 
 // 数据列表
-const dataList = ref(null);
+const dataList = ref([]);
 
 // 示例数据
 // for (let i = 1; i < 10; i++) {
