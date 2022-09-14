@@ -410,7 +410,7 @@ export const riverLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 管理范围线
@@ -552,7 +552,7 @@ export const reservoirLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 水库-管理范围线
@@ -660,7 +660,7 @@ export const hillpondLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 山塘-管理范围线
@@ -764,7 +764,7 @@ export const lakeLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 湖泊-管理范围线
@@ -872,7 +872,7 @@ export const canalLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 人工水道-管理范围线
@@ -980,7 +980,7 @@ export const otherwaterLayer = {
     },
     crossOrigin: 'anonymous'
   },
-  zIndex: 18
+  zIndex: 17
 }
 
 // 其他水域-管理范围线
