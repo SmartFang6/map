@@ -157,7 +157,7 @@ import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 import moment from "moment";
 // import { getEventQuestionList } from "@/apis/cockpitEventStats"; // 问题列表接口(旧)
 import { getEventStatReportProblemList } from "@/apis/cockpitEventStats"; // 问题列表接口(新)
