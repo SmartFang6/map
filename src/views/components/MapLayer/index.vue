@@ -167,6 +167,10 @@ const onTriggerLayerActive = () => {
     selectLayers.value = [];
     selectLayersTypeIndex = null;
     emits("selectLayers", ["pointLayer"]);
+  } else {
+    store.commit("UPDATE_LAYOUT", {
+      bottom: "close",
+    });
   }
 };
 </script>

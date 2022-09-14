@@ -33,7 +33,7 @@
 
     <!--#region 图表-->
     <div class="chart-wrapper">
-      <img src="@/assets/images/donut-bottom-bg.png" />
+      <img class="ignore-img" src="@/assets/images/donut-bottom-bg.png" />
       <div class="chart-container" ref="chartContainer" />
     </div>
     <!--#endregion-->
@@ -265,23 +265,21 @@ watch(
 .chart-wrapper {
   position: relative;
   z-index: 100;
-  width: 244px;
-  height: 178px;
-  margin-left: 33px;
-  margin-top: 30px;
-  img,
+  width: 100%;
+  height: 100%;
+  // margin-left: 33px;
+  // margin-top: 30px;
+  .ignore-img,
   .chart-container {
     position: absolute;
   }
-  img {
+  .ignore-img {
     left: 0;
     bottom: 0;
-    width: 238px;
-    height: 129px;
+    width: 210px;
   }
   .chart-container {
-    left: 18px;
-    width: 420px;
+    width: 100%;
     height: 200px;
     max-height: 200px;
     text-align: left;
@@ -291,7 +289,8 @@ watch(
 .types {
   position: absolute;
   z-index: 101;
-  top: 18px;
+  // top: 18px;
+  top: 8px;
   width: 81px;
   height: 24px;
   background: url(@/assets/images/select-bg.png);

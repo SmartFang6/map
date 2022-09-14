@@ -207,7 +207,7 @@ export default function (pieData, internalDiameterRatio) {
       orient: "vertical",
       // left: 59,
       // bottom: 210,
-      right: 0,
+      right: 10,
       top: -5,
       // y: "center",
       formatter: (name) => {
@@ -244,8 +244,12 @@ export default function (pieData, internalDiameterRatio) {
     grid3D: {
       show: false,
       boxHeight: 8,
-      top: -28,
-      left: -98,
+      // top: -28,
+      //left: -100,
+      top: -15,
+      left: 15,
+      width: 180,
+      height: 180,
       viewControl: {
         // 3d效果可以放大、旋转等，请自己去查看官方配置
         alpha: 35,
