@@ -5,31 +5,18 @@
       <div class="map">
         <CenterToolsBar @changeTime="onChangeTime" />
         <!-- 图层切换 -->
-        <MapLayer
-          @selectLayers="mapRef?.initLayers"
-          @changeLegend="
-            ({ layerName, legend }) => mapRef?.changeLegend(layerName, legend)
-          "
-        />
+        <MapLayer @selectLayers="selectLayers" />
         <Map ref="mapRef" @showPop="showPop" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
         <el-dialog
           v-model="dialogShow"
-          :width="
-            currentDialog === LayerEnum.RESERVOIR_LAYER ||
-            currentDialog === LayerEnum.HILLPOND_LAYER
-              ? '860px'
-              : '468px'
-          "
+          :width="DialogWidth"
           append-to-body
           destroy-on-close
           custom-class="map_dialog"
         >
-          <component
-            :is="dialogEmnu[currentDialog]"
-            :info="mapInfo"
-          ></component>
+          <component :is="curDialogCom" :info="mapInfo"></component>
         </el-dialog>
       </div>
     </template>
@@ -45,6 +32,8 @@
     </template>
     <template #right>
       <div class="right-box">
+        <!-- 图例 -->
+        <LegendMap :legendList="legendList" @change="handleCheckLegendChange" />
         <!-- 风险管控-->
         <!-- <RiskControl /> -->
         <!-- 趋势分析-->
@@ -65,9 +54,8 @@
 
 <script setup>
 import Header from "./components/Header";
-import { inject, provide, ref, shallowRef, watch } from "vue";
+import { inject, provide, ref, watch } from "vue";
 import { NoticeEvt } from "@/views/config";
-import * as LayerEnum from "@/utils/LayerEnum"; // 图层id
 import EventStatistics from "./components/EventStatistics/index.vue";
 import ProblemSource from "./components/ProblemSource.vue";
 import IssueDistribution from "./components/IssueDistribution.vue";
@@ -79,30 +67,16 @@ import ProblemList from "./components/ProblemList.vue";
 import MapLayer from "./components/MapLayer/index.vue";
 import { getEventStat } from "@/apis/home";
 import Map from "@/views/OLMap/MainMap";
+import LegendMap from "@/views/components/legendMap";
 import store from "@/store";
 import moment from "moment";
 import MapPop from "./components/MapPop/index.vue";
 import CenterToolsBar from "./components/CenterToolsBar.vue";
 import router from "@/router";
 import PoliciesSystems from "./components/PoliciesSystems.vue";
-// 地图弹窗 -----
-// 视频点弹窗
-import VideoDialog from "./dialog/VideoDialog.vue";
-// 水域弹窗
-// 河道弹窗
-import RiverDialog from "./dialog/RiverDialog.vue";
-// 湖泊弹窗
-import LakeDialog from "./dialog/LakeDialog.vue";
-// 水库
-import reservoirDialog from "./dialog/ReservoirDialog";
-// 山塘
-import PoolDialog from "./dialog/PoolDialog.vue";
-// 人工水道弹窗
-import CanalDialog from "./dialog/CanalDialog.vue";
-// 其他水域弹窗
-import OtherwaterDialog from "./dialog/OtherwaterDialog.vue";
 
 import useActiveFilter from "./useActiveFilter.js";
+import useHomeDialog from "@/views/components/useHomeDialog.js";
 
 const eventBus = inject("EventBus");
 // 若未通过单点登录进入，重定向去401页面
@@ -164,20 +138,10 @@ function onChangeTime(val) {
   mapRef.value?.changeTime(val);
 }
 
+//当前展示的弹窗,弹窗的宽度,当前展示的弹窗组件
+const { currentDialog, DialogWidth, curDialogCom } = useHomeDialog();
 // 地图点位弹窗
 const dialogShow = ref(false);
-// 当前展示的弹窗
-const currentDialog = ref("");
-// 弹窗组件
-const dialogEmnu = shallowRef({
-  [LayerEnum.RIVER_LAYER]: RiverDialog, // 河道弹窗
-  [LayerEnum.LAKE_LAYER]: LakeDialog, // 湖泊弹窗
-  [LayerEnum.RESERVOIR_LAYER]: reservoirDialog, // 水库弹窗
-  [LayerEnum.HILLPOND_LAYER]: PoolDialog, // 山塘
-  [LayerEnum.OTHERWATER_LAYER]: OtherwaterDialog, // 人工水道
-  [LayerEnum.CANAL_LAYER]: CanalDialog, // 其他水域
-  [LayerEnum.VIDEO_LAYER]: VideoDialog, // 视频弹窗
-});
 // 地图弹窗信息
 const mapInfo = ref({});
 let MapPopRef = ref(null);
@@ -189,12 +153,7 @@ function showPop(info) {
     MapPopRef.value.open(info);
     return;
   }
-  // 因为地图点位和弹窗写的还不全，先把有的弹窗的组件展示，后续写全的时候if判断可以删除。
-  // if (
-  //   info.layerid !== LayerEnum.HILLPOND_LAYER
-  // ) {
   dialogShow.value = true;
-  // }
 }
 
 // 全局联动过滤参数改变时调用地图方法
@@ -213,6 +172,27 @@ watch(
 // eventBus.on(NoticeEvt.NOTICE_MAP,  (val) => {
 // TODO
 // })
+// 当前图例legend
+const legendList = ref([]);
+const layerName = ref("");
+let curLegend = [];
+// 图例筛选
+const handleCheckLegendChange = (legend) => {
+  curLegend = legend;
+  mapRef.value?.changeLegend(layerName, legend ?? []);
+};
+// 图层切换 当前图层，已选择图层name列表
+const selectLayers = ({ layerInfos, selectLayers }) => {
+  legendList.value = layerInfos?.legend ?? [];
+  //切换图例的时候 如果当前的图例类型相同的话，就还用之前的图例去渲染地图线，否则用新的图例渲染
+  let nowLegend = legendList.value?.filter((i) => i.type);
+  let legend = layerInfos?.type == layerName.value ? curLegend : nowLegend;
+  layerName.value = layerInfos?.type ?? "";
+  // 调用地图事件初始化图例图层。
+  mapRef.value?.initLayers(selectLayers);
+  // 切换图例
+  handleCheckLegendChange(legend);
+};
 </script>
 
 <style scoped lang="less">
