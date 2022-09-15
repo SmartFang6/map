@@ -90,6 +90,7 @@ class SldUtils {
     return str
   }
 
+
   /**
    * 创建样式Group
    * @param {Object} parmas - 样式配置
@@ -133,6 +134,34 @@ class SldUtils {
       str += `<sld:MaxScaleDenominator>${
         params.maxScale
       }</sld:MaxScaleDenominator>`
+    }
+    if (params.label) {
+      str += '<sld:PolygonSymbolizer/>' +
+      '<sld:TextSymbolizer>' +
+          '<sld:Geometry>' +
+              '<ogc:Function name="centroid">' +
+                  '<ogc:PropertyName>wkb_geometry</ogc:PropertyName>' +
+              '</ogc:Function>' +
+          '</sld:Geometry>' +
+          '<sld:Label>' +
+              '<ogc:PropertyName>name</ogc:PropertyName>' +
+          '</sld:Label>' +
+          '<sld:Font>' +
+              '<sld:CssParameter name="font-family">宋体</sld:CssParameter>' +
+              '<sld:CssParameter name="font-size">15.0</sld:CssParameter>' +
+              '<sld:CssParameter name="font-style">normal</sld:CssParameter>' +
+              '<sld:CssParameter name="font-weight">normal</sld:CssParameter>' +
+          '</sld:Font>' +
+          '<sld:Halo>' +
+              '<sld:Radius>1</sld:Radius>' +
+              '<sld:Fill>' +
+                  '<sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>' +
+              '</sld:Fill>' +
+          '</sld:Halo>' +
+          '<sld:Fill>' +
+              '<sld:CssParameter name="fill">#000000</sld:CssParameter>' +
+          '</sld:Fill>' +
+      '</sld:TextSymbolizer>'
     }
     if (params.filter) {
       str += FilterUtils.dealExpression(params.filter, true)
@@ -359,8 +388,8 @@ class SldUtils {
       '<sld:LabelPlacement>' +
       '<sld:PointPlacement>' +
       '<sld:AnchorPoint>' +
-      '<sld:AnchorPointX>0.0</sld:AnchorPointX>' +
-      '<sld:AnchorPointY>0.0</sld:AnchorPointY>' +
+      '<sld:AnchorPointX>0.5</sld:AnchorPointX>' +
+      '<sld:AnchorPointY>0.5</sld:AnchorPointY>' +
       '</sld:AnchorPoint>' +
       '<sld:Displacement>' +
       '<sld:DisplacementX>0.0</sld:DisplacementX>' +
