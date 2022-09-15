@@ -395,7 +395,7 @@ export const riverLayer = {
                 text: 'name',
                 font: {
                   family: '宋体',
-                  size: 20,
+                  size: 16,
                 },
                 stroke: {
                   color: '#FFFFFF',
@@ -526,6 +526,7 @@ export const reservoirLayer = {
           rules: [
             {
               type: StyleTypeEnum.polygon,
+              // label: true,
               fill: { color: '#00FFFF' },
               stroke: {
                 color: '#00FFFF',
@@ -645,7 +646,7 @@ export const hillpondLayer = {
                 text: 'name',
                 font: {
                   family: '宋体',
-                  size: 20,
+                  size: 16,
                 },
                 stroke: {
                   color: '#FFFFFF',
@@ -749,7 +750,7 @@ export const lakeLayer = {
                 text: 'name',
                 font: {
                   family: '宋体',
-                  size: 20,
+                  size: 16,
                 },
                 stroke: {
                   color: '#FFFFFF',
@@ -857,7 +858,7 @@ export const canalLayer = {
                 text: 'name',
                 font: {
                   family: '宋体',
-                  size: 20,
+                  size: 16,
                 },
                 stroke: {
                   color: '#FFFFFF',
@@ -965,7 +966,7 @@ export const otherwaterLayer = {
                 text: 'name',
                 font: {
                   family: '宋体',
-                  size: 20,
+                  size: 16,
                 },
                 stroke: {
                   color: '#FFFFFF',

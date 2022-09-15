@@ -34,6 +34,12 @@ export const CANAL_LAYER = "canalLayer";
  * 其他水域
  */
 export const OTHERWATER_LAYER = "otherwaterLayer";
+
+/**
+ * 涉水项目-涉河许可
+ */
+export const WADING_PERMIT = "wadingPermit";
+
 /**
  * 涉水项目-完工
  */
