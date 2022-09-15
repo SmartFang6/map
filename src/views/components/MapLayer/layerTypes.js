@@ -68,36 +68,28 @@ export default [
       },
     ],
   },
-  {
-    title: "涉水项目",
-    items: [
-      {
-        label: "涉河许可",
-        type: "wadingPermit",
-        value: "wadingPermit",
-        legend: [
-          {
-            name: "完工",
-            type: "finishedProj",
-            count: 0,
-          },
-          {
-            name: "在建",
-            value: "buildingProj",
-            count: 0,
-          },
-        ],
-      },
-      // {
-      //   label: "完工",
-      //   value: "finishedProj",
-      // },
-      // {
-      //   label: "在建",
-      //   value: "buildingProj",
-      // },
-    ],
-  },
+  // {
+  //   title: "涉水项目",
+  //   items: [
+  //     {
+  //       label: "涉河许可",
+  //       type: "wadingPermit",
+  //       value: "wadingPermit",
+  //       legend: [
+  //         {
+  //           name: "完工",
+  //           type: "finishedProj",
+  //           count: 0,
+  //         },
+  //         {
+  //           name: "在建",
+  //           value: "buildingProj",
+  //           count: 0,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     title: "监测点",
     items: [
