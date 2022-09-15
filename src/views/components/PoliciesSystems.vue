@@ -54,7 +54,7 @@ const getPoliciesSystems = async () => {
   PoliciesSystemsList.value = target?.map((item) => {
     return {
       ...item,
-      pdfUrl: item?.fileInfoList[0]?.relativeUrl || "",
+      pdfUrl: item?.fileInfoList?.[0]?.relativeUrl ?? "",
     };
   });
   console.log(PoliciesSystemsList);
@@ -64,7 +64,7 @@ getPoliciesSystems();
 
 // 预览pdf文件
 const onPreviewPDFFile = (url = "") => {
-  console.log(url);
+  if (!url) return;
   let a = document.createElement("a");
   a.setAttribute("href", url);
   a.setAttribute("target", "_blank");

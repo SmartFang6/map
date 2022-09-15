@@ -22,10 +22,11 @@
       <!--#region 考核制度的pdf文件预览区-->
       <div class="pdf-preview">
         <vue-pdf-embed
-          :source="activeFiles.source"
+          v-if="!activeFiles?.source"
+          :source="activeFiles?.source"
           :style="scaleFun"
           class="vue-pdf-embed"
-          :page="activeFiles.pageNum"
+          :page="activeFiles?.pageNum"
         />
       </div>
       <!--#endregion-->
