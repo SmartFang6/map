@@ -1,5 +1,5 @@
 <!--
-    处理绩效的轮播弹窗组件
+    考核制度的轮播弹窗组件
 -->
 <template>
   <div class="carousel-dialog">
@@ -12,18 +12,34 @@
         <h2 class="title-wrap">考核制度</h2>
       </div>
       <!--#region 轮播的内容区-->
-      <el-carousel indicator-position="outside">
+      <!-- <el-carousel indicator-position="outside">
         <el-carousel-item v-for="(item, index) in galleryList" :key="index">
           <img class="gallery-inner" :src="item.url" :alt="item.name" />
         </el-carousel-item>
-      </el-carousel>
+      </el-carousel> -->
+      <!--#endregion-->
+
+      <!--#region 考核制度的pdf文件预览区-->
+      <div class="pdf-preview">
+        <vue-pdf-embed
+          :source="activeFiles.source"
+          :style="scaleFun"
+          class="vue-pdf-embed"
+          :page="activeFiles.pageNum"
+        />
+      </div>
       <!--#endregion-->
     </el-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
+import { useStore } from "vuex";
+import VuePdfEmbed from "vue-pdf-embed";
+// import { createLoadingTask } from "vue3-pdfjs/esm"; // 获得总页数
+
+const store = useStore();
 
 // 接收父组件传值
 const props = defineProps({
@@ -62,33 +78,45 @@ watch(
   }
 );
 
-const galleryList = ref([
-  // {
-  //   id: 1001,
-  //   name: "rule",
-  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202209/02/cms_55236964872586607774644.jpg",
-  // },
-  // {
-  //   id: 1002,
-  //   name: "rule",
-  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202207/04/cms_67344705967398992624193.jpg",
-  // },
-  // {
-  //   id: 1003,
-  //   name: "rule",
-  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202208/09/cms_6834115643127880877769.jpg",
-  // },
-  // {
-  //   id: 1004,
-  //   name: "rule",
-  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202103/23/cms_81509214635837408606126.jpg",
-  // },
-  // {
-  //   id: 1005,
-  //   name: "rule",
-  //   url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202203/10/cms_1430663409879255511237.jpg",
-  // },
+// 本组件预览pdf文件的数据源
+const dataModel = reactive([
+  {
+    adcd: "330327",
+    source: require("@/assets/pdf/苍南县-考核积分细则.pdf").default, //预览pdf文件地址
+    pageNum: 1, //当前页面
+    scale: 1, // 缩放比例
+    numPages: 7, // 总页数
+  },
+  {
+    adcd: "330902",
+    source: require("@/assets/pdf/定海区各责任部门考核积分细则.pdf").default,
+    pageNum: 1, //当前页面
+    scale: 1, // 缩放比例
+    numPages: 8, // 总页数
+  },
 ]);
+
+const activeFiles = ref(null);
+
+onMounted(() => {
+  // 获取缓存中关于地区的code
+  const adCode = store.state?.userInfo?.adminDivCode || "";
+  // 从数据源筛选要展示的pdf文件数据
+  dataModel?.forEach((item) => {
+    if (item.adcd === adCode) {
+      activeFiles.value = item;
+    }
+  });
+});
+
+// 示例数据
+// const galleryList = ref([
+//   {
+//     id: 1001,
+//     name: "rule",
+//     url: "http://html5-epg.wasu.tv/_CMS_NEWS_IMG_/www224/202209/02/cms_55236964872586607774644.jpg",
+//   },
+// ]);
 </script>
 
 <style lang="less" scoped>
@@ -116,6 +144,22 @@ const galleryList = ref([
   .gallery-inner {
     width: 100%;
     height: 100%;
+  }
+
+  .pdf-preview {
+    position: relative;
+    height: 100vh;
+    padding: 20px 0;
+    box-sizing: border-box;
+    background: rgb(66, 66, 66);
+  }
+
+  .vue-pdf-embed {
+    text-align: center;
+    width: 515px;
+    border: 1px solid #e5e5e5;
+    margin: 0 auto;
+    box-sizing: border-box;
   }
 }
 </style>

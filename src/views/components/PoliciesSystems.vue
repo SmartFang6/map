@@ -17,9 +17,15 @@
       >
         <div class="oneList" v-for="item in PoliciesSystemsList" :key="item.id">
           <i class="icon-rectangle"></i>
-          <p class="content">
-            {{ item.policyName }}
-          </p>
+          <el-tooltip
+            :content="item.policyName"
+            effect="dark"
+            placement="top-start"
+          >
+            <p class="content" @click="onPreviewPDFFile(item.pdfUrl)">
+              {{ item.policyName }}
+            </p>
+          </el-tooltip>
           <span class="day">{{ item.createTime }}</span>
         </div>
       </vue-seamless-scroll>
@@ -32,27 +38,45 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { getPoliciesSystemsList } from "@/apis/cockpitEventStats";
-import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+
+// 政策制度组件的数据源列表
 const PoliciesSystemsList = ref([]);
-// 获取获取政策制度列表
 const store = useStore();
+
+// 获取获取政策制度列表
 const getPoliciesSystems = async () => {
-  if (store.state.userInfo) {
-    const search = {
-      adcd: store.state.userInfo.adminDivCode,
+  // 通过后台接口获取文件制度信息列表
+  const target = await getPoliciesSystemsList({
+    adcd: store.state?.userInfo?.adminDivCode || "",
+  });
+  // 处理数据,获取预览需要的pdf文件地址
+  PoliciesSystemsList.value = target?.map((item) => {
+    return {
+      ...item,
+      pdfUrl: item?.fileInfoList[0]?.relativeUrl || "",
     };
-    const res = await getPoliciesSystemsList(search);
-    console.log(res);
-    PoliciesSystemsList.value = res;
-    // console.log(PoliciesSystemsList);
-  }
+  });
+  console.log(PoliciesSystemsList);
 };
+
 getPoliciesSystems();
+
+// 预览pdf文件
+const onPreviewPDFFile = (url = "") => {
+  console.log(url);
+  let a = document.createElement("a");
+  a.setAttribute("href", url);
+  a.setAttribute("target", "_blank");
+  a.click();
+  a = null;
+};
 </script>
 <style scoped lang="less">
 .policy {
   height: 302px;
-  ::v-deep .tools {
+  overflow: hidden;
+  :v-deep(.tools) {
     display: flex;
     position: absolute;
     right: 0;
@@ -68,19 +92,18 @@ getPoliciesSystems();
   }
   .list {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
     margin-top: 10px;
+    padding: 0 22px 0 16px;
+    box-sizing: border-box;
     overflow: hidden;
     .oneList {
       display: flex;
       align-items: center;
       font-family: MicrosoftYaHei;
-      width: 443px;
+      width: 446px;
       height: 41px;
-      background-color: #0040a1;
-      background-image: linear-gradient(to right, #0040a1, #031129);
+      // background-color: #0040a1;
+      background: linear-gradient(to right, #0040a1, rgba(255, 255, 255, 0));
       margin-bottom: 9px;
 
       .icon-rectangle {
@@ -93,16 +116,19 @@ getPoliciesSystems();
       }
       .content {
         width: 290px;
-        color: #fff;
+        margin-left: 10px;
         font-size: 15px;
-        margin: 0 24px 0 10px;
-        overflow: hidden;
+        text-align: left;
+        color: #fff;
         white-space: nowrap;
         text-overflow: ellipsis;
+        overflow: hidden;
       }
       .day {
-        color: #00dcf0;
+        margin-left: 24px;
         font-size: 16px;
+        white-space: nowrap;
+        color: #00dcf0;
       }
     }
   }

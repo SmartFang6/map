@@ -32,4 +32,15 @@ module.exports = defineConfig({
       },
     },
   },
+  chainWebpack: (config) => {
+    config.module
+      .rule("pdf")
+      .test(/\.(pdf)$/)
+      .use("url-loader")
+      .loader("url-loader")
+      .options({
+        limit: 10000,
+      })
+      .end();
+  },
 });
