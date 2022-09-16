@@ -304,6 +304,10 @@ export const pointLayer = {
         pointGreen, // 已销号，已办结
         ['==', ['get', 'eventCompleteStatus'], 0], // 未销号：statPointLocationType-2
         pointYellow, // 未销号，未办结
+        ['==', ['get', 'eventCompleteStatus'], '1'], // 已销号：statPointLocationType-1
+        pointGreen, // 已销号，已办结
+        ['==', ['get', 'eventCompleteStatus'], '0'], // 未销号：statPointLocationType-2
+        pointYellow, // 未销号，未办结
         // ['==', ['get', 'statPointLocationType'], '3'],
         // pointRed, // 逾期
         pointGreen
