@@ -12,6 +12,7 @@ const instance = axios.create({
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
+    console.log("request config =>", config);
     const token = store.state.token;
     // 请求头用于接口token 认证
     token && (config.headers.token = token);

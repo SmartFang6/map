@@ -99,6 +99,10 @@
         <span class="footer-text">查看详情</span>
       </div>
     </el-dialog>
+    <EventDetailDialog
+      :info="info"
+      v-model:visible="eventDetailDialogVisible"
+    />
   </div>
 </template>
 
@@ -108,10 +112,10 @@ import noImg from "@/assets/images/no-img.png";
 // import { awaitToAdminProject } from "@/utils";
 import store from "@/store";
 import { ElMessage } from "element-plus";
-import { getMD5_sign } from "@/utils/index";
-import { getDomainName } from "@/utils/config";
+import EventDetailDialog from "@/views/dialog/EventDetail/index";
 
 let dialogVisible = ref(false);
+const eventDetailDialogVisible = ref(false);
 let info = ref({});
 
 // 事件等级颜色匹配
@@ -128,34 +132,7 @@ function getTag(val) {
 function onJupmDetail() {
   console.log("跳转后台详情", info.value);
   if (store?.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
-    const ticket = store?.state?.ticket || "";
-    const pathObj = {
-      prePath: "/workbench/eventCenter/accept/list",
-      path: "/workbench/eventCenter/showEvent",
-      query: {
-        id: info.value.id,
-        eventId: info.value.eventId,
-      },
-    };
-    const domainName = getDomainName();
-    const userId = store?.state?.userInfo?.userId || "";
-    const sign = getMD5_sign();
-    const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}&params=${JSON.stringify(
-      pathObj
-    )}`;
-
-    // const JUMP_URL =
-    //   "https://sgpt.yw.gov.cn:6006/oneInspection/ssoLogin?moduleId=water_one_inspection&userId=" +
-    //   ticket +
-    //   "&sign=" +
-    //   getMD5_sign() +
-    //   "&ticket=" +
-    //   store?.state?.ticket +
-    //   "&params=" +
-    //   JSON.stringify(pathObj);
-
-    window.open(JUMP_URL);
-    console.log("详情跳转》》》", JUMP_URL);
+    eventDetailDialogVisible.value = true;
   } else {
     ElMessage({
       message: "本功能暂未开放",
