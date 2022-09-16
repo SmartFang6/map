@@ -338,6 +338,9 @@ export default {
           thisMonthNewStatus: this.thisMonthNewStatus,
           eventGradeStatus: this.eventGradeStatus,
           eventSourceDepartCode: this.eventSourceDepartCode,
+          eventResponsibleUnitCode: this.eventResponsibleUnitCode,
+          eventCategoryCode: this.eventCategoryCode,
+          eventSource: this.eventSource,
         };
         this.layers[layerid].load(
           new LayerParams({
