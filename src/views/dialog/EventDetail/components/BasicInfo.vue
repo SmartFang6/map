@@ -110,7 +110,7 @@
 <script>
 import File from "@/components/File";
 import { toRefs, reactive, watch } from "vue";
-import Map from "@/views/OLMap/MainMap";
+import Map from "@/views/OLMap/ReadMap";
 import moment from "moment";
 import { Link } from "@element-plus/icons-vue";
 
