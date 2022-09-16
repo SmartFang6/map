@@ -63,8 +63,9 @@ export default {
       eventGradeStatus: '', // 定性参数
       eventResponsibleUnitCode: '', // 定责参数
       eventCategoryCode: '', // 左上角事件类型
-      eventSourceDepartCode: '', // 左上角事件区域
+      // eventSourceDepartCode: '', // 左上角事件区域
       eventSource: '', // 事件来源
+      pointAdcd: store?.state?.userInfo?.adminDivCode || "330182", // 左上角事件区域
       curLayer: LayerEnum.RIVER_LAYER, // 当前图层，默认为点位图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
@@ -231,6 +232,11 @@ export default {
           this[paramName] = params[paramName]
         }
       })
+      if (params.adcd) {
+        this.pointAdcd = params.adcd
+      } else {
+        this.pointAdcd = this.adcd
+      }
       
       if (this.baseLayers.indexOf('pointLayer') === -1) { // 如果此时地图展示的不是问题点位图层，则切换图层
         this.initLayers(['pointLayer'])
@@ -249,7 +255,7 @@ export default {
         this.layers.pointLayer.removeLayer(this.map, this)
         // 再重新加载当前图层
         let searchInfo = {
-          adcd: this.adcd,
+          adcd: this.pointAdcd,
           startTime: val.startTime,
           endTime: val.endTime,
           eventCompleteStatus: this.eventCompleteStatus,
@@ -329,7 +335,7 @@ export default {
       console.log('visible', layerid, status);
       if (status) {
         let searchInfo = {
-          adcd: this.adcd,
+          adcd: this.pointAdcd,
           startTime: this.startTime,
           endTime: this.endTime,
           eventCompleteStatus: this.eventCompleteStatus,
