@@ -50,11 +50,13 @@ function checkboxChange(change) {
 }
 watch(
   () => props.legendList,
-  (newVal) => {
-    checkedCities.value = newVal
-      .flat()
-      .filter((i) => !i.unChecked)
-      .map((i) => i.type);
+  () => {
+    // 默认全选
+    // (newVal) => {
+    // checkedCities.value = newVal
+    //   .flat()
+    //   .filter((i) => !i.unChecked)
+    //   .map((i) => i.type);
     emits("change", checkedCities.value);
   },
   {
