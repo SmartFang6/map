@@ -211,29 +211,27 @@ const drawChart = (data) => {
         },
         showSymbol: false,
         areaStyle: {
-          normal: {
-            color: {
-              x: 0,
-              y: 0,
-              x2: 0,
-              y2: 1,
-              colorStops: [
-                {
-                  offset: 0.1,
-                  color: "#00ecff",
-                },
-                {
-                  offset: 0.5,
-                  color: "rgba(0, 236, 255, 0.54)",
-                },
-                {
-                  offset: 0.9,
-                  color: "rgb(27, 29, 32, 0.1)",
-                },
-              ],
-            },
-            opacity: 0.3,
+          color: {
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0.1,
+                color: "#00ecff",
+              },
+              {
+                offset: 0.5,
+                color: "rgba(0, 236, 255, 0.54)",
+              },
+              {
+                offset: 0.9,
+                color: "rgb(27, 29, 32, 0.1)",
+              },
+            ],
           },
+          opacity: 0.3,
           emphasis: {
             color: {
               x: 0,

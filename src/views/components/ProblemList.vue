@@ -132,7 +132,7 @@
       append-to-body
       top="10vh"
     >
-      <template #title>
+      <template #header>
         <div class="pop-title">
           <span>问题清单</span>
         </div>
