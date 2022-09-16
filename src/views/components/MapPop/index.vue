@@ -1,6 +1,10 @@
 <template>
   <div class="map-pop">
-    <el-dialog v-model="dialogVisible" width="40%">
+    <EventDetailDialog
+      :info="info"
+      v-model:visible="eventDetailDialogVisible"
+    />
+    <el-dialog v-if="false" v-model="dialogVisible" width="40%">
       <template #title>
         <div class="pop-title">
           <span>{{ info?.eventSourceName }}</span>
@@ -99,10 +103,6 @@
         <span class="footer-text">查看详情</span>
       </div>
     </el-dialog>
-    <EventDetailDialog
-      :info="info"
-      v-model:visible="eventDetailDialogVisible"
-    />
   </div>
 </template>
 
@@ -145,6 +145,7 @@ function onJupmDetail() {
 function open(val) {
   info.value = val;
   dialogVisible.value = true;
+  eventDetailDialogVisible.value = true;
 }
 
 defineExpose({
