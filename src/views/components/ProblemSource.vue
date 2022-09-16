@@ -27,7 +27,18 @@
             (d, i) => i <= 5
           )"
           :key="index"
-          class="bubble-item"
+          :class="{
+            'bubble-item': true,
+            active:
+              activeFilter?.type === 'eventSource' &&
+              activeFilter?.value === item.eventSource,
+          }"
+          @click="
+            store.commit('UPDATE_ACTIVE_FILTER', {
+              type: 'eventSource',
+              value: item.eventSource,
+            })
+          "
         >
           <span>{{ item.eventSourceName }}</span>
           <span>
@@ -70,9 +81,15 @@
 <script setup>
 import EventSource from "@/views/dialog/EventSource";
 import { inject, computed, ref } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 // 左侧注入数据
 const leftData = inject("leftData");
+
+// 活动的过滤器
+const activeFilter = computed(() => store.state.activeFilter);
 
 // 来源总数
 const total = computed(() => {
@@ -146,11 +163,16 @@ const moreCall = () => {
 }
 
 .bubble-item {
+  cursor: pointer;
   position: absolute;
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: url(@/assets/images/bubble-bg.png);
+  background-image: url(@/assets/images/bubble-bg.png);
+  background-size: contain;
+  &.active {
+    background-image: url(@/assets/images/bubble-checked.png);
+  }
   background-size: contain;
   box-sizing: border-box;
   padding-top: 28px;
