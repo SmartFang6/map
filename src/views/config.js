@@ -41,4 +41,9 @@ export const ticketMap = [
     name: "越城区",
     ticket: "D2D8A3A838C8276EB599FCF48C5001C1",
   },
+  {
+    adcd: "331083",
+    name: "玉环市",
+    ticket: "3011BCCB9B981CB54DF424C14E722BA8",
+  },
 ];

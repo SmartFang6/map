@@ -23,6 +23,7 @@
       <div class="pdf-preview">
         <vue-pdf-embed
           class="vue-pdf-embed"
+          v-if="!activeFiles?.source"
           :source="activeFiles?.source"
           :page="activeFiles?.pageNum"
           :style="scaleFun"
