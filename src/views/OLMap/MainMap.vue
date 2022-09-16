@@ -61,7 +61,10 @@ export default {
       expireStatus: '', // 本年逾期
       thisMonthNewStatus: '', // 本年新增
       eventGradeStatus: '', // 定性参数
-      eventSourceDepartCode: '', // 定责参数
+      eventResponsibleUnitCode: '', // 定责参数
+      eventCategoryCode: '', // 左上角事件类型
+      eventSourceDepartCode: '', // 左上角事件区域
+      eventSource: '', // 事件来源
       curLayer: LayerEnum.RIVER_LAYER, // 当前图层，默认为点位图
       baseLayers: [], // 所有加载的图层
       lgtd: "",
@@ -220,7 +223,7 @@ export default {
       //     endTime: this.endTime
       //   }}
       // }
-      const allParams = ['eventCompleteStatus', 'willExpireStatus', 'expireStatus', 'thisMonthNewStatus', 'eventGradeStatus', 'eventSourceDepartCode']
+      const allParams = ['eventCompleteStatus', 'willExpireStatus', 'expireStatus', 'thisMonthNewStatus', 'eventGradeStatus', 'eventResponsibleUnitCode', 'eventSource', 'eventCategoryCode', 'eventSourceDepartCode']
       allParams.forEach(paramName => {
         if (params[paramName] === undefined) {
           this[paramName] = ''
@@ -255,6 +258,8 @@ export default {
           thisMonthNewStatus: this.thisMonthNewStatus,
           eventGradeStatus: this.eventGradeStatus,
           eventSourceDepartCode: this.eventSourceDepartCode,
+          eventResponsibleUnitCode: this.eventResponsibleUnitCode,
+          eventCategoryCode: this.eventCategoryCode,
         }
         this.layers.pointLayer.load(new LayerParams({
           vm: this,
