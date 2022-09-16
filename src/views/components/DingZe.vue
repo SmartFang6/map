@@ -16,6 +16,7 @@
           store.commit('UPDATE_ACTIVE_FILTER', {
             type: 'eventSourceDepartCode',
             value: item.eventResponsibleUnitCode,
+            params: { ...item },
           })
         "
       >

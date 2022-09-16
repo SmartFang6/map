@@ -21,7 +21,7 @@ export default function () {
     // (总数不用传，未办结是eventCompleteStatus为0 ，已办结
     // 和销号率是eventCompleteStatus为1)
 
-    const params = {};
+    let params = {};
     const activeFilter = store.state.activeFilter;
     if (!activeFilter) {
       return params;
@@ -49,6 +49,12 @@ export default function () {
       }
     } else {
       params[activeFilter.type] = activeFilter.value;
+      if (activeFilter.params) {
+        params = {
+          [activeFilter.type]: activeFilter.value,
+          ...activeFilter.params,
+        };
+      }
     }
 
     return params;
