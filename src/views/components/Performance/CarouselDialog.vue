@@ -33,7 +33,7 @@
           :src="activeFiles?.source"
           frameborder="0"
         ></iframe>
-        <div class="page-tool">
+        <div class="page-tool" style="display: none">
           <div class="page-tool-item" @click="prevPage">上一页</div>
           <div class="page-tool-item">
             {{ activeFiles.pageNum || 0 }}/{{ activeFiles.numPages || 0 }}
