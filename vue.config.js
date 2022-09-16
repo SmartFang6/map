@@ -22,12 +22,12 @@ module.exports = defineConfig({
           "^/userApi": "/api",
         },
       },
-      "/oneInspection-api": {
+      "/manage-api": {
         target: "http://192.168.2.238:8502",
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          "^/oneInspection-api": "/api",
+          "^/manage-api": "/api",
         },
       },
     },

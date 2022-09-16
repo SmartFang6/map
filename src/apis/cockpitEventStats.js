@@ -3,6 +3,7 @@
  */
 
 import { postHttp } from "@/utils/axios/index";
+import { getDomainName } from "@/utils/config";
 
 /**
  * 获取事件统计结果 (事件统计、问题来源、问题派发)
@@ -128,14 +129,11 @@ export const getEventStatReportProblemList = (queryParams) => {
  * @param {Object<any>} queryParams 查询参数
  * @returns {Object}
  */
+//水域监管后台接口
+// const BSER_URL = "https://sgpt.yw.gov.cn:6006/manage-api";
+const BASE_URL = getDomainName() + "/manage-api";
 export const getEventDetail = (queryParams) => {
-  return postHttp(
-    "/eventCenter/getEventDetail",
-    {
-      data: queryParams,
-    },
-    {
-      baseURL: "/oneInspection-api",
-    }
-  );
+  return postHttp(BASE_URL + "/eventCenter/getEventDetail", {
+    data: queryParams,
+  });
 };
