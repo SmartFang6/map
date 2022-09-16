@@ -122,3 +122,20 @@ export const getEventStatReportProblemList = (queryParams) => {
     data: queryParams,
   });
 };
+
+/**
+ * 获取问题详情
+ * @param {Object<any>} queryParams 查询参数
+ * @returns {Object}
+ */
+export const getEventDetail = (queryParams) => {
+  return postHttp(
+    "/eventCenter/getEventDetail",
+    {
+      data: queryParams,
+    },
+    {
+      baseURL: "/oneInspection-api",
+    }
+  );
+};
