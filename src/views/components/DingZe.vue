@@ -9,14 +9,13 @@
         :class="{
           content: true,
           active:
-            activeFilter?.type === 'eventSourceDepartCode' &&
+            activeFilter?.type === 'eventResponsibleUnitCode' &&
             activeFilter?.value === item.eventResponsibleUnitCode,
         }"
         @click="
           store.commit('UPDATE_ACTIVE_FILTER', {
-            type: 'eventSourceDepartCode',
+            type: 'eventResponsibleUnitCode',
             value: item.eventResponsibleUnitCode,
-            params: { ...item },
           })
         "
       >
