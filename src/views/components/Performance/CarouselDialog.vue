@@ -22,11 +22,28 @@
       <!--#region 考核制度的pdf文件预览区-->
       <div class="pdf-preview">
         <vue-pdf-embed
-          :source="activeFiles.source"
-          :style="scaleFun"
           class="vue-pdf-embed"
-          :page="activeFiles.pageNum"
+          :source="activeFiles?.source"
+          :page="activeFiles?.pageNum"
+          :style="scaleFun"
         />
+        <div class="page-tool">
+          <div class="page-tool-item" @click="prevPage">上一页</div>
+          <div class="page-tool-item">
+            {{ activeFiles.pageNum || 0 }}/{{ activeFiles.numPages || 0 }}
+          </div>
+          <div class="page-tool-item" @click="nextPage">下一页</div>
+          <div
+            class="page-tool-item"
+            @click="pageZoomOut"
+            style="display: none"
+          >
+            放大
+          </div>
+          <div class="page-tool-item" @click="pageZoomIn" style="display: none">
+            缩小
+          </div>
+        </div>
       </div>
       <!--#endregion-->
     </el-dialog>
@@ -34,10 +51,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted } from "vue";
+import { ref, reactive, watch, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import VuePdfEmbed from "vue-pdf-embed";
-// import { createLoadingTask } from "vue3-pdfjs/esm"; // 获得总页数
+import { createLoadingTask } from "vue3-pdfjs/cjs"; // 获得总页数
 
 const store = useStore();
 
@@ -82,21 +99,48 @@ watch(
 const dataModel = reactive([
   {
     adcd: "330327",
+    adnm: "温州苍南县",
     source: require("@/assets/pdf/苍南县-考核积分细则.pdf").default, //预览pdf文件地址
     pageNum: 1, //当前页面
     scale: 1, // 缩放比例
-    numPages: 7, // 总页数
+    numPages: 0, // 总页数
+  },
+  {
+    adcd: "330502",
+    adnm: "湖州吴兴区",
+    source: "",
+    pageNum: 1,
+    scale: 1,
+    numPages: 0,
   },
   {
     adcd: "330902",
+    adnm: "舟山定海区",
     source: require("@/assets/pdf/定海区各责任部门考核积分细则.pdf").default,
-    pageNum: 1, //当前页面
-    scale: 1, // 缩放比例
-    numPages: 8, // 总页数
+    pageNum: 1,
+    scale: 1,
+    numPages: 0,
+  },
+  {
+    adcd: "330182",
+    adnm: "杭州建德市",
+    source: "",
+    pageNum: 1,
+    scale: 1,
+    numPages: 0,
+  },
+  {
+    adcd: "330782",
+    adnm: "金华义乌市",
+    source: "",
+    pageNum: 1,
+    scale: 1,
+    numPages: 0,
   },
 ]);
 
-const activeFiles = ref(null);
+// 当前展示的pdf文件数据
+const activeFiles = ref({});
 
 onMounted(() => {
   // 获取缓存中关于地区的code
@@ -107,7 +151,45 @@ onMounted(() => {
       activeFiles.value = item;
     }
   });
+  // 获取pdf文件的总页数
+  if (activeFiles.value?.source) {
+    const loadingTask = createLoadingTask(activeFiles.value?.source);
+    loadingTask.promise.then((fileInfo) => {
+      activeFiles.value.numPages = fileInfo.numPages;
+    });
+  }
 });
+
+// 文件缩放的样式方法
+const scaleFun = computed(() => `transform:scale(${activeFiles.value?.scale})`);
+
+// 上一页
+const prevPage = () => {
+  if (activeFiles.value?.pageNum > 1) {
+    activeFiles.value.pageNum -= 1;
+  }
+};
+
+// 下一页
+const nextPage = () => {
+  if (activeFiles.value?.pageNum < activeFiles.value?.numPages) {
+    activeFiles.value.pageNum += 1;
+  }
+};
+
+// 文件方放大
+const pageZoomOut = () => {
+  if (activeFiles.value?.scale < 2) {
+    activeFiles.value.scale += 0.1;
+  }
+};
+
+// 文件缩小
+const pageZoomIn = () => {
+  if (activeFiles.value?.scale > 1) {
+    activeFiles.value.scale -= 0.1;
+  }
+};
 
 // 示例数据
 // const galleryList = ref([
@@ -148,18 +230,44 @@ onMounted(() => {
 
   .pdf-preview {
     position: relative;
-    height: 100vh;
-    padding: 20px 0;
+    height: auto;
+    min-height: 600px;
+    padding: 20px;
     box-sizing: border-box;
     background: rgb(66, 66, 66);
   }
 
   .vue-pdf-embed {
     text-align: center;
-    width: 515px;
-    border: 1px solid #e5e5e5;
+    width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
+  }
+
+  .pdf-wrap {
+    overflow-y: auto;
+  }
+
+  .page-tool {
+    position: absolute;
+    bottom: 35px;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+    align-items: center;
+    background: rgb(66, 66, 66);
+    color: white;
+    border-radius: 19px;
+    z-index: 100;
+    cursor: pointer;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .page-tool-item {
+    padding: 8px 15px;
+    padding-left: 10px;
+    cursor: pointer;
   }
 }
 </style>
