@@ -249,6 +249,12 @@ export default {
           adcd: this.adcd,
           startTime: val.startTime,
           endTime: val.endTime,
+          eventCompleteStatus: this.eventCompleteStatus,
+          willExpireStatus: this.willExpireStatus,
+          expireStatus: this.expireStatus,
+          thisMonthNewStatus: this.thisMonthNewStatus,
+          eventGradeStatus: this.eventGradeStatus,
+          eventSourceDepartCode: this.eventSourceDepartCode,
         }
         this.layers.pointLayer.load(new LayerParams({
           vm: this,
