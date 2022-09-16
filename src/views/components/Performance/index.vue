@@ -29,7 +29,11 @@
       <template #more>
         <div class="tools">
           <!-- 暂时注释，未完成的弹窗不展示 -->
-          <i class="icon-square" @click="carouselDialogVisible = true"></i>
+          <i
+            v-if="evaluationPdfFile?.source"
+            class="icon-square"
+            @click="carouselDialogVisible = true"
+          ></i>
           <i class="icon-zoom" @click="moreDialogVisible = true"></i>
         </div>
       </template>
@@ -51,7 +55,10 @@
     <!--#endregion-->
 
     <!--#region 图片轮播的弹窗区-->
-    <CarouselDialog v-model:visible="carouselDialogVisible" />
+    <CarouselDialog
+      v-model:visible="carouselDialogVisible"
+      :files="evaluationPdfFile"
+    />
     <!--#endregion-->
 
     <!--#region 处置绩效-更多内容的弹窗区-->
@@ -76,9 +83,12 @@ import List from "./List.vue";
 import CarouselDialog from "./CarouselDialog.vue";
 // import MoreDialog from "./MoreDialog.vue";
 import MoreDialog from "./components/MoreDialog.vue";
-import { ref, reactive, toRaw, inject, watch } from "vue";
+import { useStore } from "vuex";
+import { ref, reactive, toRaw, inject, watch, onMounted } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
+import { pdfFiles } from "@/utils/pdfFiles";
 
+const store = useStore();
 // 乡镇/部门的选择标签
 let tabActive = ref("zoneRank");
 // 销号率/考核的选择标签
@@ -101,8 +111,11 @@ let dataModel = ref([]);
 // 绩效排名列表
 let rankingList = ref([]);
 
-// 开启图片轮播弹窗的参数
+// 开启考核制度弹窗的参数
 const carouselDialogVisible = ref(false);
+
+// 考核制度弹窗内PDF预览文件的数据
+const evaluationPdfFile = ref(null);
 
 // 开启处置绩效-更多内容的弹窗参数
 const moreDialogVisible = ref(false);
@@ -178,6 +191,17 @@ watch(
     deep: true,
   }
 );
+
+onMounted(() => {
+  // 获取缓存中行政区划的编码
+  const adCode = store.state?.userInfo?.adminDivCode || "";
+  // 根据行政区划编码获取考核制度的PDF预览文件信息
+  pdfFiles?.forEach((item) => {
+    if (item?.adcd === adCode) {
+      evaluationPdfFile.value = item;
+    }
+  });
+});
 </script>
 
 <style lang="less" scoped>

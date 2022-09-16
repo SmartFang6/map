@@ -21,13 +21,18 @@
 
       <!--#region 考核制度的pdf文件预览区-->
       <div class="pdf-preview">
-        <vue-pdf-embed
+        <!-- <vue-pdf-embed
           class="vue-pdf-embed"
           v-if="activeFiles?.source"
           :source="activeFiles?.source"
           :page="activeFiles?.pageNum"
           :style="scaleFun"
-        />
+        /> -->
+        <iframe
+          class="pdf-frame"
+          :src="activeFiles?.source"
+          frameborder="0"
+        ></iframe>
         <div class="page-tool">
           <div class="page-tool-item" @click="prevPage">上一页</div>
           <div class="page-tool-item">
@@ -52,18 +57,19 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onMounted } from "vue";
-import { useStore } from "vuex";
-import VuePdfEmbed from "vue-pdf-embed";
+import { ref, watch } from "vue";
+// import VuePdfEmbed from "vue-pdf-embed";
 import { createLoadingTask } from "vue3-pdfjs/cjs"; // 获得总页数
-
-const store = useStore();
 
 // 接收父组件传值
 const props = defineProps({
   visible: {
     type: Boolean,
     default: false,
+  },
+  files: {
+    type: Object,
+    default: () => {},
   },
 });
 
@@ -96,73 +102,30 @@ watch(
   }
 );
 
-// 本组件预览pdf文件的数据源
-const dataModel = reactive([
-  {
-    adcd: "330327",
-    adnm: "温州苍南县",
-    source: require("@/assets/pdf/苍南县-考核积分细则.pdf").default, //预览pdf文件地址
-    pageNum: 1, //当前页面
-    scale: 1, // 缩放比例
-    numPages: 0, // 总页数
-  },
-  {
-    adcd: "330502",
-    adnm: "湖州吴兴区",
-    source: "",
-    pageNum: 1,
-    scale: 1,
-    numPages: 0,
-  },
-  {
-    adcd: "330902",
-    adnm: "舟山定海区",
-    source: require("@/assets/pdf/定海区各责任部门考核积分细则.pdf").default,
-    pageNum: 1,
-    scale: 1,
-    numPages: 0,
-  },
-  {
-    adcd: "330182",
-    adnm: "杭州建德市",
-    source: "",
-    pageNum: 1,
-    scale: 1,
-    numPages: 0,
-  },
-  {
-    adcd: "330782",
-    adnm: "金华义乌市",
-    source: "",
-    pageNum: 1,
-    scale: 1,
-    numPages: 0,
-  },
-]);
-
 // 当前展示的pdf文件数据
 const activeFiles = ref({});
 
-onMounted(() => {
-  // 获取缓存中关于地区的code
-  const adCode = store.state?.userInfo?.adminDivCode || "";
-  // 从数据源筛选要展示的pdf文件数据
-  dataModel?.forEach((item) => {
-    if (item.adcd === adCode) {
-      activeFiles.value = item;
+// 监听父组件传递的pdf预览文件数据
+watch(
+  () => props.files,
+  (files) => {
+    activeFiles.value = files;
+    // 获取pdf文件的总页数
+    if (activeFiles.value?.source) {
+      console.log(activeFiles.value);
+      const loadingTask = createLoadingTask(activeFiles.value?.source);
+      loadingTask.promise.then((fileInfo) => {
+        activeFiles.value.numPages = fileInfo.numPages;
+      });
     }
-  });
-  // 获取pdf文件的总页数
-  if (activeFiles.value?.source) {
-    const loadingTask = createLoadingTask(activeFiles.value?.source);
-    loadingTask.promise.then((fileInfo) => {
-      activeFiles.value.numPages = fileInfo.numPages;
-    });
+  },
+  {
+    immediate: true,
   }
-});
+);
 
 // 文件缩放的样式方法
-const scaleFun = computed(() => `transform:scale(${activeFiles.value?.scale})`);
+// const scaleFun = computed(() => `transform:scale(${activeFiles.value?.scale})`);
 
 // 上一页
 const prevPage = () => {
@@ -269,6 +232,11 @@ const pageZoomIn = () => {
     padding: 8px 15px;
     padding-left: 10px;
     cursor: pointer;
+  }
+
+  .pdf-frame {
+    width: 100%;
+    min-height: 768px;
   }
 }
 </style>
