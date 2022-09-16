@@ -111,6 +111,7 @@ const dataList = computed(() => {
     .filter((a, index) => index < 6)
     .map((item, index) => {
       return {
+        id: item.objId,
         name: item.obj,
         value: item.amount,
         rate: (item.proportion * 100).toFixed(2),
@@ -135,7 +136,6 @@ const dataList = computed(() => {
 let option = ref({});
 let chartTool = null;
 let hoveredIndex = "";
-
 function chartMouseover(params) {
   // 准备重新渲染扇形所需的参数
   let isSelected;
@@ -245,6 +245,10 @@ watch(
         chartTool = Echarts.init(chartContainer.value);
         chartTool.on("mouseover", chartMouseover);
         chartTool.on("globalout", globaloutHandler);
+        // 图表点击事件 取e.seriesId 去和地图交互
+        chartTool.on("click", (e) => {
+          console.log(e);
+        });
       }
       option.value = getPie3DOptions(dataList, 0.59);
       chartTool.setOption(option.value, true);
