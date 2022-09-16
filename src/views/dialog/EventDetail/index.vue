@@ -19,7 +19,7 @@
     <div class="map-pop">
       <div class="event-detail">
         <Progress :event-detail="eventDetail" />
-        <BasicInfo :details="eventDetail" />
+        <BasicInfo :details="eventDetail?.reportRecordVO" />
         <!--#region 事件流转表单区,根据返回结果生成-->
         <template v-for="(enevntInfo, index) in handEventList" :key="index">
           <PreAudit
