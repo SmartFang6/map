@@ -129,6 +129,7 @@ export default function (pieData, internalDiameterRatio) {
         hovered: false,
         k,
       },
+      id: pieData[i].id,
     };
 
     if (typeof pieData[i].itemStyle !== "undefined") {
