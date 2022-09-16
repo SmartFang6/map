@@ -260,6 +260,7 @@ export default {
           eventSourceDepartCode: this.eventSourceDepartCode,
           eventResponsibleUnitCode: this.eventResponsibleUnitCode,
           eventCategoryCode: this.eventCategoryCode,
+          eventSource: this.eventSource,
         }
         this.layers.pointLayer.load(new LayerParams({
           vm: this,
