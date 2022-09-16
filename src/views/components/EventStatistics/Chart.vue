@@ -46,6 +46,9 @@ import { getEventIncidenceRank } from "@/apis/cockpitEventStats";
 import "echarts-gl";
 import * as Echarts from "echarts";
 import getPie3DOptions, { getParametricEquation } from "./getPie3DOptions";
+import { useStore } from "vuex";
+
+const store = useStore();
 
 const props = defineProps({
   data: {
@@ -53,7 +56,6 @@ const props = defineProps({
     default: () => null,
   },
 });
-console.log(props);
 
 const colors = [
   "#03ffa9",
@@ -247,7 +249,10 @@ watch(
         chartTool.on("globalout", globaloutHandler);
         // 图表点击事件 取e.seriesId 去和地图交互
         chartTool.on("click", (e) => {
-          console.log(e);
+          store.commit("UPDATE_ACTIVE_FILTER", {
+            type: currentType.value.value === 1 ? "eventCategoryCode" : "adcd",
+            value: e.seriesId,
+          });
         });
       }
       option.value = getPie3DOptions(dataList, 0.59);
