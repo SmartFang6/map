@@ -39,11 +39,16 @@ export const ticketMap = [
   {
     adcd: "330602",
     name: "越城区",
-    ticket: "D2D8A3A838C8276EB599FCF48C5001C1",
+    ticket: "BB48DDA162CEA80D8FE28C3F1A4F3783",
   },
   {
     adcd: "331083",
     name: "玉环市",
     ticket: "3011BCCB9B981CB54DF424C14E722BA8",
+  },
+  {
+    adcd: "331127",
+    name: "景宁县",
+    ticket: "8C244A258565E9E476CE3BAFFAA07B58",
   },
 ];
