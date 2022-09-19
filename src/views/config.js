@@ -51,4 +51,9 @@ export const ticketMap = [
     name: "景宁县",
     ticket: "8C244A258565E9E476CE3BAFFAA07B58",
   },
+  {
+    adcd: "330681",
+    name: "诸暨市",
+    ticket: "02EB516A3A39234BEF6AD390D0FCEC0F",
+  },
 ];
