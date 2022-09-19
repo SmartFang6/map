@@ -118,7 +118,7 @@ const props = defineProps({
       margin-bottom: 10px;
       padding: 0 12px;
       background-color: #005273;
-      box-shadow: inset 0px 2px 1px 0px #0089be;
+      box-shadow: inset 0 2px 1px 0 #0089be;
       text-align: left;
       margin-right: 0.5%;
     }

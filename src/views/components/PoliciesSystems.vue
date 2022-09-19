@@ -76,7 +76,7 @@ const onPreviewPDFFile = (url = "") => {
 .policy {
   height: 302px;
   overflow: hidden;
-  :v-deep(.tools) {
+  :deep(.tools) {
     display: flex;
     position: absolute;
     right: 0;

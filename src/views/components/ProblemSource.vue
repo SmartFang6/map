@@ -173,7 +173,6 @@ const moreCall = () => {
   &.active {
     background-image: url(@/assets/images/bubble-checked.png);
   }
-  background-size: contain;
   box-sizing: border-box;
   padding-top: 28px;
   & span:first-child {
