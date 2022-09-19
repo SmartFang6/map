@@ -174,8 +174,8 @@ export default {
     flex: 1;
   }
   .map {
-    width: 532px;
-    height: 439px;
+    //width: 532px;
+    //height: 439px;
     background: #ddd;
     margin-top: 50px;
     overflow: hidden;

@@ -53,69 +53,75 @@
         <div>状态</div>
       </div>
       <div class="table-body" v-if="dataList.length > 0">
-        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
-          <div
-            v-for="row in dataList"
-            :key="row.index"
-            :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
-            @click="emits('select', row)"
-          >
-            <div>{{ row.index }}</div>
-            <el-tooltip
-              :content="row.eventResponsibleUnitName"
-              effect="dark"
-              placement="top-start"
-            >
-              <div>{{ row.eventResponsibleUnitName }}</div>
-            </el-tooltip>
-            <el-tooltip
-              :content="row.eventSourceName"
-              effect="dark"
-              placement="top-start"
-            >
-              <div>{{ row.eventSourceName }}</div>
-            </el-tooltip>
-            <el-tooltip :content="row.adnm" effect="dark" placement="top-start">
-              <div>{{ row.adnm }}</div>
-            </el-tooltip>
-            <!-- <el-tooltip
-              :content="row.rchnm"
-              effect="dark"
-              placement="top-start"
-            >
-              <div class="one-line">{{ row.rchnm }}</div>
-            </el-tooltip> -->
-            <el-tooltip
-              :content="row.eventTypeName"
-              effect="dark"
-              placement="top-start"
-            >
-              <div>{{ row.eventTypeName }}</div>
-            </el-tooltip>
+        <SeamlessScroll :data-list="dataList">
+          <template #default="{ row }">
             <div
-              :style="
-                'color: ' + (row.eventGrade === '3' ? '#00dcf0' : '#ff8300')
-              "
+              :key="row.index"
+              :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+              @click="emits('select', row)"
             >
-              {{ row.eventGradeName }}
-            </div>
-            <div>{{ row.occurTime }}</div>
-            <el-tooltip
-              :content="row.status"
-              effect="dark"
-              placement="top-start"
-            >
+              <div>{{ row.index }}</div>
+              <el-tooltip
+                :content="row.eventResponsibleUnitName"
+                effect="dark"
+                placement="top-start"
+              >
+                <div>{{ row.eventResponsibleUnitName }}</div>
+              </el-tooltip>
+              <el-tooltip
+                :content="row.eventSourceName"
+                effect="dark"
+                placement="top-start"
+              >
+                <div>{{ row.eventSourceName }}</div>
+              </el-tooltip>
+              <el-tooltip
+                :content="row.adnm"
+                effect="dark"
+                placement="top-start"
+              >
+                <div>{{ row.adnm }}</div>
+              </el-tooltip>
+              <!-- <el-tooltip
+                :content="row.rchnm"
+                effect="dark"
+                placement="top-start"
+              >
+                <div class="one-line">{{ row.rchnm }}</div>
+              </el-tooltip> -->
+              <el-tooltip
+                :content="row.eventTypeName"
+                effect="dark"
+                placement="top-start"
+              >
+                <div>{{ row.eventTypeName }}</div>
+              </el-tooltip>
               <div
-                class="one-line"
                 :style="
-                  'color: ' + (row.eventStatus === '1' ? '#ffc025' : '#00dcf0')
+                  'color: ' + (row.eventGrade === '3' ? '#00dcf0' : '#ff8300')
                 "
               >
-                {{ row.status }}
+                {{ row.eventGradeName }}
               </div>
-            </el-tooltip>
-          </div>
-        </vue-seamless-scroll>
+              <div>{{ row.occurTime }}</div>
+              <el-tooltip
+                :content="row.status"
+                effect="dark"
+                placement="top-start"
+              >
+                <div
+                  class="one-line"
+                  :style="
+                    'color: ' +
+                    (row.eventStatus === '1' ? '#ffc025' : '#00dcf0')
+                  "
+                >
+                  {{ row.status }}
+                </div>
+              </el-tooltip>
+            </div>
+          </template>
+        </SeamlessScroll>
       </div>
       <el-empty
         v-else
@@ -157,7 +163,7 @@ import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import SeamlessScroll from "@/components/SeamlessScroll";
 import moment from "moment";
 // import { getEventQuestionList } from "@/apis/cockpitEventStats"; // 问题列表接口(旧)
 import { getEventStatReportProblemList } from "@/apis/cockpitEventStats"; // 问题列表接口(新)

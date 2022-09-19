@@ -250,7 +250,6 @@ changeDate(dateTypes[0]);
   width: 551px;
   height: 75px;
   background: url(@/assets/images/center-stat-bg.png) no-repeat;
-  box-sizing: border-box;
   background-size: contain;
   display: flex;
   justify-content: space-around;

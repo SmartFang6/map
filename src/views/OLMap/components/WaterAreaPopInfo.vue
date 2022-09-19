@@ -90,7 +90,7 @@ export default {
     font-weight: normal;
     font-stretch: normal;
     line-height: 28px;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #0adbe0;
     padding: 3px 5px 3px 5px;
   }
@@ -101,7 +101,7 @@ export default {
     font-weight: normal;
     font-stretch: normal;
     line-height: 28px;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #0adbe0;
     margin-left: 20px;
     // left: 10px;
@@ -114,7 +114,7 @@ export default {
     font-weight: normal;
     font-stretch: normal;
     line-height: 28px;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #0adbe0;
     // left: -150px;
   }
@@ -128,7 +128,7 @@ export default {
     font-weight: normal;
     font-stretch: normal;
     line-height: 28px;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #0adbe0;
     // margin-top: 120px;
     margin-bottom: 20px;
@@ -142,7 +142,7 @@ export default {
     font-weight: normal;
     font-stretch: normal;
     line-height: 28px;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #0adbe0;
     margin-left: 20px;
     // left: -250px;
@@ -155,7 +155,7 @@ export default {
     font-weight: normal;
     font-stretch: normal;
     line-height: 28px;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     color: #0adbe0;
     // left: -150px;
     // top: 30px;

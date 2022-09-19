@@ -150,7 +150,7 @@ watch(
   width: 488px;
   height: 215px;
   background-color: rgba(1, 2, 5, 0.1);
-  box-shadow: inset 0px 2px 1px 0px #002480;
+  box-shadow: inset 0 2px 1px 0 #002480;
   box-sizing: border-box;
   font-size: 16px;
   font-family: MicrosoftYaHei;
@@ -191,7 +191,7 @@ watch(
   .table-row > div:nth-child(1) {
     width: 56px;
     text-align: center;
-    padding-left: 0px;
+    padding-left: 0;
   }
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {
