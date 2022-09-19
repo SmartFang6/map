@@ -79,9 +79,7 @@ class OrgBoundaryLayer extends BaseLayer {
       service: 'WFS',
       version: '1.0.0',
       request: 'GetFeature',
-      typeName: '',
       outputformat: 'json',
-      cql_filter: '',
       typeName: featureType,
       cql_filter: `admin_div_code=${mapadcd}`
     }

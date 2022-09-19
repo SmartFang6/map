@@ -324,7 +324,6 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    align-items: center;
     padding-bottom: 7px;
     .first-info {
       display: flex;
@@ -358,7 +357,6 @@ onMounted(() => {
       height: 44px;
       background: url(@/assets/images/medal-bar-item.png);
       background-size: 100%;
-      box-sizing: border-box;
       padding-left: 32px;
       padding-right: 16px;
       display: flex;
