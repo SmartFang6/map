@@ -59,7 +59,7 @@
 <script setup>
 import { ref, watch } from "vue";
 // import VuePdfEmbed from "vue-pdf-embed";
-import { createLoadingTask } from "vue3-pdfjs/cjs"; // 获得总页数
+// import { createLoadingTask } from "vue3-pdfjs/cjs"; // 获得总页数
 
 // 接收父组件传值
 const props = defineProps({
@@ -111,13 +111,13 @@ watch(
   (files) => {
     activeFiles.value = files;
     // 获取pdf文件的总页数
-    if (activeFiles.value?.source) {
-      console.log(activeFiles.value);
-      const loadingTask = createLoadingTask(activeFiles.value?.source);
-      loadingTask.promise.then((fileInfo) => {
-        activeFiles.value.numPages = fileInfo.numPages;
-      });
-    }
+    // if (activeFiles.value?.source) {
+    //   console.log(activeFiles.value);
+    //   const loadingTask = createLoadingTask(activeFiles.value?.source);
+    //   loadingTask.promise.then((fileInfo) => {
+    //     activeFiles.value.numPages = fileInfo.numPages;
+    //   });
+    // }
   },
   {
     immediate: true,
