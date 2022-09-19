@@ -5,7 +5,7 @@
       v-model:visible="eventDetailDialogVisible"
     />
     <el-dialog v-model="dialogVisible" width="40%">
-      <template #title>
+      <template #header>
         <div class="pop-title">
           <span>{{ info?.eventSourceName }}</span>
           <!-- <el-button text :type="getTag(info.eventGrade)">{{
