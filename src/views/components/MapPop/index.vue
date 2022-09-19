@@ -4,7 +4,7 @@
       :info="info"
       v-model:visible="eventDetailDialogVisible"
     />
-    <el-dialog v-if="false" v-model="dialogVisible" width="40%">
+    <el-dialog v-model="dialogVisible" width="40%">
       <template #title>
         <div class="pop-title">
           <span>{{ info?.eventSourceName }}</span>
@@ -145,7 +145,7 @@ function onJupmDetail() {
 function open(val) {
   info.value = val;
   dialogVisible.value = true;
-  eventDetailDialogVisible.value = true;
+  // eventDetailDialogVisible.value = true;
 }
 
 defineExpose({
