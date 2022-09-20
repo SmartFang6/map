@@ -144,8 +144,8 @@ function onJupmDetail() {
 // 打开弹窗
 function open(val) {
   info.value = val;
-  dialogVisible.value = true;
-  // eventDetailDialogVisible.value = true;
+  // dialogVisible.value = true;
+  eventDetailDialogVisible.value = true;
 }
 
 defineExpose({
