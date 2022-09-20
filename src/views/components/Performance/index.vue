@@ -61,7 +61,7 @@
     <!--#endregion-->
 
     <!--#region '量化'标签的列表内容区-->
-    <template>
+    <template v-if="false">
       <div class="quantify-list" v-if="true">
         <vue-seamless-scroll
           :data="PoliciesSystemsList"
