@@ -19,6 +19,7 @@
           destroy-on-close
           custom-class="map_dialog"
         >
+          <!-- <WaterAllDialog :info="mapInfo" /> -->
           <component :is="curDialogCom" :info="mapInfo"></component>
         </el-dialog>
       </div>
@@ -79,6 +80,7 @@ import router from "@/router";
 import PoliciesSystems from "./components/PoliciesSystems.vue";
 
 import useActiveFilter from "./useActiveFilter.js";
+// import WaterAllDialog from "./dialog/WaterAllDialog.vue";
 import useHomeDialog from "@/views/components/useHomeDialog.js";
 
 const eventBus = inject("EventBus");
