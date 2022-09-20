@@ -247,7 +247,7 @@ export default function (pieData, internalDiameterRatio) {
       boxHeight: 8,
       // top: -28,
       //left: -100,
-      top: -15,
+      top: 3,
       left: 15,
       width: 180,
       height: 180,
