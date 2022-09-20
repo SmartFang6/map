@@ -14,13 +14,12 @@
         <MapPop ref="MapPopRef" />
         <el-dialog
           v-model="dialogShow"
-          :width="DialogWidth"
           append-to-body
+          width="820px"
           destroy-on-close
           custom-class="map_dialog"
         >
-          <!-- <WaterAllDialog :info="mapInfo" /> -->
-          <component :is="curDialogCom" :info="mapInfo"></component>
+          <WaterAllDialog :info="mapInfo" />
         </el-dialog>
       </div>
     </template>
@@ -80,8 +79,7 @@ import router from "@/router";
 import PoliciesSystems from "./components/PoliciesSystems.vue";
 
 import useActiveFilter from "./useActiveFilter.js";
-// import WaterAllDialog from "./dialog/WaterAllDialog.vue";
-import useHomeDialog from "@/views/components/useHomeDialog.js";
+import WaterAllDialog from "./dialog/WaterAllDialog.vue";
 
 const eventBus = inject("EventBus");
 // 若未通过单点登录进入，重定向去401页面
@@ -143,16 +141,12 @@ function onChangeTime(val) {
   mapRef.value?.changeTime(val);
 }
 
-//当前展示的弹窗,弹窗的宽度,当前展示的弹窗组件
-const { currentDialog, DialogWidth, curDialogCom } = useHomeDialog();
 // 地图点位弹窗
 const dialogShow = ref(false);
 // 地图弹窗信息
 const mapInfo = ref({});
 let MapPopRef = ref(null);
 function showPop(info) {
-  console.log(info);
-  currentDialog.value = info.layerid;
   mapInfo.value = info;
   //@TODO 演示代码, 其他相关联的也是演示代码，演示完后删除
   if (info.detail) {
