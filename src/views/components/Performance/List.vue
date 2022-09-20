@@ -20,21 +20,26 @@
         <div>销号率</div>
       </div>
       <div class="table-body" v-if="dataList.length > 0">
-        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
-          <div
-            v-for="item in dataList"
-            :key="item.index"
-            :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
-          >
-            <div>{{ item.index }}</div>
-            <el-tooltip :content="item.org" effect="dark" placement="top-start">
-              <div>{{ item.org }}</div>
-            </el-tooltip>
-            <div>{{ item.count }}</div>
-            <div>{{ item.completed }}</div>
-            <div>{{ item.rate }}</div>
-          </div>
-        </vue-seamless-scroll>
+        <SeamlessScroll :data-list="dataList">
+          <template #default="{ row }">
+            <div
+              :key="row.index"
+              :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+            >
+              <div>{{ row.index }}</div>
+              <el-tooltip
+                :content="row.org"
+                effect="dark"
+                placement="top-start"
+              >
+                <div>{{ row.org }}</div>
+              </el-tooltip>
+              <div>{{ row.count }}</div>
+              <div>{{ row.completed }}</div>
+              <div>{{ row.rate }}</div>
+            </div>
+          </template>
+        </SeamlessScroll>
       </div>
       <el-empty
         v-else
@@ -55,19 +60,24 @@
         <div>分数</div>
       </div>
       <div class="table-body">
-        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
-          <div
-            v-for="item in dataList"
-            :key="item.index"
-            :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
-          >
-            <div>{{ item.index }}</div>
-            <el-tooltip :content="item.org" effect="dark" placement="top-start">
-              <div>{{ item.org }}</div>
-            </el-tooltip>
-            <div>{{ item.point }}</div>
-          </div>
-        </vue-seamless-scroll>
+        <SeamlessScroll :data-list="dataList">
+          <template #default="{ row }">
+            <div
+              :key="row.index"
+              :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+            >
+              <div>{{ row.index }}</div>
+              <el-tooltip
+                :content="row.org"
+                effect="dark"
+                placement="top-start"
+              >
+                <div>{{ row.org }}</div>
+              </el-tooltip>
+              <div>{{ row.point }}</div>
+            </div>
+          </template>
+        </SeamlessScroll>
       </div>
     </template>
     <!--#endregion-->
@@ -78,7 +88,7 @@
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
 import { ref, watch, nextTick } from "vue";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import SeamlessScroll from "@/components/SeamlessScroll";
 
 const dataList = ref([]);
 

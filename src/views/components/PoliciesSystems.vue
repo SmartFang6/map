@@ -11,25 +11,25 @@
     </Title>
     <!-- S内容区域 -->
     <div class="list" v-if="PoliciesSystemsList.length > 0">
-      <vue-seamless-scroll
-        :data="PoliciesSystemsList"
-        :class-option="{ step: 0.3 }"
-      >
-        <div class="oneList" v-for="item in PoliciesSystemsList" :key="item.id">
-          <i class="icon-rectangle"></i>
-          <el-tooltip
-            :content="item.policyName"
-            effect="dark"
-            placement="top-start"
-          >
-            <p class="content" @click="onPreviewPDFFile(item.pdfUrl)">
-              {{ item.policyName }}
-            </p>
-          </el-tooltip>
-          <span class="day">{{ item.createTime }}</span>
-        </div>
-      </vue-seamless-scroll>
+      <SeamlessScroll :data-list="PoliciesSystemsList" :startSize="3">
+        <template #default="{ row }">
+          <div class="oneList" :key="row.id">
+            <i class="icon-rectangle"></i>
+            <el-tooltip
+              :content="row.policyName"
+              effect="dark"
+              placement="top-start"
+            >
+              <p class="content" @click="onPreviewPDFFile(row.pdfUrl)">
+                {{ row.policyName }}
+              </p>
+            </el-tooltip>
+            <span class="day">{{ row.createTime }}</span>
+          </div>
+        </template>
+      </SeamlessScroll>
     </div>
+
     <el-empty v-else description="暂无数据" :image-size="80" class="dc-empty" />
     <!-- E内容区域 -->
   </div>
@@ -38,7 +38,7 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { getPoliciesSystemsList } from "@/apis/cockpitEventStats";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import SeamlessScroll from "@/components/SeamlessScroll";
 
 // 政策制度组件的数据源列表
 const PoliciesSystemsList = ref([]);
@@ -91,6 +91,7 @@ const onPreviewPDFFile = (url = "") => {
   }
   .list {
     width: 100%;
+    height: 150px;
     margin-top: 10px;
     padding: 0 22px 0 16px;
     box-sizing: border-box;
