@@ -16,6 +16,7 @@
           @tab-click="onHandleTownOrDeptClick"
         >
           <el-tab-pane
+            v-if="false"
             class="tab-item"
             label="量化"
             name="quantify"
