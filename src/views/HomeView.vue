@@ -5,7 +5,10 @@
       <div class="map">
         <CenterToolsBar @changeTime="onChangeTime" />
         <!-- 图层切换 -->
-        <MapLayer @selectLayers="selectLayers" />
+        <MapLayer
+          @selectLayers="selectLayers"
+          @showDesc="showPop({ layerid: 'point', detail: true })"
+        />
         <Map ref="mapRef" @showPop="showPop" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
@@ -149,6 +152,12 @@ function showPop(info) {
   console.log(info);
   currentDialog.value = info.layerid;
   mapInfo.value = info;
+  //@TODO 演示代码, 其他相关联的也是演示代码，演示完后删除
+  if (info.detail) {
+    MapPopRef.value.open(false, true);
+    return;
+  }
+  //@TODO END
   if (info.layerid === "point") {
     MapPopRef.value.open(info);
     return;

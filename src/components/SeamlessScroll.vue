@@ -80,8 +80,11 @@ onMounted(() => {
         });
         data.value = data.value.concat(newData);
       }
-
-      el.scrollTo(0, scrollTop);
+      el.scrollTo({
+        left: 0,
+        top: scrollTop,
+        behavior: "smooth",
+      });
       if (scrollTop <= height) {
         run();
       }

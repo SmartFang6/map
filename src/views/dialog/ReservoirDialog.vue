@@ -103,7 +103,7 @@ const props = defineProps({
     flex-wrap: wrap;
     li {
       display: flex;
-      width: calc(100% / 2 - 5px);
+      width: calc(100% / 2 - 10px);
       height: 44px;
       line-height: 44px;
       margin-right: 10px;
@@ -122,7 +122,7 @@ const props = defineProps({
       }
     }
     .oneLine {
-      width: 100%;
+      width: calc(100% - 10px);
       margin-right: 0;
     }
   }

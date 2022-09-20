@@ -7,11 +7,12 @@
     <el-dialog v-model="dialogVisible" width="40%">
       <template #header>
         <div class="pop-title">
-          <span>{{ info?.eventSourceName }}</span>
+          <span>{{ info?.eventSourceName || "水域概况" }}</span>
           <!-- <el-button text :type="getTag(info.eventGrade)">{{
             info?.eventTypeName
           }}</el-button> -->
           <el-tag
+            v-if="false"
             :type="getTag(info.eventGrade)"
             size="small"
             class="tag"
@@ -266,10 +267,13 @@ function onJupmDetail() {
 }
 
 // 打开弹窗
-function open(val) {
+function open(val, detailVisible = false) {
   info.value = val;
-  // dialogVisible.value = true;
-  eventDetailDialogVisible.value = true;
+  if (detailVisible) {
+    dialogVisible.value = detailVisible;
+  } else {
+    eventDetailDialogVisible.value = true;
+  }
 }
 
 // 水域详情的标签页数组
