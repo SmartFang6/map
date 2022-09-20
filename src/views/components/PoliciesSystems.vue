@@ -57,7 +57,6 @@ const getPoliciesSystems = async () => {
       pdfUrl: item?.fileInfoList?.[0]?.relativeUrl ?? "",
     };
   });
-  console.log(PoliciesSystemsList);
 };
 
 getPoliciesSystems();

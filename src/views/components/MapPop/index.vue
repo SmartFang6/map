@@ -5,7 +5,7 @@
       v-model:visible="eventDetailDialogVisible"
     />
     <el-dialog v-model="dialogVisible" width="40%">
-      <template #title>
+      <template #header>
         <div class="pop-title">
           <span>{{ info?.eventSourceName }}</span>
           <!-- <el-button text :type="getTag(info.eventGrade)">{{
@@ -268,8 +268,8 @@ function onJupmDetail() {
 // 打开弹窗
 function open(val) {
   info.value = val;
-  dialogVisible.value = true;
-  // eventDetailDialogVisible.value = true;
+  // dialogVisible.value = true;
+  eventDetailDialogVisible.value = true;
 }
 
 // 水域详情的标签页数组

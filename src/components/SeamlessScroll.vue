@@ -11,6 +11,7 @@
   <DynamicScroller
     ref="scrollerRef"
     class="scroller"
+    key-field="_key"
     :items="data"
     :min-item-size="30"
   >
@@ -48,9 +49,18 @@ watch(
   (dataList) => {
     const el = scrollerRef.value?.$el;
     if (el) {
-      el.scrollTop = 0;
+      el.scrollTo(0, 0);
     }
-    data.value = [...dataList];
+    let tmp = [];
+    if (dataList.length <= props.startSize) {
+      tmp = JSON.parse(JSON.stringify([...dataList]));
+    } else {
+      tmp = JSON.parse(JSON.stringify([...dataList, ...dataList]));
+    }
+    tmp.forEach((a, i) => {
+      a._key = i + 1;
+    });
+    data.value = tmp;
   },
   { immediate: true }
 );
@@ -62,7 +72,13 @@ onMounted(() => {
       let scrollTop = el.scrollTop + (trigger ? 0 : 0.8);
       let height = el.scrollHeight;
       if (scrollTop >= height / 3) {
-        data.value = data.value.concat([...props.dataList]);
+        // data.value = data.value.concat([...props.dataList]);
+        const last = data.value.at(-1);
+        const newData = JSON.parse(JSON.stringify(props.dataList));
+        newData.forEach((a, i) => {
+          a._key = last._key + i + 1;
+        });
+        data.value = data.value.concat(newData);
       }
 
       el.scrollTo(0, scrollTop);

@@ -174,7 +174,7 @@ const store = useStore();
 // 监听父组件传递的查询参数
 const props = defineProps({
   search: {
-    type: Array,
+    type: Object,
     required: true,
   },
 });
