@@ -17,6 +17,11 @@
         >
           <el-tab-pane
             class="tab-item"
+            label="量化"
+            name="quantify"
+          ></el-tab-pane>
+          <el-tab-pane
+            class="tab-item"
             label="乡镇"
             name="zoneRank"
           ></el-tab-pane>
@@ -54,6 +59,41 @@
     <List :dataModel="rankingList" :type="typeActive" />
     <!--#endregion-->
 
+    <!--#region '量化'标签的列表内容区-->
+    <template>
+      <div class="quantify-list" v-if="true">
+        <vue-seamless-scroll
+          :data="PoliciesSystemsList"
+          :class-option="{ step: 0.3 }"
+        >
+          <div
+            class="oneList"
+            v-for="item in PoliciesSystemsList"
+            :key="item.id"
+          >
+            <i class="icon-rectangle"></i>
+            <el-tooltip
+              :content="item.policyName"
+              effect="dark"
+              placement="top-start"
+            >
+              <p class="content" @click="onPreviewPDFFile(item.pdfUrl)">
+                {{ item.policyName }}
+              </p>
+            </el-tooltip>
+            <span class="day">{{ item.createTime }}</span>
+          </div>
+        </vue-seamless-scroll>
+      </div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
+    </template>
+    <!--#endregion-->
+
     <!--#region 图片轮播的弹窗区-->
     <CarouselDialog
       v-model:visible="carouselDialogVisible"
@@ -87,6 +127,7 @@ import { useStore } from "vuex";
 import { ref, reactive, toRaw, inject, watch, onMounted } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 import { pdfFiles } from "@/utils/pdfFiles";
+// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 const store = useStore();
 // 乡镇/部门的选择标签
