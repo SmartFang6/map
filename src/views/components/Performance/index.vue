@@ -60,43 +60,15 @@
     </div>
 
     <!--#region 列表区-->
-    <template v-if="tabActive === 'zoneRank' || tabActive === 'departmentRank'">
-      <List :dataModel="rankingList" :type="typeActive" />
-    </template>
+    <List
+      v-if="tabActive === 'zoneRank' || tabActive === 'departmentRank'"
+      :dataModel="rankingList"
+      :type="typeActive"
+    />
     <!--#endregion-->
 
     <!--#region '量化'标签的列表内容区-->
-    <template v-else>
-      <div
-        class="quantify-list"
-        v-if="quantifyModel && quantifyModel?.length > 0"
-      >
-        <vue-seamless-scroll
-          :data="quantifyModel"
-          :class-option="{ step: 0.3 }"
-        >
-          <div class="oneList" v-for="item in quantifyModel" :key="item.id">
-            <i class="icon-diamond"></i>
-            <el-tooltip
-              :content="item.name"
-              effect="dark"
-              placement="top-start"
-            >
-              <p class="content">
-                {{ item.name }}
-              </p>
-            </el-tooltip>
-            <span class="note">{{ item.note }}</span>
-          </div>
-        </vue-seamless-scroll>
-      </div>
-      <el-empty
-        v-else
-        description="暂无数据"
-        :image-size="80"
-        class="dc-empty"
-      />
-    </template>
+    <QuantifyList v-else />
     <!--#endregion-->
 
     <!--#region 图片轮播的弹窗区-->
@@ -132,11 +104,11 @@ import { useStore } from "vuex";
 import { ref, reactive, toRaw, inject, watch, onMounted } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 import { pdfFiles } from "@/utils/pdfFiles";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import QuantifyList from "./components/QuantifyList.vue";
 
 const store = useStore();
 // 乡镇/部门的选择标签
-let tabActive = ref("zoneRank");
+let tabActive = ref("quantify");
 // 销号率/考核的选择标签
 let typeActive = ref(1);
 // 表格分类的列表
@@ -156,35 +128,6 @@ let dataModel = ref([]);
 
 // 绩效排名列表
 let rankingList = ref([]);
-
-// 量化列表的数据源
-const quantifyModel = reactive([
-  {
-    id: 1001,
-    name: "清理非法占用河道岸线",
-    note: "12公里",
-  },
-  {
-    id: 1001,
-    name: "清理非法采砂点",
-    note: "27个",
-  },
-  {
-    id: 1001,
-    name: "清理非法采砂石量清理非法占用河道岸线清理非法占用河道岸线清理非法占用河道岸线清理非法占用河道岸线",
-    note: "234立方米",
-  },
-  {
-    id: 1001,
-    name: "清理非法占用河道岸线",
-    note: "31公里",
-  },
-  {
-    id: 1001,
-    name: "清理非法占用河道岸线",
-    note: "17公里",
-  },
-]);
 
 // 开启考核制度弹窗的参数
 const carouselDialogVisible = ref(false);
@@ -479,51 +422,6 @@ onMounted(() => {
           padding-left: 3px;
         }
       }
-    }
-  }
-}
-
-.quantify-list {
-  display: flex;
-  width: 100%;
-  height: 250px;
-  padding: 8px 10px 0 16px;
-  box-sizing: border-box;
-  overflow: hidden;
-  .oneList {
-    display: flex;
-    align-items: center;
-    font-family: MicrosoftYaHei;
-    width: 446px;
-    height: 40px;
-    // background: linear-gradient(to right, #0040a1, rgba(255, 255, 255, 0));
-    background-color: rgba(37, 53, 100, 0.8);
-    margin-bottom: 9px;
-
-    .icon-diamond {
-      width: 18px;
-      height: 17px;
-      margin-left: 10px;
-      color: #fff;
-      background: url(@/assets/images/icon-diamond.png) no-repeat;
-      background-size: cover;
-    }
-    .content {
-      width: auto;
-      max-width: 290px;
-      margin-left: 10px;
-      font-size: 18px;
-      text-align: left;
-      color: #a1fcfd;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    .note {
-      margin-left: 18px;
-      font-size: 16px;
-      white-space: nowrap;
-      color: #80b436;
     }
   }
 }
