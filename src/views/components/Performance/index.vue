@@ -16,7 +16,7 @@
           @tab-click="onHandleTownOrDeptClick"
         >
           <el-tab-pane
-            v-if="true"
+            v-if="false"
             class="tab-item"
             label="量化"
             name="quantify"
@@ -108,7 +108,7 @@ import QuantifyList from "./components/QuantifyList.vue";
 
 const store = useStore();
 // 乡镇/部门的选择标签
-let tabActive = ref("quantify");
+let tabActive = ref("zoneRank");
 // 销号率/考核的选择标签
 let typeActive = ref(1);
 // 表格分类的列表
