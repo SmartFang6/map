@@ -4,7 +4,9 @@
       <slot name="header" />
     </div>
     <div class="side left_side" :class="{ closeWL: leftSideViewClose }">
-      <!--      <div class="btn btnL" @click="switchSideL">&lt;</div>-->
+      <div class="btn btnL" @click="switchSideL">
+        <div class="triangle"></div>
+      </div>
       <div class="side-content">
         <slot name="left" />
       </div>
@@ -13,7 +15,9 @@
       <slot name="map"></slot>
     </div>
     <div class="side right_side" :class="{ closeWR: rightSideViewClose }">
-      <!--      <div class="btn btnR" @click="switchSideR">&gt;</div>-->
+      <div class="btn btnR" @click="switchSideR">
+        <div class="triangle"></div>
+      </div>
       <div class="side-content">
         <slot name="right" />
       </div>
@@ -41,16 +45,16 @@ const rightSideViewClose = computed(() => {
 const bottomViewClose = computed(() => {
   return store.state.layout?.bottom === "close" || false;
 });
-// const switchSideL = () => {
-//   store.commit("UPDATE_LAYOUT", {
-//     left: store.state.layout?.left === "close" ? "open" : "close",
-//   });
-// };
-// const switchSideR = () => {
-//   store.commit("UPDATE_LAYOUT", {
-//     right: store.state.layout?.right === "close" ? "open" : "close",
-//   });
-// };
+const switchSideL = () => {
+  store.commit("UPDATE_LAYOUT", {
+    left: store.state.layout?.left === "close" ? "open" : "close",
+  });
+};
+const switchSideR = () => {
+  store.commit("UPDATE_LAYOUT", {
+    right: store.state.layout?.right === "close" ? "open" : "close",
+  });
+};
 // const switchBottom = () => {
 //   store.commit("UPDATE_LAYOUT", {
 //     bottom: store.state.layout?.bottom === "close" ? "open" : "close",
@@ -86,13 +90,15 @@ const bottomViewClose = computed(() => {
     width: 590px;
     top: 0;
     padding-top: @topH;
-
     position: absolute;
     z-index: 100;
     bottom: 0;
     transition: transform 0.5s ease;
 
     .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #fff;
       width: 40px;
       height: 100px;
@@ -102,13 +108,32 @@ const bottomViewClose = computed(() => {
       top: 0;
       margin: auto;
       line-height: 100px;
+      cursor: pointer;
+      .triangle {
+        position: relative;
+        border: 10px solid transparent;
+        border-left-color: #fff;
+        transition: all 0.1s;
+      }
     }
 
     .btnL {
-      right: -40px;
+      right: 30px;
+      background: url(@/assets/images/silder_l.png) no-repeat;
+      background-size: 100% 100%;
+      .triangle {
+        left: -4px;
+        transform: rotate(180deg);
+      }
     }
     .btnR {
-      left: -40px;
+      left: 30px;
+      background: url(@/assets/images/silder_r.png) no-repeat;
+      background-size: 100% 100%;
+      .triangle {
+        left: 6px;
+        transform: rotate(0deg);
+      }
     }
   }
   .side-content {
@@ -159,9 +184,17 @@ const bottomViewClose = computed(() => {
   }
   .closeWL {
     transform: translateX(-@sideW);
+    .btnL .triangle {
+      left: 6px;
+      transform: rotate(0deg);
+    }
   }
   .closeWR {
     transform: translateX(@sideW);
+    .btnR .triangle {
+      left: -10px;
+      transform: rotate(180deg);
+    }
   }
   .closeHB {
     transform: translateY(calc(@bottomH - 38px));
