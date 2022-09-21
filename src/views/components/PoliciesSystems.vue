@@ -11,22 +11,27 @@
     </Title>
     <!-- S内容区域 -->
     <div class="list" v-if="PoliciesSystemsList.length > 0">
-      <SeamlessScroll :data-list="PoliciesSystemsList">
-        <template #default="{ row }">
-          <div class="oneList" :key="row.id">
+      <SeamlessScroll :list="PoliciesSystemsList" @clicked="handleItem">
+        <div>
+          <div
+            class="oneList"
+            v-for="row in PoliciesSystemsList"
+            :key="row.id"
+            :data-id="row.id"
+          >
             <i class="icon-rectangle"></i>
             <el-tooltip
               :content="row.policyName"
               effect="dark"
               placement="top-start"
             >
-              <p class="content" @click="onPreviewPDFFile(row.pdfUrl)">
+              <p class="content">
                 {{ row.policyName }}
               </p>
             </el-tooltip>
             <span class="day">{{ row.createTime }}</span>
           </div>
-        </template>
+        </div>
       </SeamlessScroll>
     </div>
 
@@ -38,12 +43,13 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { getPoliciesSystemsList } from "@/apis/cockpitEventStats";
-import SeamlessScroll from "@/components/SeamlessScroll";
 
 // 政策制度组件的数据源列表
 const PoliciesSystemsList = ref([]);
 const store = useStore();
-
+const handleItem = (row) => {
+  onPreviewPDFFile(row.pdfUrl);
+};
 // 获取获取政策制度列表
 const getPoliciesSystems = async () => {
   // 通过后台接口获取文件制度信息列表

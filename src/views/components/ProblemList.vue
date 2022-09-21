@@ -53,12 +53,13 @@
         <div>状态</div>
       </div>
       <div class="table-body" v-if="dataList.length > 0">
-        <SeamlessScroll :data-list="dataList">
-          <template #default="{ row }">
+        <SeamlessScroll :list="dataList" @clicked="handleProble">
+          <div>
             <div
+              v-for="row in dataList"
               :key="row.index"
               :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
-              @click="emits('select', row)"
+              :data-id="row.id"
             >
               <div>{{ row.index }}</div>
               <el-tooltip
@@ -120,7 +121,7 @@
                 </div>
               </el-tooltip>
             </div>
-          </template>
+          </div>
         </SeamlessScroll>
       </div>
       <el-empty
@@ -163,7 +164,6 @@ import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
 import "element-plus/es/components/option/style/css";
 import "element-plus/es/components/tooltip/style/css";
-import SeamlessScroll from "@/components/SeamlessScroll";
 import moment from "moment";
 // import { getEventQuestionList } from "@/apis/cockpitEventStats"; // 问题列表接口(旧)
 import { getEventStatReportProblemList } from "@/apis/cockpitEventStats"; // 问题列表接口(新)
@@ -180,7 +180,9 @@ const props = defineProps({
 });
 
 const emits = defineEmits(["select"]);
-
+const handleProble = (e) => {
+  emits("select", e);
+};
 // 是否折叠
 const collapsed = computed(() => {
   return store.state.layout?.bottom === "close" || false;

@@ -20,11 +20,13 @@
         <div>销号率</div>
       </div>
       <div class="table-body" v-if="dataList.length > 0">
-        <SeamlessScroll :data-list="dataList">
-          <template #default="{ row }">
+        <SeamlessScroll :list="dataList">
+          <div>
             <div
+              v-for="row in dataList"
               :key="row.index"
               :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+              :data-id="row.index"
             >
               <div>{{ row.index }}</div>
               <el-tooltip
@@ -38,7 +40,7 @@
               <div>{{ row.completed }}</div>
               <div>{{ row.rate }}</div>
             </div>
-          </template>
+          </div>
         </SeamlessScroll>
       </div>
       <el-empty
@@ -60,9 +62,10 @@
         <div>分数</div>
       </div>
       <div class="table-body">
-        <SeamlessScroll :data-list="dataList">
-          <template #default="{ row }">
+        <SeamlessScroll :list="dataList">
+          <div>
             <div
+              v-for="row in dataList"
               :key="row.index"
               :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
             >
@@ -76,7 +79,7 @@
               </el-tooltip>
               <div>{{ row.point }}</div>
             </div>
-          </template>
+          </div>
         </SeamlessScroll>
       </div>
     </template>
@@ -88,7 +91,6 @@
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
 import { ref, watch, nextTick } from "vue";
-import SeamlessScroll from "@/components/SeamlessScroll";
 
 const dataList = ref([]);
 
