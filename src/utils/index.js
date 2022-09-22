@@ -12,7 +12,7 @@ function toAdminProjectFn() {
 }
 export const awaitToAdminProject = toAdminProjectFn();
 import md5 from "md5";
-import dayjs from "dayjs";
+import * as dayjs from "dayjs";
 import store from "@/store";
 export const getMD5_sign = (USERID = null) => {
   const date = new Date();
