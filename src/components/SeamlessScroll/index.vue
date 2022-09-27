@@ -74,7 +74,6 @@ function initDom() {
     // 设置向上滚动的偏移量,为插槽内容的高度
     slotHeight.value = `-${scrollDOM.offsetHeight / 2}px`;
   } else {
-    speed.value = 0;
     slotHeight.value = 0;
   }
 }
