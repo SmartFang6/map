@@ -1,5 +1,5 @@
 <template>
-  <div class="list">
+  <div class="list" :key="componentKey" v-if="show">
     <div
       class="cc rowup"
       :style="{ '--speed': speed, '--A_DYNAMIC_VALUE': slotHeight }"
@@ -11,7 +11,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, nextTick, computed } from "vue";
+import { ref, onMounted, nextTick, computed, watch } from "vue";
 
 // prpps
 const props = defineProps({
@@ -33,6 +33,19 @@ const props = defineProps({
   },
 });
 
+// 动态key,解决组件因为DOM复用造成的bug
+let show = ref(true);
+let componentKey = ref("");
+// 生成动态key
+function getRandomKey() {
+  let randomNum = null;
+  for (let i = 0; i < 3; i++) {
+    randomNum += Math.floor(Math.random() * 10);
+  }
+  componentKey.value = `seamlessScroll-${randomNum}`;
+}
+getRandomKey();
+
 // 控制滚动速度
 const speed = computed(() => {
   return (props.step * props.list.length || 10) + "s";
@@ -47,17 +60,46 @@ onMounted(() => {
   }
   const outsideDom = scroll_box.value;
   // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
-  const slotDom = outsideDom.children[0];
-  const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom.outerHTML}</div>`;
-  outsideDom.innerHTML = slotDom.outerHTML + lastDom;
+  const slotDom = outsideDom.innerHTML;
+  // console.log("slotDom>>>", slotDom);
+  const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
+  outsideDom.innerHTML = slotDom + lastDom;
 
   // 设置滚动高度可视区域
   nextTick(() => {
-    slotHeight.value = `-${outsideDom.children[0].offsetHeight}px`;
-    console.log(slotHeight.value, "slotHeight");
+    slotHeight.value = `-${outsideDom.offsetHeight / 2}px`;
+    // console.log(slotHeight.value, "slotHeight");
   });
-  console.log(window.navigator);
+  // console.log("props-list", props.list, speed.value);
 });
+
+watch(
+  () => props.list,
+  () => {
+    console.log("getRandomKey");
+    show.value = false;
+    getRandomKey();
+    setTimeout(() => {
+      show.value = true;
+
+      // 设置滚动高度可视区域
+      nextTick(() => {
+        const outsideDom = scroll_box.value;
+        // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
+        const slotDom = outsideDom.innerHTML;
+        // console.log("slotDom>>>", slotDom);
+        const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
+        outsideDom.innerHTML = slotDom + lastDom;
+        slotHeight.value = `-${outsideDom.offsetHeight / 2}px`;
+        // console.log(slotHeight.value, "slotHeight");
+      });
+    });
+  },
+  {
+    // immediate: true,
+    deep: true,
+  }
+);
 
 // 捕获插槽点击事件
 const emites = defineEmits(["clicked"]);
