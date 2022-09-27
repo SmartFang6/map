@@ -90,7 +90,7 @@
 <script setup>
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
-import { ref, watch, nextTick } from "vue";
+import { ref, watch } from "vue";
 
 const dataList = ref([]);
 
@@ -109,34 +109,31 @@ const props = defineProps({
 watch(
   () => [props.dataModel, props.type],
   () => {
-    nextTick(() => {
-      if (!props.dataModel || props.dataModel.length <= 0) {
-        dataList.value = [];
-        return;
-      }
+    if (!props.dataModel || props.dataModel.length <= 0) {
       dataList.value = [];
-      props.dataModel.forEach((item, rankNum) => {
-        if (props.type === 1) {
-          dataList.value.push({
-            index: rankNum + 1,
-            org: item?.eventResponsibleUnitCodeName,
-            content: item?.content || "",
-            count: item?.unitEventNum || 0,
-            completed: item?.unitCompletedNum || 0,
-            rate:
-              (item?.completedRate
-                ? Number(`${item?.completedRate}e${2}`)
-                : 0) + "%",
-          });
-        } else {
-          dataList.value.push({
-            index: rankNum + 1,
-            org: item?.eventResponsibleUnitCodeName,
-            content: item?.content || "",
-            point: item?.point,
-          });
-        }
-      });
+      return;
+    }
+    dataList.value = [];
+    props.dataModel.forEach((item, rankNum) => {
+      if (props.type === 1) {
+        dataList.value.push({
+          index: rankNum + 1,
+          org: item?.eventResponsibleUnitCodeName,
+          content: item?.content || "",
+          count: item?.unitEventNum || 0,
+          completed: item?.unitCompletedNum || 0,
+          rate:
+            (item?.completedRate ? Number(`${item?.completedRate}e${2}`) : 0) +
+            "%",
+        });
+      } else {
+        dataList.value.push({
+          index: rankNum + 1,
+          org: item?.eventResponsibleUnitCodeName,
+          content: item?.content || "",
+          point: item?.point,
+        });
+      }
     });
   },
   {
