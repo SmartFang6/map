@@ -1,5 +1,5 @@
 <template>
-  <div class="list" :key="componentKey" v-if="show">
+  <div class="list" :key="componentKey" v-if="show" ref="scroll_outside">
     <div
       class="cc rowup"
       :style="{ '--speed': speed, '--A_DYNAMIC_VALUE': slotHeight }"
@@ -52,6 +52,7 @@ const speed = computed(() => {
 });
 
 // 获取DOM高度,执行滚动动画
+const scroll_outside = ref(null)
 const scroll_box = ref(null);
 const slotHeight = ref("0px");
 function initDom() {
@@ -59,14 +60,19 @@ function initDom() {
     alert("请配置数据源！");
     return;
   }
-  if (props.list.length > 5) {
-    const outsideDom = scroll_box.value;
+  // 获取组件高度
+  const scrollOutsideH = scroll_outside.value.offsetHeight
+  // 获取滚动内容高度
+  const scrollDOM = scroll_box.value;
+  const scrollHeight = scrollDOM.offsetHeight
+  // console.log("高度---",scrollHeight,scrollOutsideH);
+  if (scrollHeight > scrollOutsideH) {
     // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
-    const slotDom = outsideDom.innerHTML;
-    // console.log("slotDom>>>", slotDom);
-    const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
-    outsideDom.innerHTML = slotDom + lastDom;
-    slotHeight.value = `-${outsideDom.offsetHeight / 2}px`;
+    const slotDom = scrollDOM.innerHTML;
+    const copyDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
+    scrollDOM.innerHTML = slotDom + copyDom;
+    // 设置向上滚动的偏移量,为插槽内容的高度
+    slotHeight.value = `-${scrollDOM.offsetHeight / 2}px`;
   } else {
     speed.value = 0;
     slotHeight.value = 0;
@@ -80,7 +86,7 @@ onMounted(() => {
 watch(
   () => props.list,
   () => {
-    // 解决数据变更DOM没重新渲染
+    // 解决数据变更DOM没重新渲染,影响滚动效果
     show.value = false;
     getRandomKey();
     setTimeout(() => {
