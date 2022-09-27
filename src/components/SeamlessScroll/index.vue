@@ -52,7 +52,7 @@ const speed = computed(() => {
 });
 
 // 获取DOM高度,执行滚动动画
-const scroll_outside = ref(null)
+const scroll_outside = ref(null);
 const scroll_box = ref(null);
 const slotHeight = ref("0px");
 function initDom() {
@@ -61,10 +61,10 @@ function initDom() {
     return;
   }
   // 获取组件高度
-  const scrollOutsideH = scroll_outside.value.offsetHeight
+  const scrollOutsideH = scroll_outside.value.offsetHeight;
   // 获取滚动内容高度
   const scrollDOM = scroll_box.value;
-  const scrollHeight = scrollDOM.offsetHeight
+  const scrollHeight = scrollDOM.offsetHeight;
   // console.log("高度---",scrollHeight,scrollOutsideH);
   if (scrollHeight > scrollOutsideH) {
     // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
