@@ -51,47 +51,42 @@ const speed = computed(() => {
   return (props.step * props.list.length || 10) + "s";
 });
 
+// 获取DOM高度,执行滚动动画
 const scroll_box = ref(null);
 const slotHeight = ref("0px");
-onMounted(() => {
+function initDom() {
   if (props.list.length <= 0) {
     alert("请配置数据源！");
     return;
   }
-  const outsideDom = scroll_box.value;
-  // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
-  const slotDom = outsideDom.innerHTML;
-  // console.log("slotDom>>>", slotDom);
-  const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
-  outsideDom.innerHTML = slotDom + lastDom;
-
-  // 设置滚动高度可视区域
-  nextTick(() => {
+  if (props.list.length > 5) {
+    const outsideDom = scroll_box.value;
+    // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
+    const slotDom = outsideDom.innerHTML;
+    // console.log("slotDom>>>", slotDom);
+    const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
+    outsideDom.innerHTML = slotDom + lastDom;
     slotHeight.value = `-${outsideDom.offsetHeight / 2}px`;
-    // console.log(slotHeight.value, "slotHeight");
-  });
-  // console.log("props-list", props.list, speed.value);
+  } else {
+    speed.value = 0;
+    slotHeight.value = 0;
+  }
+}
+
+onMounted(() => {
+  initDom();
 });
 
 watch(
   () => props.list,
   () => {
-    console.log("getRandomKey");
+    // 解决数据变更DOM没重新渲染
     show.value = false;
     getRandomKey();
     setTimeout(() => {
       show.value = true;
-
-      // 设置滚动高度可视区域
       nextTick(() => {
-        const outsideDom = scroll_box.value;
-        // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
-        const slotDom = outsideDom.innerHTML;
-        // console.log("slotDom>>>", slotDom);
-        const lastDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
-        outsideDom.innerHTML = slotDom + lastDom;
-        slotHeight.value = `-${outsideDom.offsetHeight / 2}px`;
-        // console.log(slotHeight.value, "slotHeight");
+        initDom();
       });
     });
   },
@@ -104,6 +99,7 @@ watch(
 // 捕获插槽点击事件
 const emites = defineEmits(["clicked"]);
 function handleClick(e) {
+  console.log("handleClick", e);
   // 根据唯一标识获取当前点击的数据项
   let curItem = e.path.find((i) => i.dataset?.id);
   const event_id_value = curItem?.dataset?.id;
