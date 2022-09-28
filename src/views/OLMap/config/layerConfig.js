@@ -15,7 +15,8 @@ import SldUtils from '../utils/SldUtils'
 import pointRed from '@/assets/map/pointRed.png'
 import pointGreen from '@/assets/map/pointGreen.png'
 import pointYellow from '@/assets/map/pointYellow.png'
-import { getPointList } from '@/apis/map'
+import videoPic from '@/assets/map/video.png'
+import { getPointList, getVideoList } from '@/apis/map'
 import * as LayerEnum from '@/utils/LayerEnum'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
 
@@ -1048,4 +1049,26 @@ export const otherwaterWaterLayer = {
     crossOrigin: 'anonymous'
   },
   zIndex: 18
+}
+
+// 视频图层
+export const videoLayer = {
+  field: {
+    lgtd: 'vmLong',
+    lttd: 'vmLat',
+    id: 'vmCode',
+  },
+  id: LayerEnum.VIDEO_LAYER,
+  type: LayerTypeEnum.vector,
+  source: { type: SourceTypeEnum.vector },
+  zIndex: 21,
+  // levelField: null,
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: videoPic,
+      scale: 0.8
+    }
+  },
+  loadFunc: getVideoList
 }

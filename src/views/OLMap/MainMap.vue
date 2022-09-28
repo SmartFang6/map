@@ -21,7 +21,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
+import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer, videoLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -127,7 +127,7 @@ export default {
         [LayerEnum.OTHERWATER_LAYER]: new MainMapWMSWithLinesLayer(otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer), // 其他水域
         [LayerEnum.FINISHED_PROJ]: new DCLayer(), // 完工
         [LayerEnum.BUILDING_PROJ]: new DCLayer(), // 在建
-        [LayerEnum.VIDEO_LAYER]: new DCLayer(), // 视频点
+        [LayerEnum.VIDEO_LAYER]: new DCLayer(videoLayer), // 视频点
         [LayerEnum.SECTION_LAYER]: new DCLayer(), // 水质断面
       };
       // 加载立体感效果的图层
@@ -369,7 +369,7 @@ export default {
     initClick() {
       this.map.on("click", (evt) => {
         let layerid = "";
-        const clickLayers = ["point"];
+        const clickLayers = ["point", LayerEnum.VIDEO_LAYER];
         const clickFeature = this.map.forEachFeatureAtPixel(
           evt.pixel,
           (feature, layer) => {
