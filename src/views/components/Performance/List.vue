@@ -34,7 +34,7 @@
                 effect="dark"
                 placement="top-start"
               >
-                <div>{{ row.org }}</div>
+                <div :title="row.org">{{ row.org }}</div>
               </el-tooltip>
               <div>{{ row.count }}</div>
               <div>{{ row.completed }}</div>
@@ -75,7 +75,7 @@
                 effect="dark"
                 placement="top-start"
               >
-                <div>{{ row.org }}</div>
+                <div :title="row.org">{{ row.org }}</div>
               </el-tooltip>
               <div>{{ row.point }}</div>
             </div>
