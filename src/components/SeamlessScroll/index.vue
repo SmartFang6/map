@@ -155,7 +155,6 @@ function handleClick(e) {
       transform: translate3d(0, var(--A_DYNAMIC_VALUE), 0);
     }
   }
-  cursor: pointer;
   -webkit-animation: var(--speed) rowup linear infinite normal;
   animation: var(--speed) rowup linear infinite normal;
   animation-play-state: running;
