@@ -5,6 +5,8 @@
   <div class="carousel-dialog">
     <el-dialog
       v-model="dialogVisible"
+      append-to-body
+      top="2vh"
       custom-class="common_dialog"
       width="60vw"
     >
@@ -59,7 +61,7 @@
 <script setup>
 import { ref, watch } from "vue";
 // import VuePdfEmbed from "vue-pdf-embed";
-import { createLoadingTask } from "vue3-pdfjs/cjs"; // 获得总页数
+// import { createLoadingTask } from "vue3-pdfjs/cjs"; // 获得总页数
 
 // 接收父组件传值
 const props = defineProps({
@@ -111,13 +113,13 @@ watch(
   (files) => {
     activeFiles.value = files;
     // 获取pdf文件的总页数
-    if (activeFiles.value?.source) {
-      console.log(activeFiles.value);
-      const loadingTask = createLoadingTask(activeFiles.value?.source);
-      loadingTask.promise.then((fileInfo) => {
-        activeFiles.value.numPages = fileInfo.numPages;
-      });
-    }
+    // if (activeFiles.value?.source) {
+    //   console.log(activeFiles.value);
+    //   const loadingTask = createLoadingTask(activeFiles.value?.source);
+    //   loadingTask.promise.then((fileInfo) => {
+    //     activeFiles.value.numPages = fileInfo.numPages;
+    //   });
+    // }
   },
   {
     immediate: true,
@@ -168,75 +170,75 @@ const pageZoomIn = () => {
 <style lang="less" scoped>
 .carousel-dialog {
   display: block;
+}
+:deep(.el-dialog__body) {
+  // padding: 0;
+  opacity: 1;
+}
 
-  :deep(.el-dialog__body) {
-    // padding: 0;
-    opacity: 1;
+.top-title {
+  display: flex;
+  position: absolute;
+  top: 18px;
+
+  .title-wrap {
+    font-size: 26px;
+    font-weight: 400;
+    font-family: YouSheBiaoTiHei;
+    color: #0adbe0;
   }
+}
 
-  .top-title {
-    display: flex;
-    position: absolute;
-    top: 18px;
+.gallery-inner {
+  width: 100%;
+  height: 100%;
+}
 
-    .title-wrap {
-      font-size: 26px;
-      font-weight: 400;
-      font-family: YouSheBiaoTiHei;
-      color: #0adbe0;
-    }
-  }
+.pdf-preview {
+  position: relative;
+  height: auto;
+  min-height: 600px;
+  height: 82vh;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgb(66, 66, 66);
+}
 
-  .gallery-inner {
-    width: 100%;
-    height: 100%;
-  }
+.vue-pdf-embed {
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 
-  .pdf-preview {
-    position: relative;
-    height: auto;
-    min-height: 600px;
-    padding: 20px;
-    box-sizing: border-box;
-    background: rgb(66, 66, 66);
-  }
+.pdf-wrap {
+  overflow-y: auto;
+}
 
-  .vue-pdf-embed {
-    text-align: center;
-    width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
+.page-tool {
+  position: absolute;
+  bottom: 35px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  align-items: center;
+  background: rgb(66, 66, 66);
+  color: white;
+  border-radius: 19px;
+  z-index: 100;
+  cursor: pointer;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
 
-  .pdf-wrap {
-    overflow-y: auto;
-  }
+.page-tool-item {
+  padding: 8px 15px;
+  padding-left: 10px;
+  cursor: pointer;
+}
 
-  .page-tool {
-    position: absolute;
-    bottom: 35px;
-    padding-left: 15px;
-    padding-right: 15px;
-    display: flex;
-    align-items: center;
-    background: rgb(66, 66, 66);
-    color: white;
-    border-radius: 19px;
-    z-index: 100;
-    cursor: pointer;
-    margin-left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .page-tool-item {
-    padding: 8px 15px;
-    padding-left: 10px;
-    cursor: pointer;
-  }
-
-  .pdf-frame {
-    width: 100%;
-    min-height: 768px;
-  }
+.pdf-frame {
+  width: 100%;
+  height: calc(82vh - 40px);
 }
 </style>

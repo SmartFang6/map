@@ -1,6 +1,5 @@
 <template>
   <div class="map-pop">
-    <div class="header_title">{{ props.info?.name }}</div>
     <div class="pop-body">
       <div class="left-img">
         <div class="num-title">
@@ -149,6 +148,7 @@ const props = defineProps({
 </script>
 
 <style lang="less" scoped>
+@import url(./waterDialog.less);
 .map-pop {
   .pop-title {
     display: flex;
@@ -221,8 +221,8 @@ const props = defineProps({
         line-height: 44px;
         margin-bottom: 10px;
         padding: 0 12px;
-        background-color: #005273;
-        box-shadow: inset 0px 2px 1px 0px #0089be;
+        background-color: #0b216c;
+        box-shadow: inset 0 2px 1px 0 #1642d8;
         text-align: left;
       }
     }
@@ -239,7 +239,7 @@ const props = defineProps({
     .item-value {
       font-family: MicrosoftYaHei;
       font-size: 18px;
-      color: #00dcf0;
+      color: #43c7ff;
       margin-left: 12px;
       text-overflow: -o-ellipsis-lastline;
       overflow: hidden; //溢出内容隐藏

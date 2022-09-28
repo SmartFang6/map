@@ -122,7 +122,7 @@ const getStyle = () => {
     background: url(@/assets/images/responsble-unit-bg.png);
     background-size: contain;
     box-sizing: border-box;
-    padding: 0px 10px 0 17px;
+    padding: 0 10px 0 17px;
     overflow: hidden;
     cursor: pointer;
     &.active {
@@ -133,7 +133,7 @@ const getStyle = () => {
       font-size: 18px;
       padding-top: 6px;
       color: #fff;
-      text-shadow: 0px 3px 3px rgba(0, 12, 59, 0.5);
+      text-shadow: 0 3px 3px rgba(0, 12, 59, 0.5);
       text-align: left;
       line-height: 20px;
     }
@@ -142,7 +142,7 @@ const getStyle = () => {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      text-shadow: 0px 3px 3px rgba(0, 12, 59, 0.5);
+      text-shadow: 0 3px 3px rgba(0, 12, 59, 0.5);
     }
     .value {
       color: #00d4f4;

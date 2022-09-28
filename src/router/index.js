@@ -13,6 +13,11 @@ const routes = [
     component: () => import("@/views/ssoLogin.vue"),
   },
   {
+    path: "/waterSsoLogin",
+    name: "waterSsoLogin",
+    component: () => import("@/views/waterSsoLogin.vue"),
+  },
+  {
     path: "/test",
     name: "test",
     component: () => import("@/views/test.vue"),

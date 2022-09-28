@@ -42,7 +42,11 @@
           <img src="@/assets/images/chart-arrow-up.png" />
         </div>
       </div>
-      <div class="btn" @click="watersDescriptionDialogVisible = true">
+      <div
+        class="btn"
+        @click1="watersDescriptionDialogVisible = true"
+        @click="emits('showDesc')"
+      >
         <img src="@/assets/images/chart-description.png" />
         <span>水域概况</span>
       </div>
@@ -66,7 +70,7 @@ const layerLength = computed(() => {
   }, 0);
 });
 // 事件
-const emits = defineEmits(["selectLayers"]);
+const emits = defineEmits(["selectLayers", "showDesc"]);
 
 // 是否显示水域概况弹窗
 const watersDescriptionDialogVisible = ref(false);

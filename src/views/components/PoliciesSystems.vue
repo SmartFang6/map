@@ -11,25 +11,30 @@
     </Title>
     <!-- S内容区域 -->
     <div class="list" v-if="PoliciesSystemsList.length > 0">
-      <vue-seamless-scroll
-        :data="PoliciesSystemsList"
-        :class-option="{ step: 0.3 }"
-      >
-        <div class="oneList" v-for="item in PoliciesSystemsList" :key="item.id">
-          <i class="icon-rectangle"></i>
-          <el-tooltip
-            :content="item.policyName"
-            effect="dark"
-            placement="top-start"
+      <SeamlessScroll :list="PoliciesSystemsList" @clicked="handleItem">
+        <div>
+          <div
+            class="oneList"
+            v-for="row in PoliciesSystemsList"
+            :key="row.id"
+            :data-id="row.id"
           >
-            <p class="content" @click="onPreviewPDFFile(item.pdfUrl)">
-              {{ item.policyName }}
-            </p>
-          </el-tooltip>
-          <span class="day">{{ item.createTime }}</span>
+            <i class="icon-rectangle"></i>
+            <el-tooltip
+              :content="row.policyName"
+              effect="dark"
+              placement="top-start"
+            >
+              <p class="content">
+                {{ row.policyName }}
+              </p>
+            </el-tooltip>
+            <span class="day">{{ row.createTime }}</span>
+          </div>
         </div>
-      </vue-seamless-scroll>
+      </SeamlessScroll>
     </div>
+
     <el-empty v-else description="暂无数据" :image-size="80" class="dc-empty" />
     <!-- E内容区域 -->
   </div>
@@ -38,12 +43,13 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { getPoliciesSystemsList } from "@/apis/cockpitEventStats";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
 
 // 政策制度组件的数据源列表
 const PoliciesSystemsList = ref([]);
 const store = useStore();
-
+const handleItem = (row) => {
+  onPreviewPDFFile(row.pdfUrl);
+};
 // 获取获取政策制度列表
 const getPoliciesSystems = async () => {
   // 通过后台接口获取文件制度信息列表
@@ -57,7 +63,76 @@ const getPoliciesSystems = async () => {
       pdfUrl: item?.fileInfoList?.[0]?.relativeUrl ?? "",
     };
   });
-  console.log(PoliciesSystemsList);
+  PoliciesSystemsList.value = [
+    {
+      id: "3778b5534c9041ecb39fe25477c87325",
+      adcd: "330182",
+      policyName:
+        "浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知.pdf1ab1811205174a539f3fdcb891faa4ac.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "8e36701bc9c4452eaec4a6d467f168ff",
+      adcd: "330182",
+      policyName: "关于做好基层治理“一件事”集成改革有关工作的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-【3380】关于做好基层治理“一件事”集成改革有关工作的通知.pdfb7338ef4f7d0437a91933a2f9829a196.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "3778b5534c9041ecb39fe25477c87325",
+      adcd: "330182",
+      policyName:
+        "浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知.pdf1ab1811205174a539f3fdcb891faa4ac.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "8e36701bc9c4452eaec4a6d467f168ff",
+      adcd: "330182",
+      policyName: "关于做好基层治理“一件事”集成改革有关工作的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-【3380】关于做好基层治理“一件事”集成改革有关工作的通知.pdfb7338ef4f7d0437a91933a2f9829a196.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "3778b5534c9041ecb39fe25477c87325",
+      adcd: "330182",
+      policyName:
+        "浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知.pdf1ab1811205174a539f3fdcb891faa4ac.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "8e36701bc9c4452eaec4a6d467f168ff",
+      adcd: "330182",
+      policyName: "关于做好基层治理“一件事”集成改革有关工作的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-【3380】关于做好基层治理“一件事”集成改革有关工作的通知.pdfb7338ef4f7d0437a91933a2f9829a196.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "3778b5534c9041ecb39fe25477c87325",
+      adcd: "330182",
+      policyName:
+        "浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-浙水办【2022】9号浙江省水利厅办公室关于发布水域监管“一件事”第一批试点单位的通知.pdf1ab1811205174a539f3fdcb891faa4ac.pdf",
+      createTime: "2022-09-13",
+    },
+    {
+      id: "8e36701bc9c4452eaec4a6d467f168ff",
+      adcd: "330182",
+      policyName: "关于做好基层治理“一件事”集成改革有关工作的通知",
+      pdfUrl:
+        "https://zjwater-easyv-files.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/process-【3380】关于做好基层治理“一件事”集成改革有关工作的通知.pdfb7338ef4f7d0437a91933a2f9829a196.pdf",
+      createTime: "2022-09-13",
+    },
+  ];
 };
 
 getPoliciesSystems();
@@ -92,6 +167,7 @@ const onPreviewPDFFile = (url = "") => {
   }
   .list {
     width: 100%;
+    height: 250px;
     margin-top: 10px;
     padding: 0 22px 0 16px;
     box-sizing: border-box;

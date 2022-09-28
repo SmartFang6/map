@@ -20,21 +20,28 @@
         <div>销号率</div>
       </div>
       <div class="table-body" v-if="dataList.length > 0">
-        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
-          <div
-            v-for="item in dataList"
-            :key="item.index"
-            :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
-          >
-            <div>{{ item.index }}</div>
-            <el-tooltip :content="item.org" effect="dark" placement="top-start">
-              <div>{{ item.org }}</div>
-            </el-tooltip>
-            <div>{{ item.count }}</div>
-            <div>{{ item.completed }}</div>
-            <div>{{ item.rate }}</div>
+        <SeamlessScroll :list="dataList">
+          <div>
+            <div
+              v-for="row in dataList"
+              :key="row.index"
+              :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+              :data-id="row.index"
+            >
+              <div>{{ row.index }}</div>
+              <el-tooltip
+                :content="row.org"
+                effect="dark"
+                placement="top-start"
+              >
+                <div :title="row.org">{{ row.org }}</div>
+              </el-tooltip>
+              <div>{{ row.count }}</div>
+              <div>{{ row.completed }}</div>
+              <div>{{ row.rate }}</div>
+            </div>
           </div>
-        </vue-seamless-scroll>
+        </SeamlessScroll>
       </div>
       <el-empty
         v-else
@@ -55,19 +62,25 @@
         <div>分数</div>
       </div>
       <div class="table-body">
-        <vue-seamless-scroll :data="dataList" :class-option="{ step: 0.3 }">
-          <div
-            v-for="item in dataList"
-            :key="item.index"
-            :class="{ 'table-row': true, stripe: item.index % 2 !== 0 }"
-          >
-            <div>{{ item.index }}</div>
-            <el-tooltip :content="item.org" effect="dark" placement="top-start">
-              <div>{{ item.org }}</div>
-            </el-tooltip>
-            <div>{{ item.point }}</div>
+        <SeamlessScroll :list="dataList">
+          <div>
+            <div
+              v-for="row in dataList"
+              :key="row.index"
+              :class="{ 'table-row': true, stripe: row.index % 2 !== 0 }"
+            >
+              <div>{{ row.index }}</div>
+              <el-tooltip
+                :content="row.org"
+                effect="dark"
+                placement="top-start"
+              >
+                <div :title="row.org">{{ row.org }}</div>
+              </el-tooltip>
+              <div>{{ row.point }}</div>
+            </div>
           </div>
-        </vue-seamless-scroll>
+        </SeamlessScroll>
       </div>
     </template>
     <!--#endregion-->
@@ -77,8 +90,7 @@
 <script setup>
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
-import { ref, watch, nextTick } from "vue";
-// import VueSeamlessScroll from "vue-seamless-scroll/src/components/myClass";
+import { ref, watch } from "vue";
 
 const dataList = ref([]);
 
@@ -97,34 +109,31 @@ const props = defineProps({
 watch(
   () => [props.dataModel, props.type],
   () => {
-    nextTick(() => {
-      if (!props.dataModel || props.dataModel.length <= 0) {
-        dataList.value = [];
-        return;
-      }
+    if (!props.dataModel || props.dataModel.length <= 0) {
       dataList.value = [];
-      props.dataModel.forEach((item, rankNum) => {
-        if (props.type === 1) {
-          dataList.value.push({
-            index: rankNum + 1,
-            org: item?.eventResponsibleUnitCodeName,
-            content: item?.content || "",
-            count: item?.unitEventNum || 0,
-            completed: item?.unitCompletedNum || 0,
-            rate:
-              (item?.completedRate
-                ? Number(`${item?.completedRate}e${2}`)
-                : 0) + "%",
-          });
-        } else {
-          dataList.value.push({
-            index: rankNum + 1,
-            org: item?.eventResponsibleUnitCodeName,
-            content: item?.content || "",
-            point: item?.point,
-          });
-        }
-      });
+      return;
+    }
+    dataList.value = [];
+    props.dataModel.forEach((item, rankNum) => {
+      if (props.type === 1) {
+        dataList.value.push({
+          index: rankNum + 1,
+          org: item?.eventResponsibleUnitCodeName,
+          content: item?.content || "",
+          count: item?.unitEventNum || 0,
+          completed: item?.unitCompletedNum || 0,
+          rate:
+            (item?.completedRate ? Number(`${item?.completedRate}e${2}`) : 0) +
+            "%",
+        });
+      } else {
+        dataList.value.push({
+          index: rankNum + 1,
+          org: item?.eventResponsibleUnitCodeName,
+          content: item?.content || "",
+          point: item?.point,
+        });
+      }
     });
   },
   {
@@ -150,7 +159,7 @@ watch(
   width: 488px;
   height: 215px;
   background-color: rgba(1, 2, 5, 0.1);
-  box-shadow: inset 0px 2px 1px 0px #002480;
+  box-shadow: inset 0 2px 1px 0 #002480;
   box-sizing: border-box;
   font-size: 16px;
   font-family: MicrosoftYaHei;
@@ -191,7 +200,7 @@ watch(
   .table-row > div:nth-child(1) {
     width: 56px;
     text-align: center;
-    padding-left: 0px;
+    padding-left: 0;
   }
   .table-header > div:nth-child(2),
   .table-row > div:nth-child(2) {

@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve --mode dev",
     "serve:prod": "vue-cli-service serve --mode prod",
     "build": "vue-cli-service build --mode prod",
+    "build:jd": "vue-cli-service build --mode prodJd",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "vue-pdf-embed": "^1.1.4",
     "vue-router": "^4.0.3",
     "vue-seamless-scroll": "^1.1.23",
+    "vue-virtual-scroller": "^2.0.0-alpha.1",
     "vue3-pdfjs": "^0.1.6",
     "vuex": "^4.0.0",
     "vuex-persistedstate": "^4.1.0"

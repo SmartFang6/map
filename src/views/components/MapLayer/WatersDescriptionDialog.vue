@@ -10,7 +10,6 @@
 <template>
   <el-dialog
     v-model="dialogVisible"
-    idth="20px"
     append-to-body
     destroy-on-close
     top="10vh"

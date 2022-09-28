@@ -16,6 +16,12 @@
           @tab-click="onHandleTownOrDeptClick"
         >
           <el-tab-pane
+            v-if="false"
+            class="tab-item"
+            label="量化"
+            name="quantify"
+          ></el-tab-pane>
+          <el-tab-pane
             class="tab-item"
             label="乡镇"
             name="zoneRank"
@@ -39,7 +45,10 @@
       </template>
       <!--#endregion-->
     </Title>
-    <div class="navi-bar">
+    <div
+      class="navi-bar"
+      v-if="tabActive === 'zoneRank' || tabActive === 'departmentRank'"
+    >
       <div
         v-for="typeItem in typeList"
         :key="typeItem.value"
@@ -51,7 +60,15 @@
     </div>
 
     <!--#region 列表区-->
-    <List :dataModel="rankingList" :type="typeActive" />
+    <List
+      v-if="tabActive === 'zoneRank' || tabActive === 'departmentRank'"
+      :dataModel="rankingList"
+      :type="typeActive"
+    />
+    <!--#endregion-->
+
+    <!--#region '量化'标签的列表内容区-->
+    <QuantifyList v-else />
     <!--#endregion-->
 
     <!--#region 图片轮播的弹窗区-->
@@ -87,6 +104,7 @@ import { useStore } from "vuex";
 import { ref, reactive, toRaw, inject, watch, onMounted } from "vue";
 import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
 import { pdfFiles } from "@/utils/pdfFiles";
+import QuantifyList from "./components/QuantifyList.vue";
 
 const store = useStore();
 // 乡镇/部门的选择标签
@@ -324,7 +342,6 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    align-items: center;
     padding-bottom: 7px;
     .first-info {
       display: flex;
@@ -358,7 +375,6 @@ onMounted(() => {
       height: 44px;
       background: url(@/assets/images/medal-bar-item.png);
       background-size: 100%;
-      box-sizing: border-box;
       padding-left: 32px;
       padding-right: 16px;
       display: flex;
