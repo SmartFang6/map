@@ -14,6 +14,11 @@
       :lgtd="item.lgtd"
       :lttd="item.lttd"
     /> -->
+    <div class="popup" id="popup">
+      <div class="title">
+        <div class="name">{{ popDetail.vmName || '--'}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -77,6 +82,7 @@ export default {
       curIndex: 0,
       popInfo: {},
       lineManageShow: false,
+      popDetail:{}, // overlay信息
       threeLines: [], // 三线
       threeLineLayers: [LayerEnum.RIVER_LAYER, LayerEnum.RESERVOIR_LAYER, LayerEnum.HILLPOND_LAYER, LayerEnum.LAKE_LAYER, LayerEnum.OTHERWATER_LAYER], // 需要加载三线的图层
     };
@@ -142,12 +148,16 @@ export default {
       this.initLayers(['pointLayer'])
       // 轮播图高亮图层
       this.layers.selectLayer.addLayer(this.map)
-      // this.overlay = new Overlay({
-      //   position: undefined,
-      //   positioning: 'bottom-center',
-      //   element: ,
-      //   stopEvent: false,
-      // })
+      // 添加overlay
+      this.overlay = new Overlay({
+        positioning: 'bottom-center',
+        element: document.getElementById('popup'),
+        stopEvent: false,
+        autoPan: false,
+        offset: [0, -10]
+      })
+      this.overlay.setPosition(undefined)
+      this.map.addOverlay(this.overlay)
     },
     // 切换图层
     changeLayer(layerName) {
@@ -349,13 +359,17 @@ export default {
           return undefined
         })
         if(hoverFeature){
-          // console.log('hover', hoverFeature);
+          let properties = hoverFeature.get('properties')
           switch(layerid) {
             case LayerEnum.VIDEO_LAYER:
+              this.popDetail = properties
+              this.overlay.setPosition([properties.vmLong, properties.vmLat])
               break
             default:
               break
           }
+        } else {
+          this.overlay.setPosition(undefined)
         }
       })
     },
@@ -502,5 +516,15 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+.popup {
+  background-color: rgba(32, 51, 68, 0.8);
+  color: #fff;
+  font-size: 16px;
+  border:1px solid #266da0;
+  padding: 5px;
+  border-radius: 2px;
+  box-shadow: 0px 17px 30px 0px 
+		rgba(28, 35, 39, 0.1);
 }
 </style>
