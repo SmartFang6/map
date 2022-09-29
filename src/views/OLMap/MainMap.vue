@@ -520,9 +520,9 @@ export default {
 .popup {
   background-color: rgba(32, 51, 68, 0.8);
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
   border:1px solid #266da0;
-  padding: 5px;
+  padding: 5px 8px 5px 8px;
   border-radius: 2px;
   box-shadow: 0px 17px 30px 0px 
 		rgba(28, 35, 39, 0.1);
