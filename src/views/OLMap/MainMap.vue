@@ -154,7 +154,7 @@ export default {
         element: document.getElementById('popup'),
         stopEvent: false,
         autoPan: false,
-        offset: [0, -10]
+        offset: [0, -15]
       })
       this.overlay.setPosition(undefined)
       this.map.addOverlay(this.overlay)
