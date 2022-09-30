@@ -26,7 +26,7 @@
             {{
               Number.isInteger(props.info?.rcarea)
                 ? props.info?.rcarea
-                : props.info?.rcarea?.toFixed(2)
+                : props.info?.rcarea?.toFixed(3)
             }}km²
           </span>
         </li>
@@ -49,18 +49,18 @@
             {{
               Number.isInteger(props.info?.tcr)
                 ? props.info?.tcr
-                : props.info?.tcr?.toFixed(3)
+                : props.info?.tcr?.toFixed(2)
             }}
             万m³
           </span>
         </li>
         <li>
           <span class="label">水域面积：</span>
-          <span class="value">{{ props.info?.area?.toFixed(1) }}m²</span>
+          <span class="value">{{ props.info?.area?.toFixed(3) }}km²</span>
         </li>
         <li>
           <span class="label">坝顶高程：</span>
-          <span class="value">{{ props.info?.ce?.toFixed(1) }}m</span>
+          <span class="value">{{ props.info?.ce?.toFixed(2) }}m</span>
         </li>
         <li>
           <span class="label">建成时间：</span>

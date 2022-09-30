@@ -32,7 +32,7 @@
         </li>
         <li>
           <span class="label">水域面积：</span>
-          <span class="value">{{ props.info?.area?.toFixed(1) }}m²</span>
+          <span class="value">{{ props.info?.area?.toFixed(3) }}km²</span>
         </li>
         <li>
           <span class="label">是否为重要水域：</span>
