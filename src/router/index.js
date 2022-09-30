@@ -8,6 +8,11 @@ const routes = [
     component: HomeView,
   },
   {
+    path: "/dynamicLayout",
+    name: "dynamicLayout",
+    component: () => import("@/views/DynamicLayout"),
+  },
+  {
     path: "/ssoLogin",
     name: "ssoLogin",
     component: () => import("@/views/ssoLogin.vue"),

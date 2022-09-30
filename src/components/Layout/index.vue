@@ -64,7 +64,7 @@ const switchSideR = () => {
 
 <style scoped lang="less">
 @topH: 75px;
-@sideW: 507px;
+@sideW: 500px;
 @bottomH: 256px;
 .cockpit {
   width: 100vw;
@@ -87,13 +87,18 @@ const switchSideR = () => {
   .side {
     // width: @sideW;
     // height: calc(100vh - @topH);
-    width: 590px;
+    width: @sideW;
     top: 0;
     padding-top: @topH;
     position: absolute;
     z-index: 100;
     bottom: 0;
     transition: transform 0.5s ease;
+
+    .side-content {
+      width: @sideW;
+      height: 100%;
+    }
 
     .btn {
       display: flex;
@@ -118,7 +123,7 @@ const switchSideR = () => {
     }
 
     .btnL {
-      right: 30px;
+      right: -40px;
       background: url(@/assets/images/silder_l.png) no-repeat;
       background-size: 100% 100%;
       .triangle {
@@ -127,7 +132,7 @@ const switchSideR = () => {
       }
     }
     .btnR {
-      left: 30px;
+      left: -40px;
       background: url(@/assets/images/silder_r.png) no-repeat;
       background-size: 100% 100%;
       .triangle {
@@ -135,10 +140,6 @@ const switchSideR = () => {
         transform: rotate(0deg);
       }
     }
-  }
-  .side-content {
-    width: @sideW;
-    height: 100%;
   }
   .left_side {
     left: 0;
