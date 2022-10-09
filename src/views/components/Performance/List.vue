@@ -61,7 +61,7 @@
         <!-- <div>行政区划</div> -->
         <div>分数</div>
       </div>
-      <div class="table-body">
+      <div class="table-body" v-if="dataList.length > 0">
         <SeamlessScroll :list="dataList">
           <div>
             <div

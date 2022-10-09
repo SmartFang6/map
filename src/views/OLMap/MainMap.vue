@@ -14,6 +14,11 @@
       :lgtd="item.lgtd"
       :lttd="item.lttd"
     /> -->
+    <div class="popup" id="popup">
+      <div class="title">
+        <div class="name">{{ popDetail.vmName || '--'}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,7 +26,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer } from "./config/layerConfig";
+import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer, videoLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -43,6 +48,7 @@ import { getFeatures } from './common/common';
 import GeoJSON from 'ol/format/GeoJSON';
 import { geoserverPath } from './config/geoserverConfig';
 import RiverLayer from './layers/impl/RiverLayer';
+import Overlay from 'ol/Overlay'
 
 export default {
   name: "FirstMap",
@@ -76,6 +82,7 @@ export default {
       curIndex: 0,
       popInfo: {},
       lineManageShow: false,
+      popDetail:{}, // overlay信息
       threeLines: [], // 三线
       threeLineLayers: [LayerEnum.RIVER_LAYER, LayerEnum.RESERVOIR_LAYER, LayerEnum.HILLPOND_LAYER, LayerEnum.LAKE_LAYER, LayerEnum.OTHERWATER_LAYER], // 需要加载三线的图层
     };
@@ -117,18 +124,16 @@ export default {
         selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
         basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
-        // lineManageLayer: new MainMapWMSLayer(riverManageLineLayer), // 河道管理范围线
-        // [LayerEnum.RIVER_LAYER]: new MainMapWMSLayer(riverLayer), // 河道
         [LayerEnum.RIVER_LAYER]: new RiverLayer(riverLayer),
         [LayerEnum.RESERVOIR_LAYER]: new MainMapWMSWithLinesLayer(reservoirLayer, reservoirManageLayer, reservoirWaterLayer), // 水库
         [LayerEnum.HILLPOND_LAYER]: new MainMapWMSWithLinesLayer(hillpondLayer, hillpondManageLayer, hillpondWaterLayer), // 山塘
         [LayerEnum.LAKE_LAYER]: new MainMapWMSWithLinesLayer(lakeLayer, lakeManageLayer, lakeWaterLayer), // 湖泊
         [LayerEnum.CANAL_LAYER]: new MainMapWMSLayer(canalLayer), // 人工水道
         [LayerEnum.OTHERWATER_LAYER]: new MainMapWMSWithLinesLayer(otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer), // 其他水域
-        [LayerEnum.FINISHED_PROJ]: new DCLayer(), // 完工
-        [LayerEnum.BUILDING_PROJ]: new DCLayer(), // 在建
-        [LayerEnum.VIDEO_LAYER]: new DCLayer(), // 视频点
-        [LayerEnum.SECTION_LAYER]: new DCLayer(), // 水质断面
+        // [LayerEnum.FINISHED_PROJ]: new DCLayer(), // 完工
+        // [LayerEnum.BUILDING_PROJ]: new DCLayer(), // 在建
+        [LayerEnum.VIDEO_LAYER]: new DCLayer(videoLayer), // 视频点
+        // [LayerEnum.SECTION_LAYER]: new DCLayer(), // 水质断面
       };
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
@@ -137,22 +142,22 @@ export default {
       });
       // 加载下级行政区划边界
       this.layers.boundary.load(this.map, this.adcd)
-      // 加载下级行政区划边界
-      // this.layers.orgAdcdWmsLayer.load(this.map,this.adcd)
       this.initClick();
-      // 加载河道管理范围线
-      // if (this.lineManageShow) {
-      //   this.layers.lineManageLayer.load(new LayerParams({
-      //     vm: this,
-      //     searchInfo: {}
-      //   }))
-      // }
+      this.initHover()
       // 初始化加载图层
       this.initLayers(['pointLayer'])
       // 轮播图高亮图层
       this.layers.selectLayer.addLayer(this.map)
-      // 监听地图缩放，加载管理范围线
-      // this.watchMapZoom()
+      // 添加overlay
+      this.overlay = new Overlay({
+        positioning: 'bottom-center',
+        element: document.getElementById('popup'),
+        stopEvent: false,
+        autoPan: false,
+        offset: [0, -15]
+      })
+      this.overlay.setPosition(undefined)
+      this.map.addOverlay(this.overlay)
     },
     // 切换图层
     changeLayer(layerName) {
@@ -165,25 +170,6 @@ export default {
         this.curLayer = layerName
       }
     },
-    // 监听地图缩放
-    // watchMapZoom() {
-    //   this.map.getView().on('change:resolution', evt => {
-    //     if(this.map.getView().getZoom() > 14) {
-    //       if (!this.lineManageShow) { // 如果此时地图上没展示范围线，则加载
-    //         this.layers.lineManageLayer.load(new LayerParams({
-    //           vm: this,
-    //           searchInfo: {}
-    //         }))
-    //         this.lineManageShow = true
-    //       }
-    //     } else {
-    //       if (this.lineManageShow) {
-    //         this.layers.lineManageLayer.removeLayer(this.map, this)
-    //         this.lineManageShow = false
-    //       }
-    //     }
-    //   })
-    // },
     // 移除轮播
     removeInterval() {
       if (this.interval) {
@@ -217,13 +203,6 @@ export default {
     // 修改筛选条件：仅对问题图层起作用
     changeFilter(params) {
       console.log('修改筛选条件', params);
-      // if (params) {
-      //   this.pointParams = {...params, ...{
-      //     adcd: this.adcd,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }}
-      // }
       const allParams = ['eventCompleteStatus', 'willExpireStatus', 'expireStatus', 'thisMonthNewStatus', 'eventGradeStatus', 'eventResponsibleUnitCode', 'eventSource', 'eventCategoryCode', 'eventSourceDepartCode']
       allParams.forEach(paramName => {
         if (params[paramName] === undefined) {
@@ -366,10 +345,38 @@ export default {
         this.baseLayers.splice(this.baseLayers.indexOf(layerid), 1);
       }
     },
+    initHover() {
+      this.map.on('pointermove', (evt) => {
+        let layerid = ''
+        const hoverLayers = [LayerEnum.VIDEO_LAYER]
+        const hoverFeature = this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+          if (layer) {
+            if (hoverLayers.indexOf(layer.get('id')) !== -1) {
+              layerid = layer.get('id')
+              return feature
+            }
+          }
+          return undefined
+        })
+        if(hoverFeature){
+          let properties = hoverFeature.get('properties')
+          switch(layerid) {
+            case LayerEnum.VIDEO_LAYER:
+              this.popDetail = properties
+              this.overlay.setPosition([properties.vmLong, properties.vmLat])
+              break
+            default:
+              break
+          }
+        } else {
+          this.overlay.setPosition(undefined)
+        }
+      })
+    },
     initClick() {
       this.map.on("click", (evt) => {
         let layerid = "";
-        const clickLayers = ["point"];
+        const clickLayers = ["point", LayerEnum.VIDEO_LAYER];
         const clickFeature = this.map.forEachFeatureAtPixel(
           evt.pixel,
           (feature, layer) => {
@@ -509,5 +516,15 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+.popup {
+  background-color: rgba(32, 51, 68, 0.8);
+  color: #fff;
+  font-size: 14px;
+  border:1px solid #266da0;
+  padding: 5px 8px 5px 8px;
+  border-radius: 2px;
+  box-shadow: 0px 17px 30px 0px 
+		rgba(28, 35, 39, 0.1);
 }
 </style>

@@ -6,84 +6,84 @@
       <ul>
         <li>
           <span class="label">项目名称：</span>
-          <span class="value">{{ props.info?.subjectName }}</span>
+          <span class="value">{{ props.info?.subjectName ?? "-" }}</span>
         </li>
         <li>
           <span class="label">所在乡镇：</span>
           <span class="value">
-            {{ props.info?.town }}
+            {{ props.info?.suitAreaName ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">审批文号：</span>
           <span class="value">
-            {{ props.info?.approveNumber }}
+            {{ props.info?.approveNumber ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">占用单位：</span>
           <span class="value">
-            {{ props.info?.bas }}
+            {{ props.info?.department ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">批复时间：</span>
           <span class="value">
-            {{ props.info?.approveTime }}
+            {{ props.info?.approveTime ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">完成时间：</span>
           <span class="value">
-            {{ props.info?.bas }}
+            {{ props.info?.completeTime ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">占用面积：</span>
           <span class="value">
-            {{ props.info?.waterPreArea?.toFixed(3) }}km²
+            {{ props.info?.waterPreArea?.toFixed(3) ?? "-" }}km²
           </span>
         </li>
         <li>
           <span class="label">拟补偿面积：</span>
           <span class="value">
-            {{ props.info?.waterPreCompensateArea?.toFixed(1) }}km²
+            {{ props.info?.waterPreCompensateArea?.toFixed(1) ?? "-" }}km²
           </span>
         </li>
         <li>
           <span class="label">已补偿面积：</span>
           <span class="value">
-            {{ props.info?.waterCompensateArea?.toFixed(2) }}km²
+            {{ props.info?.waterCompensateArea?.toFixed(2) ?? "-" }}km²
           </span>
         </li>
         <li>
           <span class="label">占用类型：</span>
           <span class="value">
-            {{ props.info?.base }}
+            {{ props.info?.subjectType ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">占用水域名称：</span>
           <span class="value">
-            {{ props.info?.base }}
+            {{ props.info?.occupyWatersName ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">水域类型：</span>
           <span class="value">
-            {{ props.info?.base }}
+            {{ props.info?.occupyWatersName ?? "-" }}
           </span>
         </li>
         <li>
           <span class="label">是否占用重要水域：</span>
           <span class="value">
-            {{ props.info?.base }}
+            {{ props.info?.watersOccupied ? "占用" : "未占用" }}
           </span>
         </li>
         <li>
           <span class="label">实施状态：</span>
           <span class="value">
-            {{ props.info?.base }}
+            {{ props.info?.subjectStatus === 0 ? "未完成" : "完成" }}
           </span>
         </li>
       </ul>

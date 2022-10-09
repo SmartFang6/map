@@ -57,7 +57,7 @@ const scroll_box = ref(null);
 const slotHeight = ref("0px");
 function initDom() {
   if (props.list.length <= 0) {
-    alert("请配置数据源！");
+    // alert("请配置数据源！");
     return;
   }
   // 获取组件高度

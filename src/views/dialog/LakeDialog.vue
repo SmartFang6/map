@@ -8,24 +8,24 @@
           <span class="value">{{ props.info?.city }}</span>
         </li>
         <li>
-          <span class="label">平均宽度：</span>
-          <span class="value">{{ props.info?.width?.toFixed(1) }}m</span>
+          <span class="label">所属流域：</span>
+          <span class="value">{{ props.info?.bas }}</span>
         </li>
         <li>
-          <span class="label">河流长度：</span>
-          <span class="value">{{ props.info?.length?.toFixed(2) }}km</span>
+          <span class="label">平均水深：</span>
+          <span class="value">{{ props.info?.averdep?.toFixed(2) }}m</span>
         </li>
         <li>
           <span class="label">水域面积：</span>
-          <span class="value">{{ props.info?.area?.toFixed(1) }}m²</span>
+          <span class="value">{{ props.info?.area?.toFixed(3) }}km²</span>
         </li>
         <li>
           <span class="label">最高允许蓄水位：</span>
-          <span class="value">{{ props.info?.masl }}</span>
+          <span class="value">{{ props.info?.masl.toFixed(2) }}m</span>
         </li>
         <li>
           <span class="label">水域容积：</span>
-          <span class="value">{{ props.info?.vol }}</span>
+          <span class="value">{{ props.info?.vol?.toFixed(2) }}万m³</span>
         </li>
         <li>
           <span class="label">主要功能：</span>

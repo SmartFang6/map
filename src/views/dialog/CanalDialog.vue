@@ -7,15 +7,19 @@
           <span class="label">所属地区：</span>
           <span class="value">{{ props.info?.city }}</span>
         </li>
-        <li>
+        <!-- <li>
           <span class="label">所属流域：</span>
           <span class="value">
             {{ props.info?.bas }}
           </span>
-        </li>
+        </li> -->
         <li>
           <span class="label">水域面积：</span>
-          <span class="value">{{ props.info?.area?.toFixed(3) }}m²</span>
+          <span class="value">{{ props.info?.area?.toFixed(3) }}km²</span>
+        </li>
+        <li>
+          <span class="label">水域容积：</span>
+          <span class="value">{{ props.info?.vol?.toFixed(2) }}万m³</span>
         </li>
         <li>
           <span class="label">宽度：</span>

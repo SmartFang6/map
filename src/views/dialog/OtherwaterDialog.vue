@@ -16,7 +16,7 @@
         </li>
         <li>
           <span class="label">水域面积：</span>
-          <span class="value">{{ props.info?.area?.toFixed(1) }}m²</span>
+          <span class="value">{{ props.info?.area?.toFixed(4) }}km²</span>
         </li>
         <li>
           <span class="label">水域容积：</span>
@@ -24,7 +24,7 @@
         </li>
         <li>
           <span class="label">平均水深：</span>
-          <span class="value">{{ props.info?.averdep?.toFixed(1) }}m</span>
+          <span class="value">{{ props.info?.averdep?.toFixed(2) }}m</span>
         </li>
       </ul>
     </div>

@@ -129,3 +129,18 @@ export const getPointList = (data) => {
     data,
   }); // http://10.33.158.26:8504/api
 };
+
+// 视频图层接口
+export const getVideoList = (data) => {
+  //   return [
+  //     {
+  //       stcd: "1",
+  //       lgtd: "120",
+  //       lttd: "30",
+  //       problemStatus: "1",
+  //     },
+  //   ];
+  return postHttp("/supervision/queryVideoList", {
+    data,
+  }); // http://10.33.158.26:8504/api
+};
