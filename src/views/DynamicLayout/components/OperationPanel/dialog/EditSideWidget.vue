@@ -51,14 +51,20 @@
                 <el-icon color="#dc401d" v-else><CircleClose /></el-icon>
               </template>
             </el-input>
+            <el-button type="primary" link @click="bindWidget(item, idx)">
+              选择组件
+            </el-button>
           </div>
         </div>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit">确定</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$emit('close')">取消</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog title="组件库" v-model="showWidgetList" width="85vw" top="10vh">
+      <WidgetList @submitSelect="submitSelectCall" />
+    </el-dialog>
   </div>
 </template>
 
@@ -68,6 +74,7 @@
  **/
 import { computed, reactive, ref } from "vue";
 import { CircleCheckFilled, CircleClose } from "@element-plus/icons-vue";
+import WidgetList from "./WidgetList";
 
 const props = defineProps({
   newBuildSideLocation: {
@@ -75,7 +82,10 @@ const props = defineProps({
     default: () => "",
   },
 });
-const emits = defineEmits(["submitAdd"]);
+const emits = defineEmits(["submitAdd", "close"]);
+
+// 布局新增
+// 布局新增
 const tabCountList = ref([
   {
     title: "一列",
@@ -145,6 +155,20 @@ const countChange = (val) => {
   console.log(formData);
 };
 
+// 列 绑定组件
+const showWidgetList = ref(false);
+const activeWidget = ref();
+const bindWidget = (tab, index) => {
+  showWidgetList.value = true;
+  activeWidget.value = index;
+  console.log(tab);
+};
+const submitSelectCall = (payload) => {
+  showWidgetList.value = false;
+  formData.widgets[activeWidget.value].widgetCode = payload;
+  console.log(payload);
+};
+
 const submit = () => {
   emits("submitAdd", {
     type: props?.newBuildSideLocation,
@@ -165,7 +189,7 @@ const submit = () => {
     .title-warp__item {
       display: flex;
       justify-content: flex-start;
-      align-items: flex-start;
+      align-items: center;
       margin-bottom: 10px;
     }
   }

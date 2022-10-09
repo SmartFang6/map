@@ -25,7 +25,11 @@
       />
     </div>
     <el-dialog title="新增组件" v-model="showDialog" width="85vw">
-      <EditSideWidget :location="newBuildSideLocation" />
+      <EditSideWidget
+        @submitAdd="submitAddCall"
+        :location="newBuildSideLocation"
+        @close="showDialog = false"
+      />
     </el-dialog>
   </div>
 </template>
@@ -47,6 +51,11 @@ const newBuildSideLocation = ref("");
 function addSide(location) {
   showDialog.value = true;
   newBuildSideLocation.value = location;
+}
+
+function submitAddCall(payload) {
+  showDialog.value = false;
+  console.log("widgetConfig", payload);
 }
 </script>
 
