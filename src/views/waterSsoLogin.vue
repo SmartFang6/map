@@ -8,6 +8,7 @@ import { ref, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useStore } from "vuex";
+import { ticketMap } from "./config.js";
 import axios from "axios";
 onBeforeMount(() => {
   getUserInformation();
@@ -18,9 +19,18 @@ const route = useRoute();
 const store = useStore();
 const getUserInformation = () => {
   loading.value = true;
+  const { adcd } = route.query;
+  // 根据 adcd 匹配行政区域ticket
+  const currentTicket = ticketMap.filter((item) => item.adcd === adcd);
+  store.commit("UPDATE_ADCD_TICKET", currentTicket?.[0]?.ticket || "");
+  let params = {
+    moduleId: "water_one_cockpit",
+    ...route.query,
+  };
+  console.log(params, "params");
   axios
     .get(`/userApi/user/waterSso`, {
-      params: { moduleId: "water_one_cockpit", ...route.query },
+      params,
     })
     .then((res) => {
       console.log("单点登录", res);
