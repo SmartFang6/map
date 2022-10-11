@@ -20,7 +20,7 @@ const getUserInformation = () => {
   loading.value = true;
   axios
     .get(`/userApi/user/waterSso`, {
-      params: route.query,
+      params: { moduleId: "water_one_cockpit", ...route.query },
     })
     .then((res) => {
       console.log("单点登录", res);
