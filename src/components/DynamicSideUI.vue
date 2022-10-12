@@ -1,15 +1,15 @@
 <!--****************************************
- *
+ * 动态加载模版
  *
  * founder: king
- * Date:  29 2022/9/29
+ * Date:  10 2022/10/10
  *****************************************-->
 <template>
   <div class="add_warp">
     <div class="header">
       <ul class="header-content">
         <li
-          v-for="tab in widgets"
+          v-for="tab in widgetConfig?.widgets"
           :class="{
             'active--span': activeTabName === tab?.widgetCode,
           }"
@@ -19,49 +19,48 @@
           {{ tab?.title }}
         </li>
       </ul>
-      <div class="more"></div>
+      <div class="more" @click="showDialog"></div>
     </div>
     <div class="content">
-      <template v-if="!!widgets?.length">
-        <img class="content--img" :src="activeTabView?.img" alt="" />
-      </template>
-      <div v-else class="add-icon" @click="$emit('newBuild')">
-        <el-icon>
-          <Plus />
-        </el-icon>
-      </div>
-    </div>
-    <div class="toolsBox" v-if="!!widgets?.length">
-      <el-icon color="#fff" :size="20" @click="$emit('editWidget')">
-        <Edit />
-      </el-icon>
-      <el-icon color="#fff" :size="20" @click="$emit('delWidget')">
-        <DeleteFilled />
-      </el-icon>
+      <component :is="activeTabView" ref="childRef" />
     </div>
   </div>
 </template>
 
 <script setup>
 /**
-
+ 动态加载模版
  **/
-import { Plus, Edit, DeleteFilled } from "@element-plus/icons-vue";
-import { computed, ref } from "vue";
-defineEmits(["newBuild", "delWidget", "editWidget"]);
+import { computed, ref, defineAsyncComponent, onMounted } from "vue";
 const props = defineProps({
-  widgets: {
-    type: Array,
-    default: () => [],
+  widgetConfig: {
+    type: Object,
+    required: true,
   },
 });
-const activeTabName = ref(props?.widgets?.[0]?.widgetCode || "");
+const childRef = ref(null);
+function showDialog() {
+  childRef?.value?.openDialog && childRef?.value?.openDialog();
+}
+defineEmits(["newBuild", "delWidget", "editWidget"]);
+const activeTabName = ref("");
 const activeTabView = computed(() => {
-  return props?.widgets.find((item) => item.widgetCode === activeTabName.value);
+  if (!activeTabName.value) return;
+  const nowWidget = props?.widgetConfig?.widgets.find(
+    (item) => item.widgetCode === activeTabName.value
+  );
+  console.log("nowWidget", nowWidget);
+  return defineAsyncComponent(() =>
+    import(`@/views/dynamicWidget/${nowWidget?.widgetCode}/index.vue`)
+  );
 });
 const clickMap = (code) => {
   activeTabName.value = code;
 };
+onMounted(() => {
+  console.log("nowWidget", props.widgetConfig);
+  activeTabName.value = props?.widgetConfig?.widgets?.[0]?.widgetCode || "";
+});
 </script>
 
 <style scoped lang="less">
@@ -92,15 +91,6 @@ const clickMap = (code) => {
     i {
       cursor: pointer;
     }
-  }
-
-  &:hover {
-    background: rgba(227, 227, 227, 0.1);
-    transform: translateY(-2px);
-    border-radius: 10px 0px 10px 10px;
-  }
-  &:hover .toolsBox {
-    width: 30px;
   }
   .header {
     width: 100%;

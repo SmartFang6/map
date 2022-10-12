@@ -7,8 +7,12 @@
 <template>
   <div class="warp">
     <div class="left-warp">
-      <template v-for="side in layoutView.left" :key="side?.id">
-        <AddSideUI />
+      <template v-for="(side, idx) in layoutView.left" :key="side?.id">
+        <AddSideUI
+          :widgets="side?.widgets"
+          @delWidget="delWidgetCall('left', idx)"
+          @editWidget="editWidgetCall('left', side?.widgets, idx)"
+        />
       </template>
       <AddSideUI
         v-if="layoutView.right?.length < 3"
@@ -16,18 +20,27 @@
       />
     </div>
     <div class="right-warp">
-      <template v-for="side in layoutView.right" :key="side?.id">
-        <AddSideUI />
+      <template v-for="(side, idx) in layoutView.right" :key="side?.id">
+        <AddSideUI
+          :widgets="side?.widgets"
+          @delWidget="delWidgetCall('right', idx)"
+          @editWidget="editWidgetCall('right', side?.widgets, idx)"
+        />
       </template>
       <AddSideUI
         v-if="layoutView.right?.length < 3"
         @newBuild="addSide({ location: 'right' })"
       />
     </div>
-    <el-dialog title="新增组件" v-model="showDialog" width="85vw">
+    <el-dialog
+      title="新增组件"
+      v-model="showDialog"
+      width="85vw"
+      destroy-on-close
+    >
       <EditSideWidget
         @submitAdd="submitAddCall"
-        :location="newBuildSideLocation"
+        :nowSide="nowSide"
         @close="showDialog = false"
       />
     </el-dialog>
@@ -38,24 +51,77 @@
 /**
  操作面板
  **/
+import { ElMessage, ElMessageBox } from "element-plus";
 import AddSideUI from "./components/AddSideUI";
 import EditSideWidget from "./dialog/EditSideWidget";
-import { ref } from "vue";
-const layoutView = ref({
+// import { ref, defineAsyncComponent } from "vue";
+import { reactive, ref, watch } from "vue";
+
+const emits = defineEmits(["updateConfig"]);
+const layoutView = reactive({
   left: [],
   right: [],
 });
-
+function clearConfig() {
+  layoutView.left = [];
+  layoutView.right = [];
+}
+defineExpose({
+  clearConfig,
+});
+watch(
+  () => layoutView,
+  (newVal, oldVal) => {
+    const payload = newVal || oldVal;
+    emits("updateConfig", payload);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 const showDialog = ref(false);
-const newBuildSideLocation = ref("");
-function addSide(location) {
+const nowSide = reactive({
+  type: "add",
+  location: "",
+  idx: null,
+  widgets: [],
+});
+function addSide({ location }) {
   showDialog.value = true;
-  newBuildSideLocation.value = location;
+  nowSide.location = location;
+  nowSide.widgets = [];
+  nowSide.type = "add";
+}
+
+function editWidgetCall(location, widgets, idx) {
+  nowSide.location = location;
+  nowSide.widgets = widgets;
+  nowSide.type = "edit";
+  nowSide.idx = idx;
+  showDialog.value = true;
+}
+
+function delWidgetCall(location, idx) {
+  ElMessageBox.confirm("是否删除？", "", {
+    confirmButtonText: "删除",
+  }).then(() => {
+    ElMessage.success("已删除！");
+    layoutView[location].splice(idx, 1);
+  });
 }
 
 function submitAddCall(payload) {
   showDialog.value = false;
-  console.log("widgetConfig", payload);
+  const { widgets } = payload;
+  nowSide.widgets = widgets;
+  if (nowSide.type === "add") {
+    layoutView[nowSide.location].push({
+      widgets: widgets,
+    });
+  } else if (nowSide.type === "edit") {
+    layoutView[nowSide.location][nowSide.idx].widgets = widgets;
+  }
 }
 </script>
 
@@ -63,8 +129,10 @@ function submitAddCall(payload) {
 @topH: 60px;
 @sideW: 26%;
 .warp {
-  width: 80vw;
-  height: calc(80vw * 1080 / 1920);
+  //width: 80vw;
+  //height: calc(80vw * 1080 / 1920);
+  width: 100%;
+  height: 100%;
   margin: auto;
   border-radius: 10px;
   box-shadow: 0 0 20px 20px rgba(0, 0, 0, 0.05);
@@ -72,7 +140,7 @@ function submitAddCall(payload) {
   top: 0;
   left: 0;
   background-image: url(~@/assets/images/config/config_bg.png);
-  background-size: 80vw calc(80vw * 1080 / 1920);
+  background-size: 100% 100%;
 
   .left-warp {
     width: @sideW;

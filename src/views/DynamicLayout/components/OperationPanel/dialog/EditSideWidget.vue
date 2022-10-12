@@ -52,7 +52,7 @@
               </template>
             </el-input>
             <el-button type="primary" link @click="bindWidget(item, idx)">
-              选择组件
+              {{ item.widgetCode ? "更换" : "添加" }}组件
             </el-button>
           </div>
         </div>
@@ -62,8 +62,14 @@
         <el-button @click="$emit('close')">取消</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog title="组件库" v-model="showWidgetList" width="85vw" top="10vh">
-      <WidgetList @submitSelect="submitSelectCall" />
+    <el-dialog
+      title="组件库"
+      v-model="showWidgetList"
+      width="85vw"
+      top="10vh"
+      destroy-on-close
+    >
+      <WidgetList :filterList="useWidget" @submitSelect="submitSelectCall" />
     </el-dialog>
   </div>
 </template>
@@ -72,14 +78,19 @@
 /**
  编辑 side 组件
  **/
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { CircleCheckFilled, CircleClose } from "@element-plus/icons-vue";
 import WidgetList from "./WidgetList";
 
 const props = defineProps({
-  newBuildSideLocation: {
-    type: String,
-    default: () => "",
+  nowSide: {
+    type: Object,
+    default: () => ({
+      type: "add",
+      location: "",
+      idx: null,
+      widgets: [],
+    }),
   },
 });
 const emits = defineEmits(["submitAdd", "close"]);
@@ -114,9 +125,14 @@ const formData = reactive({
   widgets: [
     {
       title: "",
+      img: "",
       widgetCode: "",
     },
   ],
+});
+
+const useWidget = computed(() => {
+  return formData?.widgets?.map((item) => item?.widgetCode);
 });
 const countChange = (val) => {
   console.log(val);
@@ -138,7 +154,6 @@ const countChange = (val) => {
       title: numStr[tabCountList.value.length + 1] + "列",
       value: tabCountList.value.length + 1,
     });
-    console.log(tabCountList);
     formData.tabCount = Number(tabCountList.value.length);
   }
   const widgetCount = formData.widgets?.length;
@@ -146,13 +161,13 @@ const countChange = (val) => {
     for (let i = 0; i < formData.tabCount - widgetCount; i++) {
       formData.widgets.push({
         title: "",
+        img: "",
         widgetCode: "",
       });
     }
   } else {
     formData.widgets = formData.widgets.slice(0, formData.tabCount);
   }
-  console.log(formData);
 };
 
 // 列 绑定组件
@@ -161,20 +176,27 @@ const activeWidget = ref();
 const bindWidget = (tab, index) => {
   showWidgetList.value = true;
   activeWidget.value = index;
-  console.log(tab);
 };
 const submitSelectCall = (payload) => {
   showWidgetList.value = false;
-  formData.widgets[activeWidget.value].widgetCode = payload;
-  console.log(payload);
+  formData.widgets[activeWidget.value].img = payload?.img;
+  formData.widgets[activeWidget.value].widgetCode = payload?.widgetCode;
 };
 
 const submit = () => {
-  emits("submitAdd", {
-    type: props?.newBuildSideLocation,
-    data: formData,
-  });
+  const payload = {
+    ...props?.nowSide,
+    widgets: formData.widgets,
+  };
+  emits("submitAdd", payload);
 };
+onMounted(() => {
+  const { type, widgets } = props?.nowSide || {};
+  if (type === "edit") {
+    formData.widgets = widgets;
+    formData.tabCount = widgets?.length;
+  }
+});
 </script>
 
 <style scoped lang="less">

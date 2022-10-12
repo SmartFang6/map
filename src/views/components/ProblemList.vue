@@ -158,7 +158,6 @@ import {
   computed,
   onBeforeMount,
   onBeforeUnmount,
-  inject,
 } from "vue";
 import { ElTooltip } from "element-plus";
 import "element-plus/es/components/select/style/css";
@@ -270,7 +269,7 @@ const getEventProblemList = () => {
 };
 
 // 获取注入的时间区间
-let dateRange = inject("dateRange");
+let dateRange = computed(() => store?.state?.dateRange);
 // 定时器的查询参数
 const searchType = ref(null);
 

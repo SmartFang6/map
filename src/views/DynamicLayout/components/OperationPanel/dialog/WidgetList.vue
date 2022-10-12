@@ -15,21 +15,21 @@
       <li
         class="widget--item_warp"
         v-for="widget in widgetList"
-        :key="widget?.ic"
+        :key="widget?.widgetCode"
         @click="selectFn(widget)"
       >
         <header>
           <span>{{ widget?.name }}</span>
-          <div class="checked--icon" v-if="selectedWidget === widget?.ic">
+          <div
+            class="checked--icon"
+            v-if="selectedWidget?.widgetCode === widget?.widgetCode"
+          >
             <el-icon color="#67C23A" :size="25">
               <CircleCheckFilled />
             </el-icon>
           </div>
         </header>
-        <img
-          src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
-          alt="alt"
-        />
+        <img :src="widget?.poster" alt="alt" />
       </li>
     </ul>
   </div>
@@ -40,21 +40,25 @@
  弹窗组件列表
  **/
 import { ref } from "vue";
+import widgetList from "@/views/dynamicWidget/config/widgetList";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 
 defineEmits(["submitSelect"]);
+const props = defineProps({
+  filterList: {
+    type: Array,
+    default: () => [],
+  },
+});
 // 组件库列表
-const widgetList = ref([]);
-for (let i = 1; i <= 20; i++) {
-  widgetList.value.push({
-    ic: `widget_${i}`,
-    name: `组件_${i}`,
-  });
-}
-const selectedWidget = ref("");
+const selectedWidget = ref(null);
 const selectFn = (widget) => {
-  selectedWidget.value = widget?.ic;
-  console.log(widget);
+  if (props?.filterList?.includes(widget?.widgetCode)) {
+    ElMessage.error("该组件在此模块已使用！");
+    return;
+  }
+  selectedWidget.value = widget;
 };
 </script>
 
