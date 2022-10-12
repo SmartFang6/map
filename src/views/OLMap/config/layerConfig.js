@@ -1072,7 +1072,7 @@ export const subjectLayer = {
         'case',
         ['==', ['get', 'subjectStatus'], 1], finish, // 完工
         ['==', ['get', 'subjectStatus'], 0], building, // 在建
-        finish
+        building
       ],
       scale: 0.8
     }
