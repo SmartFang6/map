@@ -1,6 +1,6 @@
 export function getDomainName() {
   // return location.origin;
-  return process.env.VUE_APP_ENV === "prod"
-    ? location.origin
-    : "https://web.dcyun.com:48467";
+  return process.env.VUE_APP_ENV === "dev"
+    ? "https://web.dcyun.com:48467"
+    : location.origin;
 }
