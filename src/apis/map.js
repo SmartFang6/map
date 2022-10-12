@@ -144,3 +144,18 @@ export const getVideoList = (data) => {
     data,
   }); // http://10.33.158.26:8504/api
 };
+
+// 涉河许可图层接口
+export const getSubjectList = (data) => {
+  //   return [
+  //     {
+  //       stcd: "1",
+  //       lgtd: "120",
+  //       lttd: "30",
+  //       problemStatus: "1",
+  //     },
+  //   ];
+  return postHttp("/supervision/supervise/subject", {
+    data,
+  }); // http://10.33.158.26:8504/api
+};

@@ -9,7 +9,7 @@
           @selectLayers="selectLayers"
           @showDesc="showPop({ layerid: 'point', detail: true })"
         />
-        <Map ref="mapRef" @showPop="showPop" />
+        <Map ref="mapRef" @showPop="showPop" @changeLegend="changeLegend" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
         <el-dialog

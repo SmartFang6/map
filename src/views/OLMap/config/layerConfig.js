@@ -15,8 +15,10 @@ import SldUtils from '../utils/SldUtils'
 import pointRed from '@/assets/map/pointRed.png'
 import pointGreen from '@/assets/map/pointGreen.png'
 import pointYellow from '@/assets/map/pointYellow.png'
+import finish from '@/assets/map/finish.png'
+import building from '@/assets/map/building.png'
 import videoPic from '@/assets/map/video.png'
-import { getPointList, getVideoList } from '@/apis/map'
+import { getPointList, getSubjectList, getVideoList } from '@/apis/map'
 import * as LayerEnum from '@/utils/LayerEnum'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
 
@@ -1049,6 +1051,33 @@ export const otherwaterWaterLayer = {
     crossOrigin: 'anonymous'
   },
   zIndex: 18
+}
+
+// 涉河许可图层
+export const subjectLayer = {
+  field: {
+    lgtd: 'lgtd',
+    lttd: 'lttd',
+    id: 'id',
+  },
+  id: LayerEnum.WADING_PERMIT,
+  type: LayerTypeEnum.vector,
+  source: { type: SourceTypeEnum.vector },
+  zIndex: 21,
+  levelField: 'subjectStatus',
+  style: {
+    type: StyleTypeEnum.icon,
+    icon: {
+      src: [
+        'case',
+        ['==', ['get', 'subjectStatus'], 1], finish, // 完工
+        ['==', ['get', 'subjectStatus'], 0], building, // 在建
+        finish
+      ],
+      scale: 0.8
+    }
+  },
+  loadFunc: getSubjectList
 }
 
 // 视频图层

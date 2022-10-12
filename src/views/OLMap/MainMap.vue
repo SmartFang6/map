@@ -16,7 +16,8 @@
     /> -->
     <div class="popup" id="popup">
       <div class="title">
-        <div class="name">{{ popDetail.vmName || '--'}}</div>
+        <div v-if="popDetail.layerid === 'videoLayer'" class="name">{{ popDetail.vmName || '--'}}</div>
+        <div v-if="popDetail.layerid === 'wadingPermit'" class="name">{{ popDetail.subjectName || '--'}}</div>
       </div>
     </div>
   </div>
@@ -26,7 +27,7 @@
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
-import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer, videoLayer } from "./config/layerConfig";
+import { basicTotalLayer, canalLayer, hillpondLayer, hillpondManageLayer, hillpondWaterLayer, lakeLayer, lakeManageLayer, lakeWaterLayer, orgHighLightLayer, otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer, pointLayer, reservoirLayer, reservoirManageLayer, reservoirWaterLayer, riverLayer, riverManageLineLayer, riverPointLayer, statisticsLayer, subjectLayer, videoLayer } from "./config/layerConfig";
 // import AMap from 'AMap'
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -44,6 +45,7 @@ import store from "@/store";
 import * as LayerEnum from '@/utils/LayerEnum';
 import MainMapWMSLayer from './layers/impl/MainMapWMSLayer'
 import MainMapWMSWithLinesLayer from './layers/impl/MainMapWMSWithLinesLayer' // 包括水域及其范围线、临水线
+import SubjectLayer from './layers/impl/SubjectLayer'
 import { getFeatures } from './common/common';
 import GeoJSON from 'ol/format/GeoJSON';
 import { geoserverPath } from './config/geoserverConfig';
@@ -130,10 +132,8 @@ export default {
         [LayerEnum.LAKE_LAYER]: new MainMapWMSWithLinesLayer(lakeLayer, lakeManageLayer, lakeWaterLayer), // 湖泊
         [LayerEnum.CANAL_LAYER]: new MainMapWMSLayer(canalLayer), // 人工水道
         [LayerEnum.OTHERWATER_LAYER]: new MainMapWMSWithLinesLayer(otherwaterLayer, otherwaterManageLayer, otherwaterWaterLayer), // 其他水域
-        // [LayerEnum.FINISHED_PROJ]: new DCLayer(), // 完工
-        // [LayerEnum.BUILDING_PROJ]: new DCLayer(), // 在建
+        [LayerEnum.WADING_PERMIT]: new SubjectLayer(subjectLayer), // 涉河许可
         [LayerEnum.VIDEO_LAYER]: new DCLayer(videoLayer), // 视频点
-        // [LayerEnum.SECTION_LAYER]: new DCLayer(), // 水质断面
       };
       // 加载立体感效果的图层
       this.layers.mainShadeLayer.load({
@@ -348,7 +348,7 @@ export default {
     initHover() {
       this.map.on('pointermove', (evt) => {
         let layerid = ''
-        const hoverLayers = [LayerEnum.VIDEO_LAYER]
+        const hoverLayers = [LayerEnum.VIDEO_LAYER, LayerEnum.WADING_PERMIT]
         const hoverFeature = this.map.forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
           if (layer) {
             if (hoverLayers.indexOf(layer.get('id')) !== -1) {
@@ -363,7 +363,13 @@ export default {
           switch(layerid) {
             case LayerEnum.VIDEO_LAYER:
               this.popDetail = properties
+              this.popDetail.layerid = LayerEnum.VIDEO_LAYER
               this.overlay.setPosition([properties.vmLong, properties.vmLat])
+              break
+            case LayerEnum.WADING_PERMIT:
+              this.popDetail = properties
+              this.popDetail.layerid = LayerEnum.WADING_PERMIT
+              this.overlay.setPosition([properties.lgtd, properties.lttd])
               break
             default:
               break
