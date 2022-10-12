@@ -382,7 +382,7 @@ export default {
     initClick() {
       this.map.on("click", (evt) => {
         let layerid = "";
-        const clickLayers = ["point", LayerEnum.VIDEO_LAYER];
+        const clickLayers = ["point", LayerEnum.VIDEO_LAYER, LayerEnum.WADING_PERMIT];
         const clickFeature = this.map.forEachFeatureAtPixel(
           evt.pixel,
           (feature, layer) => {
