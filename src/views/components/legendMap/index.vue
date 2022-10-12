@@ -1,24 +1,35 @@
 <template>
   <div class="legend" :class="legendsStyle" v-if="legendList.length">
-    <div class="box">
-      <el-checkbox-group
-        v-show="isShow"
-        v-model="checkedCities"
-        @change="checkboxChange"
-      >
-        <el-checkbox
+    <div class="showBox" v-show="isShow">
+      <div class="box" v-if="props.isShowChecked">
+        <el-checkbox-group v-model="checkedCities" @change="checkboxChange">
+          <el-checkbox
+            v-for="item in legendList"
+            :key="item.type"
+            :label="item.type"
+          >
+            <div class="content">
+              <img v-if="item.icon" :src="item.icon" alt="" />
+              <div v-if="item.style" class="icon-div" :style="item.style" />
+              {{ item.name }}
+              {{ item.count !== undefined ? "(" + item.count + ")" : "" }}
+            </div>
+          </el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <div class="content noChecked" v-else>
+        <div
+          class="list"
           v-for="item in legendList"
           :key="item.type"
           :label="item.type"
         >
-          <div class="content">
-            <img v-if="item.icon" :src="item.icon" alt="" />
-            <div v-if="item.style" class="icon-div" :style="item.style" />
-            {{ item.name }}
-            {{ item.count !== undefined ? "(" + item.count + ")" : "" }}
-          </div>
-        </el-checkbox>
-      </el-checkbox-group>
+          <img v-if="item.icon" :src="item.icon" alt="" />
+          <div v-if="item.style" class="icon-div" :style="item.style" />
+          {{ item.name }}
+          {{ item.count !== undefined ? "(" + item.count + ")" : "" }}
+        </div>
+      </div>
     </div>
 
     <div class="btn" @click="toggle">
@@ -37,6 +48,10 @@ const props = defineProps({
     default: () => [],
   },
   isShowDefault: {
+    type: Boolean,
+    default: true,
+  },
+  isShowChecked: {
     type: Boolean,
     default: true,
   },
@@ -122,6 +137,18 @@ const legendsStyle = computed(() =>
     span {
       margin-left: 4px;
     }
+  }
+}
+.noChecked {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  .list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    line-height: 32px;
   }
 }
 .default {

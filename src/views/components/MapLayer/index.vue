@@ -42,14 +42,15 @@
           <img src="@/assets/images/chart-arrow-up.png" />
         </div>
       </div>
-      <div
+      <!-- 暂时注释掉 等水域年报上线后展示 -->
+      <!-- <div
         class="btn"
         @click1="watersDescriptionDialogVisible = true"
         @click="emits('showDesc')"
       >
         <img src="@/assets/images/chart-description.png" />
         <span>水域概况</span>
-      </div>
+      </div> -->
     </div>
 
     <WatersDescriptionDialog v-model:visible="watersDescriptionDialogVisible" />
