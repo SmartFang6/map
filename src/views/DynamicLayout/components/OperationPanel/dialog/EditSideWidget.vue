@@ -125,7 +125,7 @@ const formData = reactive({
   widgets: [
     {
       title: "",
-      img: "",
+      poster: "",
       widgetCode: "",
     },
   ],
@@ -161,7 +161,7 @@ const countChange = (val) => {
     for (let i = 0; i < formData.tabCount - widgetCount; i++) {
       formData.widgets.push({
         title: "",
-        img: "",
+        poster: "",
         widgetCode: "",
       });
     }
@@ -179,7 +179,7 @@ const bindWidget = (tab, index) => {
 };
 const submitSelectCall = (payload) => {
   showWidgetList.value = false;
-  formData.widgets[activeWidget.value].img = payload?.img;
+  formData.widgets[activeWidget.value].poster = payload?.poster;
   formData.widgets[activeWidget.value].widgetCode = payload?.widgetCode;
 };
 

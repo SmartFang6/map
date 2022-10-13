@@ -62,6 +62,7 @@ import { ref, computed } from "vue";
 import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
+import { loadScriptString } from "@/utils";
 
 const store = useStore();
 
@@ -98,6 +99,7 @@ const onSelectLayers = (item, index) => {
     selectLayers.value.splice(existIndex, 1);
   } else {
     selectLayers.value.push(item.value);
+    loadScriptString();
   }
   emits("selectLayers", {
     layerInfos: selectLayers.value.length > 0 ? item : [],

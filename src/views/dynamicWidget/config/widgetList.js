@@ -15,7 +15,7 @@ export default [
   {
     widgetCode: "ProblemSource",
     name: "事件来源",
-    img: require("@/views/dynamicWidget/config/previewImg/problemSource.png"),
+    poster: require("@/views/dynamicWidget/config/previewImg/problemSource.png"),
     getDataUri: "",
     domainName: "", // TODO: 域名(暂时没使用)
     port: "", // TODO: 端口(暂时没使用)

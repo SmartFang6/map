@@ -23,7 +23,7 @@
     </div>
     <div class="content">
       <template v-if="!!widgets?.length">
-        <img class="content--img" :src="activeTabView?.img" alt="" />
+        <img class="content--img" :src="activeTabView?.poster" alt="" />
       </template>
       <div v-else class="add-icon" @click="$emit('newBuild')">
         <el-icon>

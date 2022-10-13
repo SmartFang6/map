@@ -78,7 +78,8 @@ function clearCall() {
   operationPanel?.value?.clearConfig && operationPanel?.value?.clearConfig();
 }
 function publishLayout() {
-  store.commit("UPDATE_LAYOUT_CONFIG", JSON.stringify(nowConfig.value));
+  // store.commit("UPDATE_LAYOUT_CONFIG", JSON.stringify(nowConfig.value));
+  store.commit("UPDATE_LAYOUT_CONFIG", nowConfig.value);
   router?.replace("/");
 }
 </script>

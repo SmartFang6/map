@@ -80,7 +80,8 @@ const nowConfig = computed(() => {
   const configJSONStr = store?.state?.layoutConfig;
   let config = null;
   try {
-    config = configJSONStr ? JSON.parse(configJSONStr) : defaultConfig;
+    // config = configJSONStr ? JSON.parse(configJSONStr) : defaultConfig;
+    config = configJSONStr ? configJSONStr : defaultConfig;
   } catch (e) {
     config = defaultConfig;
   }
