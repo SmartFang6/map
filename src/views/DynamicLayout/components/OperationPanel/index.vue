@@ -34,7 +34,7 @@
       />
     </div>
     <div class="map">
-      <CenterToolsBar />
+      <CenterToolsBar style="margin-top: 8px" />
       <!-- 图层切换 -->
       <MapLayer />
       <Map ref="mapRef" />
@@ -134,7 +134,7 @@ function submitAddCall(payload) {
 </script>
 
 <style scoped lang="less">
-@topH: 60px;
+@topH: 0;
 @sideW: 26%;
 .warp {
   //width: 80vw;
