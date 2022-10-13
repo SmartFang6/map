@@ -209,7 +209,7 @@ onMounted(() => {
 .performance {
   display: flex;
   flex-direction: column;
-  height: 305px;
+  height: 100%;
   :deep(.el-tabs) {
     height: auto;
     margin-left: 10px;

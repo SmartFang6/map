@@ -121,7 +121,7 @@ getLeftData(store?.state?.dateRange);
   // :deep(.el-empty__image) {
   //   opacity: 0.5;
   // }
-  height: 313px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   :deep(.tools) {
