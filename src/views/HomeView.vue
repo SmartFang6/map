@@ -15,7 +15,7 @@
         <el-dialog
           v-model="dialogShow"
           append-to-body
-          width="820px"
+          width="960px"
           destroy-on-close
           custom-class="map_dialog"
         >
@@ -83,7 +83,7 @@ import router from "@/router";
 import PoliciesSystems from "./components/PoliciesSystems.vue";
 
 import useActiveFilter from "./useActiveFilter.js";
-import WaterAllDialog from "./dialog/WaterAllDialog.vue";
+import WaterAllDialog from "./dialog/WaterAllDialog";
 
 const eventBus = inject("EventBus");
 // 若未通过单点登录进入，重定向去401页面

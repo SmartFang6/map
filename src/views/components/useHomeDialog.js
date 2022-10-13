@@ -21,14 +21,30 @@ import ProjectDialog from "@/views/dialog/ProjectDialog.vue";
 
 // 弹窗组件
 const dialogEmnu = {
-  [LayerEnum.RIVER_LAYER]: { com: RiverDialog, width: "468px" }, // 河道弹窗
-  [LayerEnum.LAKE_LAYER]: { com: LakeDialog, width: "468px" }, // 湖泊弹窗
-  [LayerEnum.RESERVOIR_LAYER]: { com: reservoirDialog, width: "860px" }, // 水库弹窗
-  [LayerEnum.HILLPOND_LAYER]: { com: PoolDialog, width: "860px" }, // 山塘
-  [LayerEnum.OTHERWATER_LAYER]: { com: OtherwaterDialog, width: "468px" }, // 人工水道
-  [LayerEnum.CANAL_LAYER]: { com: CanalDialog, width: "468px" }, // 其他水域
-  [LayerEnum.VIDEO_LAYER]: { com: VideoDialog, width: "468px" }, // 视频弹窗
-  [LayerEnum.WADING_PERMIT]: { com: ProjectDialog, width: "860px" }, // 涉河许可
+  [LayerEnum.RIVER_LAYER]: { com: RiverDialog, width: "468px", tabShow: true }, // 河道弹窗
+  [LayerEnum.LAKE_LAYER]: { com: LakeDialog, width: "468px", tabShow: true }, // 湖泊弹窗
+  [LayerEnum.RESERVOIR_LAYER]: {
+    com: reservoirDialog,
+    width: "860px",
+    tabShow: true,
+  }, // 水库弹窗
+  [LayerEnum.HILLPOND_LAYER]: {
+    com: PoolDialog,
+    width: "860px",
+    tabShow: true,
+  }, // 山塘
+  [LayerEnum.OTHERWATER_LAYER]: {
+    com: OtherwaterDialog,
+    width: "468px",
+    tabShow: true,
+  }, // 人工水道
+  [LayerEnum.CANAL_LAYER]: { com: CanalDialog, width: "468px", tabShow: true }, // 其他水域
+  [LayerEnum.VIDEO_LAYER]: { com: VideoDialog, width: "468px", tabShow: false }, // 视频弹窗
+  [LayerEnum.WADING_PERMIT]: {
+    com: ProjectDialog,
+    width: "860px",
+    tabShow: false,
+  }, // 涉河许可
 };
 export default function () {
   // 当前展示的弹窗
@@ -36,6 +52,9 @@ export default function () {
   // 弹窗的宽度
   const DialogWidth = computed(() => {
     return dialogEmnu[currentDialog.value]?.width || "468px";
+  });
+  const isShowTab = computed(() => {
+    return dialogEmnu[currentDialog.value]?.tabShow;
   });
   // 当前展示的弹窗组件
   const curDialogCom = computed(() => {
@@ -45,5 +64,6 @@ export default function () {
     currentDialog,
     DialogWidth,
     curDialogCom,
+    isShowTab,
   };
 }
