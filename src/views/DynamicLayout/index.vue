@@ -142,7 +142,7 @@ function publishLayout() {
 }
 .dynamicConfig--warp__main {
   padding: 0 !important;
-  margin-top: -50px;
+  overflow: hidden;
 }
 </style>
 <style lang="less">

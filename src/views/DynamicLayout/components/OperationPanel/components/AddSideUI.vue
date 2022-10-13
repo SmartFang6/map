@@ -5,7 +5,13 @@
  * Date:  29 2022/9/29
  *****************************************-->
 <template>
-  <div class="add_warp">
+  <div
+    class="add_warp"
+    :class="{
+      'addWarp--left': layout === 'left' && !!widgets?.length,
+      'addWarp--right': layout === 'right' && !!widgets?.length,
+    }"
+  >
     <div class="header">
       <ul class="header-content">
         <li
@@ -31,7 +37,14 @@
         </el-icon>
       </div>
     </div>
-    <div class="toolsBox" v-if="!!widgets?.length">
+    <div
+      class="toolsBox"
+      :class="{
+        'toolsBox--left': layout === 'left',
+        'toolsBox--right': layout === 'right',
+      }"
+      v-if="!!widgets?.length"
+    >
       <el-icon color="#fff" :size="20" @click="$emit('editWidget')">
         <Edit />
       </el-icon>
@@ -53,6 +66,10 @@ const props = defineProps({
   widgets: {
     type: Array,
     default: () => [],
+  },
+  layout: {
+    type: String,
+    default: () => "left",
   },
 });
 const activeTabName = ref(props?.widgets?.[0]?.widgetCode || "");
@@ -77,12 +94,9 @@ const clickMap = (code) => {
   .toolsBox {
     position: absolute;
     top: 0;
-    right: -30px;
     width: 0px;
     height: 100px;
     background: rgba(227, 227, 227, 0.1);
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
     overflow: hidden;
     display: flex;
     justify-content: space-around;
@@ -94,10 +108,20 @@ const clickMap = (code) => {
     }
   }
 
+  .toolsBox--left {
+    right: -30px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .toolsBox--right {
+    left: -30px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
   &:hover {
     background: rgba(227, 227, 227, 0.1);
     transform: translateY(-2px);
-    border-radius: 10px 0px 10px 10px;
+    border-radius: 10px;
   }
   &:hover .toolsBox {
     width: 30px;
@@ -184,6 +208,20 @@ const clickMap = (code) => {
       justify-content: center;
       align-items: center;
     }
+  }
+}
+.addWarp--left {
+  &:hover {
+    background: rgba(227, 227, 227, 0.1);
+    transform: translateY(-2px);
+    border-radius: 10px 0 10px 10px;
+  }
+}
+.addWarp--right {
+  &:hover {
+    background: rgba(227, 227, 227, 0.1);
+    transform: translateY(-2px);
+    border-radius: 0 10px 10px 10px;
   }
 }
 </style>

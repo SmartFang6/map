@@ -23,6 +23,7 @@
       <template v-for="(side, idx) in layoutView.right" :key="side?.id">
         <AddSideUI
           :widgets="side?.widgets"
+          layout="right"
           @delWidget="delWidgetCall('right', idx)"
           @editWidget="editWidgetCall('right', side?.widgets, idx)"
         />
