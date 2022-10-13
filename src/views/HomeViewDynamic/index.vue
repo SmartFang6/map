@@ -39,7 +39,11 @@
     <template #right>
       <div class="right-box">
         <!-- 图例 -->
-        <LegendMap :legendList="legendList" @change="handleCheckLegendChange" />
+        <LegendMap
+          :legendList="legendList"
+          :isShowChecked="isShowMapChecked"
+          @change="handleCheckLegendChange"
+        />
         <template v-for="side in nowConfig?.right" :key="side?.widgetCode">
           <DynamicSideUI :widgetConfig="side" />
         </template>
@@ -161,7 +165,9 @@ const handleCheckLegendChange = (legend) => {
   mapRef.value?.changeLegend(layerName, legend ?? []);
 };
 // 图层切换 当前图层，已选择图层name列表
+const isShowMapChecked = ref(false);
 const selectLayers = ({ layerInfos, selectLayers }) => {
+  isShowMapChecked.value = layerInfos?.isShowChecked ?? true;
   legendList.value = layerInfos?.legend ?? [];
   //切换图例的时候 如果当前的图例类型相同的话，就还用之前的图例去渲染地图线，否则用新的图例渲染
   let nowLegend = legendList.value?.filter((i) => i.type);
