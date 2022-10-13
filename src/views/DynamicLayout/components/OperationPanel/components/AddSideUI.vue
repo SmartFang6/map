@@ -35,7 +35,7 @@
       <el-icon color="#fff" :size="20" @click="$emit('editWidget')">
         <Edit />
       </el-icon>
-      <el-icon color="#fff" :size="20" @click="$emit('delWidget')">
+      <el-icon color="#F56C6C" :size="20" @click="$emit('delWidget')">
         <DeleteFilled />
       </el-icon>
     </div>

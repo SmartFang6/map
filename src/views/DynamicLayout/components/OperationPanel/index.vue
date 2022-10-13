@@ -32,12 +32,16 @@
         @newBuild="addSide({ location: 'right' })"
       />
     </div>
-    <el-dialog
-      title="新增组件"
-      v-model="showDialog"
-      width="85vw"
-      destroy-on-close
-    >
+    <div class="map">
+      <CenterToolsBar />
+      <!-- 图层切换 -->
+      <MapLayer />
+      <Map ref="mapRef" />
+    </div>
+    <el-dialog v-model="showDialog" width="85vw" destroy-on-close>
+      <template #title>
+        <header class="addWidgets--header">新增组件</header>
+      </template>
       <EditSideWidget
         @submitAdd="submitAddCall"
         :nowSide="nowSide"
@@ -51,6 +55,9 @@
 /**
  操作面板
  **/
+import Map from "@/views/OLMap/MainMap";
+import MapLayer from "@/views/components/MapLayer/index.vue";
+import CenterToolsBar from "@/views/components/CenterToolsBar.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import AddSideUI from "./components/AddSideUI";
 import EditSideWidget from "./dialog/EditSideWidget";
@@ -139,7 +146,6 @@ function submitAddCall(payload) {
   position: relative;
   top: 0;
   left: 0;
-  background-image: url(~@/assets/images/config/config_bg.png);
   background-size: 100% 100%;
 
   .left-warp {
@@ -148,6 +154,7 @@ function submitAddCall(payload) {
     position: absolute;
     top: @topH;
     left: 10px;
+    z-index: 1;
   }
   .right-warp {
     width: @sideW;
@@ -155,6 +162,17 @@ function submitAddCall(payload) {
     position: absolute;
     top: @topH;
     right: 10px;
+    z-index: 1;
   }
+  .map {
+    border-top: 1px solid transparent;
+    width: 100%;
+    height: 100%;
+  }
+}
+.addWidgets--header {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 700;
 }
 </style>

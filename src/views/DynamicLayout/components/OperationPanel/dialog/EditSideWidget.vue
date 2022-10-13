@@ -63,12 +63,14 @@
       </el-form-item>
     </el-form>
     <el-dialog
-      title="组件库"
       v-model="showWidgetList"
       width="85vw"
       top="10vh"
       destroy-on-close
     >
+      <template #title>
+        <header class="widgets--header">组件库</header>
+      </template>
       <WidgetList :filterList="useWidget" @submitSelect="submitSelectCall" />
     </el-dialog>
   </div>
@@ -215,5 +217,10 @@ onMounted(() => {
       margin-bottom: 10px;
     }
   }
+}
+.widgets--header {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 700;
 }
 </style>

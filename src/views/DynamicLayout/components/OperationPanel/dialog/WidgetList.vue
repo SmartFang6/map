@@ -20,14 +20,11 @@
       >
         <header>
           <span>{{ widget?.name }}</span>
-          <div
-            class="checked--icon"
-            v-if="selectedWidget?.widgetCode === widget?.widgetCode"
-          >
+          <template v-if="selectedWidget?.widgetCode === widget?.widgetCode">
             <el-icon color="#67C23A" :size="25">
               <CircleCheckFilled />
             </el-icon>
-          </div>
+          </template>
         </header>
         <img :src="widget?.poster" alt="alt" />
       </li>
@@ -103,14 +100,14 @@ const selectFn = (widget) => {
       text-align: left;
       font-weight: 700;
       line-height: 40px;
-      position: relative;
-      top: 0;
-      left: 0;
-      .checked--icon {
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to right, #3b76ef 0, transparent 100%);
+      color: #fff;
+      padding: 0 20px;
+      font-size: 16px;
+      border-radius: 4px;
     }
     img {
       width: 100%;

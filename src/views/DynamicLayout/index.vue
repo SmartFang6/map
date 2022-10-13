@@ -7,14 +7,9 @@
 <template>
   <el-container class="dynamicConfig--warp">
     <el-header class="dynamicConfig--warp__header">
-      <h1>大屏配置页面</h1>
-      <el-select v-model="activeConfig">
-        <el-option value="default">默认布局</el-option>
-        <el-option value="layout_1">布局1</el-option>
-        <el-option value="layout_2">布局2</el-option>
-      </el-select>
+      <div class="header--title">水域监管驾驶舱大屏配置</div>
       <div class="tools--box">
-        <el-button type="primary" link :icon="Failed" @click="clearCall">
+        <el-button type="danger" link :icon="Failed" @click="clearCall">
           清空
         </el-button>
         <el-button type="primary" link :icon="View" @click="previewShow = true">
@@ -34,7 +29,7 @@
       <!--          dd-->
       <!--        </div>-->
       <!--      </el-aside>-->
-      <el-main>
+      <el-main class="dynamicConfig--warp__main">
         <OperationPanel ref="operationPanel" @updateConfig="updateConfigCall" />
         <el-dialog
           v-model="previewShow"
@@ -64,7 +59,6 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const store = useStore();
-const activeConfig = ref("");
 const nowConfig = ref(null);
 function updateConfigCall(payload) {
   nowConfig.value = {
@@ -85,24 +79,35 @@ function publishLayout() {
 </script>
 
 <style scoped lang="less">
+@headerH: 60px;
 .dynamicConfig--warp {
   width: 100vw;
   height: 100vh;
-  background: #0b216c;
+  background: url(@/assets/images/layout-bg-1.png) no-repeat;
+  background-size: 100%;
 }
 .dynamicConfig--warp__header {
-  height: 60px;
+  box-sizing: border-box;
+  height: @headerH;
   text-align: left;
   color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 20px;
+  background: url(~@/assets/images/config/header.png) no-repeat;
+  background-size: 100% 90px;
+
+  .header--title {
+    font-family: YOUSHEBIAOTIHEI;
+    font-size: 24px;
+  }
   .tools--box {
     margin-left: auto;
   }
 }
 .aside-list {
-  height: calc(100vh - 60px);
+  height: calc(100vh - @headerH);
   overflow-x: hidden;
   overflow-y: scroll;
   background: #7fc2e2;
@@ -134,6 +139,10 @@ function publishLayout() {
     border-radius: 8px;
     background: #2d7d96;
   }
+}
+.dynamicConfig--warp__main {
+  padding: 0 !important;
+  margin-top: -50px;
 }
 </style>
 <style lang="less">
