@@ -427,14 +427,15 @@ export default {
             }
           })
           // 空间查询
-          this.getFeatureByLocation(searchServers, evt.coordinate)
+          if(searchServers.length > 0) {
+            this.getFeatureByLocation(searchServers, evt.coordinate)
+          }
         }
       });
     },
     async getFeatureByLocation(types, coord) {
       // 通过点击的点查询空间数据
       const res = await getFeatures(this.getUrl(types, coord[0], coord[1]))
-      console.log('location', types, coord, res);
       const features = new GeoJSON().readFeatures(res.data)
       if (features.length > 0) {
         // 这里只有河道需要走wms服务，所以不写什么判断了，后面有自己再加判断好了
@@ -494,7 +495,7 @@ export default {
         '</DWithin>' +
         '<PropertyIsLike xmlns="http://www.opengis.net/ogc" wildCard="*" singleChar="." escapeChar="!">' +
         '<PropertyName>county_adcd</PropertyName>' +
-        `<Literal>${this.adcd}</Literal>` +
+        `<Literal>${this.adcd}000</Literal>` +
         '</PropertyIsLike>' +
         '</And>' +
         '</Filter>'
