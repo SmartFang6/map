@@ -5,6 +5,8 @@
 ¦ Date: 2022-09-13 12:51:06
 ¦ FilePath: src/views/components/MapLayer/layerTypes.js
 ¦------------------------------------------------------*/
+import building from "@/assets/map/building.png";
+import finish from "@/assets/map/finish.png";
 const RiverLegend = [
   {
     name: "管理范围线",
@@ -33,68 +35,76 @@ export default [
       {
         label: "河道",
         value: "riverLayer",
+        isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
       },
       {
         label: "水库",
         value: "reservoirLayer",
+        isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
       },
       {
         label: "山塘",
         value: "hillpondLayer",
+        isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
       },
       {
         label: "湖泊",
         value: "lakeLayer",
+        isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
       },
       {
         label: "人工水道",
         value: "canalLayer",
+        isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
       },
       {
         label: "其他水域",
         value: "otherwaterLayer",
+        isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
       },
     ],
   },
-  // {
-  //   title: "涉水项目",
-  //   items: [
-  //     {
-  //       label: "涉河许可",
-  //       type: "wadingPermit",
-  //       value: "wadingPermit",
-  //       legend: [
-  //         {
-  //           name: "完工",
-  //           type: "finishedProj",
-  //           count: 0,
-  //         },
-  //         {
-  //           name: "在建",
-  //           value: "buildingProj",
-  //           count: 0,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    title: "涉水项目",
+    items: [
+      {
+        label: "涉河许可",
+        type: "wadingPermit",
+        value: "wadingPermit",
+        isShowChecked: false,
+        legend: [
+          {
+            name: "完工",
+            type: "finishedProj",
+            icon: finish,
+          },
+          {
+            name: "在建",
+            value: "buildingProj",
+            icon: building,
+          },
+        ],
+      },
+    ],
+  },
   {
     title: "监测点",
     items: [
       {
         label: "视频点",
+        isShowChecked: true,
         value: "videoLayer",
       },
       // {

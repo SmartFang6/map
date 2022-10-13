@@ -1,3 +1,11 @@
+/*
+ * @Author: chuyingf chuyingf@163.com
+ * @Date: 2022-09-07 20:42:01
+ * @LastEditors: chuyingf chuyingf@163.com
+ * @LastEditTime: 2022-10-12 11:14:34
+ * @FilePath: \river-lake-cockpit-front\src\views\OLMap\layers\impl\DCLayer.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import MergeLayerImpl from '../base/impl/MergeLayerImpl'
 
 class DCLayer extends MergeLayerImpl {
@@ -20,7 +28,7 @@ class DCLayer extends MergeLayerImpl {
     } else {
       this.res = []
     }
-    // console.log('load res', this.res);
+    console.log('load res', this.res);
     // this.legendChange()
     this.clear()
     if (this.res.length > 0) {
