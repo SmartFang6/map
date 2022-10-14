@@ -22,10 +22,10 @@
         ></el-table-column>
         <el-table-column
           prop="subjectName"
-          width="140px"
+          width="160px"
           label="项目名称"
         ></el-table-column>
-        <el-table-column label="时间" width="120px">
+        <el-table-column label="时间">
           <template #default="{ row }">
             {{
               row?.createTime
@@ -159,7 +159,7 @@ const getRightInfo = (row) => {
   height: 620px;
   overflow: hidden;
   .lf_list {
-    width: 350px;
+    width: 35%;
   }
 
   .left-img {
@@ -230,12 +230,14 @@ ul {
   margin: 0 16px 0 20px;
 }
 :deep(.el-table) {
+  max-height: 540px;
   .el-table__header-wrapper {
     background: #023368;
     font-size: 14px;
   }
   .el-table__body-wrapper {
     color: #fff;
+    overflow: scroll !important;
   }
   .el-table__row {
     .el-table__cell {
@@ -255,6 +257,7 @@ ul {
     background: #023368 !important;
   }
   .el-table__inner-wrapper {
+    max-height: 540px;
     &::before {
       display: none;
     }

@@ -93,9 +93,9 @@ const getChildrenList = async () => {
   li {
     display: flex;
     width: 23.7%;
-    height: 44px;
+    height: 52px;
     margin-right: calc(6% / 4);
-    line-height: 44px;
+    line-height: 52px;
     padding: 0 12px;
     background-color: #0b216c;
     box-shadow: inset 0 2px 1px 0 #1642d8;
@@ -157,14 +157,14 @@ const getChildrenList = async () => {
   min-width: 82px;
   text-align: right;
   font-family: MicrosoftYaHei;
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
   flex-shrink: 0;
 }
 
 .item-value {
   font-family: MicrosoftYaHei;
-  font-size: 16px;
+  font-size: 18px;
   color: #43c7ff;
   margin-left: 12px;
   text-overflow: -o-ellipsis-lastline;

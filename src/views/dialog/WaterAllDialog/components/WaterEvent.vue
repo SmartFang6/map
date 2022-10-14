@@ -10,7 +10,6 @@
           background: '#023368',
           color: '#fff',
         }"
-        max-height="540px"
         @row-click="changeInfo"
         stripe
         :cell-style="{ 'text-align': 'center' }"
@@ -22,7 +21,6 @@
         ></el-table-column>
         <el-table-column
           prop="eventId"
-          width="150px"
           show-overflow-tooltip
           label="事件编号"
         ></el-table-column>
@@ -145,8 +143,7 @@ const viewEventflow = (row) => {
   height: 560px;
   box-sizing: border-box;
   .lf_list {
-    width: 300px;
-    // width: 44%;
+    width: 34%;
   }
 
   .left-img {
@@ -207,12 +204,14 @@ ul {
   height: 360px;
 }
 :deep(.el-table) {
+  max-height: 540px;
   .el-table__header-wrapper {
     background: #023368;
     font-size: 14px;
   }
   .el-table__body-wrapper {
     color: #fff;
+    overflow: scroll !important;
   }
   .el-table__row {
     .el-table__cell {
@@ -232,6 +231,8 @@ ul {
     background: #023368 !important;
   }
   .el-table__inner-wrapper {
+    max-height: 540px;
+    overflow: scroll;
     &::before {
       display: none;
     }
