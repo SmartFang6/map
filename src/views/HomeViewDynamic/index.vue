@@ -1,3 +1,9 @@
+<!--****************************************
+ * 动态主页
+ *
+ * founder: king
+ * Date:  11 2022/10/11
+ *****************************************-->
 <template>
   <Layout>
     <template #header><Header /></template>
@@ -9,13 +15,13 @@
           @selectLayers="selectLayers"
           @showDesc="showPop({ layerid: 'point', detail: true })"
         />
-        <Map ref="mapRef" @showPop="showPop" @changeLegend="changeLegend" />
+        <Map ref="mapRef" @showPop="showPop" />
         <!-- 地图弹窗 -->
         <MapPop ref="MapPopRef" />
         <el-dialog
           v-model="dialogShow"
           append-to-body
-          width="960px"
+          width="820px"
           destroy-on-close
           custom-class="map_dialog"
         >
@@ -25,12 +31,9 @@
     </template>
     <template #left>
       <div class="left-box">
-        <!-- 事件统计 -->
-        <EventStatistics />
-        <!-- 问题来源 -->
-        <ProblemSource />
-        <!-- 问题派发 -->
-        <IssueDistribution />
+        <template v-for="side in nowConfig?.left" :key="side?.widgetCode">
+          <DynamicSideUI :widgetConfig="side" />
+        </template>
       </div>
     </template>
     <template #right>
@@ -41,15 +44,9 @@
           :isShowChecked="isShowMapChecked"
           @change="handleCheckLegendChange"
         />
-        <!-- 风险管控-->
-        <!-- <RiskControl /> -->
-        <!-- 趋势分析-->
-        <TrendAnalysis />
-        <!-- 处置绩效 -->
-        <Performance />
-        <!-- 高发问题排名-->
-        <!--<HighProblemTopList />-->
-        <PoliciesSystems />
+        <template v-for="side in nowConfig?.right" :key="side?.widgetCode">
+          <DynamicSideUI :widgetConfig="side" />
+        </template>
       </div>
     </template>
     <template #bottom>
@@ -60,32 +57,41 @@
 </template>
 
 <script setup>
-import Header from "./components/Header";
-import { inject, provide, ref, watch } from "vue";
-import { NoticeEvt } from "@/views/config";
-import EventStatistics from "./components/EventStatistics/index.vue";
-import ProblemSource from "./components/ProblemSource.vue";
-import IssueDistribution from "./components/IssueDistribution.vue";
-// import RiskControl from "./components/RiskControl.vue";
-import TrendAnalysis from "./components/TrendAnalysis.vue";
-import Performance from "./components/Performance/index.vue";
-// import HighProblemTopList from "./components/HighProblemTopList.vue";
-import ProblemList from "./components/ProblemList.vue";
-import MapLayer from "./components/MapLayer/index.vue";
-import { getEventStat } from "@/apis/home";
+/**
+ 动态主页
+ **/
+import DynamicSideUI from "@/components/DynamicSideUI";
+import Header from "@/views/components/Header";
+import { computed, ref, watch } from "vue";
+import ProblemList from "@/views/components/ProblemList.vue";
+import MapLayer from "@/views/components/MapLayer/index.vue";
 import Map from "@/views/OLMap/MainMap";
 import LegendMap from "@/views/components/legendMap";
-import store from "@/store";
 import moment from "moment";
-import MapPop from "./components/MapPop/index.vue";
-import CenterToolsBar from "./components/CenterToolsBar.vue";
-import router from "@/router";
-import PoliciesSystems from "./components/PoliciesSystems.vue";
+import MapPop from "@/views/components/MapPop/index.vue";
+import CenterToolsBar from "@/views/components/CenterToolsBar.vue";
 
-import useActiveFilter from "./useActiveFilter.js";
-import WaterAllDialog from "./dialog/WaterAllDialog";
+import useActiveFilter from "@/views/useActiveFilter.js";
+import WaterAllDialog from "@/views/dialog/WaterAllDialog.vue";
 
-const eventBus = inject("EventBus");
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import defaultConfig from "./default";
+
+const router = useRouter();
+const store = useStore();
+const nowConfig = computed(() => {
+  const configJSONStr = store?.state?.layoutConfig;
+  let config = null;
+  try {
+    // config = configJSONStr ? JSON.parse(configJSONStr) : defaultConfig;
+    config = configJSONStr ? configJSONStr : defaultConfig;
+  } catch (e) {
+    config = defaultConfig;
+  }
+  return config;
+});
+
 // 若未通过单点登录进入，重定向去401页面
 const USER_ID = store?.state?.userInfo?.userId;
 if (!USER_ID) {
@@ -93,58 +99,23 @@ if (!USER_ID) {
 }
 
 let dateRange = ref({});
-const dateRangeChange = (payload) => {
-  dateRange.value = payload;
-  store.commit("UPDATE_DATE_RANGE", payload);
+const dateRangeChange = (st, et) => {
+  const startTime =
+    st || moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00");
+  const endTime =
+    et || moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59");
+  dateRange.value = {
+    adcd: store?.state?.userInfo?.adminDivCode,
+    startTime,
+    endTime,
+  };
+  store.commit("UPDATE_DATE_RANGE", dateRange.value);
 };
 
-let leftData = ref({});
-// 获取左侧栏数据
-function getLeftData(st = null, et = null) {
-  const _startTime =
-    st || moment(new Date()).startOf("month").format("YYYY-MM-DD 00:00:00");
-  const _endTime =
-    et || moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59");
-  const params = {
-    adcd: store?.state?.userInfo?.adminDivCode || "330182",
-    endTime: _endTime,
-    startTime: _startTime,
-  };
-  dateRangeChange(params);
-  getEventStat(params).then((res) => {
-    // 事件统计平均耗时（小时）转（天 ）
-    if (res.eventStatEvent && res.eventStatEvent.completedAverageCostTime) {
-      let day = parseInt(res.eventStatEvent.completedAverageCostTime / 24);
-      if (Number.isNaN(day)) {
-        day = 0;
-      }
-      res.eventStatEvent.completedAverageCostTime = day;
-    }
-    // 事件统计消耗率转百分比
-    if (res.eventStatEvent && res.eventStatEvent.completedRate) {
-      let val = res.eventStatEvent.completedRate * 100;
-      if (Number.isNaN(val)) {
-        val = 0;
-      } else {
-        val = val.toFixed(0);
-      }
-      res.eventStatEvent.completedRate = val;
-    }
-    leftData.value = res;
-  });
-}
-// getLeftData();
-
-// 注入左侧栏数据
-provide("leftData", leftData);
-
-provide("dateRange", dateRange);
-
-console.log(eventBus, "eventBus", NoticeEvt);
 const mapRef = ref(null);
 function onChangeTime(val) {
-  console.log(val, "on-change-time");
-  getLeftData(val.startTime, val.endTime);
+  // console.log(val, "on-change-time");
+  dateRangeChange(val.startTime, val.endTime);
   mapRef.value?.changeTime(val);
 }
 
@@ -173,7 +144,7 @@ const activeFilter = useActiveFilter();
 watch(
   () => activeFilter.value,
   (activeFilter) => {
-    console.log("activeFilter changed =>", activeFilter);
+    // console.log("activeFilter changed =>", activeFilter);
     mapRef.value?.changeFilter({
       ...activeFilter,
     });
@@ -196,7 +167,6 @@ const handleCheckLegendChange = (legend) => {
 // 图层切换 当前图层，已选择图层name列表
 const isShowMapChecked = ref(false);
 const selectLayers = ({ layerInfos, selectLayers }) => {
-  console.log(layerInfos, "layerInfos");
   isShowMapChecked.value = layerInfos?.isShowChecked ?? true;
   legendList.value = layerInfos?.legend ?? [];
   //切换图例的时候 如果当前的图例类型相同的话，就还用之前的图例去渲染地图线，否则用新的图例渲染
@@ -219,7 +189,7 @@ const selectLayers = ({ layerInfos, selectLayers }) => {
 .right-box {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100%;
   box-sizing: border-box;
   padding-bottom: 15px;

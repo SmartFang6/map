@@ -68,7 +68,7 @@
 
     <!--#region 配置-->
     <div class="settings">
-      <a class="btn" />
+      <a class="btn" @click="$router.push('/dynamicLayout')" />
     </div>
     <!--#endregion-->
   </div>
@@ -306,6 +306,7 @@ changeDate(dateTypes[0]);
     cursor: pointer;
     width: 87px;
     height: 33px;
+    cursor: pointer;
     background: url(@/assets/images/config-button.png);
     background-size: contain;
   }
