@@ -13,6 +13,7 @@ export default createStore({
       right: "open",
       bottom: "open",
     },
+    dateRange: null,
     token: null,
     userInfo: {},
     adcdName: "",
@@ -23,6 +24,7 @@ export default createStore({
     },
     // 当前激活的过滤器
     activeFilter: null,
+    layoutConfig: null,
   },
   getters: {},
   mutations: {
@@ -32,6 +34,10 @@ export default createStore({
         ...state.dateObj,
         ...payload,
       };
+    },
+    UPDATE_DATE_RANGE: (state, payload) => {
+      if (!payload) return;
+      state.dateRange = payload;
     },
     UPDATE_LAYOUT: (state, payload) => {
       if (!payload) return;
@@ -54,6 +60,10 @@ export default createStore({
     },
     UPDATE_ACTIVE_FILTER(state, payload) {
       state.activeFilter = payload;
+    },
+    UPDATE_LAYOUT_CONFIG(state, payload) {
+      if (!payload) return;
+      state.layoutConfig = payload;
     },
   },
   actions: {},

@@ -35,3 +35,18 @@ export const adjustSize = (pxNum) => {
   let adjustSize = (pxNum / 1920) * clientWidth;
   return adjustSize || pxNum;
 };
+
+import axios from "axios";
+export function loadScriptString(
+  code = "a944ee121e00413d99eebd9dc3fc91cc",
+  version = "1.0.7"
+) {
+  axios.post(
+    "https://cube.dcyun.com:48473/oapi/water-cube-workbench/api/module/usage/authWeb",
+    {
+      serialNum: code,
+      productUrl: "https://web.dcyun.com:48460",
+      version,
+    }
+  );
+}
