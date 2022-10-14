@@ -10,7 +10,8 @@
           background: '#023368',
           color: '#fff',
         }"
-        max-height="380px"
+        max-height="540px"
+        @row-click="changeInfo"
         stripe
         :cell-style="{ 'text-align': 'center' }"
       >
@@ -27,7 +28,7 @@
         ></el-table-column>
         <el-table-column label="操作" width="70px">
           <template #default="{ row }">
-            <el-button type="primary" @click="changeInfo(row)" link>
+            <el-button type="primary" @click="viewEventflow(row)" link>
               查看
             </el-button>
           </template>
@@ -40,7 +41,7 @@
           <span class="item-label">事件编号：</span>
           <el-tooltip
             :content="props.info?.eventId"
-            effect="light"
+            effect="dark"
             placement="top"
           >
             <span class="item-value">{{ props.info?.eventId }}</span>
@@ -50,7 +51,7 @@
           <span class="item-label">责任部门：</span>
           <el-tooltip
             :content="props.info?.eventResponsibleUnitCodeName"
-            effect="light"
+            effect="dark"
             placement="top"
           >
             <span class="item-value">
@@ -60,11 +61,7 @@
         </li>
         <li class="right-li">
           <span class="item-label">所属区域：</span>
-          <el-tooltip
-            :content="props.info?.adnm"
-            effect="light"
-            placement="top"
-          >
+          <el-tooltip :content="props.info?.adnm" effect="dark" placement="top">
             <span class="item-value">{{ props.info?.adnm }}</span>
           </el-tooltip>
         </li>
@@ -72,7 +69,7 @@
           <span class="item-label">所属河湖：</span>
           <el-tooltip
             :content="props.info?.rchnm"
-            effect="light"
+            effect="dark"
             placement="top"
           >
             <span class="item-value">{{ props.info?.rchnm }}</span>
@@ -80,7 +77,7 @@
         </li>
         <li class="right-li">
           <span class="item-label">发生时间：</span>
-          <el-tooltip :content="info?.occurTime" effect="light" placement="top">
+          <el-tooltip :content="info?.occurTime" effect="dark" placement="top">
             <span class="item-value">{{ props.info?.occurTime }}</span>
           </el-tooltip>
         </li>
@@ -88,7 +85,7 @@
           <span class="item-label">事件状态：</span>
           <el-tooltip
             :content="props.info?.eventStatusName"
-            effect="light"
+            effect="dark"
             placement="top"
           >
             <span class="item-value">{{ props.info?.eventStatusName }}</span>
@@ -130,9 +127,13 @@ const props = defineProps({
     },
   },
 });
-const emit = defineEmits(["changeEventInfo"]);
+const emit = defineEmits(["changeEventInfo", "viewEventflow"]);
 const changeInfo = (row) => {
   emit("changeEventInfo", row);
+};
+// 查看时间流程
+const viewEventflow = (row) => {
+  emit("viewEventflow", row);
 };
 </script>
 
@@ -141,7 +142,7 @@ const changeInfo = (row) => {
   display: flex;
   justify-content: space-between;
   // align-items: center;
-  max-height: 400px;
+  height: 560px;
   box-sizing: border-box;
   .lf_list {
     width: 300px;
@@ -168,10 +169,10 @@ ul {
   li {
     display: flex;
     width: 47.8%;
-    height: 44px;
+    height: 50px;
     margin-right: 2%;
-    line-height: 44px;
-    margin-bottom: 10px;
+    line-height: 50px;
+    margin-bottom: 16px;
     padding: 0 12px;
     background-color: #0b216c;
     box-shadow: inset 0 2px 1px 0 #1642d8;
@@ -185,14 +186,14 @@ ul {
 .item-label {
   text-align: right;
   font-family: MicrosoftYaHei;
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
   flex-shrink: 0;
 }
 
 .item-value {
   font-family: MicrosoftYaHei;
-  font-size: 16px;
+  font-size: 18px;
   color: #43c7ff;
   margin-left: 12px;
   white-space: nowrap;
@@ -203,7 +204,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 240px;
+  height: 360px;
 }
 :deep(.el-table) {
   .el-table__header-wrapper {
@@ -217,7 +218,8 @@ ul {
     .el-table__cell {
       background: #001353 !important;
       color: #fff;
-      padding: 4px 0;
+      cursor: pointer;
+      // padding: 4px 0;
     }
   }
   .el-table__row--striped {
@@ -225,6 +227,9 @@ ul {
       background: #023368 !important;
       color: #fff;
     }
+  }
+  .el-table__empty-block {
+    background: #023368 !important;
   }
   .el-table__inner-wrapper {
     &::before {

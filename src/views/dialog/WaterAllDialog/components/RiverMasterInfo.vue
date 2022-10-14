@@ -4,38 +4,48 @@
     <ul class="right_box">
       <li>
         <span class="item-label">河长姓名：</span>
-        <span class="item-value">{{ props.info?.eventId ?? "-" }}</span>
+        <span class="item-value">{{ fatherInfo?.name ?? "-" }}</span>
       </li>
       <li>
         <span class="item-label">河长级别：</span>
         <span class="item-value">
-          {{ props.info?.eventResponsibleUnitCodeName ?? "-" }}
+          {{ fatherInfo?.rvmasterLev ?? "-" }}
         </span>
       </li>
       <li>
         <span class="item-label">职务：</span>
-        <span class="item-value">{{ props.info?.adnm ?? "-" }}</span>
+        <span class="item-value">{{ fatherInfo?.post ?? "-" }}</span>
       </li>
       <li>
         <span class="item-label">联系部门：</span>
-        <span class="item-value">{{ props.info?.rchnm ?? "-" }}</span>
+        <span class="item-value">{{ fatherInfo?.contactUnit ?? "-" }}</span>
       </li>
     </ul>
   </div>
   <div class="children_info">
     <div class="info_title">下级河长</div>
-    <ul class="children_box">
-      <li v-for="item in 10" :key="item">
-        <p class="c-grade">事件编号：</p>
-        <p class="c-name">张三</p>
+    <ul class="children_box" v-if="childrenList.length > 0">
+      <li v-for="item in childrenList" :key="item.rvmasterId">
+        <p class="c-grade">{{ item.rchnm }}</p>
+        <p class="c-name">{{ item.name }}</p>
       </li>
     </ul>
+    <div class="img-box" v-else>
+      <img :src="noImg" alt="" />
+      <p>暂无数据</p>
+    </div>
   </div>
 </template>
 <!-- #endregion -->
 
 <script setup>
-// import { ref } from "vue";
+import { onMounted } from "vue";
+import {
+  getEventSourceInfo,
+  getPersonInfoByRchcd,
+} from "@/apis/waterBeautiful";
+import noImg from "@/assets/images/no-img.png";
+import { ref } from "vue";
 const props = defineProps({
   info: {
     type: Object,
@@ -44,6 +54,27 @@ const props = defineProps({
     },
   },
 });
+onMounted(() => {
+  console.log("m");
+  getMasterInfo();
+});
+let fatherInfo = ref({});
+const getMasterInfo = async () => {
+  let res = await getPersonInfoByRchcd({
+    rchcd: props.info?.code,
+  });
+  fatherInfo.value = res;
+  console.log(res, fatherInfo, "fatherInfo");
+  getChildrenList();
+};
+let childrenList = ref([]);
+const getChildrenList = async () => {
+  let res = await getEventSourceInfo({
+    rchcd: props.info?.code,
+    type: 1,
+  });
+  childrenList.value = res;
+};
 </script>
 
 <style scoped lang="less">
@@ -80,6 +111,19 @@ const props = defineProps({
     color: #fff;
     margin: 14px 0 10px 0;
   }
+  .img-box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    p {
+      margin-top: 12px;
+      font-size: 18px;
+      color: #fff;
+    }
+  }
 }
 .children_box {
   display: flex;
@@ -88,13 +132,13 @@ const props = defineProps({
   li {
     display: block;
     margin-bottom: 10px;
-    height: 44px;
+    height: 48px;
     padding: 0 12px;
     background-color: #0b216c;
     box-shadow: inset 0 2px 1px 0 #1642d8;
-    width: 19%;
-    margin-right: calc(4% / 4);
-    &:nth-child(5n) {
+    width: 23.5%;
+    margin-right: calc(6% / 4);
+    &:nth-child(4n) {
       margin-right: 0;
     }
     font-size: 14px;
@@ -104,7 +148,7 @@ const props = defineProps({
     padding-top: 6px;
   }
   .c-name {
-    margin-top: -6px;
+    margin-top: -2px;
     text-align: right;
   }
 }

@@ -9,14 +9,14 @@ import { postHttp, getHttp } from "@/utils/axios";
  * @returns {Object<any>}
  */
 export const getEventSourceInfo = (data) => {
-  return postHttp("/beautiful/api/master/listRvMasterByUpRchcd", { data });
+  return postHttp("/beautiful/master/listRvMasterByUpRchcd", { data });
 };
 /**
  * 根据河段编号查询河长
  * @param {Object<any>} rchcd 查询参数
  */
-export const countEventClassCount = (data) => {
-  return getHttp("/beautiful/api/rlrcReachInfo/getPersonInfoByRchcd", {
+export const getPersonInfoByRchcd = (data) => {
+  return getHttp("/beautiful/rlrcReachInfo/getPersonInfoByRchcd", {
     data,
   });
 };

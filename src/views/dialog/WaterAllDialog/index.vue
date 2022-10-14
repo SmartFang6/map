@@ -25,19 +25,26 @@
       <WaterEvent
         :list="allEvent"
         :info="currentEvnet"
+        @viewEventflow="viewEventflow"
         @changeEventInfo="changeEventInfo"
       />
     </template>
     <!-- #endregion -->
     <!-- #region 涉水项目 -->
-    <template v-if="activeTab === 3"><WaterProject /></template>
+    <template v-if="activeTab === 3">
+      <WaterProject
+        :list="allSubList"
+        :info="currentSub"
+        @getSubDetail="getSubDetail"
+      />
+    </template>
     <template v-if="activeTab === 4">
-      <RiverMasterInfo />
+      <RiverMasterInfo :info="props.info" />
     </template>
     <!-- #endregion -->
   </div>
   <EventDetailDialog
-    :info="props.info"
+    :info="currentFlow"
     v-model:visible="eventDetailDialogVisible"
   />
 </template>
@@ -46,6 +53,8 @@
 import { ref, watch } from "vue";
 import useHomeDialog from "@/views/components/useHomeDialog.js";
 import { getEventStatReportProblemList } from "@/apis/cockpitEventStats";
+import { getSubjectList } from "@/apis/map";
+import { subjectDetail } from "@/apis/dialog";
 import EventDetailDialog from "@/views/dialog/EventDetail/index";
 import RiverMasterInfo from "./components/RiverMasterInfo";
 import WaterProject from "./components/WaterProject";
@@ -86,20 +95,7 @@ const getAllWaterEvent = async () => {
 const changeEventInfo = (row) => {
   currentEvnet.value = row;
 };
-// 监听水域类型切换
-watch(
-  () => props.info,
-  (e) => {
-    console.log(e, "eeee");
-    currentDialog.value = e.layerid;
-    console.log(curDialogCom);
-    getAllWaterEvent();
-  },
-  {
-    immediate: true,
-    deep: true,
-  }
-);
+
 // 切换tab
 const tabs = ref([
   {
@@ -114,16 +110,54 @@ const tabs = ref([
     name: "涉水项目",
     value: 3,
   },
-  {
-    name: "河长信息",
-    value: 4,
-  },
 ]);
 const activeTab = ref(1);
 const switchTab = (tab) => {
   activeTab.value = tab;
 };
-
+const allSubList = ref(null);
+const currentSub = ref(null);
+// 获取全部的涉水项目
+const getAllSubjectList = async () => {
+  let res = await getSubjectList({
+    adcd: store?.state?.userInfo?.adminDivCode || "",
+  });
+  allSubList.value = res;
+  getSubDetail(res?.[0]);
+  console.log(res, "allSubList");
+};
+const getSubDetail = async (row) => {
+  let res = await subjectDetail({ subjectId: row.id });
+  currentSub.value = res;
+  console.log(currentSub.value, "currentSub.value ");
+};
+// 查看事件流程
+const currentFlow = ref({});
+const viewEventflow = (row) => {
+  currentFlow.value = row;
+  eventDetailDialogVisible.value = true;
+};
+// 监听水域类型切换
+watch(
+  () => props.info,
+  (e) => {
+    console.log(e, "eeee");
+    currentDialog.value = e.layerid;
+    if (e.layerid === "riverLayer") {
+      tabs.value.push({
+        name: "河长信息",
+        value: 4,
+      });
+    }
+    console.log(curDialogCom);
+    getAllWaterEvent();
+    getAllSubjectList();
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 // 跳转后台详情
 // function onJupmDetail() {
 //   if (store?.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
@@ -136,8 +170,6 @@ const switchTab = (tab) => {
 //   }
 // }
 const eventDetailDialogVisible = ref(false);
-
-// 获取全部的涉水项目
 </script>
 
 <style lang="less" scoped>

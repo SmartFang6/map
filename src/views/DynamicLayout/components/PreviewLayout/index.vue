@@ -21,8 +21,9 @@
         <el-dialog
           v-model="dialogShow"
           append-to-body
-          width="820px"
+          width="1260px"
           destroy-on-close
+          top="10vh"
           custom-class="map_dialog"
         >
           <WaterAllDialog :info="mapInfo" />

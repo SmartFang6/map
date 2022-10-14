@@ -2,11 +2,20 @@ const { defineConfig } = require("@vue/cli-service");
 
 const proxyUrl = process.env.VUE_APP_BASEURL || "/api";
 const publicPath = process.env.BASE_URL || "/cockpit/";
+console.log(proxyUrl + "/beautiful");
 module.exports = defineConfig({
   publicPath,
   transpileDependencies: true,
   devServer: {
     proxy: {
+      [proxyUrl + "/beautiful"]: {
+        target: "http://192.168.2.238:8104",
+        changeOrigin: true, // 是否改变域名
+        ws: true,
+        pathRewrite: {
+          [proxyUrl + "/beautiful"]: "/api",
+        },
+      },
       [proxyUrl]: {
         target: "http://192.168.2.238:8504",
         changeOrigin: true, // 是否改变域名

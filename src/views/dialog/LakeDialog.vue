@@ -35,7 +35,6 @@
         </li>
       </ul>
     </div>
-    <!-- 详情入口 -->
   </div>
 </template>
 
@@ -58,7 +57,7 @@ const props = defineProps({
     min-width: 78px;
     text-align: right;
     font-family: MicrosoftYaHei;
-    font-size: 18px;
+    font-size: 20px;
     color: #ffffff;
     flex-shrink: 0;
   }

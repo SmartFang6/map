@@ -21,3 +21,9 @@ export const controlVideo = (data) => {
     data,
   });
 };
+// 获取项目信息详情
+export const subjectDetail = (data) => {
+  return getHttp("/supervision/supervise/subject/detail", {
+    data,
+  });
+};

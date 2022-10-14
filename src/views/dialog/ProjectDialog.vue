@@ -113,8 +113,8 @@ const props = defineProps({
       display: flex;
       // width: 100%;
       width: 49.5%;
-      height: 44px;
-      line-height: 44px;
+      height: 48px;
+      line-height: 48px;
       margin-bottom: 10px;
       padding: 0 12px;
       background-color: #005273;
@@ -129,14 +129,14 @@ const props = defineProps({
 
   .label {
     font-family: MicrosoftYaHei;
-    font-size: 18px;
+    font-size: 20px;
     color: #ffffff;
     flex-shrink: 0;
   }
 
   .value {
     font-family: MicrosoftYaHei;
-    font-size: 18px;
+    font-size: 20px;
     color: #00dcf0;
     margin-left: 12px;
     text-overflow: -o-ellipsis-lastline;

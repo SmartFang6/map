@@ -21,7 +21,8 @@
         <el-dialog
           v-model="dialogShow"
           append-to-body
-          width="820px"
+          width="1260px"
+          top="10vh"
           destroy-on-close
           custom-class="map_dialog"
         >

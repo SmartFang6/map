@@ -10,8 +10,9 @@
           background: '#023368',
           color: '#fff',
         }"
-        max-height="380px"
+        max-height="540px"
         stripe
+        @row-click="getRightInfo"
         :cell-style="{ 'text-align': 'center' }"
       >
         <el-table-column
@@ -20,13 +21,17 @@
           label="序号"
         ></el-table-column>
         <el-table-column
-          prop="num"
+          prop="subjectName"
           width="140px"
           label="项目名称"
         ></el-table-column>
         <el-table-column label="时间" width="120px">
           <template #default="{ row }">
-            {{ row.createTime }}
+            {{
+              row?.createTime
+                ? moment(row.createTime).format("YYYY-MM-DD")
+                : "-"
+            }}
           </template>
         </el-table-column>
       </el-table>
@@ -36,68 +41,79 @@
         <li>
           <span class="item-label">所在乡镇</span>
           <el-tooltip
-            :content="props.info?.eventId"
-            effect="light"
+            :content="props.info?.suitAreaName"
+            effect="dark"
             placement="top"
           >
-            <span class="item-value">{{ props.info?.eventId }}</span>
+            <span class="item-value">
+              {{ props.info?.suitAreaName ?? "-" }}
+            </span>
           </el-tooltip>
         </li>
         <li>
           <span class="item-label">项目名称</span>
           <el-tooltip
-            :content="props.info?.eventResponsibleUnitCodeName"
-            effect="light"
+            :content="props.info?.subjectName"
+            effect="dark"
             placement="top"
           >
             <span class="item-value">
-              {{ props.info?.eventResponsibleUnitCodeName }}
+              {{ props.info?.subjectName ?? "-" }}
             </span>
           </el-tooltip>
         </li>
         <li>
           <span class="item-label">类型</span>
           <el-tooltip
-            :content="props.info?.adnm"
-            effect="light"
+            :content="props.info?.subjectType"
+            effect="dark"
             placement="top"
           >
-            <span class="item-value">{{ props.info?.adnm }}</span>
+            <span class="item-value">{{ props.info?.subjectType ?? "-" }}</span>
           </el-tooltip>
         </li>
         <li>
           <span class="item-label">联系人</span>
           <el-tooltip
-            :content="props.info?.rchnm"
-            effect="light"
+            :content="props.info?.subjectContacts"
+            effect="dark"
             placement="top"
           >
-            <span class="item-value">{{ props.info?.rchnm }}</span>
+            <span class="item-value">
+              {{ props.info?.subjectContacts ?? "-" }}
+            </span>
           </el-tooltip>
         </li>
         <li>
           <span class="item-label">占用水域面积</span>
-          <el-tooltip
-            :content="props.info?.occurTime"
-            effect="light"
-            placement="top"
-          >
-            <span class="item-value">{{ props.info?.occurTime }}</span>
-          </el-tooltip>
+          <span class="item-value">
+            {{ props.info?.waterPreArea + "km²" }}
+          </span>
         </li>
         <li>
           <span class="item-label">实施状态</span>
           <el-tooltip
-            :content="props.info?.eventStatusName"
-            effect="light"
+            :content="props.info?.subjectStatus === 0 ? '未完成' : '完成'"
+            effect="dark"
             placement="top"
           >
-            <span class="item-value">{{ props.info?.eventStatusName }}</span>
+            <span class="item-value">
+              {{ props.info?.subjectStatus === 0 ? "未完成" : "完成" }}
+            </span>
           </el-tooltip>
         </li>
         <li>
           <span class="item-label">相关文件</span>
-          <span class="item-value">{{ props.info?.eventStatusName }}</span>
+          <span class="item-value">
+            <a
+              v-if="props.info?.fileCompensate?.relativeUrl"
+              :href="props.info?.fileCompensate?.relativeUrl"
+              target="__blank"
+            >
+              项目文件
+            </a>
+            <span v-else>未上传项目文件</span>
+          </span>
         </li>
       </ul>
       <div class="map">
@@ -111,6 +127,7 @@
 <script setup>
 import Map from "@/views/OLMap/ReadMap";
 import { ref } from "vue";
+import moment from "moment";
 // 地图的坐标信息
 const location = ref({});
 const props = defineProps({
@@ -120,7 +137,18 @@ const props = defineProps({
       return [];
     },
   },
+  info: {
+    type: Object,
+    default() {
+      return {};
+    },
+  },
 });
+const emits = defineEmits("getSubDetail");
+const getRightInfo = (row) => {
+  console.log(row);
+  emits("getSubDetail", row);
+};
 </script>
 
 <style scoped lang="less">
@@ -128,8 +156,10 @@ const props = defineProps({
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
+  height: 620px;
+  overflow: hidden;
   .lf_list {
-    width: 300px;
+    width: 350px;
   }
 
   .left-img {
@@ -181,13 +211,13 @@ ul {
   font-size: 16px;
   color: #43c7ff;
   margin-left: 12px;
-  text-overflow: -o-ellipsis-lastline;
+  white-space: nowrap;
   overflow: hidden; //溢出内容隐藏
   text-overflow: ellipsis; //文本溢出部分用省略号表示
-  display: -webkit-box; //特别显示模式
-  -webkit-line-clamp: 2; //行数
-  line-clamp: 2;
-  -webkit-box-orient: vertical; //盒子中内容竖直排列
+  a {
+    color: #43c7ff;
+    border-bottom: 1px solid;
+  }
 }
 .imgBox {
   display: flex;
@@ -196,7 +226,7 @@ ul {
   height: 240px;
 }
 .map {
-  height: 240px;
+  height: 390px;
   margin: 0 16px 0 20px;
 }
 :deep(.el-table) {
@@ -211,7 +241,8 @@ ul {
     .el-table__cell {
       background: #001353 !important;
       color: #fff;
-      padding: 4px 0;
+      // padding: 4px 0;
+      cursor: pointer;
     }
   }
   .el-table__row--striped {
@@ -219,6 +250,9 @@ ul {
       background: #023368 !important;
       color: #fff;
     }
+  }
+  .el-table__empty-block {
+    background: #023368 !important;
   }
   .el-table__inner-wrapper {
     &::before {
