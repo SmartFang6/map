@@ -495,7 +495,7 @@ export default {
         '</DWithin>' +
         '<PropertyIsLike xmlns="http://www.opengis.net/ogc" wildCard="*" singleChar="." escapeChar="!">' +
         '<PropertyName>county_adcd</PropertyName>' +
-        `<Literal>${this.adcd}000</Literal>` +
+        `<Literal>${this.adcd}</Literal>` +
         '</PropertyIsLike>' +
         '</And>' +
         '</Filter>'
