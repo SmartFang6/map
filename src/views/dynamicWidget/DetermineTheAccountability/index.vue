@@ -91,10 +91,10 @@ const activeFilter = computed(() => store.state.activeFilter);
 
 // 责任单位列表
 const unitList = computed(() => {
-  if (!leftData.value.eventResponsibleUnitList) {
+  if (!leftData.value?.eventResponsibleUnitList) {
     return [];
   }
-  return leftData.value.eventResponsibleUnitList;
+  return leftData.value?.eventResponsibleUnitList;
 });
 
 let i = -1;
