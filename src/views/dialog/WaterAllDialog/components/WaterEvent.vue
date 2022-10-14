@@ -20,13 +20,14 @@
           label="序号"
         ></el-table-column>
         <el-table-column
-          prop="num"
-          width="120px"
+          prop="eventId"
+          width="150px"
+          show-overflow-tooltip
           label="事件编号"
         ></el-table-column>
-        <el-table-column label="操作" width="80px">
+        <el-table-column label="操作" width="70px">
           <template #default="{ row }">
-            <el-button type="primary" @click="viewDetail(row)" link>
+            <el-button type="primary" @click="changeInfo(row)" link>
               查看
             </el-button>
           </template>
@@ -79,11 +80,7 @@
         </li>
         <li class="right-li">
           <span class="item-label">发生时间：</span>
-          <el-tooltip
-            :content="props.info?.occurTime"
-            effect="light"
-            placement="top"
-          >
+          <el-tooltip :content="info?.occurTime" effect="light" placement="top">
             <span class="item-value">{{ props.info?.occurTime }}</span>
           </el-tooltip>
         </li>
@@ -104,7 +101,7 @@
           v-if="props.info?.imageFileInfoList?.length > 0"
         >
           <el-carousel-item
-            v-for="item in info.imageFileInfoList"
+            v-for="item in props.info.imageFileInfoList"
             :key="item.fileId"
           >
             <img :src="item.relativeUrl" alt="" class="left-img" />
@@ -119,22 +116,24 @@
 
 <script setup>
 import noImg from "@/assets/images/no-img.png";
-// import { ref } from "vue";
 const props = defineProps({
   list: {
     type: Array,
     default() {
-      return [
-        {
-          num: 111,
-        },
-        {
-          num: 222,
-        },
-      ];
+      return [];
+    },
+  },
+  info: {
+    type: Object,
+    default() {
+      return {};
     },
   },
 });
+const emit = defineEmits(["changeEventInfo"]);
+const changeInfo = (row) => {
+  emit("changeEventInfo", row);
+};
 </script>
 
 <style scoped lang="less">
@@ -184,7 +183,6 @@ ul {
 }
 
 .item-label {
-  min-width: 90px;
   text-align: right;
   font-family: MicrosoftYaHei;
   font-size: 16px;
@@ -197,13 +195,9 @@ ul {
   font-size: 16px;
   color: #43c7ff;
   margin-left: 12px;
-  text-overflow: -o-ellipsis-lastline;
+  white-space: nowrap;
   overflow: hidden; //溢出内容隐藏
   text-overflow: ellipsis; //文本溢出部分用省略号表示
-  display: -webkit-box; //特别显示模式
-  -webkit-line-clamp: 2; //行数
-  line-clamp: 2;
-  -webkit-box-orient: vertical; //盒子中内容竖直排列
 }
 .imgBox {
   display: flex;

@@ -26,7 +26,7 @@
         ></el-table-column>
         <el-table-column label="时间" width="120px">
           <template #default="{ row }">
-            {{ row }}
+            {{ row.createTime }}
           </template>
         </el-table-column>
       </el-table>
@@ -117,14 +117,7 @@ const props = defineProps({
   list: {
     type: Array,
     default() {
-      return [
-        {
-          num: 111,
-        },
-        {
-          num: 222,
-        },
-      ];
+      return [];
     },
   },
 });

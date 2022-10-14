@@ -22,7 +22,11 @@
     <!-- #endregion -->
     <!-- #region 水域事件 -->
     <template v-if="activeTab === 2">
-      <WaterEvent />
+      <WaterEvent
+        :list="allEvent"
+        :info="currentEvnet"
+        @changeEventInfo="changeEventInfo"
+      />
     </template>
     <!-- #endregion -->
     <!-- #region 涉水项目 -->
@@ -41,12 +45,14 @@
 <script setup>
 import { ref, watch } from "vue";
 import useHomeDialog from "@/views/components/useHomeDialog.js";
+import { getEventStatReportProblemList } from "@/apis/cockpitEventStats";
 import EventDetailDialog from "@/views/dialog/EventDetail/index";
 import RiverMasterInfo from "./components/RiverMasterInfo";
 import WaterProject from "./components/WaterProject";
 import WaterEvent from "./components/WaterEvent";
 // import { ElMessage } from "element-plus";
-// import store from "@/store";
+import store from "@/store";
+import moment from "moment";
 const { curDialogCom, currentDialog, isShowTab } = useHomeDialog();
 const props = defineProps({
   info: {
@@ -56,6 +62,30 @@ const props = defineProps({
     },
   },
 });
+const allEvent = ref([]);
+const currentEvnet = ref({});
+// 获取全部的水域事件
+const getAllWaterEvent = async () => {
+  let date = new Date().getTime();
+  const param = {
+    adcd: store?.state?.userInfo?.adminDivCode || "",
+    code: "",
+    startTime: moment(date - 60 * 1000 * 60 * 24 * 365).format(
+      "YYYY-MM-DD HH:mm:ss"
+    ),
+    endTime: moment(date).format("YYYY-MM-DD HH:mm:ss"),
+    searchText: "",
+    pageNo: 1,
+    pageSize: 20,
+  };
+  let res = await getEventStatReportProblemList(param);
+  currentEvnet.value = res[0];
+  allEvent.value = res;
+};
+// 切换当前显示的事件
+const changeEventInfo = (row) => {
+  currentEvnet.value = row;
+};
 // 监听水域类型切换
 watch(
   () => props.info,
@@ -63,6 +93,7 @@ watch(
     console.log(e, "eeee");
     currentDialog.value = e.layerid;
     console.log(curDialogCom);
+    getAllWaterEvent();
   },
   {
     immediate: true,
@@ -105,7 +136,7 @@ const switchTab = (tab) => {
 //   }
 // }
 const eventDetailDialogVisible = ref(false);
-// 获取全部的水域事件
+
 // 获取全部的涉水项目
 </script>
 

@@ -70,7 +70,7 @@ import CenterToolsBar from "@/views/components/CenterToolsBar.vue";
 import router from "@/router";
 
 import useActiveFilter from "@/views/useActiveFilter.js";
-import WaterAllDialog from "@/views/dialog/WaterAllDialog.vue";
+import WaterAllDialog from "@/views/dialog/WaterAllDialog";
 
 defineProps({
   nowConfig: {

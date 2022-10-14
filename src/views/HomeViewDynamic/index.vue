@@ -72,7 +72,7 @@ import MapPop from "@/views/components/MapPop/index.vue";
 import CenterToolsBar from "@/views/components/CenterToolsBar.vue";
 
 import useActiveFilter from "@/views/useActiveFilter.js";
-import WaterAllDialog from "@/views/dialog/WaterAllDialog.vue";
+import WaterAllDialog from "@/views/dialog/WaterAllDialog";
 
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
