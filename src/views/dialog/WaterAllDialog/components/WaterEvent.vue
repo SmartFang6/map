@@ -211,7 +211,10 @@ ul {
   }
   .el-table__body-wrapper {
     color: #fff;
-    overflow: scroll !important;
+    max-height: 500px;
+    width: calc(100% + 20px);
+    overflow-y: scroll !important;
+    background: #023368 !important;
   }
   .el-table__row {
     .el-table__cell {
@@ -232,7 +235,6 @@ ul {
   }
   .el-table__inner-wrapper {
     max-height: 540px;
-    overflow: scroll;
     &::before {
       display: none;
     }

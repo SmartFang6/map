@@ -10,7 +10,6 @@
           background: '#023368',
           color: '#fff',
         }"
-        max-height="540px"
         stripe
         @row-click="getRightInfo"
         :cell-style="{ 'text-align': 'center' }"
@@ -237,7 +236,10 @@ ul {
   }
   .el-table__body-wrapper {
     color: #fff;
-    overflow: scroll !important;
+    max-height: 500px;
+    width: calc(100% + 22px);
+    overflow-y: scroll !important;
+    background: #023368 !important;
   }
   .el-table__row {
     .el-table__cell {
@@ -258,6 +260,7 @@ ul {
   }
   .el-table__inner-wrapper {
     max-height: 540px;
+    background: #001353 !important;
     &::before {
       display: none;
     }
