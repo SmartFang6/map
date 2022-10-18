@@ -156,11 +156,13 @@ const viewEventflow = (row) => {
     height: 348px;
   }
 }
+.right_box {
+  flex: 1;
+}
 ul {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  flex: 1;
   margin-left: 14px;
 
   li {

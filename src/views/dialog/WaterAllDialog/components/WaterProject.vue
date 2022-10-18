@@ -37,7 +37,7 @@
     </div>
     <div class="right_box">
       <ul>
-        <li>
+        <li v-if="props.info?.suitAreaName">
           <span class="item-label">所在乡镇</span>
           <el-tooltip
             :content="props.info?.suitAreaName"
@@ -49,7 +49,7 @@
             </span>
           </el-tooltip>
         </li>
-        <li>
+        <li v-if="props.info?.subjectName">
           <span class="item-label">项目名称</span>
           <el-tooltip
             :content="props.info?.subjectName"
@@ -61,7 +61,7 @@
             </span>
           </el-tooltip>
         </li>
-        <li>
+        <li v-if="props.info?.subjectType">
           <span class="item-label">类型</span>
           <el-tooltip
             :content="props.info?.subjectType"
@@ -71,7 +71,7 @@
             <span class="item-value">{{ props.info?.subjectType ?? "-" }}</span>
           </el-tooltip>
         </li>
-        <li>
+        <li v-if="props.info?.subjectContacts">
           <span class="item-label">联系人</span>
           <el-tooltip
             :content="props.info?.subjectContacts"
@@ -101,7 +101,7 @@
             </span>
           </el-tooltip>
         </li>
-        <li>
+        <li v-if="props.info?.fileCompensate?.relativeUrl">
           <span class="item-label">相关文件</span>
           <span class="item-value">
             <a
@@ -175,7 +175,6 @@ ul {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  flex: 1;
   margin-left: 20px;
 
   li {
@@ -192,7 +191,7 @@ ul {
     &:nth-child(2n) {
       margin-right: 0;
     }
-    &:last-child {
+    &:nth-child(7) {
       width: 100%;
     }
   }
@@ -218,6 +217,11 @@ ul {
     border-bottom: 1px solid;
   }
 }
+.right_box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .imgBox {
   display: flex;
   align-items: center;
@@ -225,7 +229,9 @@ ul {
   height: 240px;
 }
 .map {
-  height: 390px;
+  // height: 390px;
+  flex: 1;
+  min-height: 380px;
   margin: 0 16px 0 20px;
 }
 :deep(.el-table) {
