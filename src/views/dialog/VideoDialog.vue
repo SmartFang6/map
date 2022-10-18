@@ -143,7 +143,7 @@ const destroy = () => {
   width: 100%;
   // width: calc(100% - 30px);
   box-sizing: border-box;
-  height: 46vh;
+  height: 62vh;
   // margin-left: 13px;
   > div:nth-of-type(3) {
     display: none;
