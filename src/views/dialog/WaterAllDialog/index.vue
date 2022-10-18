@@ -141,15 +141,16 @@ const viewEventflow = (row) => {
 watch(
   () => props.info,
   (e) => {
-    console.log(e, "eeee");
     currentDialog.value = e.layerid;
-    if (e.layerid === "riverLayer") {
+    if (
+      e.layerid === "riverLayer" &&
+      tabs.value[tabs.value.length - 1].value !== 4
+    ) {
       tabs.value.push({
         name: "河长信息",
         value: 4,
       });
     }
-    console.log(curDialogCom);
     getAllWaterEvent();
     getAllSubjectList();
   },
