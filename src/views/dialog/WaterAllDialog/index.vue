@@ -151,8 +151,10 @@ watch(
         value: 4,
       });
     }
-    getAllWaterEvent();
-    getAllSubjectList();
+    if (isShowTab.value) {
+      getAllWaterEvent();
+      getAllSubjectList();
+    }
   },
   {
     immediate: true,

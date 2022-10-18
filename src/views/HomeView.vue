@@ -20,7 +20,7 @@
           destroy-on-close
           custom-class="map_dialog"
         >
-          <WaterAllDialog :info="mapInfo" />
+          <WaterAllDialog v-if="dialogShow" :info="mapInfo" />
         </el-dialog>
       </div>
     </template>

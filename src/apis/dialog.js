@@ -3,9 +3,10 @@ import { getHttp } from "@/utils/axios";
  * 视频站查询播放链接列表
  * @param {codeList} data 视频编号列表
  */
-export const queryVideoUrlList = (data) => {
+export const queryVideoUrlList = (data, config) => {
   return getHttp("/supervision/queryVideoUrlList", {
     data,
+    ...config,
   });
 };
 /**
