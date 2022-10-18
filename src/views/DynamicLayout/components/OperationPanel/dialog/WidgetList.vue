@@ -37,9 +37,10 @@
  弹窗组件列表
  **/
 import { ref } from "vue";
-import widgetList from "@/views/dynamicWidget/config/widgetList";
+// import widgetList from "@/views/dynamicWidget/config/widgetList";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+import { getWidgetList } from "@/apis/dynamicLayout";
 
 defineEmits(["submitSelect"]);
 const props = defineProps({
@@ -48,7 +49,23 @@ const props = defineProps({
     default: () => [],
   },
 });
-// 组件库列表
+// 远程组件库列表
+const widgetList = ref([]);
+const params = {};
+const { message, data } = await getWidgetList(params);
+console.log(message, data);
+if (message && message?.length) {
+  widgetList.value = message.map((item) => ({
+    widgetCode: item?.componentCode,
+    name: item?.componentName,
+    poster: require(item?.poster),
+    getDataUri: item?.requestUrl,
+    domainName: item?.domainName, // TODO: 域名(暂时没使用)
+    port: item?.port, // TODO: 端口(暂时没使用)
+    size: item?.size, // TODO: 组件大小(暂时没使用)
+  }));
+}
+
 const selectedWidget = ref(null);
 const selectFn = (widget) => {
   if (props?.filterList?.includes(widget?.widgetCode)) {
