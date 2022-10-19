@@ -46,14 +46,14 @@
           </el-tooltip>
         </li>
         <li class="right-li">
-          <span class="item-label">责任部门：</span>
+          <span class="item-label">事件来源：</span>
           <el-tooltip
-            :content="props.info?.eventResponsibleUnitCodeName"
+            :content="props.info?.reportUnit"
             effect="dark"
             placement="top"
           >
             <span class="item-value">
-              {{ props.info?.eventResponsibleUnitCodeName }}
+              {{ props.info?.reportUnit }}
             </span>
           </el-tooltip>
         </li>
