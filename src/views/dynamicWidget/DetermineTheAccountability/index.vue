@@ -1,5 +1,5 @@
 <!--****************************************
- * 事件派发-定性
+ * 事件定性
  *
  * founder: king
  * Date:  11 2022/10/11
@@ -44,7 +44,7 @@
 
 <script setup>
 /**
- 事件派发-定性
+ 事件定性
  **/
 import { useStore } from "vuex";
 import { computed, watch, ref } from "vue";

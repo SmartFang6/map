@@ -27,7 +27,7 @@ export default [
   },
   {
     widgetCode: "DetermineTheNature",
-    name: "事件派发-定性",
+    name: "事件定性",
     poster: require("@/views/dynamicWidget/config/previewImg/determineTheNature.png"),
     getDataUri: "",
     domainName: "", // TODO: 域名(暂时没使用)
@@ -40,7 +40,7 @@ export default [
   },
   {
     widgetCode: "DetermineTheAccountability",
-    name: "事件派发-定责",
+    name: "事件定责",
     poster: require("@/views/dynamicWidget/config/previewImg/determineTheAccountability.png"),
     getDataUri: "",
     domainName: "", // TODO: 域名(暂时没使用)
