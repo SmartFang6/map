@@ -25,7 +25,17 @@
           })
         "
       >
-        <div class="name">{{ item.eventResponsibleUnitCodeName }}</div>
+        <el-popover
+          placement="top-start"
+          trigger="hover"
+          :content="item.eventResponsibleUnitCodeName"
+        >
+          <template #reference>
+            <div class="name">
+              {{ item.eventResponsibleUnitCodeName }}
+            </div>
+          </template>
+        </el-popover>
         <div class="info">
           <div class="value">
             <span>{{ item.unitEventNum }}</span>
@@ -177,6 +187,10 @@ const getStyle = () => {
       text-shadow: 0 3px 3px rgba(0, 12, 59, 0.5);
       text-align: left;
       line-height: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      display: inline-block;
     }
     .info {
       width: 80px;
