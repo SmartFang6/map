@@ -124,7 +124,7 @@
 <!-- #endregion -->
 
 <script setup>
-import Map from "@/views/OLMap/ReadMap";
+import Map from "@/views/OLMap/SubjectMap";
 import { ref } from "vue";
 import moment from "moment";
 // 地图的坐标信息
