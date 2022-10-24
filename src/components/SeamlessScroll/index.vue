@@ -69,7 +69,7 @@ function initDom() {
   if (scrollHeight > scrollOutsideH) {
     // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
     const slotDom = scrollDOM.innerHTML;
-    const copyDom = `<div style="position:relative;left:0;top:0;height:0;">${slotDom}</div>`;
+    const copyDom = `<div style="position:relative;left:0;top:0;height:100%;">${slotDom}</div>`;
     scrollDOM.innerHTML = slotDom + copyDom;
     // 设置向上滚动的偏移量,为插槽内容的高度
     slotHeight.value = `-${scrollDOM.offsetHeight / 2}px`;

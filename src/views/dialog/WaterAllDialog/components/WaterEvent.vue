@@ -46,14 +46,14 @@
           </el-tooltip>
         </li>
         <li class="right-li">
-          <span class="item-label">责任部门：</span>
+          <span class="item-label">事件来源：</span>
           <el-tooltip
-            :content="props.info?.eventResponsibleUnitCodeName"
+            :content="props.info?.reportUnit"
             effect="dark"
             placement="top"
           >
             <span class="item-value">
-              {{ props.info?.eventResponsibleUnitCodeName }}
+              {{ props.info?.reportUnit }}
             </span>
           </el-tooltip>
         </li>
@@ -156,11 +156,13 @@ const viewEventflow = (row) => {
     height: 348px;
   }
 }
+.right_box {
+  flex: 1;
+}
 ul {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  flex: 1;
   margin-left: 14px;
 
   li {
@@ -211,7 +213,10 @@ ul {
   }
   .el-table__body-wrapper {
     color: #fff;
-    overflow: scroll !important;
+    max-height: 500px;
+    width: calc(100% + 20px);
+    overflow-y: scroll !important;
+    background: #023368 !important;
   }
   .el-table__row {
     .el-table__cell {
@@ -232,7 +237,6 @@ ul {
   }
   .el-table__inner-wrapper {
     max-height: 540px;
-    overflow: scroll;
     &::before {
       display: none;
     }

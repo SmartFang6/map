@@ -52,5 +52,9 @@ module.exports = defineConfig({
         limit: 10000,
       })
       .end();
+    config.plugin("html").tap((args) => {
+      args[0].title = "水域监管一件事";
+      return args;
+    });
   },
 });

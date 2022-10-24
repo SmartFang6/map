@@ -102,6 +102,7 @@ const props = defineProps({
   li:last-child {
     .label {
       width: 140px;
+      min-width: 100px;
     }
   }
   .oneLine {
@@ -110,7 +111,7 @@ const props = defineProps({
   }
 
   .label {
-    width: 120px;
+    // width: 120px;
     min-width: 78px;
     text-align: right;
     font-family: MicrosoftYaHei;

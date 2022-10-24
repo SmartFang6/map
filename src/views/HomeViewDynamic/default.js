@@ -19,11 +19,11 @@ export default {
     {
       widgets: [
         {
-          title: "事件派发-定性",
+          title: "事件定性",
           widgetCode: "DetermineTheNature",
         },
         {
-          title: "事件派发-定责",
+          title: "事件定责",
           widgetCode: "DetermineTheAccountability",
         },
       ],

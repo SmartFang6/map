@@ -307,8 +307,8 @@ changeDate(dateTypes[0]);
     width: 87px;
     height: 33px;
     cursor: pointer;
-    background: url(@/assets/images/config-button.png);
-    background-size: contain;
+    background: url(@/assets/images/config-button.png) no-repeat;
+    background-size: 100% 100%;
   }
 }
 </style>

@@ -52,14 +52,12 @@
 <script setup>
 import { ref, watch } from "vue";
 import useHomeDialog from "@/views/components/useHomeDialog.js";
-import { getEventStatReportProblemList } from "@/apis/cockpitEventStats";
 import { getSubjectList } from "@/apis/map";
-import { subjectDetail } from "@/apis/dialog";
+import { subjectDetail, getEventList } from "@/apis/dialog";
 import EventDetailDialog from "@/views/dialog/EventDetail/index";
 import RiverMasterInfo from "./components/RiverMasterInfo";
 import WaterProject from "./components/WaterProject";
 import WaterEvent from "./components/WaterEvent";
-// import { ElMessage } from "element-plus";
 import store from "@/store";
 import moment from "moment";
 const { curDialogCom, currentDialog, isShowTab } = useHomeDialog();
@@ -78,16 +76,12 @@ const getAllWaterEvent = async () => {
   let date = new Date().getTime();
   const param = {
     adcd: store?.state?.userInfo?.adminDivCode || "",
-    code: "",
     startTime: moment(date - 60 * 1000 * 60 * 24 * 365).format(
       "YYYY-MM-DD HH:mm:ss"
     ),
     endTime: moment(date).format("YYYY-MM-DD HH:mm:ss"),
-    searchText: "",
-    pageNo: 1,
-    pageSize: 20,
   };
-  let res = await getEventStatReportProblemList(param);
+  let res = await getEventList(param);
   currentEvnet.value = res[0];
   allEvent.value = res;
 };
@@ -124,7 +118,6 @@ const getAllSubjectList = async () => {
   });
   allSubList.value = res;
   getSubDetail(res?.[0]);
-  console.log(res, "allSubList");
 };
 const getSubDetail = async (row) => {
   let res = await subjectDetail({ subjectId: row.id });
@@ -141,17 +134,20 @@ const viewEventflow = (row) => {
 watch(
   () => props.info,
   (e) => {
-    console.log(e, "eeee");
     currentDialog.value = e.layerid;
-    if (e.layerid === "riverLayer") {
+    if (
+      e.layerid === "riverLayer" &&
+      tabs.value[tabs.value.length - 1].value !== 4
+    ) {
       tabs.value.push({
         name: "河长信息",
         value: 4,
       });
     }
-    console.log(curDialogCom);
-    getAllWaterEvent();
-    getAllSubjectList();
+    if (isShowTab.value) {
+      getAllWaterEvent();
+      getAllSubjectList();
+    }
   },
   {
     immediate: true,
