@@ -116,7 +116,7 @@
         </li>
       </ul>
       <div class="map">
-        <Map :location="location" />
+        <Map :subjectArea="props.info.subjectArea" />
       </div>
     </div>
   </div>
@@ -125,10 +125,7 @@
 
 <script setup>
 import Map from "@/views/OLMap/SubjectMap";
-import { ref } from "vue";
 import moment from "moment";
-// 地图的坐标信息
-const location = ref({});
 const props = defineProps({
   list: {
     type: Array,
