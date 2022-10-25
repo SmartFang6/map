@@ -53,7 +53,7 @@ const props = defineProps({
 @import url(./waterDialog.less);
 .map-pop {
   .label {
-    width: 150px;
+    // width: 150px;
     min-width: 78px;
     text-align: right;
     font-family: MicrosoftYaHei;

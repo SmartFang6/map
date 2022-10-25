@@ -15,7 +15,6 @@
 import { queryVideoUrlList, controlVideo } from "@/apis/dialog";
 import { ref, onUnmounted, onMounted, nextTick } from "vue";
 import { ElMessage } from "element-plus";
-const timer = ref(null);
 const props = defineProps({
   info: {
     type: Object,
@@ -39,7 +38,7 @@ onMounted(() => {
 });
 onUnmounted(() => {
   destroy();
-  clearInterval(timer.value);
+  closePendingInterface();
 });
 const container = ref(null);
 const han = () => {
@@ -94,10 +93,21 @@ const create = () => {
 };
 // 是否有信号
 const hasSignal = ref(true);
+// 关闭弹窗 取消正在请求中的接口
+const controller = new AbortController();
+const closePendingInterface = () => {
+  // 取消请求
+  controller.abort();
+};
 // 播
 const play = (Code) => {
   loading.value = true;
-  queryVideoUrlList({ codeList: Code })
+  queryVideoUrlList(
+    { codeList: Code },
+    {
+      signal: controller.signal,
+    }
+  )
     .then((data) => {
       console.log(data, "data");
       return data;

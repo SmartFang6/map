@@ -2,7 +2,7 @@
  * @Author: chuyingf chuyingf@163.com
  * @Date: 2022-09-07 20:42:01
  * @LastEditors: chuyingf chuyingf@163.com
- * @LastEditTime: 2022-10-12 15:55:54
+ * @LastEditTime: 2022-10-24 16:43:08
  * @FilePath: \river-lake-cockpit-front\src\views\OLMap\layers\impl\SubjectLayer.js
  * @Description: 涉河许可图层
  */
@@ -32,25 +32,38 @@ class DCLayer extends MergeLayerImpl {
     } else {
       this.res = []
     }
-    let features = []
-    this.res.forEach(message => {
-      if (message.subjectArea.waterPreAreaPoints) { // 占用水域
-        const center = this.getCenterByPoints(message.subjectArea.waterPreAreaPoints)
-        const record = {...message, lgtd: center[0], lttd: center[1], subjectType: 'waterPreAreaPoints', id: 'preArea' + message.id}
-        features.push(record)
-      }
-      if (message.subjectArea.waterPreCompensateAreaPoints) { // 拟补偿水域
-        const center = this.getCenterByPoints(message.subjectArea.waterPreCompensateAreaPoints)
-        const record = {...message, lgtd: center[0], lttd: center[1], subjectType: 'waterPreCompensateAreaPoints', id: 'preCompensateArea' + message.id}
-        features.push(record)
-      }
-      if (message.subjectArea.waterCompensateAreaPoints) { // 已补偿水域
-        const center = this.getCenterByPoints(message.subjectArea.waterCompensateAreaPoints)
-        const record = {...message, lgtd: center[0], lttd: center[1], subjectType: 'waterCompensateAreaPoints', id: 'compensateArea' + message.id}
-        features.push(record)
+    // 原本读取面数据后再取中心点的方法
+    // let features = []
+    // this.res.forEach(message => {
+    //   if (message.subjectArea.waterPreAreaPoints) { // 占用水域
+    //     const center = this.getCenterByPoints(message.subjectArea.waterPreAreaPoints)
+    //     const record = {...message, lgtd: center[0], lttd: center[1], subjectType: 'waterPreAreaPoints', id: 'preArea' + message.id}
+    //     features.push(record)
+    //   }
+    //   if (message.subjectArea.waterPreCompensateAreaPoints) { // 拟补偿水域
+    //     const center = this.getCenterByPoints(message.subjectArea.waterPreCompensateAreaPoints)
+    //     const record = {...message, lgtd: center[0], lttd: center[1], subjectType: 'waterPreCompensateAreaPoints', id: 'preCompensateArea' + message.id}
+    //     features.push(record)
+    //   }
+    //   if (message.subjectArea.waterCompensateAreaPoints) { // 已补偿水域
+    //     const center = this.getCenterByPoints(message.subjectArea.waterCompensateAreaPoints)
+    //     const record = {...message, lgtd: center[0], lttd: center[1], subjectType: 'waterCompensateAreaPoints', id: 'compensateArea' + message.id}
+    //     features.push(record)
+    //   }
+    // })
+    // this.res = features
+
+    // 改为直接将中心点存到库里
+    this.res.forEach(re => {
+      if (re.subjectArea.centerPoint) {
+        re.lgtd = re.subjectArea.centerPoint.split(',')[0]
+        re.lttd = re.subjectArea.centerPoint.split(',')[1]
+      } else {
+        re.lgtd = null
+        re.lttd = null
       }
     })
-    this.res = features
+
     this.clear()
     if (this.res.length > 0) {
       this.addFeatures(this.res)

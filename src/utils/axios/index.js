@@ -73,8 +73,12 @@ instance.interceptors.response.use(
       // 获取错误提示
       ElMessage.error("服务重启中，请稍候！");
     } else {
-      // 获取错误提示
-      ElMessage.error(err.message || "Error");
+      // 不进行提示的错误集
+      let noToastErrList = ["canceled"];
+      if (!noToastErrList.includes(err.message)) {
+        // 获取错误提示
+        ElMessage.error(err.message || "Error");
+      }
     }
     return Promise.reject(err);
   }
