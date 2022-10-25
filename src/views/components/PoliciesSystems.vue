@@ -150,6 +150,7 @@ const onPreviewPDFFile = (url = "") => {
 <style scoped lang="less">
 .policy {
   height: 302px;
+  padding: 0 22px 0 16px;
   overflow: hidden;
   :deep(.tools) {
     display: flex;
@@ -169,7 +170,7 @@ const onPreviewPDFFile = (url = "") => {
     width: 100%;
     height: 250px;
     margin-top: 10px;
-    padding: 0 22px 0 16px;
+    // padding: 0 22px 0 16px;
     box-sizing: border-box;
     overflow: hidden;
     .oneList {
