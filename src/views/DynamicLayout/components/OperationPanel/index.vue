@@ -15,7 +15,7 @@
         />
       </template>
       <AddSideUI
-        v-if="layoutView.right?.length < 3"
+        v-if="layoutView.left?.length < 3"
         @newBuild="addSide({ location: 'left' })"
       />
     </div>
@@ -40,7 +40,7 @@
       <Map ref="mapRef" />
     </div>
     <el-dialog v-model="showDialog" width="85vw" destroy-on-close>
-      <template #title>
+      <template #header>
         <header class="addWidgets--header">新增组件</header>
       </template>
       <EditSideWidget
@@ -66,10 +66,35 @@ import EditSideWidget from "./dialog/EditSideWidget";
 import { reactive, ref, watch } from "vue";
 
 const emits = defineEmits(["updateConfig"]);
+const props = defineProps({
+  initLayout: {
+    type: [Object, null],
+    required: true,
+  },
+});
 const layoutView = reactive({
   left: [],
   right: [],
 });
+
+watch(
+  () => props?.initLayout,
+  (n, o) => {
+    const nowVal = n || o;
+    if (!nowVal) return;
+    const { left, right } = nowVal;
+    layoutView.id = nowVal?.id;
+    layoutView.layoutName = nowVal?.layoutName;
+    layoutView.left = left;
+    layoutView.right = right;
+    console.log(nowVal);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+
 function clearConfig() {
   layoutView.left = [];
   layoutView.right = [];
@@ -115,7 +140,13 @@ function delWidgetCall(location, idx) {
     confirmButtonText: "删除",
   }).then(() => {
     ElMessage.success("已删除！");
-    layoutView[location].splice(idx, 1);
+    try {
+      const list = JSON.parse(JSON.stringify(layoutView[location]));
+      list.splice(idx, 1);
+      layoutView[location] = list;
+    } catch (e) {
+      console.log(e);
+    }
   });
 }
 

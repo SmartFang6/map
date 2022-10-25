@@ -7,9 +7,7 @@
 <template>
   <div>
     <div class="btn--warp">
-      <el-button type="primary" @click="$emit('submitSelect', selectedWidget)">
-        确认
-      </el-button>
+      <el-button type="primary" @click="submitWidgets">确认</el-button>
     </div>
     <ul class="widget-warp">
       <li
@@ -42,7 +40,7 @@ import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { getWidgetList } from "@/apis/dynamicLayout";
 
-defineEmits(["submitSelect"]);
+const emits = defineEmits(["submitSelect"]);
 const props = defineProps({
   filterList: {
     type: Array,
@@ -52,20 +50,19 @@ const props = defineProps({
 // 远程组件库列表
 const widgetList = ref([]);
 const params = {};
-const { message, data } = await getWidgetList(params);
-console.log(message, data);
-if (message && message?.length) {
-  widgetList.value = message.map((item) => ({
-    widgetCode: item?.componentCode,
-    name: item?.componentName,
-    poster: require(item?.poster),
-    getDataUri: item?.requestUrl,
-    domainName: item?.domainName, // TODO: 域名(暂时没使用)
-    port: item?.port, // TODO: 端口(暂时没使用)
-    size: item?.size, // TODO: 组件大小(暂时没使用)
-  }));
-}
-
+getWidgetList(params).then((res) => {
+  widgetList.value =
+    res?.map((item) => ({
+      componentInfoId: item?.id,
+      widgetCode: item?.componentCode,
+      name: item?.componentName,
+      poster: item?.poster,
+      getDataUri: item?.requestUrl,
+      domainName: item?.domainName, // TODO: 域名(暂时没使用)
+      port: item?.port, // TODO: 端口(暂时没使用)
+      size: item?.size, // TODO: 组件大小(暂时没使用)
+    })) || [];
+});
 const selectedWidget = ref(null);
 const selectFn = (widget) => {
   if (props?.filterList?.includes(widget?.widgetCode)) {
@@ -73,6 +70,9 @@ const selectFn = (widget) => {
     return;
   }
   selectedWidget.value = widget;
+};
+const submitWidgets = () => {
+  emits("submitSelect", selectedWidget.value);
 };
 </script>
 

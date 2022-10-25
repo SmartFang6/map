@@ -28,7 +28,7 @@ class DCLayer extends MergeLayerImpl {
     } else {
       this.res = []
     }
-    console.log('load res', this.res);
+    // console.log('load res', this.res);
     // this.legendChange()
     this.clear()
     if (this.res.length > 0) {
@@ -40,7 +40,7 @@ class DCLayer extends MergeLayerImpl {
   legendChange(checks) {
     this.clear()
     const levelField = this.layerConfig.levelField
-    
+
     if (!this.res) {
       return
     }

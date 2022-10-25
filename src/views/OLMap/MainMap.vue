@@ -216,7 +216,7 @@ export default {
       } else {
         this.pointAdcd = this.adcd
       }
-      
+
       if (this.baseLayers.indexOf('pointLayer') === -1) { // 如果此时地图展示的不是问题点位图层，则切换图层
         this.initLayers(['pointLayer'])
       } else { // 如果此时地图展示的是问题图层，则移除后重新加载
@@ -279,7 +279,7 @@ export default {
     },
     // 初始化加载图层
     initLayers(layers) {
-      console.log('initlayers', layers);
+      // console.log('initlayers', layers);
       const layerArr = layers;
       // 需要加载的图层
       const addLayers = layerArr.filter(
@@ -311,7 +311,7 @@ export default {
     },
     // 加载/移除单个图层
     changeLayerVisible(layerid, status) {
-      console.log('visible', layerid, status);
+      // console.log('visible', layerid, status);
       if (status) {
         let searchInfo = {
           adcd: this.pointAdcd,
@@ -337,7 +337,7 @@ export default {
         // 如果需要加载水域调查图层，且图例有勾选，则再添加对应图层的三线
         if (this.threeLines.length > 0 && this.threeLineLayers.indexOf(layerid) !== -1) {
           this.layers[layerid].changeLegend(this.threeLines, this)
-        } 
+        }
 
         this.baseLayers.push(layerid);
       } else {
@@ -531,7 +531,7 @@ export default {
   border:1px solid #266da0;
   padding: 5px 8px 5px 8px;
   border-radius: 2px;
-  box-shadow: 0px 17px 30px 0px 
+  box-shadow: 0px 17px 30px 0px
 		rgba(28, 35, 39, 0.1);
 }
 </style>

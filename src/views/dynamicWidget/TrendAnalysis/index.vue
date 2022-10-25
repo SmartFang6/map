@@ -56,7 +56,6 @@ const getTrendAnalysisModel = async (queryParam) => {
 
 // 处理源数据,新增图表展示需要的参数坐标
 const dealDataModel = () => {
-  console.log("TrendAna", dataModel.value);
   nextTick(() => {
     drawChart(dataModel.value);
   });
