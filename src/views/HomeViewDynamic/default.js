@@ -26,6 +26,10 @@ export default {
           title: "事件定责",
           widgetCode: "DetermineTheAccountability",
         },
+        {
+          title: "事件定人",
+          widgetCode: "DetermineThePerson",
+        },
       ],
     },
   ],
@@ -38,6 +42,14 @@ export default {
         },
       ],
     },
+    // {
+    //   widgets: [
+    //     {
+    //       title: "工作成效",
+    //       widgetCode: "WorkEffect",
+    //     },
+    //   ],
+    // },
     {
       widgets: [
         {
@@ -54,5 +66,13 @@ export default {
         },
       ],
     },
+    // {
+    //   widgets: [
+    //     {
+    //       title: "问题研判",
+    //       widgetCode: "ProblemJudgment",
+    //     },
+    //   ],
+    // },
   ],
 };
