@@ -8,7 +8,7 @@
 
 <template>
   <div class="map-layer">
-    <div class="btns">
+    <div class="btns" v-if="showLayers.length > 0">
       <div
         :class="{ btn: true, active: layerActive }"
         @click="onTriggerLayerActive"
@@ -19,7 +19,7 @@
       <div
         class="layer-types"
         :style="{
-          '--titleLen': layerLength + layerTypes.length,
+          '--titleLen': layerLength,
         }"
         :class="layerActive ? '' : 'h0'"
       >
@@ -28,15 +28,18 @@
           :key="index"
           class="layer-type-item"
         >
-          <div class="title">{{ layer.title }}</div>
-          <div
-            v-for="(item, i) in layer.items"
-            :key="i"
-            :class="{ item: true, active: selectLayers.includes(item.value) }"
-            @click="onSelectLayers(item, index)"
-          >
-            {{ item.label }}
+          <div class="title" v-if="isShowLayerTitle(layer)">
+            {{ layer.title }}
           </div>
+          <template v-for="(item, i) in layer.items" :key="i">
+            <div
+              v-if="showLayers.includes(item.value)"
+              :class="{ item: true, active: selectLayers.includes(item.value) }"
+              @click="onSelectLayers(item, index)"
+            >
+              {{ item.label }}
+            </div>
+          </template>
         </div>
         <div class="close" @click="onTriggerLayerActive">
           <img src="@/assets/images/chart-arrow-up.png" />
@@ -63,14 +66,34 @@ import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
 import { loadScriptString } from "@/utils";
+import { getDictList } from "@/apis/common";
 
 const store = useStore();
 
+// 显示的长度
 const layerLength = computed(() => {
-  return layerTypes.reduce((pre, cur) => {
-    return pre + cur.items.length;
+  let titleLen = layerTypes.reduce((pre, cur) => {
+    let l = isShowLayerTitle(cur);
+    return pre + (l ? 1 : 0);
   }, 0);
+  return (
+    titleLen +
+    layerTypes.reduce((pre, cur) => {
+      let l = cur.items.filter((i) => {
+        return showLayers.value.includes(i.value);
+      });
+      return pre + l.length;
+    }, 0)
+  );
 });
+
+// 是否显示表头
+const isShowLayerTitle = (items) => {
+  let l = items.items.filter((i) => {
+    return showLayers.value.includes(i.value);
+  });
+  return l.length > 0;
+};
 // 事件
 const emits = defineEmits(["selectLayers", "showDesc"]);
 
@@ -123,6 +146,23 @@ const onTriggerLayerActive = () => {
     });
   }
 };
+// 可以显示的图层
+const showLayers = ref([]);
+// 获取图层字典列表
+const getLayerDict = async () => {
+  try {
+    let tableColumnCodes = "water_one_cockpit_layer:layer_code";
+    let res = await getDictList({
+      tableColumnCodes,
+    });
+    showLayers.value = res[tableColumnCodes].map((i) => {
+      return i.eucd;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+getLayerDict();
 </script>
 
 <style lang="less" scoped>
