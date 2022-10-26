@@ -68,7 +68,7 @@
       top="10vh"
       destroy-on-close
     >
-      <template #title>
+      <template #header>
         <header class="widgets--header">组件库</header>
       </template>
       <WidgetList :filterList="useWidget" @submitSelect="submitSelectCall" />
@@ -183,6 +183,10 @@ const submitSelectCall = (payload) => {
   showWidgetList.value = false;
   formData.widgets[activeWidget.value].poster = payload?.poster;
   formData.widgets[activeWidget.value].widgetCode = payload?.widgetCode;
+  if (payload?.componentInfoId) {
+    formData.widgets[activeWidget.value].componentInfoId =
+      payload?.componentInfoId;
+  }
 };
 
 const submit = () => {
@@ -195,8 +199,9 @@ const submit = () => {
 onMounted(() => {
   const { type, widgets } = props?.nowSide || {};
   if (type === "edit") {
-    formData.widgets = widgets;
-    formData.tabCount = widgets?.length;
+    let _widgets = JSON.stringify(widgets);
+    formData.widgets = JSON.parse(_widgets);
+    formData.tabCount = JSON.parse(_widgets)?.length;
   }
 });
 </script>

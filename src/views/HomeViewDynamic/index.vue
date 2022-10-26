@@ -77,12 +77,12 @@ import WaterAllDialog from "@/views/dialog/WaterAllDialog";
 
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import defaultConfig from "./default";
 
 const router = useRouter();
 const store = useStore();
 const nowConfig = computed(() => {
   const configJSONStr = store?.state?.layoutConfig;
+  const defaultConfig = { left: [], right: [] };
   let config = null;
   try {
     // config = configJSONStr ? JSON.parse(configJSONStr) : defaultConfig;

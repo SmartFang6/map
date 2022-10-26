@@ -26,15 +26,27 @@ export default {
           title: "事件定责",
           widgetCode: "DetermineTheAccountability",
         },
+        {
+          title: "事件定人",
+          widgetCode: "DetermineThePerson",
+        },
       ],
     },
   ],
   right: [
+    // {
+    //   widgets: [
+    //     {
+    //       title: "趋势分析",
+    //       widgetCode: "TrendAnalysis",
+    //     },
+    //   ],
+    // },
     {
       widgets: [
         {
-          title: "趋势分析",
-          widgetCode: "TrendAnalysis",
+          title: "工作成效",
+          widgetCode: "WorkEffect",
         },
       ],
     },
@@ -46,11 +58,19 @@ export default {
         },
       ],
     },
+    // {
+    //   widgets: [
+    //     {
+    //       title: "政策制度",
+    //       widgetCode: "PoliciesSystems",
+    //     },
+    //   ],
+    // },
     {
       widgets: [
         {
-          title: "政策制度",
-          widgetCode: "PoliciesSystems",
+          title: "问题研判",
+          widgetCode: "ProblemJudgment",
         },
       ],
     },

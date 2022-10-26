@@ -15,6 +15,8 @@ import axios from "axios";
 import { ticketMap } from "./config.js";
 import { ElMessage } from "element-plus";
 import { getMD5_sign } from "@/utils";
+import { getUserDefaultLayout } from "@/apis/dynamicLayout";
+import { buildUserLayout } from "@/views/dynamicWidget/commonTools";
 const loading = ref(false);
 onBeforeMount(() => {
   getUserInformation();
@@ -22,6 +24,7 @@ onBeforeMount(() => {
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
+
 const getUserInformation = () => {
   loading.value = true;
   const { ticket } = route.query;
@@ -46,24 +49,28 @@ const getUserInformation = () => {
     .get(`/userApi/user/sso`, {
       params: _params,
     })
-    .then((res) => {
-      console.log(res, "res");
+    .then(async (res) => {
       if (res.data.status === 0) {
         let data = res.data.message;
         store.commit("UPDATE_TOKEN", data.token);
         store.commit("UPDATE_USER_INFO", data);
-        router.push("/");
-        loading.value = false;
+        const message = await getUserDefaultLayout();
+        if (message) {
+          const userLayoutInfo = buildUserLayout(message);
+          store.commit("UPDATE_LAYOUT_CONFIG", userLayoutInfo);
+        }
+        await router.push("/");
       } else {
         ElMessage({
           message: res.data.errmsg || "系统异常",
           type: "error",
           duration: 2 * 1000,
         });
-        loading.value = false;
-
-        router.push("/401");
+        await router.push("/401");
       }
+    })
+    .finally(() => {
+      loading.value = false;
     });
 };
 </script>

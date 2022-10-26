@@ -69,7 +69,6 @@ watch(
     data.value = await countEventClassCount({
       ...dateRange,
     });
-    console.log(data);
     if (data.value.eventSourceSolveRate) {
       data.value.eventSourceSolveRate =
         data.value.eventSourceSolveRate.toFixed(0);

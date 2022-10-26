@@ -144,13 +144,14 @@ getLeftData(store?.state?.dateRange);
   position: relative;
 }
 .funnel-chart {
-  width: 269px;
-  height: 225px;
+  width: 250px;
+  height: 200px;
   background: url(@/assets/images/funnel-bg.png);
+  background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
-  right: 10px;
-  top: 23px;
+  right: 5px;
+  top: 0px;
 }
 .nature-item {
   width: 223px;
@@ -186,11 +187,11 @@ getLeftData(store?.state?.dateRange);
     }
   }
   &:nth-child(1) {
-    margin-top: 23px;
-    margin-left: 80px;
+    margin-top: 20px;
+    margin-left: 90px;
   }
   &:nth-child(2) {
-    margin-left: 40px;
+    margin-left: 45px;
     .value,
     .num {
       & span:first-child {

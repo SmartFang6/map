@@ -60,7 +60,7 @@
 
  **/
 import { Plus, Edit, DeleteFilled } from "@element-plus/icons-vue";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 defineEmits(["newBuild", "delWidget", "editWidget"]);
 const props = defineProps({
   widgets: {
@@ -76,6 +76,16 @@ const activeTabName = ref(props?.widgets?.[0]?.widgetCode || "");
 const activeTabView = computed(() => {
   return props?.widgets.find((item) => item.widgetCode === activeTabName.value);
 });
+watch(
+  () => props.widgets,
+  () => {
+    activeTabName.value = props?.widgets?.[0]?.widgetCode;
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 const clickMap = (code) => {
   activeTabName.value = code;
 };
