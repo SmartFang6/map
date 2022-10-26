@@ -112,6 +112,10 @@ async function getUserLayoutList() {
     const message = await getUserConfigLayoutList();
     if (!message) return;
     layoutList.value = message;
+    layoutList.value.push({
+      id: "",
+      layoutName: "新增",
+    });
   } catch (e) {
     console.log(e);
   }
@@ -119,17 +123,20 @@ async function getUserLayoutList() {
 getUserLayoutList();
 
 async function getLayoutInfo() {
-  if (!layoutId.value) return ElMessage.info("请选择模版！");
-  try {
-    const message = await getConfigLayoutById({
-      code: layoutId.value,
-    });
-    console.log(message);
-    const newLayout = buildUserLayout(message);
-    nowConfig.value = newLayout;
-    initLayout.value = newLayout;
-  } catch (e) {
-    console.log(e);
+  if (!layoutId.value) {
+    clearCall();
+  } else {
+    try {
+      const message = await getConfigLayoutById({
+        code: layoutId.value,
+      });
+      console.log(message);
+      const newLayout = buildUserLayout(message);
+      nowConfig.value = newLayout;
+      initLayout.value = newLayout;
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
@@ -144,6 +151,16 @@ const previewShow = ref(false);
 
 const operationPanel = ref(null);
 function clearCall() {
+  nowConfig.value = {
+    layoutName: "",
+    left: [],
+    right: [],
+  };
+  initLayout.value = {
+    layoutName: "",
+    left: [],
+    right: [],
+  };
   operationPanel?.value?.clearConfig && operationPanel?.value?.clearConfig();
 }
 async function publishLayout() {
