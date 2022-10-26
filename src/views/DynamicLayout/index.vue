@@ -98,11 +98,19 @@ const store = useStore();
 
 // 删除布局
 const layoutId = ref(null);
-function delLayout() {
+async function delLayout() {
   if (!layoutId.value) return ElMessage.info("请选择模版！");
-  delUserConfigLayout({
+  const message = await delUserConfigLayout({
     code: layoutId.value,
   });
+  if (message) {
+    ElMessage.success("成功！");
+    layoutId.value = "";
+    await getUserLayoutList();
+    clearCall();
+    return;
+  }
+  ElMessage.error("删除失败！");
 }
 
 // 获取布局列表
@@ -188,7 +196,7 @@ async function publishLayout() {
     await setUserConfigLayoutInfo(message);
     store.commit("UPDATE_LAYOUT_CONFIG", params);
     await router?.replace("/").then(() => {
-      location.reload();
+      // location.reload();
     });
   } catch (e) {
     console.log(e);

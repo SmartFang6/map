@@ -159,7 +159,7 @@ export function buildParamsLayout(requestData) {
   });
   if (requestData?.id) {
     layoutInfo.id = requestData?.id;
-    layoutInfo.layoutName = requestData?.layoutName;
   }
+  layoutInfo.layoutName = requestData?.layoutName;
   return layoutInfo;
 }
