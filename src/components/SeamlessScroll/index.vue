@@ -1,5 +1,5 @@
 <template>
-  <div class="list" :key="componentKey" v-if="show" ref="scroll_outside">
+  <div class="scroll-box" :key="componentKey" v-if="show" ref="scroll_outside">
     <div
       class="cc rowup"
       :style="{ '--speed': speed, '--A_DYNAMIC_VALUE': slotHeight }"
@@ -65,8 +65,8 @@ function initDom() {
   // 获取滚动内容高度
   const scrollDOM = scroll_box.value;
   const scrollHeight = scrollDOM.offsetHeight;
-  // console.log("高度---",scrollHeight,scrollOutsideH);
-  if (scrollHeight > scrollOutsideH) {
+  // console.log("高度---", scrollHeight, scrollOutsideH);
+  if (scrollHeight >= scrollOutsideH) {
     // 获取插槽的DOM，并生成一份新的插槽数据添加到末尾
     const slotDom = scrollDOM.innerHTML;
     const copyDom = `<div style="position:relative;left:0;top:0;height:100%;">${slotDom}</div>`;
@@ -115,16 +115,17 @@ function handleClick(e) {
 }
 </script>
 <style scoped lang="less">
-.list {
+.scroll-box {
   width: 100%;
-  height: 100%;
+  height: 95%;
   // margin: 20px auto;
   position: relative;
   overflow: hidden;
   font-family: "Microsoft Yahei";
 }
 
-.list .rowup {
+.scroll-box .rowup {
+  margin-top: --A_DYNAMIC_VALUE;
   @keyframes rowup {
     0% {
       -webkit-transform: translate3d(0, 0, 0);
