@@ -1,6 +1,6 @@
 <template>
-  <div class="picture-map3">
-    <div id="map3" />
+  <div class="picture-map4">
+    <div id="map4" />
   </div>
 </template>
 
@@ -14,8 +14,10 @@ import OrgAdcdWmsLayer from "./layers/OrgAdcdWmsLayer";
 import BaseVectorLayer from "./layers/base/BaseVectorLayer";
 import OrgBoundaryLayer from './layers/NewOrgBoundaryLayer';
 import {
+  geoserverWmsUrl,
   riverManageLineLayer,
   riverPointLayer,
+  subjectLayer,
 } from "./config/layerConfig";
 import DCLayer from "./layers/impl/DCLayer";
 import LayerParams from "./common/LayerParams";
@@ -28,11 +30,20 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import DCWMSLayer from './layers/impl/DCWMSLayer'
 import RiverManageLineLayer from './layers/impl/RiverManageLineLayer'
+import SubjectLayer from './layers/impl/SubjectLayer'
 // import useUserInfo from '@/composables/useUserInfo'
 import Fill from 'ol/style/Fill'
 import store from "@/store";
 import { watch } from 'vue'
 import MainMapWMSLayer from './layers/impl/MainMapWMSLayer';
+import building from '@/assets/map/building.png'
+import finish from '@/assets/map/finish.png'
+import {
+  getAdLevelBySystemAdcd,
+  getFeatureTypesByAdLevel,
+  getGisDataByWfs,
+  getMapAdcdFromSystem,
+} from "./common/commonrough";
 export default {
   name: "FirstMap",
   components: { },
@@ -40,61 +51,26 @@ export default {
     return { getMap: this.getMap };
   },
   props: {
-    location: {
+    subjectArea: {
       default: () => {
-        return {
-          longitude: null, 
-          latitude:null, 
-          adcd: null,
+        return {}
+      },
+      type: Object
+    }
+  },
+  watch: {
+    subjectArea: {
+      handler(nval) {
+        if (nval.subjectArea.centerPoint) {
+          this.addSubjectLayer()
+        } else {
+          if (this.subjectLayer) {
+            this.map.removeLayer(this.subjectLayer)
+          }
         }
       },
-      type: Object,
-    },
-  },
-  created() {
-    watch(() => this.location, location => {
-      this.$nextTick(() => {
-        console.log("查看 location changed =>", location);
-        // 处理本地调试不显示地图问题
-        if (!this.map.getTargetElement().querySelector('canvas')) {
-          this.initMap()
-        }
-        if (location) {
-          console.log('查看地图3定位切换', location);
-          // 经纬度不为空则添加定位点
-          if (location.longitude && location.latitude) {
-            const { longitude, latitude } = location
-            this.addClickLayer([longitude, latitude])
-            this.map.getView().setCenter([longitude, latitude])
-            this.map.getView().setZoom(16)
-          } else {
-            if (this.locatePointLayer) {
-              this.map.removeLayer(this.locatePointLayer)
-            }
-          }
-          // 传入的adcd不为空则添加行政区划线
-          if (this.location.adcd && this.location.adcd.length > 7) { // 至少定位到街道
-            if (this.location.adcd.length > 9) { // 如果定位到社区，则只取前9位adcd
-              this.location.adcd = this.location.adcd.slice(0,9)
-            }
-            // 添加对应的乡镇边界
-            this.layers.boundary.load(this.map, this.location.adcd)
-          } else {
-            if (this.layers.boundary) {
-              this.layers.boundary.removeLayer(this.map, this)
-            }
-          }
-        } else {
-          if (this.locatePointLayer) {
-            this.map.removeLayer(this.locatePointLayer)
-          }
-          if (this.layers.boundary) {
-            this.layers.boundary.removeLayer(this.map, this)
-          }
-          this.initMapExtent()
-        }
-      });
-    }, { deep: true })
+      deep: true
+    }
   },
   data() {
     return {
@@ -123,7 +99,7 @@ export default {
       getMap();
     },
     initMap() {
-      mapConfig.target = "map3";
+      mapConfig.target = "map4";
       this.map = MapFactory.createMap(mapConfig);
       // 初始化图层
       this.firstLoad();
@@ -133,109 +109,76 @@ export default {
       this.layers = {
         layerSwitch: new LayerSwitch(),
         riverPointLayer: new DCLayer(riverPointLayer),
-        // lineManageLayer: new RiverManageLineLayer(riverManageLineLayer), // 河道管理范围线
         lineManageLayer: new MainMapWMSLayer(riverManageLineLayer), // 河道管理范围线
         boundary: new OrgBoundaryLayer(), // 乡镇边界线
-        // shadeLayer: new ShadeLayer()
-        // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
-        // draw: new BaseVectorLayer(drawLayer)
       };
       // 加载影像图
       this.layers.layerSwitch.changeLayers("3", this.map);
-      // 初始化时根据adcd进行地图缩放定位
-      // this.initMapExtent()
-      // // 加载遮罩
-      // this.layers.shadeLayer.load(this.adcd, this.map, true)
-      // // this.layers.innerShadeLayer.load(this.adcd, this.map)
-      // this.layers.orgAdcdWmsLayer.load(this.map, this.adcd)
-      // this.initClick();
-      console.log('firstload');
-      if (this.location && this.location.longitude && this.location.latitude) {
-        console.log('初始化', this.location);
-        if (this.location.longitude && this.location.latitude) {
-          this.addClickLayer([this.location.longitude, this.location.latitude])
-          this.map.getView().setCenter([this.location.longitude, this.location.latitude])
-          this.map.getView().setZoom(16)
-        }
-        if (this.location.adcd && this.location.adcd.length > 7) { // 至少定位到街道
-          if (this.location.adcd.length > 9) { // 如果定位到社区，则只取前9位adcd
-            this.location.adcd = this.location.adcd.slice(0,9)
-          }
-          // 添加对应的乡镇边界
-          this.layers.boundary.load(this.map, this.location.adcd)
-        } else {
-          this.initMapExtent()
-        }
-      }
-      // 加载河道管理范围线
-      // if (this.adcd === '330182') {
-        this.layers.lineManageLayer.load(new LayerParams({
-          vm: this,
-          searchInfo: {}
-        }))
-      // }
-      this.map.updateSize()
-    },
-    // 初始化加载图层
-    initLayers(layers) {
-      const layerArr = layers;
-      // 需要加载的图层
-      const addLayers = layerArr.filter(
-        (layer) => this.baseLayers.indexOf(layer) === -1
-      );
-      // 需要移除的图层
-      const removeLayers = this.baseLayers.filter(
-        (layer) => layerArr.indexOf(layer) === -1
-      );
-      addLayers.forEach((layer) => {
-        this.changeLayerVisible(layer, true);
-      });
-      removeLayers.forEach((layer) => {
-        this.changeLayerVisible(layer, false);
-      });
-    },
-    // 加载/移除单个图层
-    changeLayerVisible(layerid, status) {
-      if (status) {
-        let searchInfo = {};
-        this.layers[layerid].load(
-          new LayerParams({
-            vm: this,
-            searchInfo,
-          })
-        );
-        this.baseLayers.push(layerid);
+      if (this.subjectArea.subjectArea && this.subjectArea.subjectArea.centerPoint) {
+        this.addSubjectLayer()
       } else {
-        this.layers[layerid].removeLayer(this.map, this);
-        this.baseLayers.splice(this.baseLayers.indexOf(layerid), 1);
+        this.initMapExtent()
       }
     },
-    initClick() {
-      this.map.on("click", (evt) => {
-        this.addClickLayer(evt.coordinate)
-      });
-    },
-    addClickLayer(coord) {
-      if (this.locatePointLayer) {
-        this.map.removeLayer(this.locatePointLayer)
+    // 初始化根据adcd定位
+    async initMapExtent() {
+      console.log('地图初始化定位');
+      const mapadcd = getMapAdcdFromSystem(this.adcd);
+      const adLevel = getAdLevelBySystemAdcd(this.adcd);
+      const featureType = getFeatureTypesByAdLevel(adLevel);
+      const params = {
+        service: "WFS",
+        version: "1.0.0",
+        request: "GetFeature",
+        outputformat: "json",
+        typeName: featureType,
+        cql_filter: `admin_div_code=${mapadcd}`,
+      };
+      const result = await getGisDataByWfs(params, geoserverWmsUrl.adcdWMS);
+      const features = new GeoJSON().readFeatures(result);
+      if (features.length > 0) {
+        this.map.getView().fit(features[0].getGeometry().getExtent());
       }
-      // 添加定位点
-      const locateFeature = new Feature({ geometry: new Point(coord) })
-      const locateStyle = new Style({
-        image: new Icon({
-          crossOrigin: 'anonymous',
-          src: location,
-          anchor: [0.5, 0.75],
-          scale: 1,
+    },
+    addSubjectLayer() {
+      console.log('添加点位', this.subjectArea);
+      if (this.subjectLayer) {
+        this.map.removeLayer(this.subjectLayer)
+      }
+      const lgtd = this.subjectArea.subjectArea.centerPoint.split(',')[0]
+      const lttd = this.subjectArea.subjectArea.centerPoint.split(',')[1]
+      const feature = new Feature({
+        geometry: new Point([lgtd, lttd]),
+        properties: null
+      })
+      let icon
+      switch(this.subjectArea.subjectStatus) {
+        case '1':
+          icon = finish
+          break
+        case '2':
+          icon = building
+          break
+        default:
+          icon = building
+          break
+      }
+      this.subjectLayer = new VectorLayer({
+        id: 'subject',
+        source: new VectorSource({
+          features: [feature],
+          
         }),
+        style: new Style({
+            image: new Icon({
+              src: icon,
+              scale: 0.8
+            })
+          }),
+          zIndex: 20
       })
-      this.locatePointLayer = new VectorLayer({
-        id: 'locatePoint',
-        source: new VectorSource({ features: [locateFeature] }),
-        style: locateStyle,
-        zIndex: 20,
-      })
-      this.map.addLayer(this.locatePointLayer)
+      this.map.addLayer(this.subjectLayer)
+      this.map.getView().setCenter([lgtd, lttd])
     }
   },
 };
@@ -247,11 +190,11 @@ export default {
 } */
 </style>
 <style lang="less" scoped>
-.picture-map3 {
+.picture-map4 {
   width: 100%;
   height: 100%;
   display: flex;
-  #map3 {
+  #map4 {
     width: 100%;
     height: 100%;
   }

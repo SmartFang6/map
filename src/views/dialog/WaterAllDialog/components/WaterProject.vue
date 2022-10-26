@@ -116,7 +116,7 @@
         </li>
       </ul>
       <div class="map">
-        <Map :subjectArea="props.info.subjectArea" />
+        <Map :subjectArea="props.info" />
       </div>
     </div>
   </div>
