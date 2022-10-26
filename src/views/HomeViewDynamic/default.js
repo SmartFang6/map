@@ -34,22 +34,22 @@ export default {
     },
   ],
   right: [
-    {
-      widgets: [
-        {
-          title: "趋势分析",
-          widgetCode: "TrendAnalysis",
-        },
-      ],
-    },
     // {
     //   widgets: [
     //     {
-    //       title: "工作成效",
-    //       widgetCode: "WorkEffect",
+    //       title: "趋势分析",
+    //       widgetCode: "TrendAnalysis",
     //     },
     //   ],
     // },
+    {
+      widgets: [
+        {
+          title: "工作成效",
+          widgetCode: "WorkEffect",
+        },
+      ],
+    },
     {
       widgets: [
         {
@@ -58,21 +58,21 @@ export default {
         },
       ],
     },
-    {
-      widgets: [
-        {
-          title: "政策制度",
-          widgetCode: "PoliciesSystems",
-        },
-      ],
-    },
     // {
     //   widgets: [
     //     {
-    //       title: "问题研判",
-    //       widgetCode: "ProblemJudgment",
+    //       title: "政策制度",
+    //       widgetCode: "PoliciesSystems",
     //     },
     //   ],
     // },
+    {
+      widgets: [
+        {
+          title: "问题研判",
+          widgetCode: "ProblemJudgment",
+        },
+      ],
+    },
   ],
 };
