@@ -19,6 +19,7 @@ export const getEventStat = (data) => {
     data,
   });
 };
+
 // 获取事件等级统计结果 (问题清单列表)
 /**
  *
@@ -85,4 +86,82 @@ export const countEventClassCount = (data) => {
 };
 export const getEventDistributeInfo = (data) => {
   return postHttp("/supervision/getEventDistributeInfo", { data });
+};
+
+/**
+ * 事件定人的列表数据
+ * date: 2022.10.26
+ * @param {Object<any>} data: 查询参数
+ * @returns {Object<any>}
+ */
+export const getEventStatDistributePerson = (data) => {
+  return postHttp("/supervision/getEventStatDistributePer", { data });
+};
+
+/**
+ * 获取工作成效的列表
+ * date: 2022.10.26
+ * @param {Object<any>} data: 查询参数
+ * @returns {Object<any>}
+ */
+export const getWorkEffectList = (data) => {
+  return postHttp("/supervision/getEventStatDistribution", { data });
+};
+
+/**
+ * 获取问题研判断的列表
+ * date: 2022.10.26
+ * @param {Object<any>} data: 查询参数
+ * @returns {Object<any>}
+ */
+export const getProblemJudgmentList = (data) => {
+  // return postHttp("/supervision/getProblemJudgmentList", { data });
+  return {
+    ...data,
+    config: null,
+    list: [
+      {
+        id: 1001,
+        eventName: "侵占河湖空间",
+        num: 624,
+        rate: 100,
+      },
+      {
+        id: 1002,
+        eventName: "占用水域",
+        num: 277,
+        rate: 84,
+      },
+      {
+        id: 1003,
+        eventName: "影响航道",
+        num: 154,
+        rate: 73,
+      },
+      {
+        id: 1004,
+        eventName: "城市河道保洁",
+        num: 92,
+        rate: 62,
+      },
+      {
+        id: 1005,
+        eventName: "水域保洁",
+        num: 47,
+        rate: 54,
+      },
+      {
+        id: 1006,
+        eventName: "非法拦网",
+        num: 45,
+        rate: 27,
+      },
+      {
+        id: 1007,
+        eventName: "非法采砂",
+        num: 13,
+        rate: 10,
+      },
+    ],
+  };
 };

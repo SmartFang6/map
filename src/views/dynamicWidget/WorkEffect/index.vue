@@ -7,85 +7,105 @@
 <template>
   <div class="work-effect" v-if="list && list.length > 0">
     <div class="list-wrap" v-for="(item, index) in list" :key="index">
-      <el-tooltip :content="item.cont" effect="dark" placement="top-start">
-        <p class="content">{{ item.cont }}</p>
+      <el-tooltip
+        :content="item.effectTypeName"
+        effect="dark"
+        placement="top-start"
+      >
+        <p class="content" :title="item.effectTypeName">
+          {{ item.effectTypeName }}
+        </p>
       </el-tooltip>
       <span class="unit">
-        <strong>{{ item.num }}</strong>
-        {{ item.unit }}
+        <strong :style="'color:' + item.color">{{ item.effectValue }}</strong>
+        {{ item.effectUnitName }}
       </span>
     </div>
   </div>
 </template>
 
 <script setup>
+/**
+ 工作成效
+ **/
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
-import { ref, reactive, toRefs } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
+import { getWorkEffectList } from "@/apis/home";
+
+// 组件注入数据模型
+const listModel = ref(null);
+
+// 事件类型的翻译映射
+const unitMapper = {
+  // 清理非法占用河道岸线
+  CX011: { unitName: "公里", color: "#ffdc00" },
+  // 清理非法采砂点
+  CX021: { unitName: "个", color: "#ec4d94" },
+  // 清理非法采砂石量
+  CX022: { unitName: "立方米", color: "#00d2f3" },
+  // 打击非法采砂船只
+  CX023: { unitName: "艏", color: "#d57e1c" },
+  // 清理建筑和生活垃圾
+  CX031: { unitName: "吨", color: "#08b14d" },
+  // 拆除违法建筑
+  CX041: { unitName: "平方米", color: "#1293ee" },
+  // 清除围堤
+  CX051: { unitName: "公里", color: "#ffdc00" },
+  // 清除非法林地
+  CX052: { unitName: "平方米", color: "#1293ee" },
+  // 清除非法网箱养殖
+  CX053: { unitName: "平方米", color: "#1293ee" },
+  // 清除违规种植大棚
+  CX054: { unitName: "平方米", color: "#1293ee" },
+};
+
+// 获取工作成效的数据
+function getWorkEffectData(dateRange) {
+  if (!dateRange) return;
+  const params = {
+    ...dateRange,
+  };
+  // 获取工作成效的数据列表
+  getWorkEffectList(params).then((res) => {
+    // 筛选数据
+    if (!res?.eventDisposalEffectStatVOList) return;
+    listModel.value = res?.eventDisposalEffectStatVOList.map((item) => {
+      // 获取时间的单位
+      item.effectUnitName = unitMapper[item.effectType]?.unitName;
+      // 获取事件数量的字体颜色
+      item.color = unitMapper[item.effectType]?.color;
+      return item;
+    });
+  });
+}
+
+// 工作成效的列表数据
+const list = computed(() => {
+  if (!listModel.value) {
+    return [];
+  }
+  return listModel.value;
+});
 
 const store = useStore();
 
-// 左侧注入数据
-const leftData = ref(null);
+// 监听驾驶舱的日期间隔
+watch(
+  () => store?.state?.dateRange,
+  (newVal, oldVal) => {
+    const val = newVal || oldVal;
+    getWorkEffectData(val);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
-console.log("person", store, leftData);
-
-// 组件的数据模型
-const model = reactive({
-  list: [
-    {
-      id: 1001,
-      cont: "清理非法占用河道岸线",
-      num: "12",
-      unit: "公里",
-    },
-    {
-      id: 1001,
-      cont: "清理非法采砂点",
-      num: "27",
-      unit: "个",
-    },
-    {
-      id: 1001,
-      cont: "清理非法采砂石量清理非法占用河道岸线清理非法占用河道岸线清理非法占用河道岸线清理非法占用河道岸线",
-      num: "234",
-      unit: "立方米",
-    },
-    {
-      id: 1001,
-      cont: "清理非法占用河道岸线",
-      num: "31",
-      unit: "公里",
-    },
-    {
-      id: 1001,
-      cont: "清理非法占用河道岸线",
-      num: "17",
-      unit: "公里",
-    },
-    {
-      id: 1001,
-      cont: "清理非法占用河道岸线",
-      num: "17",
-      unit: "公里",
-    },
-    {
-      id: 1001,
-      cont: "清理非法占用河道岸线",
-      num: "17",
-      unit: "公里",
-    },
-    {
-      id: 1001,
-      cont: "清理非法占用河道岸线",
-      num: "17",
-      unit: "公里",
-    },
-  ],
-});
-
-const { list } = toRefs(model);
+// 首次加载获取数据
+getWorkEffectData(store?.state?.dateRange);
 </script>
 
 <style lang="less" scoped>

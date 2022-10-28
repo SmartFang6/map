@@ -6,17 +6,21 @@
  *****************************************-->
 <template>
   <div class="person-container">
-    <div class="summary-wrap" v-if="dept && dept.length > 0">
-      <li class="summary-item" v-for="field in dept" :key="field?.id">
-        <span>{{ field.num + "个" }}</span>
-        <span>{{ field.content }}</span>
+    <div class="summary-wrap">
+      <li class="summary-item item-unit" v-if="unitSum" @click="deptTags = 0">
+        <span>{{ unitSum?.sum + unitSum?.meter }}</span>
+        <span>{{ unitSum?.content }}</span>
+      </li>
+      <li class="summary-item item-town" v-if="townSum" @click="deptTags = 1">
+        <span>{{ townSum?.sum + townSum?.meter }}</span>
+        <span>{{ townSum?.content }}</span>
       </li>
     </div>
     <div class="list-content">
       <div class="table-header">
         <div>问题名称</div>
-        <div>责任单位</div>
-        <div>责任乡镇</div>
+        <div v-if="deptTags === 0">责任单位</div>
+        <div v-if="deptTags === 1">责任乡镇</div>
         <div>责任人</div>
         <div>状态</div>
       </div>
@@ -30,39 +34,45 @@
               :data-id="index"
             >
               <el-tooltip
-                :content="item.problem"
+                :content="item.eventDescription"
                 effect="dark"
                 placement="top-start"
               >
-                <div :title="item.problem">{{ item.problem }}</div>
+                <div :title="item.eventDescription">
+                  {{ item.eventDescription }}
+                </div>
               </el-tooltip>
               <el-tooltip
-                :content="item.unit"
+                :content="item.eventResponsibleUnit"
                 effect="dark"
                 placement="top-start"
               >
-                <div :title="item.unit">{{ item.unit }}</div>
+                <div :title="item.eventResponsibleUnit">
+                  {{ item.eventResponsibleUnit }}
+                </div>
               </el-tooltip>
-              <el-tooltip
+              <!-- <el-tooltip
                 :content="item.village"
                 effect="dark"
                 placement="top-start"
               >
                 <div :title="item.village">{{ item.village }}</div>
-              </el-tooltip>
+              </el-tooltip> -->
               <el-tooltip
-                :content="item.person"
+                :content="item.linkPerson"
                 effect="dark"
                 placement="top-start"
               >
-                <div :title="item.person">{{ item.person }}</div>
+                <div :title="item.linkPerson">{{ item.linkPerson }}</div>
               </el-tooltip>
               <el-tooltip
-                :content="item.status"
+                :content="item.eventNewStatus"
                 effect="dark"
                 placement="top-start"
               >
-                <div :title="item.status">{{ item.status }}</div>
+                <div :title="item.eventNewStatus">
+                  {{ item.eventNewStatus }}
+                </div>
               </el-tooltip>
             </div>
           </div>
@@ -79,101 +89,90 @@
 </template>
 
 <script setup>
+/**
+ 事件定人
+ **/
 import "element-plus/es/components/tooltip/style/css";
 import { ElTooltip } from "element-plus";
-import { ref, reactive, toRefs } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
-
-const store = useStore();
+import { getEventStatDistributePerson } from "@/apis/home";
 
 // 左侧注入数据
 const leftData = ref(null);
 
-console.log("person", store, leftData);
+// 责任部门标签, 0: 责任单位, 1: 责任乡镇
+const deptTags = ref(0);
 
-// 组件的数据模型
-const model = reactive({
-  dept: [
-    {
-      id: 1001,
-      num: 8,
-      content: "责任单位",
-    },
-    {
-      id: 1002,
-      num: 235,
-      content: "责任乡镇",
-    },
-  ],
-  list: [
-    {
-      id: 2001,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2002,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2003,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2004,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2005,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2006,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2007,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-    {
-      id: 2008,
-      problem: "关于做好基层治理“一件事”集成改革",
-      unit: "江南水利局",
-      village: "灵溪镇",
-      person: "陈皮四",
-      status: "未处理",
-    },
-  ],
+// 获取事件定人的后台数据
+function getLeftData(dateRange) {
+  if (!dateRange) return;
+  const params = {
+    ...dateRange,
+  };
+  // 获取问题派发结果(定人)的数据
+  getEventStatDistributePerson(params).then((res) => {
+    // 筛选数据内容
+    if (!res?.eventStatEventResponsiblePersonVO) return;
+    leftData.value = res?.eventStatEventResponsiblePersonVO;
+  });
+}
+
+// 责任单位的数据
+const unitSum = computed(() => {
+  const result = {
+    sum: 0,
+    meter: "个",
+    content: "责任单位",
+  };
+  if (leftData.value?.unitNum) {
+    result.sum = leftData.value?.unitNum;
+  }
+  return result;
 });
 
-const { dept, list } = toRefs(model);
+// 责任乡镇的数据
+const townSum = computed(() => {
+  const result = {
+    sum: 0,
+    meter: "个",
+    content: "责任乡镇",
+  };
+  if (leftData.value?.townshipNum) {
+    result.sum = leftData.value?.townshipNum;
+  }
+  return result;
+});
+
+// 事件定人的数据列表
+const list = computed(() => {
+  const result =
+    deptTags.value === 0
+      ? leftData.value?.unitProblemList
+      : leftData.value?.townshipProblemList;
+  if (!result) {
+    return [];
+  }
+  return result;
+});
+
+const store = useStore();
+
+// 监听驾驶舱的日期间隔
+watch(
+  () => store?.state?.dateRange,
+  (newVal, oldVal) => {
+    const val = newVal || oldVal;
+    getLeftData(val);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+
+// 首次加载获取数据
+getLeftData(store?.state?.dateRange);
 </script>
 
 <style lang="less" scoped>
@@ -205,6 +204,7 @@ const { dept, list } = toRefs(model);
       background: url(@/assets/images/custom-perform-bg.png) no-repeat;
       background-size: 100% 100%;
       color: #ffffff;
+      cursor: pointer;
     }
     .summary-item:first-child {
       margin-left: 0;
