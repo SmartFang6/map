@@ -49,7 +49,6 @@ const activeTabView = computed(() => {
   const nowWidget = props?.widgetConfig?.widgets.find(
     (item) => item.widgetCode === activeTabName.value
   );
-  console.log("nowWidget", nowWidget);
   return defineAsyncComponent(() =>
     import(`@/views/dynamicWidget/${nowWidget?.widgetCode}/index.vue`)
   );
@@ -58,7 +57,6 @@ const clickMap = (code) => {
   activeTabName.value = code;
 };
 onMounted(() => {
-  console.log("nowWidget", props.widgetConfig);
   activeTabName.value = props?.widgetConfig?.widgets?.[0]?.widgetCode || "";
 });
 </script>
