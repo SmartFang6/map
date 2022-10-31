@@ -9,6 +9,8 @@ import { useRoute, useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useStore } from "vuex";
 import { ticketMap } from "./config.js";
+import { getUserDefaultLayout } from "@/apis/dynamicLayout";
+import { buildUserLayout } from "@/views/dynamicWidget/commonTools";
 import axios from "axios";
 onBeforeMount(() => {
   getUserInformation();
@@ -32,12 +34,17 @@ const getUserInformation = () => {
     .get(`/userApi/user/waterSso`, {
       params,
     })
-    .then((res) => {
+    .then(async (res) => {
       console.log("单点登录", res);
       if (res.data.status === 0) {
         let data = res.data.message;
         store.commit("UPDATE_TOKEN", data.token);
         store.commit("UPDATE_USER_INFO", data);
+        const message = await getUserDefaultLayout();
+        if (message) {
+          const userLayoutInfo = buildUserLayout(message);
+          store.commit("UPDATE_LAYOUT_CONFIG", userLayoutInfo);
+        }
         router.push("/");
       } else {
         ElMessage({

@@ -97,6 +97,25 @@ export const getEventDistributeInfo = (data) => {
 export const getEventStatDistributePerson = (data) => {
   return postHttp("/supervision/getEventStatDistributePer", { data });
 };
+/**
+ * 事件定性的列表数据
+ * date: 2022.10.31
+ * @param {Object<any>} data: 查询参数
+ * @returns {Object<any>}
+ */
+export const getEventStatDistribute = (data) => {
+  return postHttp("/supervision/getEventStatDistribute", { data });
+};
+
+/**
+ * 事件定责的列表数据
+ * date: 2022.10.31
+ * @param {Object<any>} data: 查询参数
+ * @returns {Object<any>}
+ */
+export const getEventStatDistributePersons = (data) => {
+  return postHttp("/supervision/getEventStatDistributePerson", { data });
+};
 
 /**
  * 获取工作成效的列表
