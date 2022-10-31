@@ -142,54 +142,6 @@ export const getWorkEffectList = (data) => {
  * @param {Object<any>} data: 查询参数
  * @returns {Object<any>}
  */
-export const getProblemJudgmentList = (data) => {
-  // return postHttp("/supervision/getProblemJudgmentList", { data });
-  return {
-    ...data,
-    config: null,
-    list: [
-      {
-        id: 1001,
-        eventName: "侵占河湖空间",
-        num: 624,
-        rate: 100,
-      },
-      {
-        id: 1002,
-        eventName: "占用水域",
-        num: 277,
-        rate: 84,
-      },
-      {
-        id: 1003,
-        eventName: "影响航道",
-        num: 154,
-        rate: 73,
-      },
-      {
-        id: 1004,
-        eventName: "城市河道保洁",
-        num: 92,
-        rate: 62,
-      },
-      {
-        id: 1005,
-        eventName: "水域保洁",
-        num: 47,
-        rate: 54,
-      },
-      {
-        id: 1006,
-        eventName: "非法拦网",
-        num: 45,
-        rate: 27,
-      },
-      {
-        id: 1007,
-        eventName: "非法采砂",
-        num: 13,
-        rate: 10,
-      },
-    ],
-  };
+export const getEventStatHighIncidenceRank = (data) => {
+  return postHttp("/supervision/getEventStatHighIncidenceRank", { data });
 };

@@ -21,7 +21,7 @@
           class="item"
           effect="dark"
           :content="title"
-          placement="right-start"
+          :placement="position"
         >
           {{ title }}
         </el-tooltip>
@@ -65,6 +65,10 @@ defineProps({
   rate: {
     type: Number || String,
     default: () => 60,
+  },
+  position: {
+    type: String,
+    default: () => "right-start",
   },
 });
 

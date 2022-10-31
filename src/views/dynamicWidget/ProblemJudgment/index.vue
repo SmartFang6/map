@@ -11,11 +11,12 @@
       <ProgressBar
         v-for="(item, index) in list"
         :no="index + 1"
-        :count="item?.num || 0"
-        :key="item?.eventSource || index"
-        :rate="item?.rate || 0"
+        :key="item?.eventCategoryCode || index"
+        :count="item?.completedNum || 0"
+        :rate="item?.completedRate * 100 || 0"
+        :title="item?.eventCategoryName || ''"
         flexType="row"
-        :title="item?.eventName || ''"
+        position="top-start"
       />
       <el-empty
         v-if="!list || !list.length"
@@ -35,26 +36,33 @@
 import ProgressBar from "@/views/components/ProgressBar";
 import { useStore } from "vuex";
 import { ref, computed, watch } from "vue";
-import { getProblemJudgmentList } from "@/apis/home";
-// import { countEventClassCount } from "@/apis/home";
+import { getEventStatHighIncidenceRank } from "@/apis/home";
 
 // 左侧注入数据
 const listModel = ref(null);
 
 // 获取事件列表的数据
-function getLeftData(dateRange) {
+function getProblemJudgmentData(dateRange) {
   if (!dateRange) return;
   const params = {
     ...dateRange,
   };
-  // getProblemJudgmentList(params).then((res) => {
-  //   // 事件统计数据
-  //   if (!res) return;
-  //   leftData.value = res;
-  // });
-  const res = getProblemJudgmentList(params);
-  if (!res) return;
-  listModel.value = res;
+  getEventStatHighIncidenceRank(params).then((res) => {
+    // 获取事件高发排名
+    if (!res?.eventStatHighIncidenceRankCategoryCodeList) return;
+    // 计算出完成率的百分比数值
+    let result = res?.eventStatHighIncidenceRankCategoryCodeList.map((item) => {
+      item.useRate = item?.completedRate
+        ? Number(`${item?.completedRate}e${2}`)
+        : 0;
+      return item;
+    });
+    // 按完成率的百分比数值进行排序
+    result.sort((prev, next) => {
+      return next.useRate - prev.useRate;
+    });
+    listModel.value = result;
+  });
 }
 
 const store = useStore();
@@ -64,7 +72,7 @@ watch(
   () => store?.state?.dateRange,
   (newVal, oldVal) => {
     const val = newVal || oldVal;
-    getLeftData(val);
+    getProblemJudgmentData(val);
   },
   {
     immediate: true,
@@ -73,14 +81,14 @@ watch(
 );
 
 // 首次加载获取数据
-getLeftData(store?.state?.dateRange);
+getProblemJudgmentData(store?.state?.dateRange);
 
 // 问题研判的列表数据
 const list = computed(() => {
-  if (!listModel.value?.list) {
+  if (!listModel.value) {
     return [];
   }
-  return listModel.value?.list;
+  return listModel.value;
 });
 </script>
 
