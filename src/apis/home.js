@@ -116,6 +116,15 @@ export const getEventStatDistribute = (data) => {
 export const getEventStatDistributePersons = (data) => {
   return postHttp("/supervision/getEventStatDistributePerson", { data });
 };
+/**
+ * 获取问题来源结果
+ * date: 2022.10.31
+ * @param {Object<any>} data: 查询参数
+ * @returns {Object<any>}
+ */
+export const getEventStatProblem = (data) => {
+  return postHttp("/supervision/getEventStatProblem", { data });
+};
 
 /**
  * 获取工作成效的列表

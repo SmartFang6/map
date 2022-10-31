@@ -10,11 +10,11 @@
       <div class="nature-item" @click="onSetActiveFilter(1)">
         <div class="name">重大</div>
         <div class="value">
-          <span>{{ data.serious.rate }}</span>
+          <span>{{ leftData?.serious.rate }}</span>
           <span>%</span>
         </div>
         <div class="num">
-          <span>{{ data.serious.value }}</span>
+          <span>{{ leftData?.serious.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -22,11 +22,11 @@
       <div class="nature-item" @click="onSetActiveFilter(2)">
         <div class="name">较严重</div>
         <div class="value">
-          <span>{{ data.lowSerious.rate }}</span>
+          <span>{{ leftData?.lowSerious.rate }}</span>
           <span>%</span>
         </div>
         <div class="num">
-          <span>{{ data.lowSerious.value }}</span>
+          <span>{{ leftData?.lowSerious.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -34,11 +34,11 @@
       <div class="nature-item" @click="onSetActiveFilter(3)">
         <div class="name">一般</div>
         <div class="value">
-          <span>{{ data.general.rate }}</span>
+          <span>{{ leftData?.general.rate }}</span>
           <span>%</span>
         </div>
         <div class="num">
-          <span>{{ data.general.value }}</span>
+          <span>{{ leftData?.general.value }}</span>
           <span>个</span>
         </div>
       </div>
@@ -51,9 +51,9 @@
 /**
  事件定责
  **/
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
-import { getEventStat } from "@/apis/home";
+import { getEventStatDistribute } from "@/apis/home";
 
 // 左侧注入数据
 const leftData = ref(null);
@@ -63,56 +63,42 @@ function getLeftData(dateRange) {
   const params = {
     ...dateRange,
   };
-  getEventStat(params).then((res) => {
-    // 事件统计平均耗时（小时）转（天 ）
-    if (!res?.eventStatEvent) return;
-    res.eventStatEvent.completedAverageCostTime = parseInt(
-      (res?.eventStatEvent?.completedAverageCostTime || 0) / 24
-    );
-    // 事件统计消耗率转百分比
-    res.eventStatEvent.completedRate = (
-      (res?.eventStatEvent?.completedRate || 0) * 100
-    ).toFixed(0);
-    leftData.value = res;
+  getEventStatDistribute(params).then((res) => {
+    const data = {
+      // 一般
+      general: {
+        value: 0,
+        rate: 0,
+      },
+      // 较严重
+      lowSerious: {
+        value: 0,
+        rate: 0,
+      },
+      // 重大
+      serious: {
+        value: 0,
+        rate: 0,
+      },
+    };
+    if (!res?.eventGradeList) {
+      leftData.value = data;
+    }
+    res.eventGradeList.forEach((grade) => {
+      if (grade.eventGrade === "1") {
+        data.serious.value = grade.eventGradeNum;
+        data.serious.rate = (grade.eventGradeRate * 100).toFixed(2);
+      } else if (grade.eventGrade === "2") {
+        data.lowSerious.value = grade.eventGradeNum;
+        data.lowSerious.rate = (grade.eventGradeRate * 100).toFixed(2);
+      } else {
+        data.general.value = grade.eventGradeNum;
+        data.general.rate = (grade.eventGradeRate * 100).toFixed(2);
+      }
+    });
+    leftData.value = data;
   });
 }
-
-// 定性数据
-const data = computed(() => {
-  const data = {
-    // 一般
-    general: {
-      value: 0,
-      rate: 0,
-    },
-    // 较严重
-    lowSerious: {
-      value: 0,
-      rate: 0,
-    },
-    // 重大
-    serious: {
-      value: 0,
-      rate: 0,
-    },
-  };
-  if (!leftData.value?.eventGradeList) {
-    return data;
-  }
-  leftData.value.eventGradeList.forEach((grade) => {
-    if (grade.eventGrade === "1") {
-      data.serious.value = grade.eventGradeNum;
-      data.serious.rate = (grade.eventGradeRate * 100).toFixed(2);
-    } else if (grade.eventGrade === "2") {
-      data.lowSerious.value = grade.eventGradeNum;
-      data.lowSerious.rate = (grade.eventGradeRate * 100).toFixed(2);
-    } else {
-      data.general.value = grade.eventGradeNum;
-      data.general.rate = (grade.eventGradeRate * 100).toFixed(2);
-    }
-  });
-  return data;
-});
 
 const store = useStore();
 const onSetActiveFilter = (value) => {

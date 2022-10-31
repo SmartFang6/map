@@ -80,25 +80,42 @@
 
 <script setup>
 import EventSource from "@/views/dialog/EventSource";
-import { inject, computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
+import { getEventStatProblem } from "@/apis/home";
 
 const store = useStore();
-
 // 左侧注入数据
-const leftData = inject("leftData");
-
+const leftData = ref(null);
+// 获取左侧栏数据
+function getLeftData(dateRange) {
+  if (!dateRange) return;
+  const params = {
+    ...dateRange,
+  };
+  getEventStatProblem(params).then((res) => {
+    leftData.value = res;
+  });
+}
 // 活动的过滤器
 const activeFilter = computed(() => store.state.activeFilter);
 
 // 来源总数
 const total = computed(() => {
-  console.log(leftData.value.eventSourceList, "111");
-  if (!leftData || !leftData.value.eventSourceList) {
-    return 0;
-  }
-  return leftData.value.eventSourceList[0].allNum;
+  return leftData.value?.eventSourceList?.[0]?.allNum || 0;
 });
+watch(
+  () => store?.state?.dateRange,
+  (newVal, oldVal) => {
+    const val = newVal || oldVal;
+    getLeftData(val);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+getLeftData(store?.state?.dateRange);
 
 const show = ref(false);
 const moreCall = () => {

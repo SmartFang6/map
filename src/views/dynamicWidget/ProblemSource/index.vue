@@ -67,7 +67,7 @@
 import EventSource from "@/views/dialog/EventSource";
 import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { getEventStat } from "@/apis/home";
+import { getEventStatProblem } from "@/apis/home";
 
 const store = useStore();
 const show = ref(false);
@@ -83,15 +83,7 @@ function getLeftData(dateRange) {
   const params = {
     ...dateRange,
   };
-  getEventStat(params).then((res) => {
-    // 事件统计平均耗时（小时）转（天 ）
-    res.eventStatEvent.completedAverageCostTime = parseInt(
-      (res?.eventStatEvent?.completedAverageCostTime || 0) / 24
-    );
-    // 事件统计消耗率转百分比
-    res.eventStatEvent.completedRate = (
-      (res?.eventStatEvent?.completedRate || 0) * 100
-    ).toFixed(0);
+  getEventStatProblem(params).then((res) => {
     leftData.value = res;
   });
 }

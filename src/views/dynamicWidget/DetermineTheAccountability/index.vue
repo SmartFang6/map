@@ -1,5 +1,5 @@
 <!--****************************************
- * 事件定性
+ * 事件定责 /派发
  *
  * founder: king
  * Date:  11 2022/10/11
@@ -54,33 +54,27 @@
 
 <script setup>
 /**
- 事件定性
+ 事件定责 /派发
  **/
 import { useStore } from "vuex";
 import { computed, watch, ref } from "vue";
-import { getEventStat } from "@/apis/home";
+import { getEventStatDistributePersons } from "@/apis/home";
 
 const store = useStore();
 
-// 左侧注入数据
-const leftData = ref(null);
-// 获取左侧栏数据
+// 责任单位列表
+const unitList = ref([]);
+// 责任单位列表
 function getLeftData(dateRange) {
   if (!dateRange) return;
   const params = {
     ...dateRange,
   };
-  getEventStat(params).then((res) => {
-    // 事件统计平均耗时（小时）转（天 ）
-    if (!res?.eventStatEvent) return;
-    res.eventStatEvent.completedAverageCostTime = parseInt(
-      (res?.eventStatEvent?.completedAverageCostTime || 0) / 24
-    );
-    // 事件统计消耗率转百分比
-    res.eventStatEvent.completedRate = (
-      (res?.eventStatEvent?.completedRate || 0) * 100
-    ).toFixed(0);
-    leftData.value = res;
+  getEventStatDistributePersons(params).then((res) => {
+    if (!res?.eventResponsibleUnitList) {
+      return;
+    }
+    unitList.value = res.eventResponsibleUnitList;
   });
 }
 watch(
@@ -98,14 +92,6 @@ getLeftData(store?.state?.dateRange);
 
 // 活动的过滤器
 const activeFilter = computed(() => store.state.activeFilter);
-
-// 责任单位列表
-const unitList = computed(() => {
-  if (!leftData.value?.eventResponsibleUnitList) {
-    return [];
-  }
-  return leftData.value?.eventResponsibleUnitList;
-});
 
 let i = -1;
 const styles = ["style1", "style2", "style3", "style4"];
