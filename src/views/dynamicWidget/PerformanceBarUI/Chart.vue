@@ -46,7 +46,6 @@ const props = defineProps({
 watch(
   () => [props.dataModel, props.type],
   () => {
-    console.log("chart", props.dataModel);
     if (!props.dataModel || props.dataModel.length <= 0) return;
     chartData.value = props.dataModel.map((item, rankNum) => {
       return {

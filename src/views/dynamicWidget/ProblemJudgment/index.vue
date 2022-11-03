@@ -13,7 +13,7 @@
         :no="index + 1"
         :key="item?.eventCategoryCode || index"
         :count="item?.completedNum || 0"
-        :rate="item?.completedRate * 100 || 0"
+        :rate="item?.useRate"
         :title="item?.eventCategoryName || ''"
         flexType="row"
         position="top-start"

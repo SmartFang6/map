@@ -170,7 +170,6 @@ watch(
   [() => tabActive.value, typeActive],
   () => {
     toggleTownOrDeptList();
-    console.log("toggleTownOrDeptList");
   },
   {
     immediate: true,
