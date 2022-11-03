@@ -107,6 +107,14 @@ function getChartOption(data) {
       bottom: "28%",
       right: "12%",
     },
+    dataZoom: [
+      {
+        show: false, // 是否显示滑动条 data.length > 14
+        type: "slider", // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+        startValue: 0, // 从头开始
+        endValue: 14, // 一次性展示12个
+      },
+    ],
     tooltip: {
       trigger: "axis",
       confine: true,
@@ -374,6 +382,14 @@ function getScoreChartOption(data) {
       bottom: "28%",
       right: "6%",
     },
+    dataZoom: [
+      {
+        show: false, // 是否显示滑动条 data.length > 14
+        type: "slider", // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+        startValue: 0, // 从头开始
+        endValue: 14, // 一次性展示12个
+      },
+    ],
     tooltip: {
       trigger: "axis",
       confine: true, // 提示浮层限制在容器中
