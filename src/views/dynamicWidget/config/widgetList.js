@@ -124,4 +124,30 @@ export default [
       col: null,
     },
   },
+  {
+    widgetCode: "WaterSketch",
+    name: "水域概述",
+    poster: require("@/views/dynamicWidget/config/previewImg/WaterSketch.png"),
+    getDataUri: "",
+    domainName: "", // TODO: 域名(暂时没使用)
+    port: "", // TODO: 端口(暂时没使用)
+    size: {
+      // TODO: 组件大小(暂时没使用)
+      row: null,
+      col: null,
+    },
+  },
+  {
+    widgetCode: "PerformanceBarUI",
+    name: "处理绩效柱状图",
+    poster: require("@/views/dynamicWidget/config/previewImg/PerformanceBarUI.png"),
+    getDataUri: "",
+    domainName: "", // TODO: 域名(暂时没使用)
+    port: "", // TODO: 端口(暂时没使用)
+    size: {
+      // TODO: 组件大小(暂时没使用)
+      row: null,
+      col: null,
+    },
+  },
 ];
