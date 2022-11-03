@@ -128,6 +128,8 @@ const submitWidgets = () => {
     }
     img {
       width: 100%;
+      margin-top: 12px;
+      border-radius: 12px;
     }
   }
 }
