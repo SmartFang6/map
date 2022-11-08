@@ -59,6 +59,8 @@ const unitMapper = {
   CX053: { unitName: "平方米", color: "#1293ee" },
   // 清除违规种植大棚
   CX054: { unitName: "平方米", color: "#1293ee" },
+  // 清除水利工程
+  illegalProject: { unitName: "处", color: "#1293ee" },
 };
 
 // 获取工作成效的数据

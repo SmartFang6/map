@@ -12,7 +12,7 @@
         v-for="(item, index) in list"
         :no="index + 1"
         :key="item?.eventCategoryCode || index"
-        :count="item?.completedNum || 0"
+        :count="item?.eventCategoryNum || 0"
         :rate="item?.useRate"
         :title="item?.eventCategoryName || ''"
         flexType="row"
@@ -58,9 +58,9 @@ function getProblemJudgmentData(dateRange) {
       return item;
     });
     // 按完成率的百分比数值进行排序
-    result.sort((prev, next) => {
-      return next.useRate - prev.useRate;
-    });
+    // result.sort((prev, next) => {
+    //   return next.useRate - prev.useRate;
+    // });
     listModel.value = result;
   });
 }
