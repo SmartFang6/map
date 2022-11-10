@@ -5,6 +5,11 @@ import HomeView from "../views/HomeViewDynamic";
 const routes = [
   {
     path: "/",
+    name: "index",
+    redirect: "/ssoLogin",
+  },
+  {
+    path: "/home",
     name: "home",
     component: HomeView,
   },

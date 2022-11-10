@@ -28,7 +28,6 @@ const router = useRouter();
 const getUserInformation = () => {
   loading.value = true;
   const { ticket } = route.query;
-
   // 根据 ticket 匹配行政区域名称（暂时处理）
   const currentAdcd = ticketMap.filter((item) => item.ticket === ticket);
   console.log("currentAdcd----", currentAdcd);
@@ -37,11 +36,14 @@ const getUserInformation = () => {
   // 处理sso参数
   const _ENV = process.env.VUE_APP_ENV;
   let _params = route.query;
+  console.log("_ENV", _ENV);
   if (_ENV === "dev") {
     // 开发环境实时生成所需参数 sign ;生成规则 8位日期拼接userId用MD5加密后大写字符串
     const _sign = getMD5_sign(route.query?.userId);
     _params = {
-      ..._params,
+      moduleId: "water_one_cockpit",
+      ticket: "FC37BAB8805D85AF2576563A20F66658",
+      userId: "4ebf6109-8360-11ea-b14d-6c92bfce09d6",
       sign: _sign,
     };
   }
@@ -59,7 +61,7 @@ const getUserInformation = () => {
           const userLayoutInfo = buildUserLayout(message);
           store.commit("UPDATE_LAYOUT_CONFIG", userLayoutInfo);
         }
-        await router.push("/");
+        await router.push("/home");
       } else {
         ElMessage({
           message: res.data.errmsg || "系统异常",

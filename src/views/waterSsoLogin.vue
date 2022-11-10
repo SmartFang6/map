@@ -45,7 +45,7 @@ const getUserInformation = () => {
           const userLayoutInfo = buildUserLayout(message);
           store.commit("UPDATE_LAYOUT_CONFIG", userLayoutInfo);
         }
-        router.push("/");
+        router.push("/home");
       } else {
         ElMessage({
           message: res.data.errmsg || "系统异常",
