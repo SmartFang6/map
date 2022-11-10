@@ -289,6 +289,7 @@ watch(
   }
   .chart-container {
     width: 100%;
+    // height: 100%;
     height: 200px;
     max-height: 200px;
     text-align: left;

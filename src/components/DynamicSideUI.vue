@@ -148,6 +148,7 @@ onMounted(() => {
       margin-right: 8px;
       background: url(@/assets/images/icon-zoom.png) no-repeat;
       background-size: 100% 100%;
+      cursor: pointer;
     }
   }
   .content {

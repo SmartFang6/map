@@ -194,6 +194,18 @@ const selectLayers = ({ layerInfos, selectLayers }) => {
   height: 100%;
   box-sizing: border-box;
   padding-bottom: 15px;
+  & > div {
+    position: relative;
+  }
+  & > .add_warp:nth-child(1) {
+    z-index: 1;
+  }
+  & > .add_warp:nth-child(2) {
+    z-index: 2;
+  }
+  & > .add_warp:nth-child(3) {
+    z-index: 3;
+  }
 }
 .left-box {
   padding-left: 23px;
