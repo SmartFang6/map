@@ -28,6 +28,12 @@
         >
           <WaterAllDialog :info="mapInfo" />
         </el-dialog>
+        <!-- 图例 -->
+        <LegendMap
+          :legendList="legendList"
+          :isShowChecked="isShowMapChecked"
+          @change="handleCheckLegendChange"
+        />
       </div>
     </template>
     <template #left>
@@ -39,12 +45,6 @@
     </template>
     <template #right>
       <div class="right-box">
-        <!-- 图例 -->
-        <LegendMap
-          :legendList="legendList"
-          :isShowChecked="isShowMapChecked"
-          @change="handleCheckLegendChange"
-        />
         <template v-for="side in nowConfig?.right" :key="side?.widgetCode">
           <DynamicSideUI :widgetConfig="side" />
         </template>
