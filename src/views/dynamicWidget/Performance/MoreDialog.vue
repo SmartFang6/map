@@ -6,7 +6,7 @@
     <el-dialog v-model="dialogVisible">
       <!--#region 处置绩效图表数据的类型选择区-->
       <div class="more-title">
-        <span>处置绩效</span>
+        <span>处理绩效</span>
         <el-tabs
           v-model="tabActive"
           type="card"

@@ -4,7 +4,7 @@
 <template>
   <div class="more_dialog_container">
     <div class="top_title">
-      <div class="title_wrap">处置绩效</div>
+      <div class="title_wrap">处理绩效</div>
       <div class="tabs_wrap">
         <div
           :key="item.key"

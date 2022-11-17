@@ -138,7 +138,7 @@ function getChartOption(data) {
         { icon: "circle", name: "问题数" },
         {
           icon: "rect",
-          name: "消号率",
+          name: "销号率",
           itemStyle: {
             borderWidth: 1,
           },
@@ -211,7 +211,7 @@ function getChartOption(data) {
       },
       {
         type: "value",
-        name: "消号率",
+        name: "销号率",
         nameTextStyle: {
           fontSize: 14,
           fontFamily: "Microsoft YaHei",
@@ -267,7 +267,7 @@ function getChartOption(data) {
         data: data.map((item) => item.count),
       },
       {
-        name: "消号率",
+        name: "销号率",
         type: "line",
         stack: "Total",
         smooth: true,
