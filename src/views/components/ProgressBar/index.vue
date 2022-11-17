@@ -63,7 +63,7 @@ defineProps({
     // default: () => "col",
   },
   rate: {
-    type: Number || String,
+    type: [Number, String],
     default: () => 60,
   },
   position: {

@@ -49,6 +49,19 @@
         </div>
       </div>
     </div>
+    <!-- 魔方弹窗 -->
+    <el-dialog
+      v-model="showMore"
+      width="70%"
+      append-to-body
+      destroy-on-close
+      custom-class="common_dialog"
+    >
+      <template #header>
+        <div class="title">事件派发</div>
+      </template>
+      <IssueDialog v-if="showMore" />
+    </el-dialog>
   </div>
 </template>
 
@@ -58,9 +71,15 @@
  **/
 import { useStore } from "vuex";
 import { computed, watch, ref } from "vue";
+import IssueDialog from "./IssueDialog/index.vue";
 import { getEventStatDistributePersons } from "@/apis/home";
 
 const store = useStore();
+const showMore = ref(false);
+function openDialog() {
+  showMore.value = true;
+}
+defineExpose({ openDialog });
 
 // 责任单位列表
 const unitList = ref([]);
@@ -88,8 +107,10 @@ watch(
     deep: true,
   }
 );
-getLeftData(store?.state?.dateRange);
-
+watch(
+  () => showMore.value,
+  () => (i = -1)
+);
 // 活动的过滤器
 const activeFilter = computed(() => store.state.activeFilter);
 
