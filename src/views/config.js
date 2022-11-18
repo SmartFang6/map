@@ -56,4 +56,9 @@ export const ticketMap = [
     name: "诸暨市",
     ticket: "02EB516A3A39234BEF6AD390D0FCEC0F",
   },
+  {
+    adcd: "331181",
+    name: "龙泉市",
+    ticket: "7d812c709ebf82d7afa0793d8e819c78",
+  },
 ];
