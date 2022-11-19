@@ -61,4 +61,14 @@ export const ticketMap = [
     name: "龙泉市",
     ticket: "7d812c709ebf82d7afa0793d8e819c78",
   },
+  {
+    adcd: "330503",
+    name: "南浔区",
+    ticket: "195CDEE83980B916C5077E16B729A7E3",
+  },
+  {
+    adcd: "330481",
+    name: "海宁市",
+    ticket: "0EB5CA4F5FD856142C8ADC945F4C92EC",
+  },
 ];
