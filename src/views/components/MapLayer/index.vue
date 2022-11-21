@@ -55,7 +55,12 @@
         <span>水域概况</span>
       </div> -->
     </div>
-
+    <div class="btn" @click="patrolTheRiver">AI智能巡河</div>
+    <el-dialog v-model="dialogVisible" width="95%">
+      <div v-if="dialogVisible">
+        <iframe src="" frameborder="0"></iframe>
+      </div>
+    </el-dialog>
     <WatersDescriptionDialog v-model:visible="watersDescriptionDialogVisible" />
   </div>
 </template>
@@ -65,8 +70,9 @@ import { ref, computed } from "vue";
 import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
+import { ElMessage } from "element-plus";
 import { loadScriptString } from "@/utils";
-import { getDictList } from "@/apis/common";
+import { getDictList, getCustomTicket } from "@/apis/common";
 
 const store = useStore();
 
@@ -163,6 +169,23 @@ const getLayerDict = async () => {
   }
 };
 getLayerDict();
+const dialogVisible = ref(false);
+const iframeUrl = ref("");
+// ai 巡河
+const patrolTheRiver = () => {
+  getCustomTicket({
+    adcd: "331181",
+    trueName: store.state.userInfo?.trueName || "",
+    userName: store.state.userInfo?.userName || "",
+  }).then((res) => {
+    console.log("getCustomTicket", res);
+    if (res.message) {
+      iframeUrl.value = `https://lqai.dcyun.com:9777/patrol-lq/index.html?ticket=${res.message}&title=%E6%B0%B4%E5%9F%9F%E7%9B%91%E7%AE%A1%E6%99%BA%E8%83%BD%E5%B7%A1%E6%B2%B3&userId=longquanshi&mapCenter=119.13678302089386,28.07794980954407`;
+    } else {
+      ElMessage.error("一键巡河票据获取失败,请联系管理员");
+    }
+  });
+};
 </script>
 
 <style lang="less" scoped>
@@ -171,6 +194,7 @@ getLayerDict();
   // height: 83px;
   // margin: 0 auto;
   display: flex;
+  flex-direction: column;
   position: absolute;
   left: 50%;
   top: 193px;
@@ -178,7 +202,7 @@ getLayerDict();
   z-index: 100;
 }
 
-.btns > .btn {
+.btn {
   display: flex;
   align-items: center;
   width: 138px;

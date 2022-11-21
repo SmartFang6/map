@@ -7,3 +7,6 @@ export const getDictList = (data) => {
     data,
   });
 };
+// 一键巡河
+export const getCustomTicket = (data) =>
+  getHttp("/common/getCustomTicket", data);
