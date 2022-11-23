@@ -31,6 +31,7 @@ const RiverLegend = [
 export default [
   {
     title: "水域调查",
+    id: "waterAreaSurvey",
     items: [
       {
         label: "河道",
@@ -38,6 +39,7 @@ export default [
         isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
+        countId: "riverInfoQuantity",
       },
       {
         label: "水库",
@@ -45,6 +47,7 @@ export default [
         isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
+        countId: "reservoirInfoQuantity",
       },
       {
         label: "山塘",
@@ -52,6 +55,7 @@ export default [
         isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
+        countId: "hillypondInfoQuantity",
       },
       {
         label: "湖泊",
@@ -59,6 +63,7 @@ export default [
         isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
+        countId: "lakeInfoQuantity",
       },
       {
         label: "人工水道",
@@ -66,6 +71,7 @@ export default [
         isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
+        countId: "artificialWaterwayInfoQuantity",
       },
       {
         label: "其他水域",
@@ -73,6 +79,7 @@ export default [
         isShowChecked: true,
         type: "riverLayer",
         legend: RiverLegend,
+        countId: "otherWatersInfoQuantity",
       },
     ],
   },

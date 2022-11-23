@@ -38,6 +38,12 @@
               @click="onSelectLayers(item, index)"
             >
               {{ item.label }}
+              <span
+                class="count"
+                v-if="countList?.[layer.id]?.[item.countId] !== undefined"
+              >
+                ({{ countList?.[layer.id]?.[item.countId] ?? 0 }})
+              </span>
             </div>
           </template>
         </div>
@@ -55,7 +61,7 @@
         <span>水域概况</span>
       </div> -->
     </div>
-    <div class="btn" @click="patrolTheRiver">AI智能巡河</div>
+    <!-- <div class="btn" @click="patrolTheRiver">AI智能巡河</div> -->
     <el-dialog v-model="dialogVisible" width="95%">
       <div v-if="dialogVisible">
         <iframe src="" frameborder="0"></iframe>
@@ -66,13 +72,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
 import { ElMessage } from "element-plus";
 import { loadScriptString } from "@/utils";
-import { getDictList, getCustomTicket } from "@/apis/common";
+import {
+  getDictList,
+  getCustomTicket,
+  getSurvreyTypeStat,
+} from "@/apis/common";
 
 const store = useStore();
 
@@ -174,7 +184,7 @@ const iframeUrl = ref("");
 // ai 巡河
 const patrolTheRiver = () => {
   getCustomTicket({
-    adcd: "331181",
+    adcd: store.state.userInfo?.adminDivCode || "331181",
     trueName: store.state.userInfo?.trueName || "",
     userName: store.state.userInfo?.userName || "",
   }).then((res) => {
@@ -186,6 +196,17 @@ const patrolTheRiver = () => {
     }
   });
 };
+console.log(patrolTheRiver);
+const countList = ref({
+  waterAreaSurvey: {},
+});
+onMounted(async () => {
+  countList.value.waterAreaSurvey = await getSurvreyTypeStat({
+    adcd: store.state.userInfo?.adminDivCode,
+    yr: new Date().getFullYear() - 1 + "",
+  });
+  console.log(countList.value);
+});
 </script>
 
 <style lang="less" scoped>
@@ -247,14 +268,19 @@ const patrolTheRiver = () => {
     color: #00d4f4;
     padding-left: 14px;
   }
+  .count {
+    color: #fff;
+    font-size: 14px;
+    margin: 0 6px;
+  }
   .item {
     color: #fff;
     font-size: 14px;
     font-family: MicrosoftYaHei;
     cursor: pointer;
-    padding: 4px 18px 4px 47px;
+    padding: 4px 12px 4px 18px;
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     align-items: center;
     &.active {
       color: #00d4f4;
@@ -265,6 +291,9 @@ const patrolTheRiver = () => {
         background-size: 100% 100%;
         width: 12px;
         height: 8px;
+      }
+      .count {
+        color: #00d4f4;
       }
     }
   }
