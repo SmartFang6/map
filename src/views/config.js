@@ -71,4 +71,14 @@ export const ticketMap = [
     name: "海宁市",
     ticket: "0EB5CA4F5FD856142C8ADC945F4C92EC",
   },
+  {
+    adcd: "330523",
+    name: "安吉县",
+    ticket: "BF44A2757401823B6E5D173B371D1DD1",
+  },
+  {
+    adcd: "330424",
+    name: "海盐县",
+    ticket: "0B29A18FB9247DB8C343AA2710F14018",
+  },
 ];
