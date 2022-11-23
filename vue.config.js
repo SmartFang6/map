@@ -24,6 +24,14 @@ module.exports = defineConfig({
           [proxyUrl]: "/api",
         },
       },
+      "/onemap-api": {
+        target: "http://192.168.2.238:8505",
+        changeOrigin: true, // 是否改变域名
+        ws: true,
+        pathRewrite: {
+          "/onemap-api": "/api",
+        },
+      },
       "/userApi": {
         target: "http://192.168.2.238:8501",
         changeOrigin: true,
