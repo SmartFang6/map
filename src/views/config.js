@@ -81,4 +81,14 @@ export const ticketMap = [
     name: "海盐县",
     ticket: "0B29A18FB9247DB8C343AA2710F14018",
   },
+  {
+    adcd: "330903",
+    name: "普陀区",
+    ticket: "14B15E04B361E9831B937B69B1E455CB",
+  },
+  {
+    adcd: "330922",
+    name: "嵊泗县",
+    ticket: "8F3837404187E06AE070A1E175F6F862",
+  },
 ];

@@ -30,6 +30,7 @@ const getUserInformation = () => {
   const { ticket } = route.query;
   // 根据 ticket 匹配行政区域名称（暂时处理）
   const currentAdcd = ticketMap.filter((item) => item.ticket === ticket);
+  console.log(currentAdcd, "currentAdcd");
   console.log("currentAdcd----", currentAdcd);
   store.commit("UPDATE_ADCD_TICKET", ticket || "");
   store.commit("UPDATE_ADCD_NAME", currentAdcd?.[0]?.name || "");
