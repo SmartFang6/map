@@ -96,7 +96,7 @@ const legendsStyle = computed(() =>
   padding: 16px;
   transition: all 0.3s;
   background-color: rgba(4, 46, 113, 0.88);
-  z-index: 1;
+  z-index: 2;
   :deep(.el-checkbox-group) {
     display: flex;
     flex-direction: column;
