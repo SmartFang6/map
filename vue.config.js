@@ -5,6 +5,7 @@ const publicPath = process.env.BASE_URL || "/cockpit/";
 console.log(proxyUrl + "/beautiful");
 module.exports = defineConfig({
   publicPath,
+  outputDir: process.env.VUE_APP_DIST,
   transpileDependencies: true,
   devServer: {
     proxy: {
@@ -64,5 +65,9 @@ module.exports = defineConfig({
       args[0].title = "水域监管一件事";
       return args;
     });
+    config.output
+      .filename("js/[name].[hash].js")
+      .chunkFilename("js/[name].[hash].js")
+      .end();
   },
 });
