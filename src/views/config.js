@@ -91,4 +91,9 @@ export const ticketMap = [
     name: "嵊泗县",
     ticket: "8F3837404187E06AE070A1E175F6F862",
   },
+  {
+    adcd: "330127",
+    name: "淳安县",
+    ticket: "15b96e16dafacdd3239beb7ff30e7544",
+  },
 ];
