@@ -96,4 +96,9 @@ export const ticketMap = [
     name: "淳安县",
     ticket: "15b96e16dafacdd3239beb7ff30e7544",
   },
+  {
+    adcd: "330803",
+    name: "衢江区",
+    ticket: "CEEDE266A2E66B6D72DEEAE13C6A1F08",
+  },
 ];
