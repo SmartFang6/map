@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { createToken } from './global/global';
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import LayerSwitch from "./layers/LayerSwitch";
@@ -98,7 +99,8 @@ export default {
       }
       getMap();
     },
-    initMap() {
+    async initMap() {
+      await createToken();
       mapConfig.target = "map4";
       this.map = MapFactory.createMap(mapConfig);
       // 初始化图层

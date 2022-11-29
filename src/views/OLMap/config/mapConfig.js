@@ -27,7 +27,7 @@ export const res = [
 ]
 export const matrixIds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
-const geoServerUrl = 'https://gis.dcyun.com:48164/geoserver'
+const geoServerUrl = 'https://gis.dcyun.com:48475/geoserver'
 
 export const geoServerConfig = {
   url: geoServerUrl,

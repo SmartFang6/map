@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { createToken, getToken } from './global/global';
 import MapFactory from "./factory/MapFactory";
 import mapConfig from "./config/mapConfig";
 import BaseVectorLayer from './layers/base/BaseVectorLayer'
@@ -111,7 +112,8 @@ export default {
       }
       getMap();
     },
-    initMap() {
+    async initMap() {
+      await createToken();
       mapConfig.target = "map2";
       this.map = MapFactory.createMap(mapConfig);
       // 初始化图层
@@ -121,8 +123,7 @@ export default {
       this.layers = {
         mainShadeLayer: new MainShadowLayer(), // 地图下偏移的阴影
         boundary: new OrgBoundaryLayer(), // 边界线
-        // orgAdcdWmsLayer: new OrgAdcdWmsLayer(),
-        // statisticsLayer: new StatisticsLayer(statisticsLayer), // 统计图
+
         selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
         basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
@@ -473,7 +474,8 @@ export default {
       //   geoserverUrl = geoserverPath.oneMapCityWms
       // }
       const geoserverUrl = geoserverPath.waterRegionInvestigationWMS
-      const url = `${geoserverUrl}?service=WFS&version=1.0.0&request=GetFeature
+      const token = getToken()
+      const url = `${geoserverUrl}?accessKey=${token.access_key}&token=${token.token}&service=WFS&version=1.0.0&request=GetFeature
       &typeName=${types.join(',')}&outputformat=json
       &filter=${this.getQueryParams(lng, lat)}`
       return encodeURI(url)

@@ -5,8 +5,8 @@
  * @version:
  * @Author:
  * @Date: 2021-08-23 15:22:51
- * @LastEditors:
- * @LastEditTime: 2021-08-24 11:05:40
+ * @LastEditors: chuyingf chuyingf@163.com
+ * @LastEditTime: 2022-11-28 11:09:27
  */
 import GeoJSON from 'ol/format/GeoJSON'
 import ShadowLayer from './ShadowLayer'
@@ -58,6 +58,7 @@ class MainShadowLayer {
       const params = geoServerConfig.wfsParams
       params.typeName = featureType
       params.cql_filter = `admin_div_code=${mapadcd}`
+      console.log('---------------',geoServerConfig.url);
       const result = await getGisDataByWfs(
         params,
         `${geoServerConfig.url}/ZhejiangAdminDivisionRough/wms`,

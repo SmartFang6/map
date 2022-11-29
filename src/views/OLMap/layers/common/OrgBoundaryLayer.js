@@ -1,3 +1,11 @@
+/*
+ * @Author: chuyingf chuyingf@163.com
+ * @Date: 2022-09-23 11:23:20
+ * @LastEditors: chuyingf chuyingf@163.com
+ * @LastEditTime: 2022-11-28 11:04:38
+ * @FilePath: \river-lake-cockpit-front\src\views\OLMap\layers\common\OrgBoundaryLayer.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import BaseLayer from '../../layers/base/BaseLayer'
 import {
   getMapAdcdFromSystem,
@@ -8,6 +16,7 @@ import {
 import SldUtils from '../../utils/SldUtils'
 import { StyleTypeEnum } from '../../enum/TypeEnum'
 import { orgBoundaryLayer } from '../../config/layerConfig'
+import { getToken } from '../../global/global'
 
 /**
  * 行政区划边界图层 - wms方式无点击以及鼠标经过事件
@@ -59,6 +68,10 @@ class OrgBoundaryLayer extends BaseLayer {
     const featureType = getChildFeatureTypesByAdLevel(adLevel)
     this.layerConfig.source.params.LAYERS = featureType
     this.layerConfig.source.params.CQL_FILTER = `parent_code=${mapadcd}`
+    const token = getToken()
+    this.layerConfig.source.params.accessKey = token.access_key
+    this.layerConfig.source.params.token = token.token
+    // this.layerConfig.source.url = this.layerConfig.source.url + `?accessKey=${token.access_key}&token=${token.token}`
     // this.layerConfig.source.params.CQL_FILTER = `parent_code=${mapadcd}`
     if (this.styleConfig) {
       if (this.styleConfig.sldBody) {

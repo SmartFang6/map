@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Point from 'ol/geom/Point'
+import { getToken } from '../global/global'
 
 /**
  * @module commonrough
@@ -134,7 +135,8 @@ export async function getGisDataByWfs(requestParams, wfsUrl) { // 通过wfs的�
       wfsUrl += `?${key}=${requestParams[key]}`
     }
   })
-  const res = await fetch(wfsUrl)
+  const token = getToken()
+  const res = await fetch(wfsUrl + `&accessKey=${token.access_key}&token=${token.token}`)
   const result = await res.json()
   return result
 }

@@ -134,7 +134,7 @@ export async function getGisDataByWfs(requestParams, wfsUrl) { // 通过wfs的�
       wfsUrl += `?${key}=${requestParams[key]}`
     }
   })
-  const res = await fetch(wfsUrl)
+  const res = await fetch(wfsUrl + `&accessKey=${token.access_key}&token=${token.token}`)
   const result = await res.json()
   return result
 }

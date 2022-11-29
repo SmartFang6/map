@@ -230,7 +230,7 @@ export const orgAdcdWmsLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivision/wms',
+    url: 'https://gis.dcyun.com:48475/geoserver/ZhejiangAdminDivision/wms',
     params: {
       LAYERS: '',
       VERSION: '1.3.0',
@@ -1416,7 +1416,7 @@ export const weiPianLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: 'https://gis.dcyun.com:48164/geoserver/BeautifulRiverLake/wms',
+    url: 'https://gis.dcyun.com:48475/geoserver/BeautifulRiverLake/wms',
     params: {
       LAYERS: 'BeautifulRiverLake:vw_dike_closedarea',
       VERSION: '1.3.0',
@@ -1835,7 +1835,7 @@ export const riverFiveColorLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: 'https://gis.dcyun.com:48164/geoserver/BeautifulRiverLake/wms',
+    url: 'https://gis.dcyun.com:48475/geoserver/BeautifulRiverLake/wms',
     params: {
       LAYERS: 'BeautifulRiverLake:dynamic_fivecolor_river',
       VERSION: '1.3.0',

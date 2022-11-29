@@ -17,7 +17,7 @@ class OrgAdcdWmsLayer extends BaseLayer {
    * @param {String} layerConfig.type - 图层类型 必须为LayerTypeEnum.image
    * @param {Object} layerConfig.source - 数据源
    * @param {String} layerConfig.source.type - 数据源类型 必须为SourceTypeEnum.imagewms
-   * @param {String} layerConfig.source.url - 数据源url 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivision/wms'
+   * @param {String} layerConfig.source.url - 数据源url 'https://gis.dcyun.com:48475/geoserver/ZhejiangAdminDivision/wms'
    * @param {Object} layerConfig.source.params - 请求参数
    * @param {Object} layerConfig.source.params.LAYERS - 行政区划图层 geoserver服务图层，不填，由代码自动计算出
    * @param {String} layerConfig.source.params.VERSION - 版本 写死1.3.0

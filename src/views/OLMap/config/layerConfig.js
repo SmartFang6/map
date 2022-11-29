@@ -23,9 +23,9 @@ import * as LayerEnum from '@/utils/LayerEnum'
 const tdtTk = 'e5abca32c01cf5fa9a82cd58d677fddd'
 
 export const geoserverWmsUrl = {
-  adcdWMS: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/wms',
-  adcdOWS: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/ows',
-  waterRegionInvestigationWMS: 'https://gis.dcyun.com:48164/geoserver/WaterRegionInvestigation/wms',
+  adcdWMS: 'https://gis.dcyun.com:48475/geoserver/ZhejiangAdminDivisionRough/wms',
+  adcdOWS: 'https://gis.dcyun.com:48475/geoserver/ZhejiangAdminDivisionRough/ows',
+  waterRegionInvestigationWMS: 'https://gis.dcyun.com:48475/geoserver/WaterRegionInvestigation/wms',
 }
 // 天地图 影像图
 export const tdtImg = {
@@ -140,7 +140,7 @@ export const orgAdcdWmsLayer = {
   type: LayerTypeEnum.image,
   source: {
     type: SourceTypeEnum.imagewms,
-    url: 'https://gis.dcyun.com:48164/geoserver/ZhejiangAdminDivisionRough/wms',
+    url: 'https://gis.dcyun.com:48475/geoserver/ZhejiangAdminDivisionRough/wms',
     params: {
       LAYERS: '',
       VERSION: '1.3.0',
