@@ -111,4 +111,9 @@ export const ticketMap = [
     name: "上虞区",
     ticket: "9530744F4BA536D2677FE429FD11B0F7",
   },
+  {
+    adcd: "330483",
+    name: "桐乡市",
+    ticket: "C25A25945C7C4D194FECA439D69128B8",
+  },
 ];
