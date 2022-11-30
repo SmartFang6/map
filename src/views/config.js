@@ -94,7 +94,7 @@ export const ticketMap = [
   {
     adcd: "330127",
     name: "淳安县",
-    ticket: "15b96e16dafacdd3239beb7ff30e7544",
+    ticket: "15B96E16DAFACDD3239BEB7FF30E7544",
   },
   {
     adcd: "330803",
