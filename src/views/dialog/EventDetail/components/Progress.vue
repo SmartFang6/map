@@ -31,7 +31,12 @@
           <p class="datetime">{{ item.createTime }}</p>
           <div class="info">
             <span class="name">{{ item.userName }}</span>
-            <el-tooltip effect="dark" :content="item.remark" placement="top">
+            <el-tooltip
+              effect="dark"
+              v-if="item.remark"
+              :content="item.remark"
+              placement="top"
+            >
               <span class="remark">{{ item.remark }}</span>
             </el-tooltip>
           </div>
