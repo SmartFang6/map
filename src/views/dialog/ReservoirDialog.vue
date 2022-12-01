@@ -101,7 +101,7 @@ const props = defineProps({
 .map-pop {
   li:last-child {
     .label {
-      width: 140px;
+      // width: 140px;
       min-width: 100px;
     }
   }
@@ -111,9 +111,7 @@ const props = defineProps({
   }
 
   .label {
-    // width: 120px;
     min-width: 78px;
-    text-align: right;
     font-family: MicrosoftYaHei;
     font-size: 20px;
     color: #ffffff;
