@@ -226,12 +226,12 @@ onMounted(async () => {
 .btn {
   display: flex;
   align-items: center;
-  width: 138px;
+  justify-content: center;
+  width: 154px;
   height: 36px;
   margin-top: 10px;
   background: url(@/assets/images/chart-bg.png);
   background-size: 100% 100%;
-  padding-left: 19px;
   box-sizing: border-box;
   font-size: 14px;
   color: #7be5ff;
