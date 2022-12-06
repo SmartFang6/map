@@ -116,4 +116,9 @@ export const ticketMap = [
     name: "桐乡市",
     ticket: "C25A25945C7C4D194FECA439D69128B8",
   },
+  {
+    adcd: "330802",
+    name: "柯城区",
+    ticket: "4499290716AF6478C81CEC3789BFC392",
+  },
 ];
