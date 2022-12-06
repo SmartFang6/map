@@ -154,7 +154,7 @@ const colors = {
         height: 24px;
         line-height: 24px;
         color: #9ce7fd;
-        text-align: right;
+        text-align: left;
         .count {
           font-size: 32px;
         }
