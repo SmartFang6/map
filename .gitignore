@@ -2,7 +2,7 @@
 node_modules
 /dist
 /cockpit
-
+/jd_water_one_cockpit
 # local env files
 .env.local
 .env.*.local

@@ -2,7 +2,7 @@ const { defineConfig } = require("@vue/cli-service");
 
 const proxyUrl = process.env.VUE_APP_BASEURL || "/api";
 const publicPath = process.env.BASE_URL || "/cockpit/";
-console.log(proxyUrl + "/beautiful");
+console.log(publicPath);
 module.exports = defineConfig({
   publicPath,
   outputDir: process.env.VUE_APP_DIST,
