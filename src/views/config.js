@@ -121,4 +121,9 @@ export const ticketMap = [
     name: "柯城区",
     ticket: "4499290716AF6478C81CEC3789BFC392",
   },
+  {
+    adcd: "331022",
+    name: "三门县",
+    ticket: "4AFFE2FF7988DDE595D4CE8E562AFA43",
+  },
 ];
