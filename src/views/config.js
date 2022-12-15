@@ -126,4 +126,24 @@ export const ticketMap = [
     name: "三门县",
     ticket: "4AFFE2FF7988DDE595D4CE8E562AFA43",
   },
+  {
+    adcd: "330329",
+    name: "泰顺县",
+    ticket: "84E5415A976DA7B00981F35CB618E427",
+  },
+  {
+    adcd: "330328",
+    name: "文成县",
+    ticket: "EBCF5108FDE701C41ECFB7AB563E4A6C",
+  },
+  {
+    adcd: "330382",
+    name: "乐清市",
+    ticket: "1F240B7710E7B43D92D632921ACE69E0",
+  },
+  {
+    adcd: "330324",
+    name: "永嘉县",
+    ticket: "BD37B2BBDA092CEF29541BCA3EF4EBA3",
+  },
 ];
