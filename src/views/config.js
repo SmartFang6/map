@@ -59,7 +59,7 @@ export const ticketMap = [
   {
     adcd: "331181",
     name: "龙泉市",
-    ticket: "7d812c709ebf82d7afa0793d8e819c78",
+    ticket: "7D812C709EBF82D7AFA0793D8E819C78",
   },
   {
     adcd: "330503",
