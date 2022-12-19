@@ -16,7 +16,7 @@
         <input
           type="text"
           v-model="searchText"
-          placeholder="搜索 ⏎"
+          placeholder="搜索  ⏎"
           @focus="searchActive = true"
           @blur="searchActive = false"
           @keyup.enter="emits('search', searchText)"
@@ -25,7 +25,7 @@
       <div class="datetime-wrapper">
         <el-dropdown>
           <div class="dropdown-inner">
-            <span>{{ currentDateType.label }}</span>
+            <span>{{ currentDateType?.label ?? "年份" }}</span>
             <img src="@/assets/images/center-tools-dropdown-arrow.png" />
           </div>
           <template #dropdown>
@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import moment from "moment";
 import { getEventRiskControl } from "@/apis/cockpitEventStats";
@@ -120,30 +120,45 @@ const statList = computed(() => [
 ]);
 
 // 时间类型
-const dateTypes = [
-  {
-    label: "本年",
-    value: "year",
-  },
-  {
-    label: "本月",
-    value: "month",
-  },
-];
-
-const changeDate = async (payload) => {
+const dateTypes = ref([
+  // {
+  //   label: "本年",
+  //   value: "year",
+  // },
+  // {
+  //   label: "本月",
+  //   value: "month",
+  // },
+]);
+const getTimeRange = () => {
+  let date = new Date();
+  let nowMonth = date.getMonth() + 1;
+  let nowYear = date.getFullYear();
+  const startYear = 2021;
+  let endYear = nowYear;
+  if (nowMonth >= 11) {
+    endYear = nowYear + 1;
+  }
+  let timeRange = [];
+  for (let i = startYear; i <= endYear; i++) {
+    timeRange.unshift({
+      label: i,
+      value: i,
+    });
+  }
+  dateTypes.value = timeRange;
+};
+getTimeRange();
+const changeDate = async (payload, init) => {
   const { value } = payload;
-  currentDateType.value = payload;
+  if (!init) {
+    currentDateType.value = payload;
+  }
   const dataObj = {
-    endTime:
-      value === "year"
-        ? moment(new Date()).endOf("month").format("YYYY-12-31 23:59:59")
-        : moment(new Date()).endOf("month").format("YYYY-MM-DD 23:59:59"),
-    startTime:
-      value === "year"
-        ? moment(new Date()).startOf("month").format("YYYY-01-01 00:00:00")
-        : moment(new Date()).startOf("month").format("YYYY-MM-01 00:00:00"),
+    endTime: moment().format(value + "-12-31 23:59:59"),
+    startTime: moment().format(value + "-01-01 00:00:00"),
   };
+  console.log(dataObj, "dataObj");
   store.commit("UPDATE_DATE", dataObj);
   emits("changeTime", dataObj);
   statData.value = await getEventRiskControl({
@@ -151,7 +166,9 @@ const changeDate = async (payload) => {
     adcd: store?.state?.userInfo?.adminDivCode || "330182",
   });
 };
-changeDate(dateTypes[0]);
+onMounted(() => {
+  changeDate({ value: new Date().getFullYear() }, true);
+});
 </script>
 
 <style lang="less" scoped>
@@ -181,7 +198,7 @@ changeDate(dateTypes[0]);
 .datetime-wrapper {
   padding: 0 10px;
   box-sizing: border-box;
-  width: 87px;
+  width: 94px;
   height: 33px;
   border-radius: 16px;
   border: solid 1px #00a6ed;
@@ -238,6 +255,7 @@ changeDate(dateTypes[0]);
   & img {
     width: 12px;
     height: 8px;
+    margin-left: 4px;
   }
   .dropdown-inner {
     width: 60px;
