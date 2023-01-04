@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, watch } from "vue";
 import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
@@ -200,13 +200,20 @@ console.log(patrolTheRiver);
 const countList = ref({
   waterAreaSurvey: {},
 });
-onMounted(async () => {
-  countList.value.waterAreaSurvey = await getSurvreyTypeStat({
-    adcd: store.state.userInfo?.adminDivCode,
-    yr: new Date().getFullYear() - 1 + "",
-  });
-  console.log(countList.value);
-});
+watch(
+  () => store?.state?.dateRange,
+  async (newVal, oldVal) => {
+    const val = newVal || oldVal;
+    const yr = new Date(val.startTime).getFullYear();
+    countList.value.waterAreaSurvey = await getSurvreyTypeStat({
+      yr,
+      adcd: store.state.userInfo?.adminDivCode,
+    });
+  },
+  {
+    deep: true,
+  }
+);
 </script>
 
 <style lang="less" scoped>
