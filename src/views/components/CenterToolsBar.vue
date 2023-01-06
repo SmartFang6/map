@@ -16,7 +16,7 @@
         <input
           type="text"
           v-model="searchText"
-          placeholder="搜索  ⏎"
+          placeholder="搜索    ⏎"
           @focus="searchActive = true"
           @blur="searchActive = false"
           @keyup.enter="emits('search', searchText)"
@@ -25,7 +25,8 @@
       <div class="datetime-wrapper">
         <el-dropdown>
           <div class="dropdown-inner">
-            <span>{{ currentDateType?.label ?? "年份" }}</span>
+            <span>{{ currentDateType?.label }}</span>
+            <!-- <span>{{ currentDateType?.label ?? "年份" }}</span> -->
             <img src="@/assets/images/center-tools-dropdown-arrow.png" />
           </div>
           <template #dropdown>
@@ -142,18 +143,18 @@ const getTimeRange = () => {
   let timeRange = [];
   for (let i = startYear; i <= endYear; i++) {
     timeRange.unshift({
-      label: i,
+      label: i + "年",
       value: i,
     });
   }
   dateTypes.value = timeRange;
 };
 getTimeRange();
-const changeDate = async (payload, init) => {
+const changeDate = async (payload) => {
   const { value } = payload;
-  if (!init) {
-    currentDateType.value = payload;
-  }
+  // if (!init) {
+  currentDateType.value = payload;
+  // }
   const dataObj = {
     endTime: moment().format(value + "-12-31 23:59:59"),
     startTime: moment().format(value + "-01-01 00:00:00"),
@@ -167,7 +168,8 @@ const changeDate = async (payload, init) => {
   });
 };
 onMounted(() => {
-  changeDate({ value: new Date().getFullYear() }, true);
+  let yr = new Date().getFullYear();
+  changeDate({ value: yr, label: yr + "年" });
 });
 </script>
 
@@ -198,7 +200,8 @@ onMounted(() => {
 .datetime-wrapper {
   padding: 0 10px;
   box-sizing: border-box;
-  width: 94px;
+  // width: 94px;
+  width: 114px;
   height: 33px;
   border-radius: 16px;
   border: solid 1px #00a6ed;
@@ -237,13 +240,14 @@ onMounted(() => {
     }
   }
   &.active {
-    width: 300px;
+    width: 280px;
     z-index: 100;
     position: relative;
     background: #031f57;
   }
 }
 .datetime-wrapper {
+  width: 114px;
   cursor: pointer;
   padding-left: 14px;
   padding-right: 12px;
@@ -258,7 +262,7 @@ onMounted(() => {
     margin-left: 4px;
   }
   .dropdown-inner {
-    width: 60px;
+    width: 90px;
     display: flex;
     align-items: center;
     justify-content: space-between;

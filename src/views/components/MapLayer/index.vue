@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
@@ -200,20 +200,26 @@ console.log(patrolTheRiver);
 const countList = ref({
   waterAreaSurvey: {},
 });
-watch(
-  () => store?.state?.dateRange,
-  async (newVal, oldVal) => {
-    const val = newVal || oldVal;
-    const yr = new Date(val.startTime).getFullYear();
-    countList.value.waterAreaSurvey = await getSurvreyTypeStat({
-      yr,
-      adcd: store.state.userInfo?.adminDivCode,
-    });
-  },
-  {
-    deep: true,
-  }
-);
+onMounted(async () => {
+  countList.value.waterAreaSurvey = await getSurvreyTypeStat({
+    adcd: store.state.userInfo?.adminDivCode,
+    yr: new Date().getFullYear() - 1 + "",
+  });
+});
+// watch(
+//   () => store?.state?.dateRange,
+//   async (newVal, oldVal) => {
+//     const val = newVal || oldVal;
+//     const yr = new Date(val.startTime).getFullYear();
+//     countList.value.waterAreaSurvey = await getSurvreyTypeStat({
+//       yr,
+//       adcd: store.state.userInfo?.adminDivCode,
+//     });
+//   },
+//   {
+//     deep: true,
+//   }
+// );
 </script>
 
 <style lang="less" scoped>
@@ -225,7 +231,7 @@ watch(
   flex-direction: column;
   position: absolute;
   left: 50%;
-  top: 193px;
+  top: 174px;
   margin-left: -415px;
   z-index: 100;
 }
