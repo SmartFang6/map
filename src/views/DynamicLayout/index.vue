@@ -33,7 +33,11 @@
         <el-button type="success" link :icon="Promotion" @click="publishLayout">
           发布并使用
         </el-button>
-        <el-button type="primary" :icon="HomeFilled" @click="$router.go(-1)">
+        <el-button
+          type="primary"
+          :icon="HomeFilled"
+          @click="$router.replace('/home')"
+        >
           返回
         </el-button>
       </div>
@@ -195,7 +199,7 @@ async function publishLayout() {
     const message = buildParamsLayout(params);
     await setUserConfigLayoutInfo(message);
     store.commit("UPDATE_LAYOUT_CONFIG", params);
-    await router?.replace("/").then(() => {
+    await router?.replace("/home").then(() => {
       // location.reload();
     });
   } catch (e) {
