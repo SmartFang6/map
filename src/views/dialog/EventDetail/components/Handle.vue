@@ -9,19 +9,27 @@
           {{ eventHandleVO?.handleResultName }}
         </el-descriptions-item>
         <el-descriptions-item label="处理时间">
-          {{ moment(eventHandleVO?.handleTime).format("YYYY-MM-DD") }}
+          {{
+            (eventHandleVO?.handleTime &&
+              moment(eventHandleVO?.handleTime).format("YYYY-MM-DD")) ??
+            "-"
+          }}
         </el-descriptions-item>
         <el-descriptions-item label="处理人员">
-          {{ eventHandleVO?.handleUser }}
+          {{ eventHandleVO?.handleUser ?? "-" }}
         </el-descriptions-item>
         <el-descriptions-item label="责任部门">
-          {{ eventHandleVO?.assignUnit }}
+          {{ eventHandleVO?.assignUnit ?? "-" }}
         </el-descriptions-item>
         <el-descriptions-item label="责任人员">
-          {{ eventHandleVO?.assignUser }}
+          {{ eventHandleVO?.assignUser ?? "-" }}
         </el-descriptions-item>
         <el-descriptions-item label="截止时间">
-          {{ moment(eventHandleVO?.dueDate).format("YYYY-MM-DD") }}
+          {{
+            (eventHandleVO?.dueDate &&
+              moment(eventHandleVO?.dueDate).format("YYYY-MM-DD")) ??
+            "-"
+          }}
         </el-descriptions-item>
         <el-descriptions-item label="处置要求" :span="3">
           {{ eventHandleVO?.assignInstruction }}
@@ -34,13 +42,17 @@
           {{ eventHandleVO?.handleResultName }}
         </el-descriptions-item>
         <el-descriptions-item label="处理时间">
-          {{ moment(eventHandleVO?.handleTime).format("YYYY-MM-DD") }}
+          {{
+            (eventHandleVO?.handleTime &&
+              moment(eventHandleVO?.handleTime).format("YYYY-MM-DD")) ??
+            "-"
+          }}
         </el-descriptions-item>
         <el-descriptions-item label="处理人员">
-          {{ eventHandleVO?.handleUser }}
+          {{ eventHandleVO?.handleUser ?? "-" }}
         </el-descriptions-item>
         <el-descriptions-item label="处置说明">
-          {{ eventHandleVO?.handleInstruction }}
+          {{ eventHandleVO?.handleInstruction ?? "-" }}
         </el-descriptions-item>
       </el-descriptions>
 

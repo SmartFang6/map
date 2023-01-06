@@ -7,7 +7,10 @@
       <div class="descriptions">
         <el-descriptions title="事件详情" direction="vertical" :column="2">
           <el-descriptions-item label="上报时间">
-            {{ moment(eventDetailVO?.reportTime).format("YYYY-MM-DD") }}
+            {{
+              eventDetailVO?.reportTime &&
+              moment(eventDetailVO?.reportTime).format("YYYY-MM-DD")
+            }}
           </el-descriptions-item>
           <el-descriptions-item label="上报人员">
             {{ eventDetailVO?.reportUser }}
@@ -34,7 +37,10 @@
             {{ eventDetailVO?.waterAreaTypeName }}
           </el-descriptions-item>
           <el-descriptions-item label="发生时间">
-            {{ moment(eventDetailVO?.occurTime).format("YYYY-MM-DD") }}
+            {{
+              eventDetailVO?.occurTime &&
+              moment(eventDetailVO?.occurTime).format("YYYY-MM-DD")
+            }}
           </el-descriptions-item>
           <el-descriptions-item label="地理坐标">
             {{ `${eventDetailVO?.longitude} , ${eventDetailVO?.latitude}` }}

@@ -183,7 +183,7 @@ async function publishLayout() {
       ...nowConfig.value,
     };
     const { value } = await ElMessageBox.prompt(
-      "请填写组件名称",
+      "请填写布局名称",
       "布局发布并使用",
       {
         confirmButtonText: "确认",

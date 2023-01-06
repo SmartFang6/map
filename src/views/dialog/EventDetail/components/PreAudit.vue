@@ -9,7 +9,10 @@
           {{ preAuditVo?.previewResultName }}
         </el-descriptions-item>
         <el-descriptions-item label="处理时间">
-          {{ moment(preAuditVo?.eventPrequalifyDate).format("YYYY-MM-DD") }}
+          {{
+            preAuditVo?.eventPrequalifyDate &&
+            moment(preAuditVo?.eventPrequalifyDate).format("YYYY-MM-DD")
+          }}
         </el-descriptions-item>
         <el-descriptions-item label="处理人员">
           {{ preAuditVo?.eventPrequalifyUser }}
@@ -27,7 +30,10 @@
           {{ preAuditVo?.handleUser }}
         </el-descriptions-item>
         <el-descriptions-item label="截止时间">
-          {{ moment(preAuditVo?.dueDate).format("YYYY-MM-DD") }}
+          {{
+            preAuditVo?.dueDate &&
+            moment(preAuditVo?.dueDate).format("YYYY-MM-DD")
+          }}
         </el-descriptions-item>
         <el-descriptions-item label="中心要求" :span="3">
           {{ preAuditVo?.centerRequirement }}
@@ -40,7 +46,10 @@
           {{ preAuditVo?.previewResultName }}
         </el-descriptions-item>
         <el-descriptions-item label="处理时间">
-          {{ moment(preAuditVo?.eventPrequalifyDate).format("YYYY-MM-DD") }}
+          {{
+            preAuditVo?.eventPrequalifyDate &&
+            moment(preAuditVo?.eventPrequalifyDate).format("YYYY-MM-DD")
+          }}
         </el-descriptions-item>
         <el-descriptions-item label="处理人员">
           {{ preAuditVo?.eventPrequalifyUser }}

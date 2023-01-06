@@ -1,4 +1,11 @@
 <!--
+ * @Author: bifang
+ * @Date: 2022-09-16 11:03:31
+ * @LastEditors: Do not edit
+ * @LastEditTime: 2023-01-06 14:04:01
+ * @FilePath: /river-lake-cockpit-front/src/views/dialog/EventDetail/components/Audit.vue
+-->
+<!--
   中心审核结果查看
 -->
 <template>
@@ -8,7 +15,10 @@
         {{ eventAuditVO?.reviewResultName }}
       </el-descriptions-item>
       <el-descriptions-item label="处理时间">
-        {{ moment(eventAuditVO?.eventReviewDate).format("YYYY-MM-DD") }}
+        {{
+          eventAuditVO?.eventReviewDate &&
+          moment(eventAuditVO?.eventReviewDate).format("YYYY-MM-DD")
+        }}
       </el-descriptions-item>
       <el-descriptions-item label="处理人员">
         {{ eventAuditVO?.eventReviewUser }}
