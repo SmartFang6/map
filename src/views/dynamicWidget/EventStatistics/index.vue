@@ -1,6 +1,6 @@
 <template>
   <div class="event">
-    <ul class="content">
+    <ul class="content resetScrollBar">
       <li
         v-for="(item, idx) in configList"
         :key="idx"
@@ -147,16 +147,18 @@ let configList = [
     }
   }
   .content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+    // display: flex;
+    // flex-direction: row;
+    // flex-wrap: wrap;
+    // justify-content: space-between;
+    // align-items: center;
     margin-top: 10px;
     padding: 0 2px;
-
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
     &-item {
-      display: flex;
+      display: inline-flex;
       justify-content: space-around;
       align-items: center;
       box-sizing: border-box;
@@ -164,7 +166,17 @@ let configList = [
       font-family: MicrosoftYaHei;
       color: #91cae8;
     }
-
+    &::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 0; /*高宽分别对应横竖滚动条的尺寸*/
+      height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      /*滚动条里面小方块*/
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      background: rgba(213, 233, 250, 0.75);
+    }
     .item-img {
       width: 49px;
       height: 46px;
@@ -177,9 +189,9 @@ let configList = [
       font-family: AGENCYB;
       letter-spacing: 4px;
       color: #0adbe0;
-      max-width: 65px;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      // max-width: 65px;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
     }
 
     .value-wrapper {
