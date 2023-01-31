@@ -1,3 +1,10 @@
+<!--
+ * @Author: bifang
+ * @Date: 2022-11-11 16:16:54
+ * @LastEditors: Do not edit
+ * @LastEditTime: 2023-01-31 08:39:18
+ * @FilePath: /river-lake-cockpit-front/src/views/waterSsoLogin.vue
+-->
 <!-- 单点登录页面 -->
 <template>
   <div v-loading="loading" class="page" element-loading-text="加载中" />
@@ -25,6 +32,7 @@ const getUserInformation = () => {
   // 根据 adcd 匹配行政区域ticket
   const currentTicket = ticketMap.filter((item) => item.adcd === adcd);
   store.commit("UPDATE_ADCD_TICKET", currentTicket?.[0]?.ticket || "");
+  store.commit("UPDATE_ADCD_NAME", currentTicket?.[0]?.name || "");
   let params = {
     moduleId: "water_one_cockpit",
     ...route.query,
