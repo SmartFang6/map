@@ -38,7 +38,7 @@ import { ref } from "vue";
 // import widgetList from "@/views/dynamicWidget/config/widgetList";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-import { getWidgetList } from "@/apis/dynamicLayout";
+import { listConfComponent } from "@/apis/dynamicLayout";
 
 const emits = defineEmits(["submitSelect"]);
 const props = defineProps({
@@ -50,13 +50,13 @@ const props = defineProps({
 // 远程组件库列表
 const widgetList = ref([]);
 const params = {};
-getWidgetList(params).then((res) => {
+listConfComponent(params).then((res) => {
   widgetList.value =
     res?.map((item) => ({
       componentInfoId: item?.id,
       widgetCode: item?.componentCode,
       name: item?.componentName,
-      poster: item?.poster,
+      poster: item?.picUrl,
       getDataUri: item?.requestUrl,
       domainName: item?.domainName, // TODO: 域名(暂时没使用)
       port: item?.port, // TODO: 端口(暂时没使用)

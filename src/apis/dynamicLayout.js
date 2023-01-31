@@ -1,3 +1,10 @@
+/*
+ * @Author: bifang
+ * @Date: 2022-10-26 14:57:48
+ * @LastEditors: Do not edit
+ * @LastEditTime: 2023-01-31 14:06:31
+ * @FilePath: /river-lake-cockpit-front/src/apis/dynamicLayout.js
+ */
 import { postHttp } from "@/utils/axios";
 
 /**
@@ -5,6 +12,9 @@ import { postHttp } from "@/utils/axios";
  **/
 export const getWidgetList = (data) =>
   postHttp("configLayoutRecord/listComponent", { data });
+
+export const listConfComponent = (data) =>
+  postHttp("confComponent/listConfComponent", { data });
 
 /**
  * 用户布局列表
