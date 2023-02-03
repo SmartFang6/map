@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2023-02-02 16:53:13
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-03 11:02:55
+ * @LastEditTime: 2023-02-03 14:40:13
  * @FilePath: /river-lake-cockpit-front/src/utils/rsa.js
  */
 import JSEncrypt from "jsencrypt";
@@ -11,20 +11,18 @@ import { encrypt } from "@/utils/crypt";
 import { getAuthSign } from "@/apis/common";
 /**
  *
- * @param {*} pubKey
- * @param {*} str moduleId + userId + date 8位日期
+ * @param {*} pubKey 公钥
+ * @param {*} str 加密数据 moduleId + userId + date 8位日期
  * @returns
  */
 export function encodeRsa(pubKey, str) {
   let encrypt = new JSEncrypt();
-  //sign是公钥
   encrypt.setPublicKey(pubKey);
-  // moduleId + userId + new SimpleDateFormat("yyyyMMdd").format(new Date()))
   let encrypted = encrypt.encrypt(str);
   return encrypted;
 }
 /**
- * getPublicSign
+ * getPublicSign 外部应用调取获取加密后的sign
  * @param {*} moduleId 应用编号
  * @param {*} userId 用户编号
  * @returns publicSign 公钥 sign
@@ -32,6 +30,7 @@ export function encodeRsa(pubKey, str) {
 export function getPublicSign(moduleId, userId) {
   return new Promise((res) => {
     const dateKey = moment().format("YYYYMMDD");
+    // publicKey 为aes加密的 密钥
     const publicKey = "waterOne" + dateKey;
     const sign = encrypt(moduleId + userId, publicKey);
     getAuthSign({
@@ -52,6 +51,5 @@ export function getPublicSign(moduleId, userId) {
  */
 export function getSecretText(sign, strText) {
   const dateKey = moment().format("YYYYMMDD");
-  console.log(strText + dateKey);
   return encodeRsa(sign, strText + dateKey);
 }

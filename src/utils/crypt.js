@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-11-23 11:59:00
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-03 10:36:25
+ * @LastEditTime: 2023-02-03 14:32:02
  * @FilePath: /river-lake-cockpit-front/src/utils/crypt.js
  */
 // crypto.js 文件
@@ -14,6 +14,12 @@ import CryptoJS from "crypto-js";
 // var encryptKey = CryptoJS.enc.Latin1.parse("EA53FD5B6D828F4BCBE410D2C3DB848B");
 // 偏移量
 var iv = CryptoJS.enc.Latin1.parse("");
+/**
+ * aes 加密
+ * @param {*} data 加密的数据
+ * @param {*} encryptKey 加密的key密钥
+ * @returns 加密后的数据
+ */
 export const encrypt = (
   data,
   encryptKey = "EA53FD5B6D828F4BCBE410D2C3DB848B"
@@ -28,9 +34,13 @@ export const encrypt = (
   });
   return encrypted.toString();
 };
-//加密
 
-//解密
+/**
+ * aes 解密
+ * @param {*} encrypted 解密的数据
+ * @param {*} decryptKey 解密的key 密钥
+ * @returns 解密后的数据
+ */
 export const decrypt = (
   encrypted,
   decryptKey = "01187703B39C712B7FE74E0018516DDB"
