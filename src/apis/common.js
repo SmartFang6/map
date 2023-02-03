@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-11-23 18:28:45
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-01-10 09:59:20
+ * @LastEditTime: 2023-02-03 10:02:01
  * @FilePath: /river-lake-cockpit-front/src/apis/common.js
  */
 import { getHttp, postHttp } from "@/utils/axios";
@@ -22,4 +22,13 @@ export const getCustomTicket = (data) =>
  */
 export const getSurvreyTypeStat = (data) => {
   return postHttp("/supervision/getSurvreyTypeStat", { data });
+};
+/**
+ * 获取登陆所需的公钥
+ */
+export const getAuthSign = (data) => {
+  return getHttp("/common/getAuthSign", {
+    data,
+    baseURL: "/userApi",
+  });
 };
