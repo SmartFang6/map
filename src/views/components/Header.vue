@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-09-13 17:01:06
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-06 09:24:20
+ * @LastEditTime: 2023-02-06 10:22:03
  * @FilePath: /river-lake-cockpit-front/src/views/components/Header.vue
 -->
 <!--------------------------------------------
@@ -31,10 +31,11 @@ currentAdcd.value = store.state.adcdName || "";
 
 async function onJump() {
   // if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
+  // const domainName = "http://localhost:8081";
   const domainName = getDomainName();
   const ticket = store?.state?.ticket || "";
   const userId = store?.state?.userInfo?.userId || "";
-  const moduleId = "water_one_cockpit";
+  const moduleId = "water_one_inspection";
   let sign = await getPublicSign(moduleId, userId);
   let secretText = getSecretText(sign, moduleId + userId);
   const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}&secretText=${secretText}`;

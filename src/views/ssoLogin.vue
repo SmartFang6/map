@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-11-11 16:16:54
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-03 11:03:43
+ * @LastEditTime: 2023-02-06 10:36:57
  * @FilePath: /river-lake-cockpit-front/src/views/ssoLogin.vue
 -->
 <!-- 单点登录页面 -->
@@ -35,7 +35,7 @@ const route = useRoute();
 const router = useRouter();
 const getUserInformation = async () => {
   loading.value = true;
-  const { ticket, moduleId, sign, userId } = route.query;
+  const { ticket, moduleId, sign, userId, xxx } = route.query;
   let secretText = getSecretText(sign, moduleId + userId);
   // 根据 ticket 匹配行政区域名称（暂时处理）
   const currentAdcd = ticketMap.filter((item) => item.ticket === ticket);
@@ -47,19 +47,26 @@ const getUserInformation = async () => {
   const _ENV = process.env.VUE_APP_ENV;
   let _params = { ...route.query, secretText, sign };
   console.log("_ENV", _ENV);
-  if (_ENV === "dev") {
+  if (_ENV === "dev" || xxx === "yyy") {
     // 开发环境实时生成所需参数 sign ;生成规则 8位日期拼接userId用MD5加密后大写字符串
     // const _sign = getMD5_sign(route.query?.userId);
     let _sign = await getPublicSign(moduleId, userId);
     let secretText = getSecretText(_sign, moduleId + userId);
-
-    _params = {
-      moduleId: "water_one_cockpit",
-      ticket: "FC37BAB8805D85AF2576563A20F66658",
-      userId: "4ebf6109-8360-11ea-b14d-6c92bfce09d6",
-      sign: _sign,
-      secretText,
-    };
+    if (_ENV === "dev") {
+      _params = {
+        moduleId: "water_one_cockpit",
+        ticket: "FC37BAB8805D85AF2576563A20F66658",
+        userId: "4ebf6109-8360-11ea-b14d-6c92bfce09d6",
+        sign: _sign,
+        secretText,
+      };
+    } else {
+      _params = {
+        ..._params,
+        sign: _sign,
+        secretText,
+      };
+    }
   }
   axios
     .get(`/userApi/user/sso`, {
