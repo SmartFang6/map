@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-11-11 16:16:54
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-06 10:36:57
+ * @LastEditTime: 2023-02-06 10:53:32
  * @FilePath: /river-lake-cockpit-front/src/views/ssoLogin.vue
 -->
 <!-- 单点登录页面 -->
@@ -52,21 +52,11 @@ const getUserInformation = async () => {
     // const _sign = getMD5_sign(route.query?.userId);
     let _sign = await getPublicSign(moduleId, userId);
     let secretText = getSecretText(_sign, moduleId + userId);
-    if (_ENV === "dev") {
-      _params = {
-        moduleId: "water_one_cockpit",
-        ticket: "FC37BAB8805D85AF2576563A20F66658",
-        userId: "4ebf6109-8360-11ea-b14d-6c92bfce09d6",
-        sign: _sign,
-        secretText,
-      };
-    } else {
-      _params = {
-        ..._params,
-        sign: _sign,
-        secretText,
-      };
-    }
+    _params = {
+      ..._params,
+      sign: _sign,
+      secretText,
+    };
   }
   axios
     .get(`/userApi/user/sso`, {
