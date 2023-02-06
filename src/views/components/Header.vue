@@ -1,3 +1,10 @@
+<!--
+ * @Author: bifang
+ * @Date: 2022-09-13 17:01:06
+ * @LastEditors: Do not edit
+ * @LastEditTime: 2023-02-06 09:24:20
+ * @FilePath: /river-lake-cockpit-front/src/views/components/Header.vue
+-->
 <!--------------------------------------------
  ¦ 大屏头部
  ¦
@@ -16,19 +23,21 @@
 import store from "@/store";
 import { ref } from "vue";
 // import { ElMessage } from "element-plus";
-import { getMD5_sign } from "@/utils/index";
 import { getDomainName } from "@/utils/config";
+import { getPublicSign, getSecretText } from "@/utils/rsa";
 
 let currentAdcd = ref("");
 currentAdcd.value = store.state.adcdName || "";
 
-function onJump() {
+async function onJump() {
   // if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
   const domainName = getDomainName();
   const ticket = store?.state?.ticket || "";
   const userId = store?.state?.userInfo?.userId || "";
-  const sign = getMD5_sign();
-  const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}`;
+  const moduleId = "water_one_cockpit";
+  let sign = await getPublicSign(moduleId, userId);
+  let secretText = getSecretText(sign, moduleId + userId);
+  const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}&secretText=${secretText}`;
   window.open(JUMP_URL);
   // } else {
   //   ElMessage({
