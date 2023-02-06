@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-11-11 16:16:54
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-06 10:53:32
+ * @LastEditTime: 2023-02-06 15:07:03
  * @FilePath: /river-lake-cockpit-front/src/views/ssoLogin.vue
 -->
 <!-- 单点登录页面 -->
@@ -47,7 +47,9 @@ const getUserInformation = async () => {
   const _ENV = process.env.VUE_APP_ENV;
   let _params = { ...route.query, secretText, sign };
   console.log("_ENV", _ENV);
-  if (_ENV === "dev" || xxx === "yyy") {
+  const devUrl = "https://web.dcyun.com:48467";
+  const originUrl = window.location.origin;
+  if (_ENV === "dev" || (devUrl === originUrl && xxx === "yyy")) {
     // 开发环境实时生成所需参数 sign ;生成规则 8位日期拼接userId用MD5加密后大写字符串
     // const _sign = getMD5_sign(route.query?.userId);
     let _sign = await getPublicSign(moduleId, userId);
