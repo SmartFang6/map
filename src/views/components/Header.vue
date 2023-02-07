@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-09-13 17:01:06
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-06 10:22:03
+ * @LastEditTime: 2023-02-07 10:59:14
  * @FilePath: /river-lake-cockpit-front/src/views/components/Header.vue
 -->
 <!--------------------------------------------
@@ -24,7 +24,7 @@ import store from "@/store";
 import { ref } from "vue";
 // import { ElMessage } from "element-plus";
 import { getDomainName } from "@/utils/config";
-import { getPublicSign, getSecretText } from "@/utils/rsa";
+import { getPublicSign } from "@/utils/rsa";
 
 let currentAdcd = ref("");
 currentAdcd.value = store.state.adcdName || "";
@@ -37,8 +37,7 @@ async function onJump() {
   const userId = store?.state?.userInfo?.userId || "";
   const moduleId = "water_one_inspection";
   let sign = await getPublicSign(moduleId, userId);
-  let secretText = getSecretText(sign, moduleId + userId);
-  const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}&secretText=${secretText}`;
+  const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}`;
   window.open(JUMP_URL);
   // } else {
   //   ElMessage({
