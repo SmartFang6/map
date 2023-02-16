@@ -146,4 +146,9 @@ export const ticketMap = [
     name: "永嘉县",
     ticket: "BD37B2BBDA092CEF29541BCA3EF4EBA3",
   },
+  {
+    adcd: "331024",
+    name: "仙居县",
+    ticket: "FEB43CC232E1B8A0998044B09F6D0787",
+  },
 ];
