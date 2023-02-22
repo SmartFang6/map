@@ -41,13 +41,13 @@
         class="search-form"
         size="small"
       >
-        <!-- <el-form-item label="事件来源" prop="eventSource">
+        <el-form-item label="事件来源" prop="eventSource">
           <DictSelec
             v-model:selectValue="searchFormData.eventSource"
             dict-string="water_one_inspection:event_source"
             class="search-input"
           />
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="行政区域" prop="adcdSelected">
           <el-cascader
             v-model="searchFormData.adcdSelected"
@@ -55,9 +55,19 @@
             :props="adcdCascaderProps"
             :options="adcdCascaderOptions"
             class="search-input"
+            @change="onAdcdChange"
           />
         </el-form-item>
-        <!-- <el-form-item label="事件等级" prop="eventGrade">
+        <el-form-item label="事件类型" prop="eventTypeIdSelected">
+          <EventTypeCascader
+            v-model="searchFormData.eventTypeIdSelected"
+            :adcd="userAdcd"
+            :search-text="userAdnm"
+            size="small"
+            @change="onEventTypeChange"
+          />
+        </el-form-item>
+        <el-form-item label="事件等级" prop="eventGrade">
           <el-select v-model="searchFormData.eventGrade" placeholder="请选择">
             <el-option
               v-for="item in eventGradeOptions"
@@ -66,7 +76,7 @@
               :value="item.value"
             />
           </el-select>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item label="状态" prop="eventAcceptStatus">
           <el-select
             v-model="searchFormData.eventAcceptStatus"
@@ -169,7 +179,8 @@ import { reactive, toRefs, ref, computed } from "vue";
 import EventDetailDialog from "@/views/dialog/EventDetail/index";
 import { getEventQuestionList } from "@/apis/cockpitEventStats";
 import store from "@/store";
-// import DictSelec from "@/components/DictSelect/index.vue";
+import DictSelec from "@/components/DictSelect/index.vue";
+import EventTypeCascader from "@/components/EventTypeCascader";
 import {
   getListDistrict,
   getEventStatGradeForProblemList,
@@ -177,12 +188,12 @@ import {
 import RchSelect from "@/components/RchSelect";
 import moment from "moment";
 import { ElMessage } from "element-plus";
-
 const eventDetailDialogVisible = ref(false);
 const detailInfo = ref(null);
 
 // 查询数据 ---start
 const ADMIN_DIV_CODE = store?.state?.userInfo?.adminDivCode || ""; // 用户所处行政编码
+const userAdcd = ref(ADMIN_DIV_CODE);
 // 行政区域
 let adcdCascaderOptions = ref([]);
 let rootAdcd = ADMIN_DIV_CODE;
@@ -209,26 +220,37 @@ let adcdCascaderProps = {
     resolve(childs);
   },
 };
-
+const userAdnm = ref("");
+const getUserAdnm = async (adcd) => {
+  let getAdcd = adcd.slice(0, -2);
+  const result = await getListDistrict({
+    parentAdcd: getAdcd,
+  });
+  userAdnm.value = result?.find((i) => i.adcd === adcd)?.adnm;
+};
+getUserAdnm(userAdcd.value);
+const onAdcdChange = (e) => {
+  console.log(e);
+};
 // 事件等级
-// const eventGradeOptions = [
-//   {
-//     label: "全部",
-//     value: "",
-//   },
-//   {
-//     label: "重大",
-//     value: "1",
-//   },
-//   {
-//     label: "较严重",
-//     value: "2",
-//   },
-//   {
-//     label: "一般",
-//     value: "3",
-//   },
-// ];
+const eventGradeOptions = [
+  {
+    label: "全部",
+    value: "",
+  },
+  {
+    label: "重大",
+    value: "1",
+  },
+  {
+    label: "较严重",
+    value: "2",
+  },
+  {
+    label: "一般",
+    value: "3",
+  },
+];
 
 // 事件状态列表
 const acceptStatusList = [
@@ -245,7 +267,19 @@ const acceptStatusList = [
     value: "2",
   },
 ];
-
+// 事件类型改变
+const onEventTypeChange = (node) => {
+  if (node) {
+    console.log(node);
+    data.searchFormData.eventTypeId = node.eventTypeId;
+    // state.model.eventTypeName = node.eventSubCategory;
+    // state.model.eventResponsibleUnit = node.unitName;
+    // state.model.eventResponsibleUnitCode = node.unitCode;
+    // state.model.eventGradeName =
+    //   state.eventGrade.find((grade) => grade.eucd === node.eventGrade)
+    //     ?.ntlang || "";
+  }
+};
 // 分页
 const pageData = reactive({
   total: 10,
@@ -284,6 +318,8 @@ let data = reactive({
       moment(new Date()).endOf("year").format("YYYY-MM-DD 23:59:59"),
     ],
     searchText: "",
+    eventTypeIdSelected: [],
+    eventTypeId: "",
   },
   tableData: [],
   eventGrade: {}, // 统计数量
@@ -294,6 +330,7 @@ const { searchFormData, tableData, eventGrade } = toRefs(data);
 function getData() {
   console.log(data.searchFormData, "data---");
   const params = {
+    ...data.searchFormData,
     adcd:
       data.searchFormData.adcdSelected[
         data.searchFormData.adcdSelected.length - 1
@@ -301,7 +338,6 @@ function getData() {
     code: "",
     startTime: data.searchFormData.dateRange?.[0],
     endTime: data.searchFormData.dateRange?.[1],
-    searchText: data.searchFormData.searchText,
     pageNo: pageData.pageIndex,
     pageSize: pageData.pageNum,
     eventDealStatus: data.searchFormData.eventAcceptStatus,
@@ -335,6 +371,8 @@ getData();
 let searchFormRef = ref(null);
 function onRest() {
   data.searchFormData.searchTextValue = "";
+  data.searchFormData.eventTypeIdSelected = [];
+  data.searchFormData.eventTypeId = "";
   searchFormRef.value.resetFields();
   getData();
 }
