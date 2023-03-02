@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-11-23 18:28:45
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-02-21 14:50:10
+ * @LastEditTime: 2023-03-02 16:13:01
  * @FilePath: /river-lake-cockpit-front/src/apis/common.js
  */
 import { getHttp, postHttp } from "@/utils/axios";
@@ -45,3 +45,13 @@ export const getListEventTypeByAdcd = (data) => {
     data,
   });
 };
+//查询全部考核指标
+export const listIndex = (data) =>
+  postHttp(BASE_URL + "/performanceAppraisalConfig/listIndex", {
+    data,
+  });
+//查询得分详情
+export const scoreDetail = (data) =>
+  postHttp(BASE_URL + "/performanceAppraisalRank/scoreDetail", {
+    data,
+  });

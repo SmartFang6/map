@@ -1,0 +1,134 @@
+.my-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  background: url(~@/assets/newImage/rightTopBg.png) no-repeat;
+  background-size: 100% 100%;
+  :deep(.el-table) {
+    margin: 20px;
+    background: transparent;
+    color: #fff;
+    tr {
+      background: transparent;
+    }
+    // 除去hover效果
+    tr:hover > td.el-table__cell {
+      background: transparent;
+    }
+    // 表头
+    .el-table__header-wrapper {
+      tr {
+        background: transparent;
+      }
+      th {
+        background: transparent;
+        text-align: center;
+        border: none !important;
+        color: #fff;
+      }
+    }
+    .el-table__inner-wrapper {
+      // 除去底部边框
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+    // 表体
+    .el-table__body {
+      border: 1px solid #334f74;
+      border-right: none;
+    }
+    .el-table__body-wrapper {
+      .el-scrollbar__view {
+        width: 100%;
+      }
+      .el-table__row {
+        background-color: rgba(#0b203b, 0.8);
+        td {
+          text-align: center;
+          border-right: 1px solid #334f74;
+          border-bottom: none;
+          border-left: none !important;
+          font-family: AgencyFB-Bold;
+        }
+        &:nth-child(2n) {
+          background-color: rgba(#0b203b, 0.3);
+        }
+      }
+    }
+  }
+  :deep(.el-table--border) {
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+  :deep(.el-table__border-left-patch) {
+    display: none;
+  }
+}
+// 自定义表头的table
+.my-head-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  background: url(~@/assets/newImage/rightTopBg.png) no-repeat;
+  background-size: 100% 100%;
+  :deep(.el-table) {
+    margin: 20px;
+    background: transparent;
+    color: #fff;
+    tr {
+      background: transparent;
+    }
+    // 除去hover效果
+    tr:hover > td.el-table__cell {
+      background: transparent;
+    }
+    // 表头
+    .el-table__header-wrapper {
+      tr {
+        background: transparent;
+      }
+      th {
+        background: transparent;
+        text-align: center;
+        color: #fff;
+      }
+    }
+    .el-table__body-wrapper {
+      .el-scrollbar__view {
+        width: 100%;
+      }
+      .el-table__row {
+        background-color: rgba(#0b203b, 0.8);
+        td {
+          text-align: center;
+          font-family: AgencyFB-Bold;
+        }
+        &:nth-child(2n) {
+          background-color: rgba(#0b203b, 0.3);
+        }
+      }
+    }
+    .el-table__inner-wrapper {
+      // 除去底部边框
+      &::before,
+      &::after {
+        background: #334f74;
+      }
+    }
+  }
+  :deep(.el-table--border) {
+    &::before,
+    &::after {
+      background: #334f74;
+    }
+  }
+  :deep(.el-table__border-left-patch) {
+    background: #334f74;
+  }
+}

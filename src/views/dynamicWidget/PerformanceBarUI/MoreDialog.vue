@@ -16,35 +16,140 @@
         </div>
       </div>
     </div>
-
-    <div class="two_title">
+    <div class="two_title" v-if="false">
       <ChartTitle :title="'销号率排名'" />
       <ChartTitle :title="'考核排名'" />
     </div>
 
-    <div class="content_wrap">
-      <div class="echart_left">
-        <ProgressBar
-          v-for="(item, index) in problemSourceList"
-          :no="index + 1"
-          :count="item?.unitEventNum || 0"
-          :rate="item?.completed || 0"
-          :key="item?.point || index"
-          flexType="row"
-          :title="item?.eventResponsibleUnitCodeName || ''"
+    <div class="container">
+      <div class="content_wrap">
+        <div class="echart_left">
+          <ProgressBar
+            v-for="(item, index) in problemSourceList"
+            :no="index + 1"
+            :count="item?.unitEventNum || 0"
+            :rate="item?.completed || 0"
+            :key="item?.point || index"
+            flexType="row"
+            :title="item?.eventResponsibleUnitCodeName || ''"
+          />
+        </div>
+        <div
+          class="echart_right"
+          ref="verticalChart"
+          v-if="chartData?.length > 0"
+        ></div>
+        <el-empty
+          v-else
+          description="暂无数据"
+          :image-size="80"
+          class="dc-empty"
         />
       </div>
-      <div
-        class="echart_right"
-        ref="verticalChart"
-        v-if="chartData?.length > 0"
-      ></div>
-      <el-empty
-        v-else
-        description="暂无数据"
-        :image-size="80"
-        class="dc-empty"
-      />
+      <!-- 得分详情 -->
+      <div class="newContent" :class="isShowDetail ? 'showScoreDetail' : ''">
+        <!-- 顶部分数和返回 -->
+        <div class="content_title">
+          <div class="totalScore">
+            {{ nowScore }}
+            <span>分</span>
+          </div>
+          <el-button type="primary" link @click="back">返回</el-button>
+        </div>
+        <!-- 考核单位 -->
+        <div class="tabs">
+          <div
+            v-for="item in chartData"
+            :key="item.eventResponsibleUnitCode"
+            @click="switchTab(item)"
+            class="tab"
+            :class="
+              activeRankTab === item.eventResponsibleUnitCode ? 'active' : ''
+            "
+          >
+            {{ item.eventResponsibleUnitCodeName }}
+          </div>
+        </div>
+        <el-form-item class="assessmentIndex" label="考核指标">
+          <el-select
+            v-model="indexId"
+            placeholder="请选择"
+            @change="getSorceDetail"
+            clearable
+          >
+            <el-option
+              v-for="cond in conditionList"
+              :key="cond.indexId"
+              :label="cond.indexName"
+              :value="cond.indexId"
+            />
+          </el-select>
+        </el-form-item>
+        <el-table
+          :data="tableData"
+          :headerCellStyle="{
+            background: '#05143f',
+            textAlign: 'center',
+            color: '#0adbe0',
+            width: '100%',
+          }"
+          max-height="40vh"
+          style="width: 100%"
+          :cellStyle="{ textAlign: 'center' }"
+        >
+          <el-table-column prop="gradingTime" width="90px" label="日期">
+            <template #default="{ row }">
+              <div>
+                {{ row.gradingTime?.split(" ")?.[0] }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="indexName" label="考核指标" />
+          <el-table-column label="触发规则">
+            <template #default="{ row }">
+              <el-popover
+                placement="top-start"
+                title="触发规则: "
+                :width="160"
+                trigger="hover"
+                :show-after="100"
+                :content="row.ruleName"
+              >
+                <template #reference>
+                  <div class="showEllipsis">
+                    {{ row.ruleName }}
+                  </div>
+                </template>
+              </el-popover>
+            </template>
+          </el-table-column>
+          <el-table-column prop="eventId" label="事件编号" />
+          <el-table-column label="触发事项">
+            <template #default="{ row }">
+              <el-popover
+                placement="top-start"
+                title="触发事项: "
+                :width="160"
+                trigger="hover"
+                :show-after="100"
+                :content="row.description"
+              >
+                <template #reference>
+                  <div class="showEllipsis">{{ row.description }}</div>
+                </template>
+              </el-popover>
+            </template>
+          </el-table-column>
+
+          <el-table-column prop="score" width="80px" label="分数变化">
+            <template #default="{ row }">
+              <div class="showEllipsis">
+                {{ row.scoreChange == 0 ? -row.score : "+" + row.score }}
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +158,7 @@
 import { ref, watch, nextTick } from "vue";
 import * as Echarts from "echarts";
 import ProgressBar from "@/views/components/ProgressBar";
+import { listIndex, scoreDetail } from "@/apis/common";
 
 // 接收父组件传值
 const props = defineProps({
@@ -71,6 +177,56 @@ const emits = defineEmits(["update:visible"]);
 // 所有数据
 const dataAll = ref(null);
 
+const chartData = ref([]);
+// 考核
+const indexId = ref("");
+// 考核指标列表
+const conditionList = ref([]);
+const getListIndex = async (suitUnitType = "") => {
+  conditionList.value = await listIndex({ suitUnitType });
+};
+getListIndex(1);
+// 考核指标
+const tableData = ref([
+  {
+    gradingTime: "2023-02-13 13:12:11",
+    indexName: "考核指标",
+    ruleName: "触发规则",
+    eventId: "1231231283712893",
+    description: "触发事项触发事项触发事项触发事项触发事项",
+    scoreChange: 0,
+    score: 90,
+  },
+  {
+    gradingTime: "2023-02-13 13:12:11",
+    indexName: "考核指标",
+    ruleName: "触发规则",
+    eventId: "1231231283712893",
+    description: "触发事项触发事项触发事项触发事项触发事项",
+    scoreChange: 0,
+    score: 910,
+  },
+]);
+const nowScore = ref("");
+const activeRankTab = ref(chartData.value?.[0]?.eventResponsibleUnitCode);
+// 切换考核单位
+const switchTab = (item) => {
+  activeRankTab.value = item.eventResponsibleUnitCode;
+  nowScore.value = item.count;
+  getSorceDetail();
+};
+const getSorceDetail = async () => {
+  let res = await scoreDetail({
+    unitCode: activeRankTab.value,
+    indexId: indexId.value,
+  });
+  tableData.value = res;
+};
+//#region 显示考核详情
+const isShowDetail = ref(false);
+const back = () => {
+  isShowDetail.value = false;
+};
 // 组件数据
 const problemSourceList = ref([]);
 // 处理数据
@@ -94,6 +250,11 @@ const dealData = () => {
       };
     }
   );
+  // 切换考核单位
+  // activeRankTab.value = chartData.value?.[0]?.eventResponsibleUnitCode;
+  if (isShowDetail.value) {
+    switchTab(chartData.value?.[0]);
+  }
   // 绘制图表内容
   nextTick(() => {
     draw(chartData.value);
@@ -118,8 +279,6 @@ const tabClick = (item) => {
   activeTab.value = item.key;
   dealData();
 };
-
-const chartData = ref([]);
 
 // 柱状图 dom
 const verticalChart = ref(null);
@@ -264,6 +423,14 @@ const draw = (data) => {
       },
     ],
   };
+  chart.on("click", (e) => {
+    let item = chartData.value.find(
+      (i) => i.eventResponsibleUnitCodeName === e.name
+    );
+    nowScore.value = item.count;
+    isShowDetail.value = true;
+    switchTab(item);
+  });
   chart.setOption(option);
 };
 
@@ -351,8 +518,14 @@ watch(
       width: 50%;
     }
   }
-
+  .container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+  }
   .content_wrap {
+    position: absolute;
+    z-index: 1;
     width: 100%;
     height: 500px;
     margin-top: 20px;
@@ -394,5 +567,137 @@ watch(
       }
     }
   }
+  .newContent {
+    width: 100%;
+    height: 500px;
+    margin-top: 20px;
+    position: absolute;
+    // position: relative;
+    z-index: -1;
+    background: #051446;
+    .tabs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 2px solid #09256e;
+      .tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 135px;
+        padding: 0 16px;
+        height: 27px;
+        margin-top: 8px;
+        font-size: 18px;
+        color: #c4f0ff;
+        cursor: pointer;
+      }
+      .active {
+        background: url("@/assets/images/water_tab.png") no-repeat;
+        background-size: 100% 27px;
+        background-position-y: 2px;
+      }
+    }
+    .assessmentIndex {
+      margin: 10px 0;
+      :deep(.el-form-item__label) {
+        color: #fff;
+      }
+      :deep(.el-input__wrapper) {
+        background: rgba(51, 179, 253, 0.2);
+        box-shadow: 0 0 0 1px #33b3fd;
+        .el-input__inner {
+          color: #fff;
+        }
+      }
+    }
+    :deep(.el-table) {
+      background: transparent;
+      color: #fff;
+      tr {
+        background: transparent;
+      }
+      // 除去hover效果
+      tr:hover > td.el-table__cell {
+        background: transparent;
+      }
+      // 表头
+      .el-table__header-wrapper {
+        tr {
+          background: transparent;
+        }
+        th {
+          background: transparent;
+          text-align: center;
+          border: none !important;
+          color: #fff;
+        }
+      }
+      .el-table__inner-wrapper {
+        // 除去底部边框
+        &::before,
+        &::after {
+          display: none;
+        }
+      }
+      // 表体
+      .el-table__body {
+        border: none;
+      }
+      .el-table__body-wrapper {
+        .el-scrollbar__view {
+          width: 100%;
+        }
+        .el-table__row {
+          background-color: rgba(#001349, 0.8);
+          td {
+            text-align: center;
+            border-right: none;
+            border-bottom: none;
+            border-left: none !important;
+            font-family: AgencyFB-Bold;
+          }
+          &:nth-child(2n) {
+            background-color: rgba(#03378a, 0.2);
+          }
+        }
+      }
+    }
+    :deep(.el-table--border) {
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+    :deep(.el-table__border-left-patch) {
+      display: none;
+    }
+    .content_title {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .totalScore {
+        font-family: AgencyFB-Bold;
+        font-size: 26px;
+        color: #00dcf0;
+        margin-right: 24px;
+        span {
+          margin-left: 4px;
+          font-family: MicrosoftYaHei;
+          font-size: 18px;
+          color: #00dcf0;
+        }
+      }
+    }
+  }
+}
+.showScoreDetail {
+  z-index: 99 !important;
+}
+.showEllipsis {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

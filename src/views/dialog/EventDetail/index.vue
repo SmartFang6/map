@@ -46,6 +46,7 @@
               <el-popover
                 placement="top-start"
                 trigger="hover"
+                :width="340"
                 :content="eventDetail?.reportRecordVO?.eventTypeName"
               >
                 <template #reference>
@@ -304,10 +305,5 @@ watch(
 .showMoreBox {
   transition: max-height 0.9s;
   max-height: 5000px;
-}
-</style>
-<style>
-.el-popper {
-  width: 340px !important;
 }
 </style>
