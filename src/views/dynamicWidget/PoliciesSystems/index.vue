@@ -41,7 +41,7 @@
 /**
  政策制度
  **/
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useStore } from "vuex";
 import { getPoliciesSystemsList } from "@/apis/cockpitEventStats";
 
@@ -51,12 +51,11 @@ const store = useStore();
 const handleItem = (row) => {
   onPreviewPDFFile(row.pdfUrl);
 };
+
 // 获取获取政策制度列表
-const getPoliciesSystems = async () => {
+const getPoliciesSystems = async (data) => {
   // 通过后台接口获取文件制度信息列表
-  const target = await getPoliciesSystemsList({
-    adcd: store.state?.userInfo?.adminDivCode || "",
-  });
+  const target = await getPoliciesSystemsList(data);
   // 处理数据,获取预览需要的pdf文件地址
   PoliciesSystemsList.value = target?.map((item) => {
     return {
@@ -135,8 +134,19 @@ const getPoliciesSystems = async () => {
     },
   ];
 };
-
-getPoliciesSystems();
+// 监听驾驶舱的日期间隔
+watch(
+  () => store?.state?.dateRange,
+  (newVal, oldVal) => {
+    const val = newVal || oldVal;
+    getPoliciesSystems(val);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
+// getPoliciesSystems();
 
 // 预览pdf文件
 const onPreviewPDFFile = (url = "") => {

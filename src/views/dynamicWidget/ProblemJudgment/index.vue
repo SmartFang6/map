@@ -80,9 +80,6 @@ watch(
   }
 );
 
-// 首次加载获取数据
-getProblemJudgmentData(store?.state?.dateRange);
-
 // 问题研判的列表数据
 const list = computed(() => {
   if (!listModel.value) {

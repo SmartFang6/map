@@ -119,7 +119,6 @@ watch(
     deep: true,
   }
 );
-getLeftData(store?.state?.dateRange);
 </script>
 
 <style lang="less" scoped>

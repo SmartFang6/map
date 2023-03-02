@@ -170,9 +170,6 @@ watch(
     deep: true,
   }
 );
-
-// 首次加载获取数据
-getLeftData(store?.state?.dateRange);
 </script>
 
 <style lang="less" scoped>

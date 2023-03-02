@@ -1,3 +1,10 @@
+/*
+ * @Author: bifang
+ * @Date: 2022-10-14 11:52:36
+ * @LastEditors: Do not edit
+ * @LastEditTime: 2023-03-01 18:23:40
+ * @FilePath: /river-lake-cockpit-front/src/store/index.js
+ */
 import { createStore } from "vuex";
 import createPersistedState from "vuex-persistedstate";
 

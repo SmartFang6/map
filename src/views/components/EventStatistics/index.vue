@@ -75,6 +75,9 @@ watch(
       data.value.eventSourceSolveRate =
         data.value.eventSourceSolveRate.toFixed(0);
     }
+  },
+  {
+    deep: true,
   }
 );
 

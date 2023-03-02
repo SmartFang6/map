@@ -286,8 +286,11 @@ watch(
     searchType.value = searchList[1] || {};
   },
   {
-    immediate: true,
+    deep: true,
   }
+  // {
+  //   immediate: true,
+  // }
 );
 
 // 问题清单定时器,没3分钟更新一次

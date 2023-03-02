@@ -42,6 +42,25 @@
           </template>
         </el-dropdown>
       </div>
+      <div class="datetime-wrapper adcd-wrapper">
+        <el-dropdown>
+          <div class="dropdown-inner">
+            <span>{{ currentAdcd?.adnm }}</span>
+            <img src="@/assets/images/center-tools-dropdown-arrow.png" />
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item
+                v-for="(adcd, index) in adcdList"
+                :key="index"
+                @click="onChangeAdcd(adcd)"
+              >
+                {{ adcd.adnm }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
     </div>
     <!--#endregion-->
 
@@ -79,6 +98,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import moment from "moment";
+import { getListDistrict } from "@/apis/home";
 import { getEventRiskControl } from "@/apis/cockpitEventStats";
 
 // 事件
@@ -167,8 +187,32 @@ const changeDate = async (payload) => {
     adcd: store?.state?.userInfo?.adminDivCode || "330182",
   });
 };
+const adcdList = ref([
+  {
+    adnm: store?.state?.adcdName || "",
+    adcd: store?.state?.userInfo?.adminDivCode || "",
+  },
+]);
+const getAdcdList = async () => {
+  let res = await getListDistrict({
+    parentAdcd: store?.state?.userInfo?.adminDivCode,
+  });
+  adcdList.value = [...adcdList.value, ...res];
+};
+const currentAdcd = ref({
+  adnm: store?.state?.adcdName || "",
+  adcd: store?.state?.userInfo?.adminDivCode || "",
+});
+const onChangeAdcd = (adcd) => {
+  currentAdcd.value.adnm = adcd.adnm;
+  currentAdcd.value.adcd = adcd.adcd;
+  const dataObj = store?.state?.dateRange;
+  dataObj.adcd = adcd.adcd;
+  store.commit("UPDATE_DATE", dataObj);
+};
 onMounted(() => {
   let yr = new Date().getFullYear();
+  getAdcdList();
   changeDate({ value: yr, label: yr + "年" });
 });
 </script>
@@ -176,7 +220,7 @@ onMounted(() => {
 <style lang="less" scoped>
 .center-tools-bar {
   width: 830px;
-  height: 83px;
+  height: 123px;
   margin: 75px auto 0;
   display: flex;
   justify-content: space-between;
@@ -198,6 +242,7 @@ onMounted(() => {
 }
 .search-wrapper,
 .datetime-wrapper {
+  // margin-bottom: 12px;
   padding: 0 10px;
   box-sizing: border-box;
   // width: 94px;
@@ -207,6 +252,12 @@ onMounted(() => {
   border: solid 1px #00a6ed;
   display: flex;
   align-items: center;
+}
+.adcd-wrapper .dropdown-inner span {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .search-wrapper {
   transition: 0.3s all ease-out;

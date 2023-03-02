@@ -179,7 +179,7 @@ watch(
     deep: true,
   }
 );
-
+getEventPointRankModel();
 /**
  * 绩效中乡镇或部门的标签页点击切换事件
  * @param {pane} context

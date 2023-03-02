@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import layerTypes from "./layerTypes.js";
 import WatersDescriptionDialog from "./WatersDescriptionDialog.vue";
 import { useStore } from "vuex";
@@ -206,20 +206,17 @@ onMounted(async () => {
     yr: new Date().getFullYear() - 1 + "",
   });
 });
-// watch(
-//   () => store?.state?.dateRange,
-//   async (newVal, oldVal) => {
-//     const val = newVal || oldVal;
-//     const yr = new Date(val.startTime).getFullYear();
-//     countList.value.waterAreaSurvey = await getSurvreyTypeStat({
-//       yr,
-//       adcd: store.state.userInfo?.adminDivCode,
-//     });
-//   },
-//   {
-//     deep: true,
-//   }
-// );
+watch(
+  () => store?.state?.dateRange,
+  async () => {
+    countList.value.waterAreaSurvey = await getSurvreyTypeStat({
+      adcd: store?.state?.dateRange?.adcd,
+    });
+  },
+  {
+    deep: true,
+  }
+);
 </script>
 
 <style lang="less" scoped>
@@ -231,7 +228,7 @@ onMounted(async () => {
   flex-direction: column;
   position: absolute;
   left: 50%;
-  top: 174px;
+  top: 204px;
   margin-left: -415px;
   z-index: 100;
 }
