@@ -18,26 +18,89 @@
   >
     <div class="map-pop">
       <div class="event-detail">
+        <h3 class="dialogTitle">基础信息</h3>
         <Progress :event-detail="eventDetail" />
-        <BasicInfo :details="eventDetail?.reportRecordVO" />
-        <!--#region 事件流转表单区,根据返回结果生成-->
-        <template v-for="(enevntInfo, index) in handEventList" :key="index">
-          <PreAudit
-            v-if="enevntInfo?.eventLinkName === '中心预审'"
-            :pre-audit="enevntInfo"
-            :mock-status="enevntInfo?.previewResult"
-          />
-          <Handle
-            v-else-if="enevntInfo?.eventLinkName === '事项处置'"
-            :details="enevntInfo"
-            :mock-status="enevntInfo?.handleResult"
-          />
-          <Audit
-            v-else-if="enevntInfo?.eventLinkName === '中心审核'"
-            :details="enevntInfo"
-          />
-        </template>
-        <!--#endregion-->
+        <div class="defaultShowInfo descriptions-container">
+          <el-descriptions
+            class="descriptions"
+            title=""
+            direction="vertical"
+            :column="3"
+          >
+            <el-descriptions-item label="责任部门">
+              {{ eventDetail?.linkNodeList?.[0]?.unitName }}
+            </el-descriptions-item>
+            <el-descriptions-item label="所属河湖">
+              {{ eventDetail?.reportRecordVO?.rchnm }}
+            </el-descriptions-item>
+            <el-descriptions-item label="事件状态">
+              {{ eventDetail?.reportRecordVO?.eventNewStatus }}
+            </el-descriptions-item>
+            <el-descriptions-item label="事件来源">
+              {{ eventDetail?.reportRecordVO?.eventSourceName }}
+            </el-descriptions-item>
+            <el-descriptions-item label="事件等级">
+              {{ eventDetail?.reportRecordVO?.eventGradeName }}
+            </el-descriptions-item>
+            <el-descriptions-item label="事件类型">
+              <el-popover
+                placement="top-start"
+                trigger="hover"
+                :content="eventDetail?.reportRecordVO?.eventTypeName"
+              >
+                <template #reference>
+                  <div class="eventTypeInfo">
+                    {{ eventDetail?.reportRecordVO?.eventTypeName }}
+                  </div>
+                </template>
+              </el-popover>
+            </el-descriptions-item>
+          </el-descriptions>
+        </div>
+        <div class="control">
+          <div class="btns">
+            <el-button
+              link
+              type="primary"
+              v-if="isSoder"
+              @click="switchSolder"
+              :icon="ArrowDownBold"
+            >
+              查看更多
+            </el-button>
+            <el-button
+              type="primary"
+              link
+              v-else
+              @click="switchSolder"
+              :icon="ArrowUpBold"
+            >
+              收起
+            </el-button>
+          </div>
+        </div>
+        <div class="moreBox" :class="!isSoder ? 'showMoreBox' : ''">
+          <!-- 默认隐藏以下数据 -->
+          <BasicInfo :details="eventDetail?.reportRecordVO" />
+          <!--#region 事件流转表单区,根据返回结果生成-->
+          <template v-for="(enevntInfo, index) in handEventList" :key="index">
+            <PreAudit
+              v-if="enevntInfo?.eventLinkName === '中心预审'"
+              :pre-audit="enevntInfo"
+              :mock-status="enevntInfo?.previewResult"
+            />
+            <Handle
+              v-else-if="enevntInfo?.eventLinkName === '事项处置'"
+              :details="enevntInfo"
+              :mock-status="enevntInfo?.handleResult"
+            />
+            <Audit
+              v-else-if="enevntInfo?.eventLinkName === '中心审核'"
+              :details="enevntInfo"
+            />
+          </template>
+          <!--#endregion-->
+        </div>
       </div>
     </div>
   </el-dialog>
@@ -51,6 +114,7 @@ import BasicInfo from "./components/BasicInfo.vue";
 import PreAudit from "./components/PreAudit.vue";
 import Handle from "./components/Handle.vue";
 import Audit from "./components/Audit.vue";
+import { ArrowDownBold, ArrowUpBold } from "@element-plus/icons-vue";
 
 // 是否显示双向绑定
 const emits = defineEmits(["update:visible"]);
@@ -77,10 +141,19 @@ const props = defineProps({
 
 const dialogVisible = ref(false);
 
+// 展开/收起
+const isSoder = ref(true);
+const switchSolder = () => {
+  isSoder.value = !isSoder.value;
+};
+
 watch(
   () => props.visible,
   (visible) => {
     dialogVisible.value = visible;
+    if (!visible) {
+      isSoder.value = true;
+    }
   },
   { immediate: true }
 );
@@ -195,5 +268,46 @@ watch(
   .el-dialog__body {
     padding-top: 10px;
   }
+}
+.eventTypeInfo {
+  width: 20vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dialogTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  height: 46px;
+  padding-left: 24px;
+  color: #fff;
+  font-weight: bold;
+  background: linear-gradient(90deg, #5971f8 15%, #fff);
+}
+.control {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -20px;
+}
+.defaultShowInfo {
+  padding: 0 20px;
+}
+// 隐藏展示区域
+.moreBox {
+  margin-top: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s;
+  will-change: max-height;
+}
+.showMoreBox {
+  transition: max-height 0.9s;
+  max-height: 5000px;
+}
+</style>
+<style>
+.el-popper {
+  width: 340px !important;
 }
 </style>

@@ -8,7 +8,7 @@
 
 <template>
   <div v-if="!!eventDetail" class="progress">
-    <div class="basic-info descriptions-container">
+    <!-- <div class="basic-info descriptions-container">
       <el-descriptions direction="vertical">
         <el-descriptions-item label="事件编号">
           {{ eventDetail?.reportRecordVO?.eventId }}
@@ -22,7 +22,7 @@
           {{ eventDetail?.reportRecordVO?.eventWanderDay || "  " }}
         </el-descriptions-item>
       </el-descriptions>
-    </div>
+    </div> -->
 
     <div class="progress-wrapper">
       <template v-for="(item, index) in data" :key="index">
@@ -32,7 +32,7 @@
           <div class="info">
             <span class="name">{{ item.userName }}</span>
             <el-tooltip
-              effect="dark"
+              effect="light"
               v-if="item.remark"
               :content="item.remark"
               placement="top"
