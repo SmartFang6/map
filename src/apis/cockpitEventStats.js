@@ -81,6 +81,17 @@ export const getEventStatPointRankV2 = (queryParams) => {
 };
 
 /**
+ * 获取考核绩效排名 特殊的地市
+ * @param {*} queryParams 查询参数
+ * @returns {Object}
+ */
+export const listRank = (queryParams) => {
+  return postHttp("/performanceAppraisalRank/listRank", {
+    data: queryParams,
+  });
+};
+
+/**
  * 获取政策制度列表
  * @param {*} queryParams 查询参数
  * @returns [Array]

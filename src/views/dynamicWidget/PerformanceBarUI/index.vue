@@ -54,7 +54,9 @@ import { reactive, toRefs, watch } from "vue";
 import { useStore } from "vuex";
 import MoreDialog from "./MoreDialog.vue";
 import Chart from "./Chart.vue";
-import { getEventStatPointRankV2 } from "@/apis/cockpitEventStats";
+import { specialAdcdConfig } from "./config";
+import { getEventStatPointRankV2, listRank } from "@/apis/cockpitEventStats";
+import dayjs from "dayjs";
 
 // 数据模型
 const dataModel = reactive({
@@ -114,7 +116,7 @@ function getEventRankData(queryParam) {
     pageSize: 10,
     ...queryParam,
   };
-  getEventStatPointRankV2(param).then((res) => {
+  return getEventStatPointRankV2(param).then((res) => {
     if (!res) return;
     if (res?.departmentRank) {
       deptCompletedRank.value = res?.departmentRank?.completedRankList || [];
@@ -124,13 +126,51 @@ function getEventRankData(queryParam) {
       zoneCompletedRank.value = res?.zoneRank?.completedRankList || [];
       zonePointRank.value = res?.zoneRank?.pointRankList || [];
     }
-    // 提供更多内容弹窗的数据源
-    moreDataSource.value = res;
+    moreDataSource.value = {
+      departmentRank: {
+        completedRankList: deptCompletedRank.value,
+        pointRankList: deptPointRank.value,
+      },
+      zoneRank: {
+        completedRankList: zoneCompletedRank.value,
+        pointRankList: zonePointRank.value,
+      },
+    };
     // 更新图表的绘制数据
     toggleTownOrDeptList();
   });
 }
-
+const getRankList = async (dateRange) => {
+  const adcd = store.state.userInfo.adminDivCode;
+  const sort = true;
+  const year = dayjs(dateRange?.startTime).format("YYYY");
+  // 部门考核排名
+  deptPointRank.value = await listRank({
+    year,
+    adcd,
+    unitType: "1",
+    sort,
+  });
+  // 乡镇考核分数排名
+  zonePointRank.value = await listRank({
+    year,
+    adcd,
+    unitType: "2",
+    sort,
+  });
+  moreDataSource.value = {
+    departmentRank: {
+      completedRankList: deptCompletedRank.value,
+      pointRankList: deptPointRank.value,
+    },
+    zoneRank: {
+      completedRankList: zoneCompletedRank.value,
+      pointRankList: zonePointRank.value,
+    },
+  };
+  // 更新图表的绘制数据
+  toggleTownOrDeptList();
+};
 // 根据标签的选项切换数据列表
 function toggleTownOrDeptList() {
   if (tabActive.value === "departmentRank") {
@@ -155,9 +195,15 @@ const store = useStore();
 // 监测查询时间
 watch(
   () => store?.state?.dateRange,
-  (newVal, oldVal) => {
+  async (newVal, oldVal) => {
     const params = newVal || oldVal;
-    getEventRankData(params);
+    await getEventRankData(params);
+    const adcd = store.state.userInfo.adminDivCode;
+    console.log(specialAdcdConfig, adcd);
+    if (specialAdcdConfig.includes(adcd)) {
+      await getRankList(params);
+    }
+    // 提供更多内容弹窗的数据源
   },
   {
     immediate: true,

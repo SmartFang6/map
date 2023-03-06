@@ -8,7 +8,17 @@
   <div class="performance-chart">
     <!--#region '销号率'的图表内容区-->
     <div class="completed-rank" v-if="type === 1 && chartData">
-      <div class="completed-rank-chart" ref="completedRankChart"></div>
+      <div
+        v-if="chartData?.[0]?.content !== ''"
+        class="completed-rank-chart"
+        ref="completedRankChart"
+      ></div>
+      <el-empty
+        v-else
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      />
     </div>
     <!--#endregion-->
 
@@ -50,11 +60,11 @@ watch(
     chartData.value = props.dataModel.map((item, rankNum) => {
       return {
         index: rankNum + 1,
-        org: item?.eventResponsibleUnitCodeName || "",
+        org: item?.eventResponsibleUnitCodeName || item?.unitName || "",
         content: item?.content || "",
         count: item?.unitEventNum || 0,
         completed: item?.unitCompletedNum || 0,
-        point: item?.point || 0,
+        point: item?.point || item?.score || 0,
         rate: item?.completedRate ? Number(`${item?.completedRate}e${2}`) : 0,
       };
     });

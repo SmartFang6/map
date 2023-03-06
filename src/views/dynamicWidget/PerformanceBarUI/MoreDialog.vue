@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="two_title" v-if="false">
+    <div class="two_title" v-if="!isShowDetail">
       <ChartTitle :title="'销号率排名'" />
       <ChartTitle :title="'考核排名'" />
     </div>
@@ -24,14 +24,22 @@
     <div class="container">
       <div class="content_wrap">
         <div class="echart_left">
-          <ProgressBar
-            v-for="(item, index) in problemSourceList"
-            :no="index + 1"
-            :count="item?.unitEventNum || 0"
-            :rate="item?.completed || 0"
-            :key="item?.point || index"
-            flexType="row"
-            :title="item?.eventResponsibleUnitCodeName || ''"
+          <template v-if="problemSourceList.length > 0">
+            <ProgressBar
+              v-for="(item, index) in problemSourceList"
+              :no="index + 1"
+              :count="item?.unitEventNum || 0"
+              :rate="item?.completed || 0"
+              :key="item?.point || index"
+              flexType="row"
+              :title="item?.eventResponsibleUnitCodeName || ''"
+            />
+          </template>
+          <el-empty
+            v-else
+            description="暂无数据"
+            :image-size="230"
+            class="dc-empty"
           />
         </div>
         <div
@@ -60,14 +68,17 @@
         <div class="tabs">
           <div
             v-for="item in chartData"
-            :key="item.eventResponsibleUnitCode"
+            :key="item.eventResponsibleUnitCode || item.unitCode"
             @click="switchTab(item)"
             class="tab"
             :class="
-              activeRankTab === item.eventResponsibleUnitCode ? 'active' : ''
+              activeRankTab === item.eventResponsibleUnitCode ||
+              activeRankTab === item.unitCode
+                ? 'active'
+                : ''
             "
           >
-            {{ item.eventResponsibleUnitCodeName }}
+            {{ item.eventResponsibleUnitCodeName || item.unitName }}
           </div>
         </div>
         <el-form-item class="assessmentIndex" label="考核指标">
@@ -187,32 +198,16 @@ const getListIndex = async (suitUnitType = "") => {
 };
 getListIndex(1);
 // 考核指标
-const tableData = ref([
-  {
-    gradingTime: "2023-02-13 13:12:11",
-    indexName: "考核指标",
-    ruleName: "触发规则",
-    eventId: "1231231283712893",
-    description: "触发事项触发事项触发事项触发事项触发事项",
-    scoreChange: 0,
-    score: 90,
-  },
-  {
-    gradingTime: "2023-02-13 13:12:11",
-    indexName: "考核指标",
-    ruleName: "触发规则",
-    eventId: "1231231283712893",
-    description: "触发事项触发事项触发事项触发事项触发事项",
-    scoreChange: 0,
-    score: 910,
-  },
-]);
+const tableData = ref([]);
 const nowScore = ref("");
-const activeRankTab = ref(chartData.value?.[0]?.eventResponsibleUnitCode);
+const activeRankTab = ref(
+  chartData.value?.[0]?.eventResponsibleUnitCode ||
+    chartData.value?.[0]?.unitCode
+);
 // 切换考核单位
 const switchTab = (item) => {
-  activeRankTab.value = item.eventResponsibleUnitCode;
-  nowScore.value = item.count;
+  activeRankTab.value = item.eventResponsibleUnitCode || item.unitCode;
+  nowScore.value = item.count || item.score;
   getSorceDetail();
 };
 const getSorceDetail = async () => {
@@ -245,8 +240,8 @@ const dealData = () => {
     (item) => {
       return {
         ...item,
-        name: item?.eventResponsibleUnitCodeName,
-        count: item?.point,
+        name: item?.eventResponsibleUnitCodeName || item.unitName,
+        count: item?.point || item.score,
       };
     }
   );
@@ -424,10 +419,12 @@ const draw = (data) => {
     ],
   };
   chart.on("click", (e) => {
-    let item = chartData.value.find(
-      (i) => i.eventResponsibleUnitCodeName === e.name
-    );
-    nowScore.value = item.count;
+    let item = chartData.value.find((i) => {
+      if (i.eventResponsibleUnitCodeName === e.name || i.unitName === e.name) {
+        return i;
+      }
+    });
+    nowScore.value = item.count || item.score;
     isShowDetail.value = true;
     switchTab(item);
   });
