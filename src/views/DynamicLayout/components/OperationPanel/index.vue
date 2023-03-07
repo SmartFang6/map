@@ -41,10 +41,12 @@
     </div>
     <el-dialog v-model="showDialog" width="85vw" destroy-on-close>
       <template #header>
-        <header class="addWidgets--header">新增组件</header>
+        <header class="addWidgets--header">
+          {{ nowSide.type === "add" ? "新增" : "编辑" }}组件
+        </header>
       </template>
       <EditSideWidget
-        @submitAdd="submitAddCall"
+        @submitUpdate="submitUpdateCall"
         :nowSide="nowSide"
         @close="showDialog = false"
       />
@@ -82,12 +84,11 @@ watch(
   (n, o) => {
     const nowVal = n || o;
     if (!nowVal) return;
-    const { left, right } = nowVal;
+    const { left, right } = JSON.parse(JSON.stringify(nowVal));
     layoutView.id = nowVal?.id;
     layoutView.layoutName = nowVal?.layoutName;
     layoutView.left = left;
     layoutView.right = right;
-    console.log(nowVal);
   },
   {
     immediate: true,
@@ -150,7 +151,7 @@ function delWidgetCall(location, idx) {
   });
 }
 
-function submitAddCall(payload) {
+function submitUpdateCall(payload) {
   showDialog.value = false;
   const { widgets } = payload;
   nowSide.widgets = widgets;

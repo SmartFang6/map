@@ -95,7 +95,7 @@ const props = defineProps({
     }),
   },
 });
-const emits = defineEmits(["submitAdd", "close"]);
+const emits = defineEmits(["submitUpdate", "close"]);
 
 // 布局新增
 // 布局新增
@@ -194,7 +194,7 @@ const submit = () => {
     ...props?.nowSide,
     widgets: formData.widgets,
   };
-  emits("submitAdd", payload);
+  emits("submitUpdate", payload);
 };
 onMounted(() => {
   const { type, widgets } = props?.nowSide || {};
