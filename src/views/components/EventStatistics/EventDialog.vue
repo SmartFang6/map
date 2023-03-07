@@ -226,12 +226,9 @@ const addEchartsData = () => {
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve) => {
     try {
-      const {
-        dateObj,
-        // userInfo
-      } = store.state;
+      const { dateObj, userInfo } = store.state;
       let data = {
-        // adcd: userInfo.adminDivCode,
+        adcd: userInfo.adminDivCode,
         ...dateObj,
       };
       let { eventAdcdCount, eventTypeCount } = await countEventClassCount(data);
