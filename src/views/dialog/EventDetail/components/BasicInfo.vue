@@ -43,7 +43,11 @@
             }}
           </el-descriptions-item>
           <el-descriptions-item label="地理坐标">
-            {{ `${eventDetailVO?.longitude} , ${eventDetailVO?.latitude}` }}
+            {{
+              `${eventDetailVO?.longitude?.toFixed(
+                6
+              )} , ${eventDetailVO?.latitude?.toFixed(6)}`
+            }}
           </el-descriptions-item>
           <el-descriptions-item label="位置描述">
             {{ eventDetailVO?.location }}
