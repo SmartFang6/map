@@ -188,6 +188,7 @@ export default function (pieData, internalDiameterRatio) {
   //   }, 0);
   // 准备待返回的配置项，把准备好的 legendData、series 传入。
   const option = {
+    confine: true,
     // animation: false,
     tooltip: {
       formatter: (params) => {

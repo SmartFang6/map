@@ -179,7 +179,6 @@ const changeDate = async (payload) => {
     endTime: moment().format(value + "-12-31 23:59:59"),
     startTime: moment().format(value + "-01-01 00:00:00"),
   };
-  console.log(dataObj, "dataObj");
   store.commit("UPDATE_DATE", dataObj);
   emits("changeTime", dataObj);
   statData.value = await getEventRiskControl({

@@ -35,6 +35,12 @@
     <div class="chart-wrapper">
       <img class="ignore-img" src="@/assets/images/donut-bottom-bg.png" />
       <div class="chart-container" ref="chartContainer" />
+      <!-- <el-empty
+        v-show="echartsDataIsZero"
+        description="暂无数据"
+        :image-size="80"
+        class="dc-empty"
+      /> -->
     </div>
     <!--#endregion-->
   </div>
@@ -238,10 +244,17 @@ function globaloutHandler() {
   // 使用更新后的 option，渲染图表
   chartTool.setOption(option);
 }
-
+// const echartsDataIsZero = computed(() => {
+//   let count = dataList.value.reduce((prev, cur) => {
+//     return prev + cur.value;
+//   }, 0);
+//   console.log(count == 0);
+//   return count == 0;
+// });
 watch(
   () => dataList.value,
   (dataList) => {
+    console.log(dataList, "dataList");
     if (dataList && dataList.length > 0) {
       if (!chartTool) {
         chartTool = Echarts.init(chartContainer.value);
@@ -329,7 +342,11 @@ watch(
   align-items: flex-end;
   padding-right: 20px;
 }
-
+.dc-empty {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+}
 .legend-item {
   display: flex;
   color: #91cae8;

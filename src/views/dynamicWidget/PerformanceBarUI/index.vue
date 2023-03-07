@@ -199,7 +199,6 @@ watch(
     const params = newVal || oldVal;
     await getEventRankData(params);
     const adcd = store.state.userInfo.adminDivCode;
-    console.log(specialAdcdConfig, adcd);
     if (specialAdcdConfig.includes(adcd)) {
       await getRankList(params);
     }
