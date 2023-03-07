@@ -124,7 +124,7 @@
         stripe
       >
         <el-table-column label="序号" type="index" width="60" />
-        <el-table-column label="责任部门" prop="eventResponsibleUnitCodeName" />
+        <el-table-column label="责任部门" prop="eventResponsibleUnit" />
         <el-table-column label="事件来源" prop="eventSourceName" />
         <el-table-column label="行政区域" prop="adnm" />
         <el-table-column label="所在河湖" prop="rchnm" />
@@ -328,7 +328,6 @@ const { searchFormData, tableData, eventGrade } = toRefs(data);
 
 // 获取table数据
 function getData() {
-  console.log(data.searchFormData, "data---");
   const params = {
     ...data.searchFormData,
     adcd:
