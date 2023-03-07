@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-10-14 11:52:36
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-03-01 18:23:40
+ * @LastEditTime: 2023-03-07 15:42:40
  * @FilePath: /river-lake-cockpit-front/src/store/index.js
  */
 import { createStore } from "vuex";
@@ -78,6 +78,12 @@ export default createStore({
   plugins: [
     createPersistedState({
       storage: window.sessionStorage,
+      // 指定部分的 state 去缓存，
+      reducer(state) {
+        const newState = JSON.parse(JSON.stringify(state));
+        delete newState.activeFilter;
+        return newState;
+      },
     }),
   ],
 });
