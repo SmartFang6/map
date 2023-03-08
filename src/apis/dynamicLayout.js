@@ -2,7 +2,7 @@
  * @Author: bifang
  * @Date: 2022-10-26 14:57:48
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-01-31 14:06:31
+ * @LastEditTime: 2023-03-08 14:49:54
  * @FilePath: /river-lake-cockpit-front/src/apis/dynamicLayout.js
  */
 import { postHttp } from "@/utils/axios";
@@ -45,3 +45,8 @@ export const getConfigLayoutById = (data) =>
  **/
 export const getUserDefaultLayout = (data) =>
   postHttp("configLayoutRecord/userDefaultConfigLayout", { data });
+/**
+ * 获取用户默认布局详情
+ **/
+export const settingDefaultConfigLayout = (data) =>
+  postHttp("configLayoutRecord/settingDefaultConfigLayout", { data });

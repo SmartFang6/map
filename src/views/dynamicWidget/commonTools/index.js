@@ -100,7 +100,8 @@ function createSide(config) {
     config?.componentRecordVOList?.map((item) => ({
       title: item?.title,
       componentInfoId: item?.componentInfoId,
-      widgetCode: item?.configComponentInfo?.componentCode,
+      widgetCode:
+        item?.configComponentInfo?.componentCode || item?.componentInfoId,
       poster: item?.configComponentInfo?.poster,
       name: item?.configComponentInfo?.componentName,
       // TODO: 其他参数暂时不用

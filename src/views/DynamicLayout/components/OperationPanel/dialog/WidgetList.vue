@@ -53,7 +53,7 @@ const params = {};
 listConfComponent(params).then((res) => {
   widgetList.value =
     res?.map((item) => ({
-      componentInfoId: item?.id,
+      componentInfoId: item?.componentCode,
       widgetCode: item?.componentCode,
       name: item?.componentName,
       poster: item?.picUrl,
