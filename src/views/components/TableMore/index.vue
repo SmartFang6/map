@@ -92,8 +92,8 @@
         </el-form-item>
         <el-form-item label="河湖名称" prop="searchText">
           <RchSelect
-            v-model="searchFormData.searchTextValue"
-            v-model:label="searchFormData.searchText"
+            v-model="searchFormData.searchText"
+            v-model:label="searchFormData.searchTextValue"
             :adcd="lastAdcd"
             size="small"
           />
@@ -340,6 +340,7 @@ function getData() {
     pageNo: pageData.pageIndex,
     pageSize: pageData.pageNum,
     eventDealStatus: data.searchFormData.eventAcceptStatus,
+    searchTextValue: null,
   };
   getEventQuestionList(params)
     .then((res) => {
