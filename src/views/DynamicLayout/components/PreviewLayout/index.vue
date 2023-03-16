@@ -102,6 +102,7 @@ const dateRangeChange = (st, et) => {
 
 const mapRef = ref(null);
 function onChangeTime(val) {
+  console.log("111111111111");
   // console.log(val, "on-change-time");
   dateRangeChange(val.startTime, val.endTime);
   mapRef.value?.changeTime(val);

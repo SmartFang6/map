@@ -9,7 +9,7 @@
     <template #header><Header /></template>
     <template #map>
       <div class="map">
-        <CenterToolsBar @changeTime="onChangeTime" />
+        <CenterToolsBar @changeTime="onChangeTime" @changeAdcd="onChangeAdcd" />
         <!-- 图层切换 -->
         <MapLayer
           @selectLayers="selectLayers"
@@ -119,7 +119,10 @@ function onChangeTime(val) {
   dateRangeChange(val.startTime, val.endTime);
   mapRef.value?.changeTime(val);
 }
-
+function onChangeAdcd(val) {
+  console.log(val, "on-change-adcd");
+  mapRef.value?.changeAdcd(val);
+}
 // 地图点位弹窗
 const dialogShow = ref(false);
 // 地图弹窗信息

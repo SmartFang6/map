@@ -208,6 +208,7 @@ const onChangeAdcd = (adcd) => {
   const dataObj = store?.state?.dateRange;
   dataObj.adcd = adcd.adcd;
   store.commit("UPDATE_DATE", dataObj);
+  emits("changeAdcd", dataObj);
 };
 onMounted(() => {
   let yr = new Date().getFullYear();
