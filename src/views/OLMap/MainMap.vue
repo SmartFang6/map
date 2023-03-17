@@ -158,7 +158,6 @@ export default {
       this.layers = {
         mainShadeLayer: new MainShadowLayer(), // 地图下偏移的阴影
         boundary: new OrgBoundaryLayer(), // 边界线
-
         selectLayer: new BaseVectorLayer(orgHighLightLayer), // 统计图轮播高亮
         basicTotalLayer: new BasicTotalLayer(basicTotalLayer), // 统计图
         pointLayer: new DCLayer(pointLayer), // 点位图
@@ -321,12 +320,28 @@ export default {
         );
       }
     },
-    // 地市筛选：
+    // 地市筛选——与筛选时间的逻辑相同之后考虑简化代码
     changeAdcd(val) {
       console.log("切换地市", val);
       this.startTime = val.startTime;
       this.endTime = val.endTime;
       this.pointAdcd = val.adcd;
+      if (this.adcd != val.adcd) {
+        this.layers.mainShadeLayer.load({
+          map: this.map,
+          adcd: val.adcd,
+        });
+        // 加载下级行政区划边界
+        this.layers.boundary.load(this.map, val.adcd);
+      } else {
+        this.layers.mainShadeLayer.load({
+          map: this.map,
+          adcd: this.adcd,
+        });
+        // 加载下级行政区划边界
+        this.layers.boundary.load(this.map, this.adcd);
+      }
+
       if (this.baseLayers[0] === "pointLayer") {
         // 先移除当前图层
         this.layers.pointLayer.removeLayer(this.map, this);
