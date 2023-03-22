@@ -190,6 +190,7 @@ async function publishLayout() {
         cancelButtonText: "取消",
         inputPlaceholder: params?.layoutName,
         inputPattern: /.+/,
+        inputValue: params?.layoutName,
         inputErrorMessage: "名称不能为空",
       }
     );
