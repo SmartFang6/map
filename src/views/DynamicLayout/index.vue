@@ -197,6 +197,7 @@ async function publishLayout() {
     if (value) {
       params.layoutName = value;
     }
+    console.log(params, "11");
     const message = buildParamsLayout(params);
     await setUserConfigLayoutInfo(message);
     store.commit("UPDATE_LAYOUT_CONFIG", params);

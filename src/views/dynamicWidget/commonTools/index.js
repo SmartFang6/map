@@ -138,6 +138,7 @@ function createLayoutRecordVO(config) {
   sideInfo.componentRecordVOList =
     config?.widgets?.map((item) => ({
       componentInfoId: item?.componentInfoId,
+      poster: item?.poster,
       title: item?.title,
       // TODO: 其他参数暂时不用
     })) || [];
