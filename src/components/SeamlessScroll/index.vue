@@ -100,13 +100,28 @@ watch(
     deep: true,
   }
 );
-
+function composedPath(e) {
+  // 存在则直接return
+  if (e.path) {
+    return e.path;
+  }
+  // 不存在则遍历target节点
+  let target = e.target;
+  e.path = [];
+  while (target.parentNode !== null) {
+    e.path.push(target);
+    target = target.parentNode;
+  }
+  // 最后补上document和window
+  e.path.push(document, window);
+  return e.path;
+}
 // 捕获插槽点击事件
 const emites = defineEmits(["clicked"]);
 function handleClick(e) {
   console.log("handleClick", e);
   // 根据唯一标识获取当前点击的数据项
-  let curItem = e.path.find((i) => i.dataset?.id);
+  let curItem = composedPath(e).find((i) => i.dataset?.id);
   const event_id_value = curItem?.dataset?.id;
   const currentItem =
     props.list?.filter((i) => i[props.identification] === event_id_value)[0] ||
