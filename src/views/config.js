@@ -151,4 +151,9 @@ export const ticketMap = [
     name: "仙居县",
     ticket: "FEB43CC232E1B8A0998044B09F6D0787",
   },
+  {
+    adcd: "330421",
+    name: "嘉善县",
+    ticket: "60C682BEE7F827169E0D686E249BDB48",
+  },
 ];
