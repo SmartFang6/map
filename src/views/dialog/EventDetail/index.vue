@@ -244,7 +244,9 @@ watch(
       padding-left: 18px;
     }
   }
-  .el-descriptions__label.el-descriptions__cell:not(.is-bordered-label).is-vertical-label {
+  .el-descriptions__label.el-descriptions__cell:not(
+      .is-bordered-label
+    ).is-vertical-label {
     color: #a3a9b4;
     font-size: 16px;
     border-right: 30px solid transparent;

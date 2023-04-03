@@ -456,10 +456,12 @@ defineExpose({});
     :deep(.el-table thead) {
       color: white;
     }
-    :deep(.el-table--striped
-        .el-table__body
-        tr.el-table__row--striped
-        td.el-table__cell) {
+    :deep(
+        .el-table--striped
+          .el-table__body
+          tr.el-table__row--striped
+          td.el-table__cell
+      ) {
       background-color: #174762;
       border-bottom: none;
     }
