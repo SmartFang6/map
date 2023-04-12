@@ -104,7 +104,7 @@
             color: '#0adbe0',
             width: '100%',
           }"
-          max-height="40vh"
+          max-height="36vh"
           style="width: 100%"
           :cellStyle="{ textAlign: 'center' }"
         >

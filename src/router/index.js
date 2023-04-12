@@ -29,6 +29,11 @@ const routes = [
     component: () => import("@/views/waterSsoLogin.vue"),
   },
   {
+    path: "/cityCountySsoLogin",
+    name: "cityCountySsoLogin",
+    component: () => import("@/views/cityCountySsoLogin.vue"),
+  },
+  {
     path: "/test",
     name: "test",
     component: () => import("@/views/test.vue"),
