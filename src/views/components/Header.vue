@@ -30,7 +30,6 @@ let currentAdcd = ref("");
 currentAdcd.value = store.state.adcdName || "";
 
 async function onJump() {
-  // if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
   // const domainName = "http://localhost:8081";
   const domainName = getDomainName();
   const ticket = store?.state?.ticket || "";
@@ -39,12 +38,6 @@ async function onJump() {
   let sign = await getPublicSign(moduleId, userId);
   const JUMP_URL = `${domainName}/oneInspection/ssoLogin?moduleId=water_one_inspection&sign=${sign}&ticket=${ticket}&userId=${userId}`;
   window.open(JUMP_URL);
-  // } else {
-  //   ElMessage({
-  //     message: "本功能暂未开放",
-  //     type: "warning",
-  //   });
-  // }
 }
 </script>
 

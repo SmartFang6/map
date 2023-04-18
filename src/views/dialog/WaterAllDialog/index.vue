@@ -154,17 +154,7 @@ watch(
     deep: true,
   }
 );
-// 跳转后台详情
-// function onJupmDetail() {
-//   if (store?.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
-//     eventDetailDialogVisible.value = true;
-//   } else {
-//     ElMessage({
-//       message: "本功能暂未开放",
-//       type: "warning",
-//     });
-//   }
-// }
+
 const eventDetailDialogVisible = ref(false);
 </script>
 

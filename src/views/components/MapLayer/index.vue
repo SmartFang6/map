@@ -203,7 +203,8 @@ const countList = ref({
 onMounted(async () => {
   countList.value.waterAreaSurvey = await getSurvreyTypeStat({
     adcd: store.state.userInfo?.adminDivCode,
-    yr: new Date().getFullYear() - 1 + "",
+    yr: 2021,
+    // yr: new Date().getFullYear() - 1 + "",
   });
 });
 watch(
@@ -211,6 +212,7 @@ watch(
   async () => {
     countList.value.waterAreaSurvey = await getSurvreyTypeStat({
       adcd: store?.state?.dateRange?.adcd,
+      yr: 2021,
     });
   },
   {

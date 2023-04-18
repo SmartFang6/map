@@ -187,7 +187,6 @@ import {
 } from "@/apis/home.js";
 import RchSelect from "@/components/RchSelect";
 import moment from "moment";
-import { ElMessage } from "element-plus";
 const eventDetailDialogVisible = ref(false);
 const detailInfo = ref(null);
 
@@ -378,18 +377,11 @@ function onRest() {
 }
 // 查看详情
 function onCheck(row) {
-  if (store.state?.userInfo?.roleId === "065e6e9013954b09b013a1846499a720") {
-    eventDetailDialogVisible.value = true;
-    detailInfo.value = {
-      id: row?.id,
-      eventId: row?.eventId,
-    };
-  } else {
-    ElMessage({
-      message: "本功能暂未开放",
-      type: "warning",
-    });
-  }
+  eventDetailDialogVisible.value = true;
+  detailInfo.value = {
+    id: row?.id,
+    eventId: row?.eventId,
+  };
 }
 
 defineExpose({});
