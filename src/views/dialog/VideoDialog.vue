@@ -113,8 +113,12 @@ const play = (Code) => {
       return data;
     })
     .then((message) => {
-      console.log(message[Code]);
-      if (!message[Code].flv) {
+      let code = message[Code];
+      console.log(code);
+      const playUrl =
+        code.flv || code.hls || code.fmp4 || code.rtmp || code.rtsp || code.ts;
+
+      if (!playUrl) {
         ElMessage.error("暂无信号");
         hasSignal.value = false;
         destroy();
@@ -122,12 +126,12 @@ const play = (Code) => {
         hasSignal.value = true;
         create();
         player.value.on("load", () => {
-          player.value.play(message[Code].flv);
+          player.value.play(playUrl);
         });
         han();
       }
       loading.value = false;
-      console.log(message, message[Code].flv);
+      console.log(message, playUrl);
     });
 };
 // 暂停
