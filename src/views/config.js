@@ -156,4 +156,9 @@ export const ticketMap = [
     name: "嘉善县",
     ticket: "60C682BEE7F827169E0D686E249BDB48",
   },
+  {
+    name: "磐安县",
+    adcd: "330727",
+    ticket: "765CCEAC7E093A8ACD827A9774F09883",
+  },
 ];
